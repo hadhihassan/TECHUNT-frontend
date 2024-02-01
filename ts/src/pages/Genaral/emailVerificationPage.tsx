@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
-import { setVerify } from "../../redux/Slice/loginSlice";
+import { setVerify } from "../../redux/Slice/signup.js/signupSlice";
 
 
 const emailVerificationPage = () => {
@@ -17,9 +17,9 @@ const emailVerificationPage = () => {
             try {
                 const url = `http://localhost:3000/client/verify/${param.id}`;
                 const { data } = await axios.get(url);
-                if(data.status){
+                if (data.status) {
                     dispatch(setVerify(true))
-                    
+
                 }
             } catch (error) {
                 console.error('Error verifying email:', error);
@@ -34,14 +34,14 @@ const emailVerificationPage = () => {
             <div>
                 <Header layout={true} />
                 <div className="w-full flex  justify-center items-center">
-                    <div className="w-[40rem] flex space-y-14 items-center flex-col   h-[40rem] mt-16 mb-16  border shadow-2xl rounded-lg">
+                    <div className="w-[794px] flex space-y-14 items-center flex-col   h-[40rem] mt-16 mb-16  border shadow-2xl rounded-lg">
                         <div>
                             <p className="text-stone-800 font-sans leading-snug text-[33px] font-semibold flex items-center justify-center pt-16">
                                 You'r email is veryfied
                             </p>
                         </div>
                         <div className="w-[460px] h-[55.31px] " >
-                            <Link to={"/login"}>
+                            <Link to={"/type/"}>
                                 <button className="w-[460px] text-white h-[55.31px] mt-8 bg-red-500 rounded-[100px]" type="submit" >
                                     Continue
                                 </button>

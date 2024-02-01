@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import Routers from "../../../../util/pathVariables";
 type Layout = {
   layout: boolean
 }
@@ -41,7 +43,9 @@ const Header = ({ layout }: Layout) => {
         {/* Login Button */}
         <div className="w-full sm:w-[15%] mt-3 sm:mt-0 ml-0 sm:ml-8  flex justify-center sm:justify-start">
           <button className="w-full sm:w-[120px] h-[34px] bg-red-500 rounded-[20px]">
+            <Link to={Routers.Login}>
             Login
+            </Link>
           </button>
         </div>
       </div>}

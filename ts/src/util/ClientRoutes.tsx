@@ -1,14 +1,23 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Genaral/Home';
-import Login from '../pages/Genaral/loginPage'
+import EmailVerification from '../pages/Genaral/email.SignupPage'
 import Path from './pathVariables'
+import FidnTypeUser from '../pages/Genaral/findTypeUser';
 import EmailVerificationPage from '../pages/Genaral/emailVerificationPage';
-const WebRouters = () => {
+import { IsLoggedUser, IsNotLoggedUser } from './protectedRoute';
+import ProfileStarMessage from '../pages/Genaral/profileStarMessage';
+const WebRouters: React.FC = () => {
     return (
         <Routes>
+
             <Route path={Path.Landing} element={<Home />} />
-            <Route path={Path.Login} element={< Login/>} />
-            <Route path={Path.MailVerification} element={< EmailVerificationPage />} />
+            <Route path={Path.CREATE_PROFILE_MESSAGE} element={ <ProfileStarMessage/>} />
+
+            <Route element={<IsNotLoggedUser />}>
+                <Route path={Path.MailVerification} element={< EmailVerificationPage />} />
+                <Route path={Path.Login} element={< EmailVerification />} />
+                <Route path={Path.Type} element={< FidnTypeUser />} />
+            </Route>
         </Routes>
     );
 };
