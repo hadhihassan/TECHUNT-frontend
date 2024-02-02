@@ -1,3 +1,3 @@
-export interface Typerole {
-    type: "CLIENT" | "ADMIN" | "TALENT" | "NOTHING"
+export interface Typerole  {
+    type: "NOTHING" | "CLIENT" | "ADMIN" | "TALENT"
 }

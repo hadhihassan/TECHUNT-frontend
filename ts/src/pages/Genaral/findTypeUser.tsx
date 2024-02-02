@@ -14,7 +14,7 @@ import routerVariables from '../../util/pathVariables'
 const FindTypeUser: React.FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    let a: number
     const { email }: INITIALSTATE = useSelector(
         (state: ROOTSTORE) => state.signup
     );
@@ -37,11 +37,11 @@ const FindTypeUser: React.FC = () => {
             setUserType("CLIENT")
         }
     }
-    
+
     const handleClickBtn = () => {
         console.log("dispatch work", _UserType);
         dispatch(setRole(_UserType))
-        navigate(routerVariables.CREATE_PROFILE_MESSAGE)
+        navigate(routerVariables.Login)
     }
 
     const radios = options.map((option, index) => (

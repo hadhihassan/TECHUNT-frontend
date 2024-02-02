@@ -1,49 +1,50 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-const BASE_URL: string = 'http://localhost:3000';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+
+const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = BASE_URL;
 
-
-const axiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
 });
 
-// Define types for response and error
-interface ApiResponse<T = any> {
-  data: T;
-}
+const jwtToken = localStorage.getItem("token");
+console.log("local store data",jwtToken)
+const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  config.headers = config.headers || {};
+  config.headers['authorization'] = `Bearer ${jwtToken}`;
+  return config;
+};
 
-interface ApiError {
-  message: string;
-}
+axiosInstance.interceptors.request.use(onRequest);
 
-// Function to make an HTTP GET request
-export const get = async <T>(url: string, email?: AxiosRequestConfig): Promise<T> => {
-    
+export const get = async <T>(url: string, _type?: string): Promise<T> => {
   try {
-    const response: AxiosResponse<ApiResponse<T>> = await axiosInstance.get(url, {data : email });
-    return response.data.data;
+    const response: AxiosResponse = await axiosInstance.get(url);
+    console.log(response)
+    return response.data.status;
   } catch (error) {
     handleRequestError(error);
     throw error;
   }
 };
 
-// Function to make an HTTP POST request
 export const post = async <T>(url: string, data?: any): Promise<T> => {
   try {
-    console.log("email is=>",data)
-      const response: AxiosResponse<ApiResponse<T>> = await axiosInstance.post(url, data);
-      console.log("RESPONSE",response)
-    return response.data.data;
+    console.log("email is=>", data);
+    url = data.type + url;
+    console.log("url is ", url);
+    const response: AxiosResponse = await axiosInstance.post(url, data);
+    console.log("RESPONSE", response);
+    return response.data;
   } catch (error) {
+    console.log(error);
     handleRequestError(error);
     throw error;
   }
 };
 
-// Function to handle common request errors
 const handleRequestError = (error: any): void => {
   console.error('Request error:', error.message || 'Unknown error');
 };

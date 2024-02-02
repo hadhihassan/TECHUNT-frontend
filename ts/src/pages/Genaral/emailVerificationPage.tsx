@@ -2,24 +2,30 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { setVerify } from "../../redux/Slice/signup.js/signupSlice";
-
+import routerVariables from '../../util/pathVariables'
+import { ROOTSTORE } from "../../redux/store";
+import { INITIALSTATE } from "../../redux/Slice/signup.js/signupSlice";
+import { get } from "../../config/axios";
 
 const emailVerificationPage = () => {
     const [validUrl, setValidUrl] = useState<boolean>(true);
     const param = useParams<{ id: string }>();
     const dispatch = useDispatch()
+    const signupData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     useEffect(() => {
         const verifyEmailUrl = async () => {
             try {
                 const url = `http://localhost:3000/client/verify/${param.id}`;
-                const { data } = await axios.get(url);
-                if (data.status) {
-                    dispatch(setVerify(true))
 
+                // const { data } = await axios.get(url);
+                const data = await get(url, signupData.role);
+
+                if (data) {
+                    dispatch(setVerify(true))
                 }
             } catch (error) {
                 console.error('Error verifying email:', error);
@@ -41,7 +47,7 @@ const emailVerificationPage = () => {
                             </p>
                         </div>
                         <div className="w-[460px] h-[55.31px] " >
-                            <Link to={"/type/"}>
+                            <Link to={routerVariables.CREATE_PROFILE_MESSAGE}>
                                 <button className="w-[460px] text-white h-[55.31px] mt-8 bg-red-500 rounded-[100px]" type="submit" >
                                     Continue
                                 </button>

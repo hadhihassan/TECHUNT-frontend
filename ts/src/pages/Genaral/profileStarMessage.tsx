@@ -14,12 +14,12 @@ const ProfileStarMessage = () => {
 
                     <div>
                         <p className="text-xl text-center  font-sans ">
-                            Hey Hadhi. Ready for your <br />
+                            Hey Ready for your <br />
                             next big opportunity?
                         </p>
                     </div>
                     <div>
-                        <p className="text-xs text-center font-sans leading-8 ">
+                        <p className="text-xs text-center font-sans leading-8 whitespace">
                             Build a profile to show the world what you can do
                             <br />
                             Apply on jobs posted from clients, around the world
