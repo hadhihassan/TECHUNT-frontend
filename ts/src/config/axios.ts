@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 
-const BASE_URL: string = 'http://localhost:3000/';
+export const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = BASE_URL;
 
-const axiosInstance: AxiosInstance = axios.create({
+export const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
 });
@@ -14,6 +14,7 @@ console.log("local store data", jwtToken)
 const onRequest = (config: AxiosRequestConfig): any => {
   config.headers = config.headers || {};
   config.headers['authorization'] = `Bearer ${jwtToken}`;
+  // config.headers['role'] = `Bearer ${jwtToken}`;
   return config;
 };
 

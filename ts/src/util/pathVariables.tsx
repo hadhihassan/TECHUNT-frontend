@@ -6,6 +6,8 @@ export type Routes = {
     MailVerification: string;
     Type: string;
     CREATE_PROFILE_MESSAGE: string;
+    signup:"/signup/"
+
 };
 const routerVariables: Routes = {
     Landing: '/',
@@ -13,7 +15,8 @@ const routerVariables: Routes = {
     Login: '/login/',
     MailVerification: '/client/verify/:id',
     Type: '/type/',
-    CREATE_PROFILE_MESSAGE: '/profile-create/'
+    CREATE_PROFILE_MESSAGE: '/profile-create/',
+    signup:"/signup/"
 }
 export default routerVariables;
 

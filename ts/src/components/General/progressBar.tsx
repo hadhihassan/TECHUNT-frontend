@@ -1,19 +1,45 @@
-import React from 'react';
+import LinearProgress from '@mui/material/LinearProgress';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import CircularProgress, {
+    circularProgressClasses,
+    CircularProgressProps,
+} from '@mui/material/CircularProgress';
+import  { linearProgressClasses } from '@mui/material/LinearProgress';
 
 interface ProgressBarProps {
     value: number;
 }
 
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  },
+}));
+
+
+
 export const ProgressBar: React.FC<ProgressBarProps> = ({ value }) => {
+
+
     return (
-        value < 6 ? (
-            <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-70">
-                <div className={`bg-red-500 h-1 rounded-full w-[50%] dark:bg-gray-70`}></div>
-            </div>
-        ) : (
-            <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-70">
-                <div className={`bg-red-500 h-1 rounded-full w-[100%] dark:bg-gray-70`}></div>
-            </div>
-        )
-    );
+        <Box sx={{ flexGrow: 1 }}>
+          <br />
+          <BorderLinearProgress variant="determinate" value={50} />
+        </Box>
+      );
 };
+
+
+
+
+
+
+

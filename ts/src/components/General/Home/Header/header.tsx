@@ -41,10 +41,15 @@ const Header = ({ layout }: Layout) => {
         </div>
 
         {/* Login Button */}
-        <div className="w-full sm:w-[15%] mt-3 sm:mt-0 ml-0 sm:ml-8  flex justify-center sm:justify-start">
-          <button className="w-full sm:w-[120px] h-[34px] bg-red-500 rounded-[20px]">
+        <div className="w-full mr-[4rem] sm:w-[15%] mt-3 sm:mt-0 ml-0 sm:ml-8  flex justify-center sm:justify-start">
+          <button className="w-full sm:w-[120px] h-[34px] bg-white text-red-500 border border-red-500 rounded-[20px] mr-2">
             <Link to={Routers.Login}>
             Login
+            </Link>
+          </button>
+          <button className="w-full sm:w-[120px] h-[34px] text-white bg-red-500 rounded-[20px] ">
+            <Link to={Routers.signup}>
+            sign up
             </Link>
           </button>
         </div>

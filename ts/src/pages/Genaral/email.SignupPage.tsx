@@ -18,9 +18,9 @@ const Login = () => {
     const naviagte = useNavigate()
     const dispatch = useDispatch()
     const [inputvalue, setValue] = useState<string>("")
+    const [password, setPassword] = useState<String>("")
     const [message, setMessage] = useState<boolean>(false)
     const data: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup);
-    console.log(data)
     const handleEmailSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         if (inputvalue !== "") {
@@ -34,15 +34,15 @@ const Login = () => {
     const verifyEmail = async (): Promise<void> => {
         try {
             const url: string = Routers.VerifyEmail;  // Adjust this based on the desired route
-            const result: {[x: string]: any; key: string} = await post(url, { email: inputvalue, type: data.role });
+            const result: { [x: string]: any; key: string } = await post(url, { email: inputvalue, password: password, type: data.role });
             setMessage(true);
             setTimeout(() => {
                 setMessage(false);
             }, 3000);
-            const { clientAuthToken } = result
-            console.log('AUTHTOKEN',clientAuthToken );
+            const { token } = result
+            console.log('AUTHTOKEN', result.token);
 
-            localStorage.setItem("token", clientAuthToken)
+            localStorage.setItem("token", token)
         } catch (error) {
             console.error('Error posting data:', error);
         }
@@ -85,10 +85,17 @@ const Login = () => {
                         >
                             <input
                                 onChange={(e) => setValue(e.target.value)}
-                                className="w-[460px] h-[55.31px] rounded-[100px] border border-black block w-full p-4 text-gray-900 border-gray-300"
+                                className="w-[460px] mb-5 h-[55.31px] rounded-[100px] border border-black block w-full p-4 text-gray-900 border-gray-300"
                                 id="username"
                                 type="text"
                                 placeholder="Email Address"
+                            />
+                            <input
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-[460px] h-[55.31px] rounded-[100px] border border-black block w-full p-4 text-gray-900 border-gray-300"
+                                id="username"
+                                type="text"
+                                placeholder="Password"
                             />
                             <button onClick={verifyEmail}
                                 className="w-[460px] text-white h-[55.31px] mt-8 bg-red-500 rounded-[100px]"

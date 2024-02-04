@@ -41,7 +41,7 @@ const FindTypeUser: React.FC = () => {
     const handleClickBtn = () => {
         console.log("dispatch work", _UserType);
         dispatch(setRole(_UserType))
-        navigate(routerVariables.Login)
+        navigate(routerVariables.signup)
     }
 
     const radios = options.map((option, index) => (

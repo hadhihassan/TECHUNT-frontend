@@ -9,7 +9,7 @@ import ProfileStarMessage from '../pages/Genaral/profileStarMessage';
 import ProfileDescription from '../pages/Client/profileDescription';
 import ContractDetails from '../pages/Client/contactDetails';
 import AfterLoginHeader from '../components/General/Home/Header/afterLoginHeader';
-
+import Login from '../pages/Genaral/login';
 const WebRouters: React.FC = () => {
     return (
         <Routes>
@@ -22,15 +22,16 @@ const WebRouters: React.FC = () => {
 
             <Route path={Path.Landing} element={<Home />} />
             <Route path={Path.MailVerification} element={< EmailVerificationPage />} />
+            <Route path={Path.Login} element={<  Login/>} />
 
 
             <Route element={<IsNotLoggedUser />}>
                 <Route path={Path.Type} element={< FidnTypeUser />} />
                 <Route element={< CheckUserType />}>
-                    <Route path={Path.Login} element={< EmailVerification />} />
+                    <Route path={Path.signup} element={< EmailVerification />} />
                 </Route>
             </Route>
-            <Route path='*' element={<AfterLoginHeader />}></Route>
+            {/* <Route path='*' element={<AfterLoginHeader />}></Route> */}
         </Routes>
     );
 };
