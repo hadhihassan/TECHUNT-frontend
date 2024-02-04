@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { useSelector, useDispatch } from "react-redux";
-import { INITIALSTATE, setRole } from "../../redux/Slice/signup.js/signupSlice";
+import { INITIALSTATE, setRole } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import Avatar from "react-avatar";
 import { Typerole } from "../../components/interface/loginSliceType"
@@ -73,7 +73,7 @@ const FindTypeUser: React.FC = () => {
         <div>
             <Header layout={true} />
             <div className="w-full flex justify-center items-center">
-                <div className="w-[794px] flex space-y-14 items-center flex-col h-[40rem] mt-16 mb-16 border shadow-2xl rounded-lg">
+                <div className="w-[700px] flex space-y-14 items-center  xl:[700px] md:w[1100px] sm:w-[700px] xs:w[550px] flex-col h-[40rem] mt-16 mb-16 border shadow-2xl rounded-lg">
                     <div className="h-[10rem]">
                         <div className="text-center pt-9 text-stone-800 text-[33px] font-semibold font-sans line-clamp-2">
                             Complete your free account<br />setup

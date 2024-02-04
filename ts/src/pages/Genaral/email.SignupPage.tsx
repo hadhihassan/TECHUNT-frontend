@@ -3,19 +3,19 @@ import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from "react-redux";
-import { INITIALSTATE, setEmail } from "../../redux/Slice/signup.js/signupSlice";
+import { INITIALSTATE, setEmail } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import GoogleIcon from '@mui/icons-material/Google';
 import { post } from "../../config/axios";
 import Routers, { Routes } from "../../util/pathVariables";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import routerVariables from "../../util/pathVariables";
 
 
 const Login = () => {
 
-    
-    const naviagte = useNavigate() 
+
+    const naviagte = useNavigate()
     const dispatch = useDispatch()
     const [inputvalue, setValue] = useState<string>("")
     const [message, setMessage] = useState<boolean>(false)
@@ -25,25 +25,24 @@ const Login = () => {
         event.preventDefault();
         if (inputvalue !== "") {
             dispatch(setEmail(inputvalue));
-            setMessage(true);
-            setTimeout(() => {
-                setMessage(false);
-            }, 3000);
         }
     }
-    const handleClickBtn = () => {
+    const handleClickBtn: () => void = () => {
         naviagte("/signup/")
     }
 
     const verifyEmail = async (): Promise<void> => {
         try {
             const url: string = Routers.VerifyEmail;  // Adjust this based on the desired route
-            const result: {
-                [x: string]: any; key: string
-            } = await post(url, { email: inputvalue, type: data.role });
-            console.log(url, result)
-            console.log('Received data:', result.clientAuthToken);
-            localStorage.setItem("token", result.clientAuthToken)
+            const result: {[x: string]: any; key: string} = await post(url, { email: inputvalue, type: data.role });
+            setMessage(true);
+            setTimeout(() => {
+                setMessage(false);
+            }, 3000);
+            const { clientAuthToken } = result
+            console.log('AUTHTOKEN',clientAuthToken );
+
+            localStorage.setItem("token", clientAuthToken)
         } catch (error) {
             console.error('Error posting data:', error);
         }
@@ -74,7 +73,6 @@ const Login = () => {
                         </p>
                     </div>
                     <div className="w-[460px] h-[55.31px] bg-indigo-600 rounded-[100px]" >
-
                         <p className="text-white text-center mt-4">  <GoogleIcon className="mr-1 mb-1 " /> Continue with Google</p>
                     </div>
                     <div className="w-[490px] h-[0px] border border-black border-opacity-25 flex justify-center items-center">or</div>

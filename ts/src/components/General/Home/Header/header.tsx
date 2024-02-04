@@ -49,10 +49,6 @@ const Header = ({ layout }: Layout) => {
           </button>
         </div>
       </div>}
-
-
-
-
     </>
   );
 };
