@@ -5,6 +5,7 @@ import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import routerVariables from "../../util/pathVariables";
+import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 
 export interface CONTACT_FROM {
     photo?: File | null,
@@ -22,7 +23,8 @@ const ContactForm: React.FC = () => {
     const naviagte = useNavigate()
     const [image, setImage] = useState<any>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
-    const [formData, setFormData] = useState<CONTACT_FROM>({
+    const description:Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
+    const [formData, setFormData] = useState({
         photo: null,
         address: "",
         city: "",
@@ -30,7 +32,8 @@ const ContactForm: React.FC = () => {
         lName: "",
         number: null,
         pinCode: null,
-        country: ""
+        country: "",
+        description:description
     })
 
     const handleInputChnage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +62,7 @@ const ContactForm: React.FC = () => {
             const data = new FormData();
             data.append('image', img);
             console.log(img);
-            
+
             for (var key of data.entries()) {
                 console.log(key[0] + ', ' + key[1]);
             }

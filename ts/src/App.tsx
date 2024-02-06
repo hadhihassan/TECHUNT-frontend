@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import WebRouters from './util/ClientRoutes';
+import WebRouters from './util/routes';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 function App() {

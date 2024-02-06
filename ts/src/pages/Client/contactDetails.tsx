@@ -38,12 +38,12 @@ const ContractDetails = () => {
                                 <p>1/2</p>
                             </div>
                             <div className="pt-5 ">
-                                <ProgressBar value={100} />
+                                <ProgressBar percentage={100} />
                             </div>
                         </div>
                             <div className="w-full pt-10">
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900 ">Add contact information..</h1>
-                                <p className="text-xs pt-5 font-light">personalized space within the application where users can showcase and manage key information about themselves.</p>
+                                <p className="text-xs pt-5 font-normal">personalized space within the application where users can showcase and manage key information about themselves.</p>
                                 <ContactForm />
                             </div>
                     </div>

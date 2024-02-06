@@ -14,16 +14,20 @@ const ProfileDescription = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup)
     const data1 = useSelector((state: ROOTSTORE) => state.client)
     const navigate = useNavigate()
-    
+
     console.log(data1);
 
     const dispatch = useDispatch()
     const [_description, addDescription] = useState("")
-
+    const [lengthError, setLenghtError] = useState<String | any>("")
     const handleType: (event: ChangeEvent<HTMLTextAreaElement>) => void = (event) => {
-        console.log(_description);
-
-        addDescription(event.target.value)
+        if (_description.length === 450) {
+            setLenghtError("Description going long maximum 450 characters")
+        } else {
+            console.log(_description);
+            addDescription(event.target.value)
+            setLenghtError(null)
+        }
     }
     const saveProfileDescription: (event: React.FormEvent) => void = (event) => {
         event.preventDefault()
@@ -66,8 +70,7 @@ const ProfileDescription = () => {
                         <form onSubmit={saveProfileDescription}>
                             <div className="w-full pt-10">
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900 ">Add Profile Descrption.</h1>
-                                <p className="text-xs pt-5 font-light">personalized space within the application where users can showcase and manage key information about themselves.</p>
-
+                                <p className="text-xs pt-5 font-normal">personalized space within the application where users can showcase and manage key information about themselves.</p>
                                 <label className="block mt-5 mb-5 text-sm font-medium ">Profile description</label>
                                 <textarea
                                     value={_description}
@@ -77,11 +80,13 @@ const ProfileDescription = () => {
                                     className="block p-2.5 w-full text-sm bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Write your profile description here..."
                                 ></textarea>
-                                <label className="block mt-1  text-xs font-medium text-end ">500 characters</label>
+                                <label className="block mt-1  text-xs font-medium text-end ">450 characters</label>
+                                {lengthError.length &&
+                                    <label className="block mt-1  text-xs font-medium text-end ">{lengthError}</label>
+                                }
                             </div>
                             <div className="flex justify-center items-center">
                                 <button
-                                    
                                     className="w-[250px] mx-auto items-center text-white h-[35.31px] mt-8 bg-red-500 rounded-[100px]">Next</button>
                             </div>
                         </form>

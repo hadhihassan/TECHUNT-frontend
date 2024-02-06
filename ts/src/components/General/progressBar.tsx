@@ -13,7 +13,7 @@ interface ProgressBarProps {
 }
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
+  height: 5,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
@@ -26,13 +26,13 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ value }) => {
+export const ProgressBar: React.FC<ProgressBarProps>  = ({ percentage }) => {
 
 
     return (
         <Box sx={{ flexGrow: 1 }}>
           <br />
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress variant="determinate" value={percentage} />
         </Box>
       );
 };

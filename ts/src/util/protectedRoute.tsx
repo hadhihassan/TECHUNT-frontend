@@ -4,18 +4,32 @@ import routerVariables from "./pathVariables";
 import { ROOTSTORE } from '../redux/store'
 
 export function IsLoggedUser() {
-    const { verify } = useSelector((state: ROOTSTORE) => state.signup);
+    const { verify,isLogged  } = useSelector((state: ROOTSTORE) => state.signup);
+    console.log(verify, "verify")
+    return (
+        isLogged ? <Outlet /> : <Navigate to={routerVariables.Login} />
+    )
+}
+export function IsVerified() {
+    const { verify  } = useSelector((state: ROOTSTORE) => state.signup);
     console.log(verify, "verify")
     return (
         verify ? <Outlet /> : <Navigate to={routerVariables.Login} />
     )
 }
-
-export function IsNotLoggedUser() {
-    const { verify } = useSelector((state: ROOTSTORE) => state.signup);
+export function IsNewUser() {
+    const { verify  } = useSelector((state: ROOTSTORE) => state.signup);
     console.log(verify, "verify")
     return (
-        !verify ? <Outlet /> : <Navigate to={routerVariables.Landing} />
+        !verify ? <Outlet /> : <Navigate to={routerVariables.signup} />
+    )
+}
+
+export function IsNotLoggedUser() {
+    const { verify,isLogged } = useSelector((state: ROOTSTORE) => state.signup);
+    console.log(verify, "verify")
+    return (
+        verify&&!isLogged ? <Outlet /> : <Navigate to={routerVariables.signup} />
     )
 }
 export function CheckUserType() {

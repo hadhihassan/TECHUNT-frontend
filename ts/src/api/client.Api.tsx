@@ -6,8 +6,7 @@ import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../redux/store';
 import { axiosInstance, BASE_URL } from '../config/axios'
 
-//Client Api
-//=========
+
 
 
 export async function createContactDetails(formData: CONTACT_FROM, role: INITIALSTATE["role"]) {
@@ -33,4 +32,4 @@ export async function Login(data:{},role:string) {
     )
 
 }
-
+//^ COMMAN API 

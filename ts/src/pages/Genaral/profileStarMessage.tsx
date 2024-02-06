@@ -2,10 +2,13 @@ import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import IMG from '../../assets/3714960.jpg'
 import { useNavigate } from 'react-router-dom'
-import { clientRoutes } from "../../util/pathVariables";
+import { clientRoutes, talent_routes, } from "../../util/pathVariables";
+import { useSelector } from "react-redux";
+import { ROOTSTORE } from "../../redux/store";
 
 const ProfileStarMessage = () => {
     const navigate = useNavigate()
+    const role = useSelector((state:ROOTSTORE) => state.signup.role)
     return (
         <div>
             <Header layout={true} />
@@ -30,7 +33,13 @@ const ProfileStarMessage = () => {
                             Get paid safely and know we’re here to help
                         </p>
                     </div>
-                    <div onClick={() => navigate(clientRoutes.ADD_PROFILE_DESCRIPTION)}>
+                    <div onClick={() => {
+                        if(role === "TALENT"){
+                            navigate(talent_routes.Profile_title)
+                        }else{
+                            navigate(clientRoutes.ADD_PROFILE_DESCRIPTION)
+                        }
+                        }}>
                         <button className="w-[392px] h-[45px] bg-red-500 text-white rounded-[100px]">Create Your Profile</button>
                     </div>
                 </div>

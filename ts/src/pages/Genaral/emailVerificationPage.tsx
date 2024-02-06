@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  useParams } from "react-router";
+import { useParams } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +20,13 @@ const emailVerificationPage = () => {
     const handleClick: () => void = async () => {
         try {
             const url = `http://localhost:3000/${signupData.role}/verify/${param.id}`;
-            const data = await get(url, signupData.role);
+            const data = await get(url, signupData.role)
+                .then((_res) => {
+                    dispatch(setVerify(true))
+                    console.log("verified")
+                    navigate(routerVariables.CREATE_PROFILE_MESSAGE)
+                })
             console.log(data);
-            
-            if (data) {
-                dispatch(setVerify(true))
-                console.log("verified")
-                navigate(routerVariables.CREATE_PROFILE_MESSAGE)
-            }
         } catch (error) {
             console.error('Error verifying email:', error);
             setValidUrl(false);

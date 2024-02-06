@@ -34,13 +34,13 @@ const Login = () => {
     const verifyEmail = async (): Promise<void> => {
         try {
             const url: string = Routers.VerifyEmail;  // Adjust this based on the desired route
-            const result: { [x: string]: any; key: string } = await post(url, { email: inputvalue, password: password, type: data.role });
+            const result : { [x: string]: any; key: string } = await post(url, { email: inputvalue, password: password, type: data.role });
             setMessage(true);
             setTimeout(() => {
                 setMessage(false);
             }, 3000);
-            const { token } = result
             console.log('AUTHTOKEN', result.token);
+            const { token } = result
 
             localStorage.setItem("token", token)
         } catch (error) {
