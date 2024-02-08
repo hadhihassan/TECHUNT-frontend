@@ -19,9 +19,9 @@ const ProfileDescription = () => {
 
     const dispatch = useDispatch()
     const [_description, addDescription] = useState("")
-    const [lengthError, setLenghtError] = useState<String | any>("")
+    const [lengthError, setLenghtError] = useState<string | any>("")
     const handleType: (event: ChangeEvent<HTMLTextAreaElement>) => void = (event) => {
-        if (_description.length === 450) {
+        if (_description?.length && _description?.length > 440) {
             setLenghtError("Description going long maximum 450 characters")
         } else {
             console.log(_description);
@@ -81,7 +81,7 @@ const ProfileDescription = () => {
                                     placeholder="Write your profile description here..."
                                 ></textarea>
                                 <label className="block mt-1  text-xs font-medium text-end ">450 characters</label>
-                                {lengthError.length &&
+                                {lengthError &&
                                     <label className="block mt-1  text-xs font-medium text-end ">{lengthError}</label>
                                 }
                             </div>

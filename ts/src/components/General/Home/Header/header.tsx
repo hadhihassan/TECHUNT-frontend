@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 import Routers from "../../../../util/pathVariables";
+import { useContext } from "react";
+import { MyContext } from "../../../../context/myContext";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+
 type Layout = {
   layout: boolean
 }
 
 
+
 const Header = ({ layout }: Layout) => {
+  const data  = useContext(MyContext)
+  console.log(data);
+  
   return (
     <>{layout ? <div className="h-[50px] m-1 border-b-2">
       <div className="ml-16 mt-5">
@@ -13,7 +21,7 @@ const Header = ({ layout }: Layout) => {
         <span className="text-red-500 text-3xl font-normal font-montserrat break-words">UNT</span>
       </div>
     </div>
-      : 
+      :
       <div className="flex flex-col sm:flex-row mt-5 p-1 mb-3 justify-between ">
         {/* Logo */}
         <div className="w-full sm:w-[16%] flex items-center justify-center sm:justify-end">
@@ -35,23 +43,21 @@ const Header = ({ layout }: Layout) => {
         {/* Search Bar */}
         <div className="w-full sm:w-[25%] mt-3 sm:mt-0 ml-0 sm:ml-8 flex justify-center items-center">
           <div className="flex justify-between border border-black rounded-[20px] w-[100%] sm:w-[300px] h-[30px]">
-            <label className="m-1 ml-3 text-sm text-black font-normal font-montserrat">Search</label>
-            <label className="m-1 mr-3 text-sm text-black font-normal font-montserrat">Search</label>
+            <input className="m-1 ml-3 text-sm  font-normal font-montserrat border-white "/>
+            <SearchOutlinedIcon className="m-1"/>
           </div>
         </div>
 
-        {/* Login Button */}
-        <div className="w-full mr-[4rem] sm:w-[15%] mt-3 sm:mt-0 ml-0 sm:ml-8  flex justify-center sm:justify-start">
-          <button className="w-full sm:w-[120px] h-[34px] bg-white text-red-500 border border-red-500 rounded-[20px] mr-2">
+        <div className="w-full  sm:w-[15%] mt-3 sm:mt-0 ml-0 sm:ml-8  flex justify-center sm:justify-start">
+          {data?.isLogged ? <button className="w-full sm:w-[120px] h-[34px] bg-white text-red-500 border border-red-500 rounded-[20px] mr-2">
             <Link to={Routers.Login}>
-            Login
+              Login
             </Link>
-          </button>
-          <button className="w-full sm:w-[120px] h-[34px] text-white bg-red-500 rounded-[20px] ">
+          </button> : <button className="w-full sm:w-[120px] h-[34px] text-white bg-red-500 rounded-[20px] ">
             <Link to={Routers.signup}>
-            sign up
+              sign up
             </Link>
-          </button>
+          </button>} 
         </div>
       </div>}
     </>

@@ -12,7 +12,6 @@ import { useNavigate } from "react-router";
 
 const Addexperiance: React.FC = () => {
 
-
     const navigate = useNavigate();
     const data = useSelector((state: ROOTSTORE) => state.signup);
     const [text, setText] = useState<string>("");

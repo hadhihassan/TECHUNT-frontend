@@ -26,6 +26,8 @@ export const get = async <T>(url: string, _type?: string): Promise<T> => {
     console.log("repones axios",response)
     return response.data.status;
   } catch (error) {
+    console.log(error);
+    
     handleRequestError(error);
     throw error;
   }
@@ -65,6 +67,7 @@ export async function resolve(promise: Promise<any> | PromiseLike<null> | null) 
   try {
     resolved.data = await promise;
   } catch (e) {
+    
     resolved.error = e;
   }
 

@@ -1,25 +1,40 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../api/client.Api";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE, setLogged } from "../../redux/Slice/signupSlice";
+import { INITIALSTATE, setEmail, setVerify, setRole, setLogged } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [email, setEmail] = useState<string>("")
+    const navigate = useNavigate();
+
+    const [email, setUserEmail] = useState<string>("")
+    const [error, setError] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
+    const d = useSelector((state: ROOTSTORE) => state.signup)
+
+
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
 
-        Login({ email, password }, role)
-            .then((res: {}) => {
-                if (res) {
-                    dispatch(setLogged(true))
+        Login({ email, password })
+            .then((res: any) => {
+                console.log(res, "thisis response");
+                if (!res?.data) {
+                    setError("Email Or Password incorrect")
+                } else {
+                    console.log("he entered");
+
+                    dispatch(setLogged(true));
+                    dispatch(setVerify(true));
+                    dispatch(setRole(res?.data?.data?.role));
+                    dispatch(setEmail(res?.data?.data?.data?.Email));
+                    console.log(res?.data?.data?.token);
+                    localStorage.setItem("token", res?.data?.data.token)
                     navigate("/");
                 }
             })
@@ -38,11 +53,11 @@ const LoginPage: React.FC = () => {
                     <form className="space-y-4 md:space-y-6" onSubmit={handleEmailSubmit}>
                         <div>
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                            <input  onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" />
+                            <input onChange={(e) => setUserEmail(e.target.value)} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" />
                         </div>
                         <div>
-                            <label  className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-                            <input  onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password"className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <label className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                            <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-start">
@@ -56,6 +71,8 @@ const LoginPage: React.FC = () => {
                             <span className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>
                         </div>
                         <div className="flex justify-center items-center flex-col ">
+                            <span className="text-sm font-medium text-center text-red-700 font-sans">{error}</span>
+                            <br />
                             <button type="submit" className=" bg-red-500 w-[10rem] mb-4 h-[2rem] text-white border rounded-xl  ">Sign in</button>
                             <p className="text-sm font-normal fonr-sans text-start">
                                 Don’t have an account yet? <span className="font-medium  hover:underline text-red-500">Sign up</span>
@@ -63,7 +80,7 @@ const LoginPage: React.FC = () => {
                         </div>
                     </form>
                     <div >
-                        <hr /> 
+                        <hr />
                     </div>
                 </div>
             </div>

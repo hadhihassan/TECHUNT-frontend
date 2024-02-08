@@ -19,11 +19,18 @@ export const MyContextProvider: React.FC<ContextProps> = ({ children }) => {
   const data = useSelector((state: ROOTSTORE) => state.signup);
 
   // Initialize your context data here
-  const userData: Context = {
+  const userData = {
     isLogged: data.isLogged,
     role: data.role,
     verify: data.verify,
-  };
+    fn: () => {
+        userData.isLogged = false;
+        userData.role = 'NOTHING';
+        userData.verify = false;
+    }
+};
 
-  return <MyContext.Provider value={userData}>{children}</MyContext.Provider>;
+
+
+  return <MyContext.Provider value={userData} >{children}</MyContext.Provider>;
 };

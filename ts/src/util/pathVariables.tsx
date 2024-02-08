@@ -7,8 +7,9 @@ export type Routes = {
     MailVerification: string;
     Type: string;
     CREATE_PROFILE_MESSAGE: string;
-    signup:string
-   
+    signup: string,
+    404:string
+
 };
 
 const routerVariables: Routes = {
@@ -19,7 +20,8 @@ const routerVariables: Routes = {
     Type: '/type/',
     CREATE_PROFILE_MESSAGE: '/profile-create/',
     signup: "/signup/",
-   
+    404:'/404/'
+
 }
 export default routerVariables;
 //Client routes
@@ -31,19 +33,19 @@ export interface CLIENTROUTES {
 export const clientRoutes: CLIENTROUTES = {
     ADD_PROFILE_DESCRIPTION: "/client/profile-description/",
     ADD_CONTACT_DETAILS: "/client/add-contact/",
-    Profile:"/client/profile/"
-} 
+    Profile: "/client/profile/"
+}
 
 //Talent routes
-interface TALENT_ROUTES  {
-    AddSkills:string,
-    Profile_title:string,
-    AddWorkExperiance:string
-    Profile:string
+interface TALENT_ROUTES {
+    AddSkills: string,
+    Profile_title: string,
+    AddWorkExperiance: string
+    Profile: string
 }
-export const talent_routes:TALENT_ROUTES = {
+export const talent_routes: TALENT_ROUTES = {
     AddSkills: "/add-skills/",
     Profile_title: "/profile-title/",
     AddWorkExperiance: "/add-experiance/",
-    Profile:"/talent/profile/"
+    Profile: "/talent/profile/"
 }

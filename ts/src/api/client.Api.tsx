@@ -25,10 +25,10 @@ export async function uploadProfilePhoto(image: FormData, role: string) {
     );
 }
 
-export async function Login(data:{},role:string) {
+export async function Login(data:{}) {
     console.log("email =>", data, "password => ", data);
     return await resolve(
-        axiosInstance.post(`${BASE_URL}${role}/login/`,data)
+        axiosInstance.post(`${BASE_URL}login/`,data)
     )
 
 }

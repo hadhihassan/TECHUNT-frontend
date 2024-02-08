@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { createContactDetails, uploadProfilePhoto } from "../../api/client.Api";
 import { useSelector } from "react-redux";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
@@ -6,6 +6,8 @@ import { ROOTSTORE } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import routerVariables from "../../util/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
+import Select from 'react-select'
+import axios from 'axios';
 
 export interface CONTACT_FROM {
     photo?: File | null,
@@ -23,7 +25,7 @@ const ContactForm: React.FC = () => {
     const naviagte = useNavigate()
     const [image, setImage] = useState<any>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
-    const description:Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
+    const description: Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
     const [formData, setFormData] = useState({
         photo: null,
         address: "",
@@ -33,7 +35,7 @@ const ContactForm: React.FC = () => {
         number: null,
         pinCode: null,
         country: "",
-        description:description
+        description: description
     })
 
     const handleInputChnage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +76,24 @@ const ContactForm: React.FC = () => {
                 })
         }
     }
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+
+    useEffect(() => {
+        axios.get('your-api-endpoint-url')
+            .then(response => {
+                // Assuming the API response is an array of country objects with label and value properties
+                setCountries(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching countries:', error);
+            });
+    }, []);
+
+    const handleCountryChange = (selectedOption: React.SetStateAction<null>) => {
+        setSelectedCountry(selectedOption);
+        console.log('Selected country:', selectedOption);
+    };
     // };
 
     return (
@@ -129,6 +149,13 @@ const ContactForm: React.FC = () => {
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">Country</label>
                     <div className="mt-2.5">
+                        {/* <Select
+                            options={countries}
+                            value={selectedCountry}
+                            onChange={handleCountryChange}
+                            isSearchable
+                            placeholder="Select a country"
+                        /> */}
                         <input onChange={handleInputChnage} type="text" name="country" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import ContactForm from "../../components/General/contactForm";
 
 const ContractDetails = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup)
+    
     return (
         <div>
             <Header layout={true} />
