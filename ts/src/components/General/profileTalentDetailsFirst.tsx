@@ -121,10 +121,10 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
             <div>
                 <img className="border border-black rounded-xl" src={IMG} alt="" />
             </div>
-            <div className="m-2 w-[18rem]">
+            <div className="m-2 w-[18rem] mt-2">
                 <p className="font-sans font-normal text-sm">USA</p>
                 <AccessTimeRoundedIcon fontSize="inherit" />
-                <span className="font-sans font-normal text-xs ml-2" >It's currently 4:45 PM here</span><br />
+                {/* <span className="font-sans font-normal text-xs ml-2" >It's currently 4:45 PM here</span><br /> */}
                 <EditCalendarRoundedIcon fontSize="inherit" />
                 <span className="font-sans font-normal text-xs ml-2">Joined {formattedDate ? formattedDate: "Joined September 1, 2013" }</span>
             </div>

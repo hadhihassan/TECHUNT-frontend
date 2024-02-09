@@ -49,3 +49,14 @@ export const talent_routes: TALENT_ROUTES = {
     AddWorkExperiance: "/add-experiance/",
     Profile: "/talent/profile/"
 }
+
+//Admin routes
+type ADMIN_ROUTES = {
+    Login : string,
+    UserMangment : string
+}
+
+export const admin_Routes: ADMIN_ROUTES = {
+    Login: "/admin/login/",
+    UserMangment: "/admin/user-managment/"
+}

@@ -5,12 +5,12 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from "react-redux";
 import { INITIALSTATE, setEmail } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import { post } from "../../config/axios";
 import Routers, { Routes } from "../../util/pathVariables";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin  } from '@react-oauth/google';
-import axios from "axios";
+import { GoogleLogin } from '@react-oauth/google';
+// import axios from "axios";
 const Login = () => {
 
 
@@ -46,12 +46,12 @@ const Login = () => {
             console.error('Error posting data:', error);
         }
     };
-    const responseMessage = (response: any) => {
-        console.log("this is answer", response);
-    };
-    const errorMessage = (error: any) => {
-        console.log(error, "this is error");
-    };
+    // const responseMessage = (response: any) => {
+    //     console.log("this is answer", response);
+    // };
+    // const errorMessage = (error: any) => {
+    //     console.log(error, "this is error");
+    // };
     // const [user, setUser] = useState([]);
     // const [profile, setProfile] = useState([]);
 
@@ -106,14 +106,14 @@ const Login = () => {
                         </p>
                     </div>
                     <div className="w-[460px] h-[55.31px]  rounded-[100px]" >
-                        <GoogleLogin
-                            clientId="789696358541-g2m8o8ik8de7j8f662n3281rtbcec9uc.apps.googleusercontent.com.apps.googleusercontent.com" // Replace with your Google Client ID
-                            onSuccess={responseMessage} // Function to handle successful login response
-                            onError={errorMessage} // Function to handle login error
-                            cookiePolicy={'single_host_origin'} // Specify cookie policy
-                            buttonText="Login with Google" // Optional: text for the login button
-                        // Additional optional props can be used as needed
-                        />
+                        {/* <GoogleLogin */}
+                            {/* // clientId="789696358541-g2m8o8ik8de7j8f662n3281rtbcec9uc.apps.googleusercontent.com.apps.googleusercontent.com" // Replace with your Google Client ID */}
+                            {/* // onSuccess={responseMessage} // Function to handle successful login response */}
+                            {/* // onError={errorMessage} // Function to handle login error */}
+                            {/* // cookiePolicy={'single_host_origin'} // Specify cookie policy */}
+                            {/* // buttonText="Login with Google" // Optional: text for the login button */}
+                        {/* // Additional optional props can be used as needed */}
+                        {/* /> */}
                         {/* <p className="text-white text-center mt-4">  <GoogleIcon className="mr-1 mb-1 " /> Continue with Google</p> */}
                     </div>
                     <div className="w-[490px] h-[0px] border border-black border-opacity-25 flex justify-center items-center">or</div>
