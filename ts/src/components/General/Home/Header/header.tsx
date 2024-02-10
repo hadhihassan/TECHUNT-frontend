@@ -8,8 +8,6 @@ type Layout = {
   layout: boolean
 }
 
-
-
 const Header = ({ layout }: Layout) => {
   const data  = useContext(MyContext)
   console.log(data);

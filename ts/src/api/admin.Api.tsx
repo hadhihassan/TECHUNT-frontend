@@ -1,4 +1,4 @@
-import { resolve } from '../config/axios';
+import { resolve, resolve1 } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 
 export async function login(data: {}) {
@@ -12,7 +12,7 @@ export async function getAllUser() {
     )
 }
 export async function blockUser(data:any) {
-    return await resolve(
-        axiosInstance.post(`${BASE_URL}admin//block-user/`,data)
+    return await resolve1(
+        axiosInstance.post(`${BASE_URL}admin/block-user/`,data)
     )
 }

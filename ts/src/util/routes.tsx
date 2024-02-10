@@ -33,7 +33,7 @@ const WebRouters: React.FC = () => {
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Imports.SidePanel />} />
+            <Imports.Route path={"*"} element={<Imports.ContractDetails />} />
 
             {/* ADMIN ROUTES */}
             <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />

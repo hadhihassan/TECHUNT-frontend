@@ -43,7 +43,7 @@ export const post = async <T>(url: string, data?: any): Promise<T> => {
     return response.data;
   } catch (error) {
     console.log(error);
-    handleRequestError(error);
+    // handleRequestError(error);
     throw error;
   }
 };
@@ -73,6 +73,23 @@ export async function resolve(promise: Promise<any> | PromiseLike<null> | null) 
 
   return resolved;
 }
+
+export async function resolve1(promise: Promise<any> | PromiseLike<null> | null) {
+  const resolved: resolve = {
+    data: null,
+    error: null
+  };
+
+  try {
+    const response = await promise;
+    resolved.data = response.data.data; // Assuming the response object has a 'data' property
+  } catch (error:any) {
+    resolved.error = error.response.data;
+  }
+
+  return resolved;
+}
+
 
 
 

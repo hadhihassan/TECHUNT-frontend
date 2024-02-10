@@ -8,7 +8,9 @@ import routerVariables from "../../util/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 import Select from 'react-select'
 import axios from 'axios';
+import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../src/config/validators'
 
+// interface for the form data shap
 export interface CONTACT_FROM {
     photo?: File | null,
     lName: string,
@@ -22,10 +24,24 @@ export interface CONTACT_FROM {
 }
 
 const ContactForm: React.FC = () => {
+
     const naviagte = useNavigate()
     const [image, setImage] = useState<any>(null)
+    const [countries, setCountries] = useState([]);
+
+    // form validation state error message
+    const [lError, setlError] = useState<string | null>(null)
+    const [fError, setfError] = useState<string | null>(null)
+    const [numberError, setNumberError] = useState<string | null>(null)
+    const [cityError, setCityError] = useState<string | null>(null)
+    const [pinCodeError, setPinCodeError] = useState<string | null>(null)
+    const [AddressError, setAddressError] = useState<string | null>(null)
+    const [countryError, setCountryError] = useState<string | null>(null)
+
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const description: Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
+
+    // form data state
     const [formData, setFormData] = useState({
         photo: null,
         address: "",
@@ -37,37 +53,57 @@ const ContactForm: React.FC = () => {
         country: "",
         description: description
     })
-
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await axios.get('https://restcountries.com/v3.1/all');
+                setCountries(response.data);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+            }
+        };
+        fetchCountries();
+    }, []);
+    ;
     const handleInputChnage = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name);
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+        validateForm()
+    }
+    const validateForm = () => {
+        const errors = {};
+        errors.fName = nameValidator(formData.fName, "First Name");
+        errors.lName = nameValidator(formData.lName, "Last Name");
+        errors.city = nameValidator(formData.city, "City");
+        errors.number = numberValidator(formData.number || "");
+        errors.pinCode = pincodeValidator(formData.pinCode || "");
+        errors.address = addressValidator(formData.address);
+        if (selectedCountry === "") {
+            errors.country = "Country is required";
+        }
+        return Object.values.length === 0 
     }
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        createContactDetails(formData, role)
-            .then((res: any) => {
-                console.log("response =>", res);
-                naviagte(routerVariables.Login)
-            }).catch((e: any) => {
-                console.log(e.message)
-            })
-        console.log(formData);
+
+        if (validateForm()) {
+            createContactDetails(formData, role)
+                .then((res: any) => {
+                    console.log("response =>", res);
+                    naviagte(routerVariables.Login)
+                }).catch((e: any) => {
+                    console.log(e.message)
+                })
+        }
     }
     const handlePhotoChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.files && e.target.files.length > 0) {
-
             setImage(e.target.files[0]);
             let img: any = e.target.files[0];
             const data = new FormData();
             data.append('image', img);
-            console.log(img);
-
-            for (var key of data.entries()) {
-                console.log(key[0] + ', ' + key[1]);
-            }
             uploadProfilePhoto(data, role)
                 .then((res: any) => {
                     console.log(res);
@@ -76,23 +112,15 @@ const ContactForm: React.FC = () => {
                 })
         }
     }
-    const [countries, setCountries] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState(null);
 
-    useEffect(() => {
-        axios.get('your-api-endpoint-url')
-            .then(response => {
-                // Assuming the API response is an array of country objects with label and value properties
-                setCountries(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching countries:', error);
-            });
-    }, []);
-
+    const [selectedCountry, setSelectedCountry] = useState<any>('');
     const handleCountryChange = (selectedOption: React.SetStateAction<null>) => {
-        setSelectedCountry(selectedOption);
         console.log('Selected country:', selectedOption);
+        setCountryError("")
+        setFormData({
+            ...formData,
+            ["country"]: selectedOption?.value,
+        });
     };
     // };
 
@@ -129,54 +157,63 @@ const ContactForm: React.FC = () => {
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
+                        {lError && <p className="text-red-500 text-xs text-end">{lError}</p>}
+                    </div>
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="lName" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">First name</label>
+                    {fError && <p className="text-red-500 text-xs text-end">{fError}</p>}
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="fName" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div className="sm:col-span-2">
                     <label className="block text-sm font-semibold leading-6 text-gray-900">Address</label>
+                    {AddressError && <p className="text-red-500 text-xs text-end">{AddressError}</p>}
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="address" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">Country</label>
-                    <div className="mt-2.5">
-                        {/* <Select
-                            options={countries}
-                            value={selectedCountry}
-                            onChange={handleCountryChange}
-                            isSearchable
-                            placeholder="Select a country"
-                        /> */}
-                        <input onChange={handleInputChnage} type="text" name="country" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    {countryError && <p className="text-red-500 text-xs text-end">{countryError}</p>}
+                    <div>
+                        <div className="mt-2.5">
+                            <div className="mt-2.5">
+                                <Select
+                                    options={countries.map((country: any) => ({ value: country.name.common, label: country.name.common }))}
+                                    onChange={handleCountryChange}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                         City name
                     </label>
+                    {cityError && <p className="text-red-500 text-xs text-end">{cityError}</p>}
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="city" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">Zip code/ Pincode</label>
+                    {pinCodeError && <p className="text-red-500 text-xs text-end">{pinCodeError}</p>}
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="pinCode" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
                     <label className="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
+                    {numberError && <p className="text-red-500 text-xs text-end">{numberError}</p>}
                     <div className="mt-2.5">
-                        <input onChange={handleInputChnage} type="text" name="number" className="block w-full rounded-md border-0 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input onChange={handleInputChnage} type="text" name="number" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
 
