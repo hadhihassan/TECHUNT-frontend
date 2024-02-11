@@ -21,8 +21,8 @@ const Login = () => {
     const [message, setMessage] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const data: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup);
-    const [Emailerrors, setErrorsEmail] = useState<string | null>(null);
-    const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
+    const [Emailerrors, setErrorsEmail] = useState<string | null>(" ");
+    const [PasswordErrors, setErrorsPassword] = useState<string | null>(" ");
 
     const handleClickBtn: () => void = () => {
         naviagte("/login/")
@@ -31,7 +31,7 @@ const Login = () => {
     const verifyEmail = async (): Promise<void> => {
         setErrorsEmail(emailValidator(inputvalue))
         setErrorsPassword(passwordValidator(password))
-
+        console.log(Emailerrors,PasswordErrors)
         if (!Emailerrors && !PasswordErrors) {
             if (inputvalue !== "") {
                 dispatch(setEmail(inputvalue));
@@ -39,6 +39,7 @@ const Login = () => {
             try {
                 const url: string = Routers.VerifyEmail;
                 const result: any = await signup({ email: inputvalue, password: password }, data.role)
+                console.log(result)
                 if (result.data) {
                     setMessage(true);
                     setTimeout(() => {
@@ -88,7 +89,7 @@ const Login = () => {
                                 <p className="text-black">Get your Techunt free account</p>
                             </div>
                             <div className="mt-5">
-                                <label className="font-semibold text-sm text-gray-400 pb-1 block">E-mail</label>
+                                <label className="font-semibold text-sm  pb-1 block">E-mail</label>
                                 {Emailerrors && <p className="text-red-500 text-xs text-end">{Emailerrors}</p>}
                                 <input
                                     onChange={handleChange}
@@ -96,7 +97,7 @@ const Login = () => {
                                     type="text"
                                     id="login"
                                 />
-                                <label className="font-semibold text-sm text-gray-400 pb-1 block">Password</label>
+                                <label className="font-semibold text-sm  pb-1 block">Password</label>
                                 {PasswordErrors && <p className="text-red-500 text-xs text-end">{PasswordErrors}</p>}
                                 <input
                                     onChange={handleChangePassword}

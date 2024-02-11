@@ -14,7 +14,6 @@ import routerVariables from '../../util/pathVariables'
 const FindTypeUser: React.FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    let a: number
     const { email }: INITIALSTATE = useSelector(
         (state: ROOTSTORE) => state.signup
     );
@@ -33,8 +32,10 @@ const FindTypeUser: React.FC = () => {
     const handleType = (index: Number) => {
         if (index === 1) {
             setUserType("TALENT")
+            console.log("THIS WILL BE TALENT",_UserType)
         } else if (index === 0) {
             setUserType("CLIENT")
+            console.log("THIS WILL BE CIENT" ,_UserType)
         }
     }
 

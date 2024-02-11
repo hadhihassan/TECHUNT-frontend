@@ -46,7 +46,7 @@ const workCategory = () => {
                             </p>
 
                         </div>
-                        <div className='m-10'>
+                        <div className='m-10 w-full'>
                             <ReactCardSlider slides={slides} />
                         </div>
                     </div>
@@ -57,7 +57,7 @@ const workCategory = () => {
                                 A Job Category is a broad-based group of employees with comparable job responsibilities located at comparable levels of responsibility within an organization.
                             </p>
                         </div>
-                        <div className='m-10'>
+                        <div className='m-10 w-full'>
                             <ReactCardSlider slides={slides} />
                         </div>
                     </div>

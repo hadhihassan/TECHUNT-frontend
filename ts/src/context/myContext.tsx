@@ -1,12 +1,12 @@
-// myContext.tsx
-import React, { createContext, ReactNode } from "react";
+import React, { createContext, ReactNode, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../redux/store";
 
 export interface Context {
-  isLogged: boolean | any;
-  role: String;
+  isLogged: boolean;
+  role: string;
   verify: boolean;
+  fn: () => void; // Function to update context data
 }
 
 interface ContextProps {
@@ -16,21 +16,37 @@ interface ContextProps {
 export const MyContext = createContext<Context | undefined>(undefined);
 
 export const MyContextProvider: React.FC<ContextProps> = ({ children }) => {
-  const data = useSelector((state: ROOTSTORE) => state.signup);
+  const reduxData = useSelector((state: ROOTSTORE) => state.signup);
 
-  // Initialize your context data here
-  const userData = {
-    isLogged: data.isLogged,
-    role: data.role,
-    verify: data.verify,
+  // Initialize context data using useState
+  const [userData, setUserData] = useState<Context>({
+    isLogged: reduxData.isLogged,
+    role: reduxData.role,
+    verify: reduxData.verify,
     fn: () => {
-        userData.isLogged = false;
-        userData.role = 'NOTHING';
-        userData.verify = false;
+      // Update context data using setUserData function
+      setUserData(prevData => ({
+        ...prevData,
+        isLogged: false,
+        role: 'NOTHING',
+        verify: false
+      }));
     }
-};
+  });
 
+  // Update context data when Redux store data changes
+  useEffect(() => {
+    setUserData({
+      isLogged: reduxData.isLogged,
+      role: reduxData.role,
+      verify: reduxData.verify,
+      fn: userData.fn // Keep the existing update function
+    });
+  }, [reduxData]);
 
-
-  return <MyContext.Provider value={userData} >{children}</MyContext.Provider>;
+  return (
+    <MyContext.Provider value={userData}>
+      {children}
+    </MyContext.Provider>
+  );
 };

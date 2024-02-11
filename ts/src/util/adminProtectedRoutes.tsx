@@ -1,15 +1,19 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRoute: React.FC = ({ children }) => {
-    const adminData = JSON.parse(localStorage.getItem("admin") || false);
-    const isLogged = adminData.isLogged;
+interface AdminData {
+    isLogged: boolean;
+}
+
+const ProtectedRoute: React.FC   = ({ children }) => {
+    const adminData: AdminData | null = JSON.parse(localStorage.getItem("admin") || "null");
+    const isLogged: boolean = adminData?.isLogged || false;
     const location = useLocation();
-    
+
     if (!isLogged) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/admin/login/" state={{ from: location }} replace />;
     }
-    
+
     return <>{children}</>; // Render children using curly braces
 };
 

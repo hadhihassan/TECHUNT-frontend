@@ -103,19 +103,32 @@ const profileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data
 
             <hr />
             <div className="flex flex-col space-y-5 items-start m-5">
-                {/* { */}
-                {/* // data.data?.Profile?.Work_Experiance.map((value: string, key: number) => ( */}
-
-                <><p className="text-gray-700 text-md font-sans font-medium" key={1}>{data?.Profile?.Work_Experiance[0]}</p><span className="text-gray-700 font-sans font-normal text-xs">2019- 2021</span><p className="text-gray-700 font-sans font-normal text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.Lorem  ipsum dolor sit amet,
-                    consectetur adipiscing elit,sed do eiusmod.Lorem ipsum  dolor sit amet, consectetur adipiscing
-                    elit,sed do eiusmod.</p></>
-                {/* // )) */}
-
-                {/* // } */}
-                {/* <p className="text-gray-700 text-md font-sans font-medium" >{data.data?.Profile?.Work_Experiance[0]}</p> */}
+                {data?.Profile?.Work_Experiance[0] ? (
+                    <>
+                        <p className="text-gray-700 text-md font-sans font-medium">
+                            {data?.Profile?.Work_Experiance[0]}
+                        </p>
+                        <span className="text-gray-700 font-sans font-normal text-xs">2019- 2021</span>
+                        <p className="text-gray-700 font-sans font-normal text-sm">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
+                        </p>
+                    </>
+                ) : (
+                    <p className="text-center text-3xl font-sans font-medium">Fresher</p>
+                )}
             </div>
-            <hr />
-            <p className=" mt-4 text-blue-500 text-center">View All</p>
+            {
+                data?.Profile?.Work_Experiance[0] && (
+                    <>
+                        <hr />
+                        <p className="mt-4 text-blue-500 text-center">View All</p>
+                    </>
+                )
+            }
+
+
         </div >
     )
 }

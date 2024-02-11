@@ -21,7 +21,7 @@ const profile = () => {
 
         getUserProfileDetails(role)
             .then((res: any) => {
-                console.log(res)
+                console.log(res,"this is reponse for geting profile")
                 setData(res.data.data)
             }).catch((err: any) => {
                 console.log(err)

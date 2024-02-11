@@ -3,19 +3,22 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import Avatar from '@mui/material/Avatar';
 import { getUserProfileDetails } from "../../../../api/talent.Api";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList, IconButton } from '@mui/material';
 import { Logout, Person } from '@mui/icons-material';
 import { persistor} from '../../../../redux/store'
 import { useNavigate } from "react-router-dom"; 
+
 import { MyContext } from "../../../../context/myContext";
+import { cleanAllData } from "../../../../redux/Slice/signupSlice";
 const AfterLoginHeader = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [IMG, setIMG] = useState<string>("")
     const basicdata:any = useContext(MyContext); // Move useContext here
-
+    console.log("conetxtData",basicdata)
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -45,6 +48,7 @@ const AfterLoginHeader = () => {
         localStorage.removeItem('token')
         persistor.purge();
         basicdata.fn()
+        dispatch(cleanAllData())
         navigate("/")
     }
 

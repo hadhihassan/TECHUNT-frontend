@@ -37,11 +37,11 @@ export function nameValidator(name: string, fieldName: string) {
 }
 // number
 export function numberValidator(number: string) {
-    const phoneRegex = /^\d{10}$/;
+    const phoneRegex =/^\d+$/;
     if (number.trim() === "") {
         return 'Number is required';
     }
-    if (number.length < 10) {
+    if (number.length < 10 || number.length > 10 ) {
         return "Phone number must be 10 digits";
     }
     if (!phoneRegex.test(number)) {
@@ -70,7 +70,7 @@ export function pincodeValidator(number: string) {
     if (!pincodeRegex.test(number)) {
         return "Pincode only includes numbers";
     }
-    if (number.length !== 6) {
+    if (number.length < 6 || number.length > 6) {
         return "Pincode must be 6 digits";
     }
     return null;

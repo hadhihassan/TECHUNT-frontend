@@ -7,7 +7,7 @@ import { ROOTSTORE } from "../../redux/store";
 import { INITIALSTATE, setEmail, setVerify, setRole, setLogged } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../config/validators";
-
+import Swal from 'sweetalert2'
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -26,18 +26,26 @@ const LoginPage: React.FC = () => {
         if (Emailerrors === null && PasswordErrors === null) {
             Login({ email, password })
                 .then((res: any) => {
-                    console.log(res, "thisis response");
-                    if (!res?.data) {
-                        setError("Email Or Password incorrect")
+                    if (res?.error?.response?.data?.isBlocked) {
+                        Swal.fire({
+                            title: "Youre blocked !",
+                            text: "you blocked by admin !",
+                            icon: "warning"
+                        });
                     } else {
-                        console.log("he entered");
-                        dispatch(setLogged(true));
-                        dispatch(setVerify(true));
-                        dispatch(setRole(res?.data?.data?.role));
-                        dispatch(setEmail(res?.data?.data?.data?.Email));
-                        console.log(res?.data?.data?.token);
-                        localStorage.setItem("token", res?.data?.data.token)
-                        navigate("/");
+                        console.log(res, "login response");
+                        if (!res?.data) {
+                            setError("Email Or Password incorrect")
+                        } else {
+                            console.log("he entered");
+                            dispatch(setLogged(true));
+                            dispatch(setVerify(true));
+                            dispatch(setRole(res?.data?.data.role));
+                            dispatch(setEmail(res?.data?.data?.data?.Email));
+                            console.log(res?.data?.data?.token);
+                            localStorage.setItem("token", res?.data?.data.token)
+                            navigate("/");
+                        }
                     }
                 })
                 .catch((error) => {

@@ -9,17 +9,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes, talent_routes } from "../../util/pathVariables";
 import { storeWorkBasedDataBioData } from "../../api/talent.Api";
+import Alert from '@mui/material/Alert';
+
+
 
 const AddSkills: React.FC = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup);
     const [text, setText] = useState<string>("");
     const [skills, setSkills] = useState<string[]>([]);
+    const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
     const addSkill = () => {
         if (text.trim() !== "") {
-            setSkills(prevSkills => [...prevSkills, text.trim()]);
-            setText("");
+            // Check if the skill already exists in the array
+            if (!skills.includes(text.trim())) {
+                setSkills(prevSkills => [...prevSkills, text.trim()]);
+                setText("");
+                setError("");
+            } else {
+                setError("Skill already exists");
+                setTimeout(() => {
+                    setError("");
+                }, 3000);
+            }
         }
     };
 
@@ -29,27 +42,35 @@ const AddSkills: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
+        setError(""); // Clear error message when input changes
     };
 
     const handleClick = () => {
         let dataString: string | null = localStorage.getItem("talent_Data");
         let data: { skills?: string[] } = dataString ? JSON.parse(dataString) : {};
-    
-        data.skills = skills;
-        localStorage.setItem("talent_Data", JSON.stringify(data));
-        
-        storeWorkBasedDataBioData(data)
-            .then((res) => {
-                console.log(res.data)
-                navigate(clientRoutes.ADD_PROFILE_DESCRIPTION);
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-            .finally(() => {
-            });
+        if (skills.length >= 5) {
+            setError("")
+            data.skills = skills;
+            localStorage.setItem("talent_Data", JSON.stringify(data));
+
+            storeWorkBasedDataBioData(data)
+                .then((res) => {
+                    console.log(res.data)
+                    navigate(clientRoutes.ADD_PROFILE_DESCRIPTION);
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+                .finally(() => {
+                });
+        }else{
+            setError("Minimum 5 skill you want ")
+            setTimeout(() => {
+                setError("");
+            }, 300);
+        }
     };
-    
+
 
     return (
         <div>
@@ -97,7 +118,7 @@ const AddSkills: React.FC = () => {
                                     placeholder="Example: node js | react js"
                                 />
                                 <label className="text-red-500 text-sm font-medium" onClick={addSkill}>+ Add skills</label>
-
+                                {error && <Alert severity="warning">{error}</Alert>}
                                 <div className="flex flex-wrap mt-2">
                                     {skills &&
                                         skills.map((value, key) => (

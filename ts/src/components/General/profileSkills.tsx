@@ -104,11 +104,17 @@ const profileSkills: React.FC<{ data: any, onUpdate: () => void }> = ({ data, on
             </Modal>
             <hr />
             <div className="flex flex-col space-y-5 items-start m-5">
-                {data?.Profile?.Skills.map((value: string, key: number) => (
-                    <span className="text-start font-semibold font-sans" key={key}>
-                        {value}
-                    </span>
-                ))}
+                {
+                    data?.Profile?.Skills.length > 0 ? (
+                        data?.Profile?.Skills.map((value: string, key: number) => (
+                            <span className="text-start font-semibold font-sans" key={key}>
+                                {value}
+                            </span>
+                        ))
+                    ) : (
+                        <p className="font-sans font-medium text-red-300">Add skills here</p>
+                    )
+                }
             </div>
         </div>
     )

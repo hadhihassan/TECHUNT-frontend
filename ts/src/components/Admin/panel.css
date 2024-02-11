@@ -1,20 +1,24 @@
 #sidebar {
     --tw-translate-x: -100%;
 }
+
 #menu-close-icon {
     display: none;
 }
 
-#menu-open:checked ~ #sidebar {
+#menu-open:checked~#sidebar {
     --tw-translate-x: 0;
 }
-#menu-open:checked ~ * #mobile-menu-button {
+
+#menu-open:checked~* #mobile-menu-button {
     background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
 }
-#menu-open:checked ~ * #menu-open-icon {
+
+#menu-open:checked~* #menu-open-icon {
     display: none;
 }
-#menu-open:checked ~ * #menu-close-icon {
+
+#menu-open:checked~* #menu-close-icon {
     display: block;
 }
 
@@ -23,6 +27,85 @@
         --tw-translate-x: 0;
     }
 }
+
 .b {
     color: rgba(66, 66, 74, 1);
+}
+
+.Btn {
+    --black: #000000;
+    --ch-black: #141414;
+    --eer-black: #1b1b1b;
+    --night-rider: #2e2e2e;
+    --white: #ffffff;
+    --af-white: #f3f3f3;
+    --ch-white: #e1e1e1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: var(--af-white);
+}
+
+/* plus sign */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 17px;
+}
+
+.sign svg path {
+    fill: var(--night-rider);
+}
+
+/* text */
+.text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: var(--night-rider);
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+}
+
+/* hover effect on button width */
+.Btn:hover {
+    width: 125px;
+    border-radius: 5px;
+    transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+
+/* hover effect button's text */
+.Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+}
+
+/* button click effect*/
+.Btn:active {
+    transform: translate(2px, 2px);
 }

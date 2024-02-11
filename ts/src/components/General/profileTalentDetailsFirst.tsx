@@ -23,9 +23,22 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
     const truncatedDescription = details?.Profile?.Description?.slice(0, 200); // Display only first 200 characters
     const remainingDescription = details?.Profile?.Description?.slice(10); // Display remaining characters
     const [image, setImage] = useState<any>(null);
+
+    const [formData, setData] = useState({
+        first_name: "",
+        last_name: "",
+        description: "",
+        title: "",
+    })
     useEffect(() => {
         setDetails(datas);
-    });
+        setData({
+            first_name: datas?.First_name || "add you first name",
+            last_name: datas?.Last_name || "add you last  name",
+            description: datas?.Profile?.Description || "add you profile description",
+            title: datas?.Profile?.Title || "add you profile title ",
+        })
+    }, [datas]);
     const [showMore, setShowMore] = useState(false);
     const toggleShowMore = () => {
         setShowMore(!showMore);
@@ -79,24 +92,18 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
                 });
         }
     }
-    const [formData, setData] = useState({
-        first_name: "",
-        last_name: "",
-        description: "",
-        title: "",
-    })
+    console.log(details)
     const changeHandle: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         setData({
             ...formData,
             [e.target.name]: e.target.value,
         })
-        console.log("the conatc edit modal ", formData)
+        console.log(formData)
     }
     const handleSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
         editMainProfileSection(formData, basicData?.role)
             .then((res) => {
-                console.log(res, "after the edit form submit ")
                 onUpdate()
                 setMessage(true)
                 setTimeout(() => {
@@ -107,7 +114,7 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
             })
     }
 
-    const dateString = details?.createdAt || "2024-02-07T15:53:33.469+00:00"   ;
+    const dateString = details?.createdAt;
     const date = new Date(dateString);
     const month = date.toLocaleString('default', { month: 'long' });
     const day = date.getDate();
@@ -116,17 +123,19 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
     const formattedDate = `${month} ${day}, ${year}`;
 
 
+
+    console.log(formData, details)
     return <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
                 <img className="border border-black rounded-xl" src={IMG} alt="" />
             </div>
             <div className="m-2 w-[18rem] mt-2">
-                <p className="font-sans font-normal text-sm">USA</p>
-                <AccessTimeRoundedIcon fontSize="inherit" />
+                <p className="font-sans font-normal text-sm">from : {details?.Country}</p>
+                {/* <AccessTimeRoundedIcon fontSize="inherit" /> */}
                 {/* <span className="font-sans font-normal text-xs ml-2" >It's currently 4:45 PM here</span><br /> */}
                 <EditCalendarRoundedIcon fontSize="inherit" />
-                <span className="font-sans font-normal text-xs ml-2">Joined {formattedDate ? formattedDate: "Joined September 1, 2013" }</span>
+                <span className="font-sans font-normal text-xs ml-2">Joined {formattedDate ? formattedDate : "Joined September 1, 2013"}</span>
             </div>
         </div>
         <div className=" w-full ">
@@ -160,22 +169,21 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
                     <div className="flex justify-between">
                         <div className="mr-5">
                             <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
-                            <input onChange={changeHandle} type="text" name="first_name" id="firstName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" />
+                            <input onChange={changeHandle} type="text" value={formData.first_name} name="first_name" id="firstName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" ></input>
                         </div>
                         <div>
                             <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900">Last name</label>
-                            <input onChange={changeHandle} type="text" name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" />
+                            <input onChange={changeHandle} type="text" value={formData?.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="profileTitle" className="block mb-2 text-sm font-medium text-gray-900">Profile Title</label>
-                        <input onChange={changeHandle} type="text" name="title" id="profileTitle" placeholder="Title" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <input onChange={changeHandle} type="text" name="title" value={formData?.title} id="profileTitle" placeholder="Title" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div>
                         <label htmlFor="profileDescription" className="block mb-2 text-sm font-medium text-gray-900">Profile Description</label>
-                        <input onChange={changeHandle} name="description" id="profileDescription" placeholder="Write profile description..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <textarea rows={5} onChange={changeHandle} name="description" value={formData?.description} id="profileDescription" placeholder="Write profile description..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
-
                     <div className="flex justify-center">
                         <button type="submit" className="bg-red-500 w-[10rem] h-[2rem] text-white border rounded-xl">Edit</button>
                     </div>

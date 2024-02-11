@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-
+import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom"
 export const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = BASE_URL;
@@ -23,11 +24,11 @@ axiosInstance.interceptors.request.use(onRequest);
 export const get = async <T>(url: string, _type?: string): Promise<T> => {
   try {
     const response: AxiosResponse = await axiosInstance.get(url);
-    console.log("repones axios",response)
+    console.log("repones axios", response)
     return response.data.status;
   } catch (error) {
     console.log(error);
-    
+
     handleRequestError(error);
     throw error;
   }
@@ -39,7 +40,7 @@ export const post = async <T>(url: string, data?: any): Promise<T> => {
 
     url = data.type + url;
     const response: AxiosResponse = await axiosInstance.post(url, data);
-    console.log(response,"axios post response");
+    console.log(response, "axios post response");
     return response.data;
   } catch (error) {
     console.log(error);
@@ -66,12 +67,24 @@ export async function resolve(promise: Promise<any> | PromiseLike<null> | null) 
 
   try {
     resolved.data = await promise;
+
   } catch (e) {
-    
+
     resolved.error = e;
   }
+  if (resolved?.error?.response?.data?.isBlocked) {
+    Swal.fire({
+      title: "You're blocked!",
+      text: "You are blocked by the admin.",
+      icon: "warning"
+    }).then((res) => {
+      localStorage.clear()
+      window.location.href = '/';
+    });
+  } else {
+    return resolved;
+  }
 
-  return resolved;
 }
 
 export async function resolve1(promise: Promise<any> | PromiseLike<null> | null) {
@@ -83,7 +96,7 @@ export async function resolve1(promise: Promise<any> | PromiseLike<null> | null)
   try {
     const response = await promise;
     resolved.data = response.data.data; // Assuming the response object has a 'data' property
-  } catch (error:any) {
+  } catch (error: any) {
     resolved.error = error.response.data;
   }
 

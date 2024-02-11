@@ -37,6 +37,7 @@ const ContactForm: React.FC = () => {
     const [pinCodeError, setPinCodeError] = useState<string | null>(null)
     const [AddressError, setAddressError] = useState<string | null>(null)
     const [countryError, setCountryError] = useState<string | null>(null)
+    const [photoError, setPhotoErro] = useState<string | null>(null)
 
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const description: Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
@@ -58,6 +59,7 @@ const ContactForm: React.FC = () => {
             try {
                 const response = await axios.get('https://restcountries.com/v3.1/all');
                 setCountries(response.data);
+                console.log(response)
             } catch (error) {
                 console.error('Error fetching countries:', error);
             }
@@ -73,21 +75,22 @@ const ContactForm: React.FC = () => {
         validateForm()
     }
     const validateForm = () => {
-        const errors = {};
-        errors.fName = nameValidator(formData.fName, "First Name");
-        errors.lName = nameValidator(formData.lName, "Last Name");
-        errors.city = nameValidator(formData.city, "City");
-        errors.number = numberValidator(formData.number || "");
-        errors.pinCode = pincodeValidator(formData.pinCode || "");
-        errors.address = addressValidator(formData.address);
-        if (selectedCountry === "") {
-            errors.country = "Country is required";
+        const errors:{} | any = {};
+        errors.fName = setfError(nameValidator(formData.fName, "First Name"))
+        errors.lName = setlError(nameValidator(formData.lName, "Last Name"))
+        errors.city = setCityError(nameValidator(formData.city, "City"))
+        errors.number = setNumberError(numberValidator(formData.number || ""))
+        errors.pinCode = setPinCodeError(pincodeValidator(formData.pinCode || ""))
+        errors.address = setAddressError(addressValidator(formData.address))
+        if (formData.country === "") {
+            errors.country = "djkfhsdjf"
+            setCountryError("Country is required")
         }
-        return Object.values.length === 0 
+        return Object.values(errors).every(error => !error);
     }
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-
+        console.log(validateForm(), "form validation ")
         if (validateForm()) {
             createContactDetails(formData, role)
                 .then((res: any) => {
@@ -152,6 +155,7 @@ const ContactForm: React.FC = () => {
                         <span className="mt-1 text-xs leading-normal">Choose a photo</span>
                         <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
                     </label>
+                    {photoError && <p className="text-red-500 text-xs text-center">{photoError}</p>}
                 </div>
             </div>
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -166,22 +170,29 @@ const ContactForm: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">First name</label>
-                    {fError && <p className="text-red-500 text-xs text-end">{fError}</p>}
+                    <div className="flex justify-between">
+
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">First name</label>
+                        {fError && <p className="text-red-500 text-xs text-end">{fError}</p>}
+                    </div>
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="fName" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">Address</label>
-                    {AddressError && <p className="text-red-500 text-xs text-end">{AddressError}</p>}
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">Address</label>
+                        {AddressError && <p className="text-red-500 text-xs text-end">{AddressError}</p>}
+                    </div>
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="address" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">Country</label>
-                    {countryError && <p className="text-red-500 text-xs text-end">{countryError}</p>}
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">Country</label>
+                        {countryError && <p className="text-red-500 text-xs text-end">{countryError}</p>}
+                    </div>
                     <div>
                         <div className="mt-2.5">
                             <div className="mt-2.5">
@@ -194,24 +205,31 @@ const ContactForm: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">
-                        City name
-                    </label>
-                    {cityError && <p className="text-red-500 text-xs text-end">{cityError}</p>}
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">
+                            City name
+                        </label>
+                        {cityError && <p className="text-red-500 text-xs text-end">{cityError}</p>}
+                    </div>
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="city" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">Zip code/ Pincode</label>
-                    {pinCodeError && <p className="text-red-500 text-xs text-end">{pinCodeError}</p>}
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">Zip code/ Pincode</label>
+                        {pinCodeError && <p className="text-red-500 text-xs text-end">{pinCodeError}</p>}
+                    </div>
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="pinCode" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
-                    {numberError && <p className="text-red-500 text-xs text-end">{numberError}</p>}
+                    <div className="flex justify-between">
+                        <label className="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
+                        {numberError && <p className="text-red-500 text-xs text-end">{numberError}</p>}
+                    </div>
+
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="number" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
@@ -220,9 +238,10 @@ const ContactForm: React.FC = () => {
 
             </div>
             <div className="mt-10">
-                <button type="submit" className="block w-full rounded-md () px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+                <button type="submit" className="block w-full rounded-md () px-1 py-1 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
             </div>
-        </form>)
+        </form>
+    )
 }
 
 export default ContactForm;

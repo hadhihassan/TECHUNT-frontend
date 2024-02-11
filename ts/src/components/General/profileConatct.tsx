@@ -4,21 +4,31 @@ import { editProfileContact } from "../../api/commonApi";
 import { MyContext, Context } from "../../context/myContext";
 import Alert from '@mui/material/Alert';
 
-const profileConatct: React.FC<{ data: {}, onUpdate: () => void }> = ({ data, onUpdate }) => {
+const profileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
     const [details, setdetails] = useState<any>()
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
 
-    useEffect(() => {
-        setdetails(data)
-    }, [data])
-    const basicData: any = useContext(MyContext);
     const [formData, setData] = useState({
-        Address: "",
+        Address: '',
         City: "",
         Country: "",
-        PinCode: null,
-        Number: null,
+        PinCode: "",
+        Number: "",
     })
+    useEffect(() => {
+        if (data) {
+            setdetails(data);
+            console.log(data.Address)
+            setData({
+                Address: data.Address || 'ad address here',
+                City: data.City || 'add city here',
+                Country: data.Country || ' add country here',
+                PinCode: data.PinCode || 'add pin code here',
+                Number: data.Number || 'add number here',
+            });
+        }
+    }, [data])
+    const basicData: any = useContext(MyContext);
     const [isOpen, setIsOpen] = useState(false);
 
     const openModal: () => void = () => {
@@ -67,7 +77,7 @@ const profileConatct: React.FC<{ data: {}, onUpdate: () => void }> = ({ data, on
                             <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
                                 Address
                             </label>
-                            <input name="Address" onChange={handleChnage} className="appearance-none block w-full  bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" placeholder={details?.Address} />
+                            <input name="Address" onChange={handleChnage} className="appearance-none block w-full  bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" value={formData?.Address} />
                         </div>
                     </div>
                     <div className="flex flex-wrap -mx-3 mb-1">
@@ -75,25 +85,25 @@ const profileConatct: React.FC<{ data: {}, onUpdate: () => void }> = ({ data, on
                             <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
                                 City Name
                             </label>
-                            <input name="City" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={details?.City} />
+                            <input name="City" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" value={formData?.City} />
                         </div>
                         <div className="w-full md:w-1/2 px-3">
                             <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
                                 Country Name
                             </label>
-                            <input name="Country" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={details?.Country} />
+                            <input name="Country" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" value={formData?.Country} />
                         </div>
                     </div>
                     <div className="flex flex-wrap -mx-3 mb-1">
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
                                 Zip code/ Pincode                                </label>
-                            <input name="PinCode" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={details?.PinCode} />
+                            <input name="PinCode" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" value={formData?.PinCode} />
                         </div>
                         <div className="w-full md:w-1/2 px-3">
                             <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2">
                                 Phone number                                </label>
-                            <input name="Number" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={details?.Number} />
+                            <input name="Number" onChange={handleChnage} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" value={formData?.Number} />
                         </div>
                     </div>
                     <div className="mt-10">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination } from 'react-table';
 import { blockUser, getAllUser } from '../../api/admin.Api';
-
+import Swal from 'sweetalert2'
 
 
 const DataTable = () => {
@@ -11,7 +11,6 @@ const DataTable = () => {
     const [data, setData] = useState([]);
     const [data1, setData1] = useState([]);
     const [switchUser, setSwitch] = useState<boolean>(false);
-
     function getData() {
         getAllUser()
             .then((res: any) => {
@@ -22,6 +21,7 @@ const DataTable = () => {
                     user: `${item?.First_name} ${item?.Last_name}`,
                     email: item?.Email,
                     status: item?.status || 'Offline',
+                    job: item?.Profile.Title,
                     "join date": item?.createAt || "2030-12-12",
                     action: item?.isBlock || false,
                     role: "TALENT",
@@ -31,6 +31,7 @@ const DataTable = () => {
                     photo: item?.Profile?.profile_Dp,
                     user: `${item?.First_name} ${item?.Last_name}`,
                     email: item?.Email,
+                    job: item?.Profile.Title,
                     status: item?.status || 'Offline',
                     "join date": item?.createAt || "2030-12-12",
                     action: item?.isBlock,
@@ -64,12 +65,13 @@ const DataTable = () => {
             ),
         },
         {
-            Header: 'Name',
-            accessor: 'name',
-        },
-        {
-            Header: 'Email',
-            accessor: 'email',
+            Header: 'Job',
+            accessor: 'job',
+            Cell: ({ row }) => (
+                <div className="flex items-center">
+                    <p>{row.original.job}</p>
+                </div>
+            ),
         },
         {
             Header: 'Status',
@@ -143,14 +145,34 @@ const DataTable = () => {
     ], []);
 
     const handleActionClick = (email: string, role: string, block: boolean) => {
-        blockUser({ email, block })
-            .then((res) => {
-                if(res?.data?.data){
-                    getData()
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                blockUser({ email, block })
+                    .then((res) => {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        getData();
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            title: "Error",
+                            text: "Failed to block user. Please try again later.",
+                            icon: "error"
+                        });
+                    });
+            }
+        });
     };
 
 

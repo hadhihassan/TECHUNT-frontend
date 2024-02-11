@@ -8,8 +8,13 @@ import { ROOTSTORE } from '../../redux/store'
 import { useDispatch } from "react-redux";
 import { setDescription } from "../../redux/Slice/Client/clientSlice";
 import { ChangeEvent, useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../util/pathVariables";
+import Alert from '@mui/material/Alert';
+
+
+
+
 const ProfileDescription = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup)
     const data1 = useSelector((state: ROOTSTORE) => state.client)
@@ -21,20 +26,32 @@ const ProfileDescription = () => {
     const [_description, addDescription] = useState("")
     const [lengthError, setLenghtError] = useState<string | any>("")
     const handleType: (event: ChangeEvent<HTMLTextAreaElement>) => void = (event) => {
-        if (_description?.length && _description?.length > 440) {
+        if (_description.trim() === "") {
+            setLenghtError("Description is required")
+        } else if (_description.trim().length < 99) {
+            setLenghtError("Description must be more than 100 letters")
+        } else if (_description?.length && _description?.length > 440) {
             setLenghtError("Description going long maximum 450 characters")
         } else {
             console.log(_description);
-            addDescription(event.target.value)
             setLenghtError(null)
         }
+        addDescription(event.target.value)
     }
     const saveProfileDescription: (event: React.FormEvent) => void = (event) => {
         event.preventDefault()
-        console.log(data1);
-        dispatch(setDescription(_description))
-        addDescription("")
-        navigate(clientRoutes.ADD_CONTACT_DETAILS)
+        if (_description.trim() === "") {
+            setLenghtError("Description is required")
+
+        } else {
+
+            if (!lengthError) {
+                console.log(data1);
+                dispatch(setDescription(_description))
+                addDescription("")
+                navigate(clientRoutes.ADD_CONTACT_DETAILS)
+            }
+        }
     }
     return (
         <div>
@@ -67,6 +84,7 @@ const ProfileDescription = () => {
                                 <ProgressBar value={100} />
                             </div>
                         </div>
+                        {lengthError && <Alert severity="warning">{lengthError}</Alert>}
                         <form onSubmit={saveProfileDescription}>
                             <div className="w-full pt-10">
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900 ">Add Profile Descrption.</h1>
@@ -81,13 +99,10 @@ const ProfileDescription = () => {
                                     placeholder="Write your profile description here..."
                                 ></textarea>
                                 <label className="block mt-1  text-xs font-medium text-end ">450 characters</label>
-                                {lengthError &&
-                                    <label className="block mt-1  text-xs font-medium text-end ">{lengthError}</label>
-                                }
                             </div>
                             <div className="flex justify-center items-center">
                                 <button
-                                    className="w-[250px] mx-auto items-center text-white h-[35.31px] mt-8 bg-red-500 rounded-[100px]">Next</button>
+                                    className="w-[250px] mx-auto items-center text-white h-[35.31px] mt-4 bg-red-500 rounded-[100px]">Next</button>
                             </div>
                         </form>
                     </div>

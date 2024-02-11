@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import Button from '@mui/material/Button'
 import React, { useState } from "react";
-import {  talent_routes } from "../../util/pathVariables";
+import { talent_routes } from "../../util/pathVariables";
 import { useNavigate } from "react-router";
+import Alert from '@mui/material/Alert';
 
 
 const Addexperiance: React.FC = () => {
@@ -16,28 +17,36 @@ const Addexperiance: React.FC = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup);
     const [text, setText] = useState<string>("");
     const [experience, setExperience] = useState<string[]>([]);
+    const [error, setError] = useState<string>("")
 
     const addExperience = () => {
         if (text.trim() !== "") {
-            setExperience(prevExperience => [...prevExperience, text.trim()]);
-            setText("");
+            if (!experience.includes(text.trim())) {
+                setExperience(prevExperience => [...prevExperience, text.trim()]);
+                setText("");
+                setError("");
+            } else {
+                setError("Experience already exists");
+                setTimeout(() => {
+                    setError("");
+                }, 3000);
+            }
         }
     };
-
     const removeExperience = (index: number) => {
         setExperience(prevExperience => prevExperience.filter((_, idx) => idx !== index));
     };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
+        setError(""); // Clear error message when input changes
     };
-
     const handleClick = () => {
         let dataString: string | null = localStorage.getItem("talent_Data");
         let data: { experience?: string[] } = dataString ? JSON.parse(dataString) : {};
-        data.experience = experience;                
+        data.experience = experience;
         localStorage.setItem("talent_Data", JSON.stringify(data));
         navigate(talent_routes.AddSkills);
+
     };
 
     return (
@@ -86,7 +95,7 @@ const Addexperiance: React.FC = () => {
                                     placeholder="Example: Web developer | Web & Mobile"
                                 />
                                 <label className="text-red-500 text-sm font-medium" onClick={addExperience}>+ Add Experience</label>
-
+                                {error && <Alert severity="warning">{error}</Alert>}
                                 <div className="flex flex-wrap mt-2">
                                     {experience &&
                                         experience.map((value, key) => (

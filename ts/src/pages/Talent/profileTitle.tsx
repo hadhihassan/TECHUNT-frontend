@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../util/pathVariables";
+import Alert from '@mui/material/Alert';
 
 
 
@@ -15,15 +16,30 @@ const ProfileTitle: React.FC = () => {
     const navigate = useNavigate()
     const data = useSelector((state: ROOTSTORE) => state.signup)
     const [title, setTitle] = useState<string>("")
+    const [error, setError] = useState<string>("")
     const saveProfileTitle = (e: React.FormEvent) => {
-        e.preventDefault()
-        let data: {} = {
-            title
+        e.preventDefault();
+        if (title.trim() === "") {
+            setError("Title is required");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+        } else if (title.length < 4 || title.length > 50) {
+            setError("Title must be between 4 and 50 characters");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+        } else {
+            let data: {} = {
+                title
+            };
+            localStorage.setItem("talent_Data", JSON.stringify(data));
+            setTitle("");
+            navigate(talent_routes.AddWorkExperiance);
         }
-        localStorage.setItem("talent_Data", JSON.stringify(data));
-        setTitle("")
-        navigate(talent_routes.AddWorkExperiance)
-    }
+
+    };
+
     return (<div>
         <Header layout={true} />
         <div className="w-full flex justify-center items-center">
@@ -71,7 +87,7 @@ const ProfileTitle: React.FC = () => {
                                     placeholder="Example: Web developer | Web & Mobile"
                                 ></input>
 
-                                <label className="block mt-1  text-xs font-medium text-end ">500 characters</label>
+                                {error && <Alert severity="warning">{error}</Alert>}
                             </div>
                             <div className="flex justify-center items-center">
                                 <button
