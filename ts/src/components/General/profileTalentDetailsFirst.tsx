@@ -12,9 +12,10 @@ import { uploadProfilePhoto } from '../../api/client.Api';
 import Swal from 'sweetalert2';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import { nameValidator, addressValidator, descriptionValidator } from '../../../src/config/validators'
 
 
-const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> = ({ datas, onUpdate }) => {
+const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
     const basicData: any = useContext(MyContext);
     const [details, setDetails] = useState<any>(null);
@@ -24,12 +25,34 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
     const remainingDescription = details?.Profile?.Description?.slice(10); // Display remaining characters
     const [image, setImage] = useState<any>(null);
 
+    const [fNameError, setfNameErro] = useState<any>(null);
+    const [lNameError, setlNameErro] = useState<any>(null);
+    const [titleError, setTitleError] = useState<any>(null);
+    const [descriptionError, setDescError] = useState<any>(null);
+
+
+
     const [formData, setData] = useState({
         first_name: "",
         last_name: "",
         description: "",
         title: "",
     })
+    const validateForm = () => {
+        const errors: any = {};
+        errors.fName = nameValidator(formData.first_name, "First Name");
+        errors.lName = nameValidator(formData.last_name, "Last Name");
+        errors.description = descriptionValidator(formData.description);
+        errors.title = nameValidator(formData.title, "Title");
+
+        setfNameErro(errors.fName);
+        setlNameErro(errors.lName);
+        setDescError(errors.description);
+        setTitleError(errors.title);
+
+        return !(errors.fName || errors.lName || errors.description || errors.title);
+    }
+
     useEffect(() => {
         setDetails(datas);
         setData({
@@ -94,24 +117,29 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
     }
     console.log(details)
     const changeHandle: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
+        validateForm()
         setData({
             ...formData,
             [e.target.name]: e.target.value,
         })
-        console.log(formData)
+
     }
     const handleSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
-        editMainProfileSection(formData, basicData?.role)
-            .then((res) => {
-                onUpdate()
-                setMessage(true)
-                setTimeout(() => {
-                    setMessage(false)
-                }, 3000);
-            }).catch((error) => {
-                console.log(error)
-            })
+        const valid = validateForm()
+        if (valid) {
+
+            editMainProfileSection(formData, basicData?.role)
+                .then((res) => {
+                    onUpdate()
+                    setMessage(true)
+                    setTimeout(() => {
+                        setMessage(false)
+                    }, 3000);
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
     }
 
     const dateString = details?.createdAt;
@@ -161,27 +189,40 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
                         </div>
                         <div>
                             <label className="flex flex-col items-center mt-5 w-[10rem] bg-white red-blue-500 rounded-md shadow-md tracking-wide uppercase border-red-blue-500 cursor-pointer hover:bg-red-500 hover:text-white">
-                                <span className="mt-1 text-xs leading-normal" >Upload photo</span>
+                                <span className="mt-1 text-xs leading-normal">Upload photo</span>
                                 <input type="file" accept="image/*" onChange={uploadPhoto} name='profile_dp' className="hidden" />
                             </label>
+                            <label className='text-red-500 font-sans text-sm font-normal'>{image}</label>
                         </div>
                     </div>
                     <div className="flex justify-between">
                         <div className="mr-5">
-                            <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
-                            <input onChange={changeHandle} type="text" value={formData.first_name} name="first_name" id="firstName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" ></input>
+                            <div className='flex justify-between'>
+                                <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
+                                <label className='text-red-500 font-sans text-sm font-normal'>{fNameError}</label>
+                            </div>
+                            <input onChange={changeHandle} type="text" value={formData.first_name} name="first_name" id="firstName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" />
                         </div>
                         <div>
-                            <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900">Last name</label>
+                            <div className='flex justify-between'>
+                                <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900">Last name</label>
+                                <label className='text-red-500 font-sans text-sm font-normal'>{lNameError}</label>
+                            </div>
                             <input onChange={changeHandle} type="text" value={formData?.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="profileTitle" className="block mb-2 text-sm font-medium text-gray-900">Profile Title</label>
+                        <div className='flex justify-between'>
+                            <label htmlFor="profileTitle" className="block mb-2 text-sm font-medium text-gray-900">Profile Title</label>
+                            <label className='text-red-500 font-sans text-sm font-normal'>{titleError}</label>
+                        </div>
                         <input onChange={changeHandle} type="text" name="title" value={formData?.title} id="profileTitle" placeholder="Title" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div>
-                        <label htmlFor="profileDescription" className="block mb-2 text-sm font-medium text-gray-900">Profile Description</label>
+                        <div className='flex justify-between'>
+                            <label className='text-red-500 font-sans text-sm font-normal'>{descriptionError}</label>
+                            <label htmlFor="profileDescription" className="block mb-2 text-sm font-medium text-gray-900">Profile Description</label>
+                        </div>
                         <textarea rows={5} onChange={changeHandle} name="description" value={formData?.description} id="profileDescription" placeholder="Write profile description..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div className="flex justify-center">
@@ -203,7 +244,7 @@ const profileTalentDetailsFirst: React.FC<{ datas: {}, onUpdate: () => void }> =
                 <div className="border-r border-solid  border-gray-500 h-8 "></div>
                 <div>
                     <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
-                    <span className="text-gray-500 font-sans font-normal text-sm">Total earnings- 0K  Rs</span>
+                    <span className="text-gray-500 font-sans font-normal text-sm">Total earnings :  0  Rs</span>
                 </div><div className="border-r border-solid border-gray-500 h-8"></div>
                 <div>
                     <VerifiedTwoToneIcon fontSize="inherit" color="primary" />

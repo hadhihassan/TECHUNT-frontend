@@ -80,9 +80,9 @@ const FindTypeUser: React.FC = () => {
                             Complete your free account<br />setup
                         </div>
                         <div className="flex justify-center items-center pt-5">
-                            <Avatar name={email} size="40" round />
+                            {/* <Avatar name={email} size="40" round /> */}
                             <div className="opacity-70 text-center text-stone-800 text-sm ml-1 font-medium font-['Montserrat'] underline">
-                                {email ? email : "hadhi@gmail.com"}
+                                {/* {email ? email : "hadhi@gmail.com"} */}
                             </div>
                         </div>
                     </div>

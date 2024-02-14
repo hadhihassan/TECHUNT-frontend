@@ -4,7 +4,7 @@ import { useContext } from "react";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import io from 'socket.io-client';
 import { useSelector, useDispatch } from "react-redux";
-import { persistor } from '../../../../redux/store'
+import { ROOTSTORE, persistor } from '../../../../redux/store'
 import { useNavigate } from "react-router-dom";
 
 import { MyContext } from "../../../../context/myContext";

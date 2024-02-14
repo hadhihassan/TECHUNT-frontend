@@ -16,6 +16,7 @@ import Addexperiance from '../pages/Talent/addWorkExperiance';
 import Profile from '../pages/Talent/profile/profile';
 import ErrorPage from '../pages/Genaral/404/404ErrorPage';
 import AdminLogin from '../pages/Admin/adminLogin';
+import Settings from '../pages/Genaral/settings';
 
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
@@ -25,6 +26,7 @@ import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from './protectedR
 //Admin protected routes
 import ProtectedRoute from './adminProtectedRoutes';
 import SidePanel from '../components/Admin/sidePanel';
+import IndexAdmin from '../pages/Admin';
 
 
 
@@ -54,5 +56,7 @@ export {
     ErrorPage,
     AdminLogin,
     ProtectedRoute,
-    SidePanel
+    SidePanel,
+    Settings,
+    IndexAdmin
 };

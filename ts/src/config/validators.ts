@@ -37,29 +37,23 @@ export function nameValidator(name: string, fieldName: string) {
 }
 // number
 export function numberValidator(number: string) {
-    const phoneRegex =/^\d+$/;
-    if (number.trim() === "") {
-        return 'Number is required';
+
+    console.log(number);
+    
+    const mobileNumber = number.trim();
+    const zeroCount = (mobileNumber.match(/0/g) || []).length;
+    const mobileNumberPattern = /^\d+$/;
+    if(mobileNumber === ""){
+        return "Number is required";
+    }else if(!mobileNumberPattern.test(mobileNumber)) {
+        return "Invalid mobile number. Please enter numbers only.";
+    }else if(mobileNumber.length !== 10){
+        return "Invalid mobile number must be 10 digits";
+    } else if (zeroCount > 5) {
+        return "Too many zeros in the mobile number.";
+    } else {
+        return null;
     }
-    if (number.length < 10 || number.length > 10 ) {
-        return "Phone number must be 10 digits";
-    }
-    if (!phoneRegex.test(number)) {
-        return "Phone number only includes numbers";
-    }
-    // Count the occurrences of each digit
-    const counts: { [digit: string]: number } = {};
-    for (const digit of number) {
-        counts[digit] = (counts[digit] || 0) + 1;
-    }
-    // Check if any digit occurs more than 5 times
-    for (const digit in counts) {
-        if (counts[digit] > 5) {
-            return "Phone number should not contain more than 5 occurrences of any digit";
-        }
-    }
-    // Phone number is valid
-    return null;
 }
 // pincode
 export function pincodeValidator(number: string) {
@@ -67,10 +61,10 @@ export function pincodeValidator(number: string) {
     if (number.trim() === "") {
         return 'Pincode is required';
     }
-    if (!pincodeRegex.test(number)) {
+    if (!pincodeRegex.test(number.trim())) {
         return "Pincode only includes numbers";
     }
-    if (number.length < 6 || number.length > 6) {
+    if (number.trim().length !== 6) {
         return "Pincode must be 6 digits";
     }
     return null;
@@ -81,6 +75,15 @@ export function addressValidator(address: string) {
     }
     if (address.length < 10) {
         return "Address more than 10 letters";
+    }
+    return null;
+}
+export function descriptionValidator(address: string) {
+    if (address.trim() === "") {
+        return 'address is required';
+    }
+    if (address.length < 100) {
+        return "Address more than 100 letters";
     }
     return null;
 }

@@ -11,8 +11,19 @@ export async function getAllUser() {
         axiosInstance.get(`${BASE_URL}admin/get-all-users`)
     )
 }
-export async function blockUser(data:any) {
+export async function blockUser(data: any) {
     return await resolve1(
-        axiosInstance.post(`${BASE_URL}admin/block-user/`,data)
+        axiosInstance.post(`${BASE_URL}admin/block-user/`, data)
+    )
+}
+
+export async function createNewJobCategoru(data: {} | any) {
+    return await resolve(
+        axiosInstance.post(`${BASE_URL}admin/add-new-job-category/`, data)
+    )
+}
+export async function getAllJobCategoies() {
+    return await resolve(
+        axiosInstance.get(`${BASE_URL}admin/get-all-job-category/`)
     )
 }

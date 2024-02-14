@@ -75,23 +75,34 @@ const ContactForm: React.FC = () => {
         validateForm()
     }
     const validateForm = () => {
-        const errors:{} | any = {};
-        errors.fName = setfError(nameValidator(formData.fName, "First Name"))
-        errors.lName = setlError(nameValidator(formData.lName, "Last Name"))
-        errors.city = setCityError(nameValidator(formData.city, "City"))
-        errors.number = setNumberError(numberValidator(formData.number || ""))
-        errors.pinCode = setPinCodeError(pincodeValidator(formData.pinCode || ""))
-        errors.address = setAddressError(addressValidator(formData.address))
+        const errors: any = {};
+        errors.fName = nameValidator(formData.fName, "First Name");
+        errors.lName = nameValidator(formData.lName, "Last Name");
+        errors.city = nameValidator(formData.city, "City");
+        errors.number = numberValidator(formData.number || "");
+        errors.pinCode = pincodeValidator(formData.pinCode || "");
+        errors.address = addressValidator(formData.address);
         if (formData.country === "") {
-            errors.country = "djkfhsdjf"
-            setCountryError("Country is required")
+            errors.country = "djkfhsdjf";
+            setCountryError("Country is required");
         }
-        return Object.values(errors).every(error => !error);
-    }
+        if (!image) {
+            setPhotoErro("Photo is required");
+        }
+    
+        setfError(errors.fName);
+        setlError(errors.lName);
+        setCityError(errors.city);
+        setNumberError(errors.number);
+        setPinCodeError(errors.pinCode);
+        setAddressError(errors.address);
+    
+        return !(errors.city || errors.number || errors.pinCode || errors.address || formData.Country === "" || !image);
+    };
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log(validateForm(), "form validation ")
-        if (validateForm()) {
+        const valid = validateForm()
+        if (valid) {
             createContactDetails(formData, role)
                 .then((res: any) => {
                     console.log("response =>", res);
@@ -104,6 +115,7 @@ const ContactForm: React.FC = () => {
     const handlePhotoChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             setImage(e.target.files[0]);
+            setPhotoErro("")
             let img: any = e.target.files[0];
             const data = new FormData();
             data.append('image', img);

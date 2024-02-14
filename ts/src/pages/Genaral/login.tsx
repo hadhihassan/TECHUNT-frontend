@@ -4,7 +4,7 @@ import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../api/client.Api";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE, setEmail, setVerify, setRole, setLogged } from "../../redux/Slice/signupSlice";
+import { INITIALSTATE, setEmail, setVerify, setRole, setLogged,setId } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../config/validators";
 import Swal from 'sweetalert2'
@@ -41,6 +41,7 @@ const LoginPage: React.FC = () => {
                             dispatch(setLogged(true));
                             dispatch(setVerify(true));
                             dispatch(setRole(res?.data?.data.role));
+                            dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             console.log(res?.data?.data?.token);
                             localStorage.setItem("token", res?.data?.data.token)

@@ -79,7 +79,7 @@ const Addexperiance: React.FC = () => {
                                 <p>1/2</p>
                             </div>
                             <div className="pt-2 ">
-                                <ProgressBar value={40} />
+                                {/* <ProgressBar value={40} /> */}
                             </div>
                         </div>
                         <div className="mt-6">
@@ -94,7 +94,7 @@ const Addexperiance: React.FC = () => {
                                     className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Example: Web developer | Web & Mobile"
                                 />
-                                <label className="text-red-500 text-sm font-medium" onClick={addExperience}>+ Add Experience</label>
+                                <label className="text-red-500 text-sm font-medium" onClick={addExperience}>+ Add Experience</label> <br />
                                 {error && <Alert severity="warning">{error}</Alert>}
                                 <div className="flex flex-wrap mt-2">
                                     {experience &&

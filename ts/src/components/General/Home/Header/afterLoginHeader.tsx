@@ -9,7 +9,7 @@ import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList, IconButton 
 import { Logout, Person } from '@mui/icons-material';
 import { persistor} from '../../../../redux/store'
 import { useNavigate } from "react-router-dom"; 
-
+import SettingsIcon from '@mui/icons-material/Settings';
 import { MyContext } from "../../../../context/myContext";
 import { cleanAllData } from "../../../../redux/Slice/signupSlice";
 const AfterLoginHeader = () => {
@@ -93,6 +93,7 @@ const AfterLoginHeader = () => {
                                         <MenuList autoFocusItem={open} id="menu-list-grow">
                                             <MenuItem ><Person sx={{ mr: 1 }} /> Profile</MenuItem>
                                             <MenuItem onClick={handleLogout}><Logout sx={{ mr: 1 }} /> Logout</MenuItem>
+                                            <MenuItem ><SettingsIcon sx={{ mr: 1 }} /> Settings</MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>

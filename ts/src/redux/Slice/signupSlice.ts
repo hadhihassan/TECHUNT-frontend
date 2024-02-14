@@ -4,14 +4,16 @@ export type INITIALSTATE = {
     email: string;
     verify: boolean;
     role: "CLIENT" | "ADMIN" | "TALENT" | "NOTHING",
-    isLogged: Boolean
+    isLogged: Boolean,
+    id: number | null
 };
 
 const initialState: INITIALSTATE = {
     email: '',
     verify: false,
     role: "NOTHING",
-    isLogged: false
+    isLogged: false,
+    id: null
 };
 
 const Signup = createSlice({
@@ -31,6 +33,9 @@ const Signup = createSlice({
         setLogged: (state, action: PayloadAction<boolean>) => {
             state.isLogged = action.payload
         },
+        setId: (state, action: PayloadAction<number>) => {
+            state.id = action.payload
+        },
         cleanAllData: (state, action: PayloadAction) => {
             state.email = ""
             state.verify = false
@@ -40,6 +45,6 @@ const Signup = createSlice({
 
     }
 })
-export const { setEmail, setVerify, setRole, setLogged, cleanAllData } = Signup.actions
+export const { setEmail, setVerify, setRole, setLogged, cleanAllData, setId } = Signup.actions
 export default Signup.reducer
 

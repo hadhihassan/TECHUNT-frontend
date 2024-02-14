@@ -42,7 +42,6 @@ const ProfileDescription = () => {
         event.preventDefault()
         if (_description.trim() === "") {
             setLenghtError("Description is required")
-
         } else {
 
             if (!lengthError) {
@@ -81,7 +80,7 @@ const ProfileDescription = () => {
                                 <p>1/2</p>
                             </div>
                             <div className="pt-5 ">
-                                <ProgressBar value={100} />
+                                {/* <ProgressBar value={100} /> */}
                             </div>
                         </div>
                         {lengthError && <Alert severity="warning">{lengthError}</Alert>}

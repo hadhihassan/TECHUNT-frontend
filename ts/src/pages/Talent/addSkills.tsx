@@ -102,7 +102,7 @@ const AddSkills: React.FC = () => {
                                 <p>1/2</p>
                             </div>
                             <div className="pt-2 ">
-                                <ProgressBar value={40} />
+                                {/* <ProgressBar value={40} /> */}
                             </div>
                         </div>
                         <div className="mt-6">

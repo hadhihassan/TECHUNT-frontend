@@ -39,7 +39,7 @@ const ContractDetails = () => {
                                 <p>1/2</p>
                             </div>
                             <div className="pt-5 ">
-                                <ProgressBar percentage={100} />
+                                {/* <ProgressBar percentage={100} /> */}
                             </div>
                         </div>
                             <div className="w-full pt-10">

@@ -93,7 +93,7 @@ const Login = () => {
                                 {Emailerrors && <p className="text-red-500 text-xs text-end">{Emailerrors}</p>}
                                 <input
                                     onChange={handleChange}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-gray-200 text-white"
+                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="text"
                                     id="login"
                                 />
@@ -101,7 +101,7 @@ const Login = () => {
                                 {PasswordErrors && <p className="text-red-500 text-xs text-end">{PasswordErrors}</p>}
                                 <input
                                     onChange={handleChangePassword}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-gray-200 text-white"
+                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="password"
                                     id="password"
                                 />
