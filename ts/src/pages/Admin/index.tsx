@@ -1,8 +1,7 @@
 import React, { useRef,useEffect, useState } from "react";
 import { SidePanel } from "../../util/imports";
-import JobCategories from "./jobCategories";
 import UserManagement from "./userManagment";
-
+import JobCategories from "./jobCategory/jobCategories";
 
 const indexAdmin = () => {
     const childRef:React.MutableRefObject<any> = useRef(null);

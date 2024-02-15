@@ -1,20 +1,17 @@
 import React, { useState, ChangeEvent } from "react"
 import Modal from "./profileEditModal";
 import { IMG_URL, JOB_CATEGORY_FORM_DATA } from '../../constant/columns'
-import { createNewJobCategoru } from "../../api/admin.Api";
+import { createNewJobCategoru, editJobCategory, softDeleteJobCategory } from "../../api/admin.Api";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import toast, { Toaster } from "react-hot-toast";
-
-
-
+import JobCategoryForm from "../Admin/jobcategory/jobCategoryForm";
 //interface for props data shap 
 interface TablesProps {
     data: any[];
     columns: string[];
-    reCAll: () => void
+    reCall: () => void
 }
-
 
 const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
     //sucess toast hot message
@@ -24,24 +21,28 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
     const error = (err: string) => toast.error(err);
     //modal chandle states
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [image, setImage] = useState<File | null>(null)
+    const [isOpen1, setIsOpen1] = useState<boolean>(false);
     const openModal: () => void = () => {
         setIsOpen(true);
     };
     const closeModal: () => void = () => {
         setIsOpen(false);
     };
+    const openModal1: () => void = () => {
+        setIsOpen1(true);
+    };
+    const closeModal1: () => void = () => {
+        setIsOpen1(false);
+    };
     //input change handlers & state
     const [formData, setFormData] = useState<JOB_CATEGORY_FORM_DATA>({
         name: "",
         description: "",
         image: null,
-        status: false
     })
     const handleChnage: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
             const selectedImage = e.target.files[0];
-            setImage(e.target.files[0])
             setFormData({
                 ...formData,
                 image: selectedImage,
@@ -60,13 +61,18 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         formDataToUpload.append('description', formData.description);
         if (formData.image) {
             formDataToUpload.append('image', formData.image);
+            console.log(formDataToUpload)
         }
         createNewJobCategoru(formDataToUpload)
             .then((res: any) => {
-                console.log('Job API response: ', res);
                 if (res?.data?.data?.success) {
                     success(res?.data?.data?.message);
                     reCall()
+                    setFormData({
+                        name: "",
+                        description: "",
+                        image: null,
+                    })
                 } else if (res?.data?.data?.message) {
                     error(res?.data?.data?.message);
                 } else {
@@ -74,26 +80,73 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                 }
             })
             .catch((err) => {
-                console.error('Job API error: ', err);
                 error(err?.error?.response?.data?.message || 'An error occurred while processing your request.');
             });
     }
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handleSearch = (e) => {
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
 
     const filteredData = data.filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    const changeState: (_id: string, status: boolean) => void = (_id, status) => {
+        const state = !status
+        softDeleteJobCategory(state, _id)
+            .then((res: any) => {
+                if (res.data.status === 200) {
+                    success(res?.data?.data?.message);
+                    reCall()
+                } else if (res?.error) {
+                    error(res?.error?.response?.data?.message || 'An error occurred while processing your request.');
+                } else {
+                    error(res?.error?.response?.data?.message || 'An error occurred while processing your request.');
+                }
+            }).catch((err: any) => {
+                error(err?.error?.response?.data?.message || 'An error occurred while processing your request.');
+            })
+    }
+    const [editData, setEditData] = useState<{} | any | null>(null)
+    const editCategory = (index: number) => {
+        setEditData(data[index])
+        setFormData({
+            name: data[index].name,
+            description: data[index].description,
+            image: data[index].image,
+        })
+        openModal1()
+    }
+    const chandleEditJobCategory = () => {
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('name', formData.name);
+        formDataToUpload.append('description', formData.description);
+        // if (formData.image) {
+        //     formDataToUpload.append('image', formData.image );
+        // }
+        editJobCategory({ name: formData.name, description: formData.description }, editData?._id)
+            .then((res: any) => {
+                if (res?.data?.data.status === 200) {
+                    success(res?.data?.data?.message);
+                    reCall()
+                } else if (res?.error?.response?.data.message) {
+                    error(res.error.response.data.message);
+                } else {
+                    error(res?.error?.response?.data?.message);
+                }
+            }).catch((err: any) => {
+                console.log(err)
+                error(err?.error?.response?.data?.message);
+            })
+    }
 
 
     return <>
         <div className="w-full h-screen bg-gray-100">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="flex flex-col">
-                    
+
                     <div className="-mb-2 py-4 flex flex-wrap flex-grow justify-between">
                         <div className="flex items-center py-2">
                             <input
@@ -166,8 +219,8 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                                     {value.workingBelow}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-no-wrap text-right border-b  border-gray-200 text-sm leading-5 font-medium">
-                                                    <DeleteIcon color="error" className="ml-2" />
-                                                    <EditNoteIcon color="primary" />
+                                                    <DeleteIcon color="error" className="ml-2" onClick={() => changeState(value._id, value.status)} />
+                                                    <EditNoteIcon color="primary" onClick={() => editCategory(index)} />
                                                 </td>
                                             </tr>
                                         ))}
@@ -183,81 +236,25 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                 </div>
             </div>
         </div>
-        {/* modal starting */}
+        {/* add job category modal starting */}
         <Modal isOpen={isOpen} onClose={closeModal}>
-            <div className="w-full  ">
-                <div className="mb-1">
-                    <p className="m-4 font-sans font-semibold text-center">Back</p>
-                    <hr />
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                    <div className="w-full px-3">
-                        <label className="block tracking-wide text-gray-900 text-xs font-bold mb-2">
-                            Name
-                        </label>
-                        <input name="name" onChange={handleChnage} className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />
-                        <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
-
-                        </label>
-                    </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                    <div className="w-full px-3">
-                        <label className="block tracking-wide text-gray-900 text-xs font-bold mb-2">
-                            Description
-                        </label>
-                        <textarea rows={2} onChange={handleChnage} name="description" className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />
-                        <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
-                        </label>
-                    </div>
-                </div>
-                {image &&
-                    <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                        <div className="w-full px-3">
-                            <img className="rounded-full h-20 w-20" src={URL.createObjectURL(image)} alt="Selected" />
-                        </div>
-                    </div>
-                }
-                <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                    <div className="w-full px-3">
-                        <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="imageUpload">
-                            Image/Icon
-                        </label>
-                        <div className="relative">
-                            <input
-                                onChange={handleChnage}
-                                type="file"
-                                name="image"
-                                className="appearance-none block w-full border border-gray-300 py-2 px-3 mb-1 leading-tight focus:outline-none focus:shadow-outline rounded-md"
-                                id="imageUpload"
-                                accept="image/*"
-                            />
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path d="M12 4v16m8-8H4"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1">
-                    <div className="w-full md:w-1/2 px-3">
-                        <label className="block tracking-wide text-gray-900 text-xs font-bold mb-2">
-                            Status
-                        </label>
-                        <input onChange={handleChnage} name="status" className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" />
-                        <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
-                        </label>
-                    </div>
-                </div>
-                <div className="mt-10">
-                    <button
-                        onClick={chandleAddNewJobCategory}
-                        type="submit" className="block w-full rounded-md text-center px-3.5 py-2.5  text-sm font-semibold text-white shadow-sm bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add</button>
-                </div>
-            </div>
+            <JobCategoryForm
+                editable={false}
+                formData={undefined}
+                handleChnage={handleChnage}
+                OnSubmit={chandleAddNewJobCategory} />
         </Modal>
         {/* Modal end */}
+        {/* editjob category modal starting */}
+        <Modal isOpen={isOpen1} onClose={closeModal1}>
+            <JobCategoryForm
+                editable={true}
+                formData={editData}
+                handleChnage={handleChnage}
+                OnSubmit={chandleEditJobCategory} />
+        </Modal>
+        {/* Modal end */}
+
     </>
 }
 export default Tables

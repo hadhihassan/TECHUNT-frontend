@@ -27,3 +27,13 @@ export async function getAllJobCategoies() {
         axiosInstance.get(`${BASE_URL}admin/get-all-job-category/`)
     )
 }
+export async function softDeleteJobCategory(status:boolean, id:string) {
+    return await resolve(
+        axiosInstance.patch(`${BASE_URL}admin/change-job-category-status/`,{status, id})
+    )
+}
+export async function editJobCategory(data:{},id:string | null) {
+    return await resolve(
+        axiosInstance.post(`${BASE_URL}admin/edit-job-category-status/`,{data,id})
+    )
+}

@@ -3,7 +3,6 @@ export interface JOB_CATEGORY_FORM_DATA {
     name : string,
     description :string,
     image:File | null,
-    status:Boolean
 }
 
 export const IMG_URL = "http://localhost:3000/images/" 

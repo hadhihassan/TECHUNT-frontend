@@ -1,6 +1,6 @@
-import { getAllJobCategoies } from "../../api/admin.Api";
-import Tables from "../../components/General/tables";
-import { JOB_CATEGORY_COLUMN } from "../../constant/columns";
+import { getAllJobCategoies } from "../../../api/admin.Api";
+import Tables from "../../../components/General/tables";
+import { JOB_CATEGORY_COLUMN } from "../../../constant/columns";
 import React, { useEffect, useState } from 'react'
 
 const jobCategories = () => {
