@@ -7,8 +7,8 @@ const WebRouters: React.FC = () => {
             {/* Logged users access only routes */}
             <Imports.Route element={<Imports.IsLoggedUser />}>
                 <Imports.Route path={Imports.clientRoutes.Profile} element={<Imports.Profile />} />
-            </Imports.Route>
                 <Imports.Route path={Imports.talent_routes.Profile} element={<Imports.Profile />} />
+            </Imports.Route>
 
                 <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
             {/* Email verified users only access routes */}
@@ -33,7 +33,7 @@ const WebRouters: React.FC = () => {
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Imports.IndexAdmin />} />
+            <Imports.Route path={"*"} element={<Imports.Settings />} />
 
 
             {/* ADMIN ROUTES */}
