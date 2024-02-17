@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 interface AdminData {
     isLogged: boolean;
 }
 
-const ProtectedRoute: React.FC   = ({ children }) => {
+const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const adminData: AdminData | null = JSON.parse(localStorage.getItem("admin") || "null");
     const isLogged: boolean = adminData?.isLogged || false;
     const location = useLocation();

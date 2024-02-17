@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import routerVariables from "../../util/pathVariables";
+import routerVariables from "../../routes/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 import Select from 'react-select'
 import axios from 'axios';

@@ -7,7 +7,7 @@ import { ROOTSTORE } from "../../redux/store";
 import Avatar from "react-avatar";
 import { Typerole } from "../../components/interface/loginSliceType"
 import { useNavigate } from "react-router-dom";
-import routerVariables from '../../util/pathVariables'
+import routerVariables from '../../routes/pathVariables'
 
 
 

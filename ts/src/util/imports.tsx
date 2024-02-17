@@ -17,16 +17,15 @@ import Profile from '../pages/Talent/profile/profile';
 import ErrorPage from '../pages/Genaral/404/404ErrorPage';
 import AdminLogin from '../pages/Admin/adminLogin';
 import Settings from '../pages/Genaral/settings';
-
 // Path Variables
-import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
-
+import Path, { admin_Routes, clientRoutes, talent_routes } from '../routes/pathVariables';
 // Protected Routes
-import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from './protectedRoute';
+import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from '../routes/protectedRoutes/protectedRoute';
 //Admin protected routes
-import ProtectedRoute from './adminProtectedRoutes';
+import ProtectedRoute from '../routes/protectedRoutes/adminProtectedRoutes';
 import SidePanel from '../components/Admin/sidePanel';
-import IndexAdmin from '../pages/Admin';
+import JobCategories from '../pages/Admin/jobCategory/jobCategories';
+import UserManagementIndex from '../pages/Admin/userManagment';
 
 
 
@@ -58,5 +57,6 @@ export {
     ProtectedRoute,
     SidePanel,
     Settings,
-    IndexAdmin
+    JobCategories,
+    UserManagementIndex
 };

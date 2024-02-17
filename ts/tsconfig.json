@@ -21,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src", "src/util/protectedRoute.tsx"],
+  "include": ["src", "src/routes/protectedRoutes/protectedRoute.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setDescription } from "../../redux/Slice/Client/clientSlice";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clientRoutes } from "../../util/pathVariables";
+import { clientRoutes } from "../../routes/pathVariables";
 import Alert from '@mui/material/Alert';
 
 

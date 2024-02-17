@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column } from 'react-table';
-import { blockUser, getAllUser } from '../../api/admin.Api';
+import { blockUser, getAllUser } from '../../../api/admin.Api';
 import Swal from 'sweetalert2';
 
 interface Row {

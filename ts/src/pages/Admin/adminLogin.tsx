@@ -4,7 +4,7 @@ import { login } from '../../api/admin.Api';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-import { admin_Routes } from '../../util/pathVariables';
+import { admin_Routes } from '../../routes/pathVariables';
 import * as yup from 'yup';
 
 const schema = yup.object().shape({

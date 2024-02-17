@@ -1,5 +1,7 @@
 import React from 'react';
-import * as Imports from './imports';
+import * as Imports from '../../src/util/imports';
+import IndexDashBoard from '../pages/Admin/dashboard';
+import Home from '../pages/Client/home';
 
 const WebRouters: React.FC = () => {
     return (
@@ -10,7 +12,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.talent_routes.Profile} element={<Imports.Profile />} />
             </Imports.Route>
 
-                <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
+            <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
             {/* Email verified users only access routes */}
             <Imports.Route element={<Imports.IsVerified />}>
                 <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
@@ -28,29 +30,31 @@ const WebRouters: React.FC = () => {
                 </Imports.Route>
                 <Imports.Route path={Imports.Path.Type} element={<Imports.FidnTypeUser />} />
             </Imports.Route>
-                <Imports.Route path={Imports.Path.MailVerification} element={<Imports.EmailVerificationPage />} />
+            <Imports.Route path={Imports.Path.MailVerification} element={<Imports.EmailVerificationPage />} />
 
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Imports.Settings />} />
-
-
+            <Imports.Route path={"*"} element={<Home />} />
             {/* ADMIN ROUTES */}
-
             <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
 
-
-            <Imports.Route
-                path={Imports.admin_Routes.UserMangment}
-                element={
-                    <Imports.ProtectedRoute>
-                        <Imports.SidePanel />
-                    </Imports.ProtectedRoute>
-                }
-            />
-
-
+                <Imports.Route
+                    path={Imports.admin_Routes.JobCategoryManagment}
+                    element={
+                        <Imports.ProtectedRoute>
+                            <Imports.JobCategories />
+                        </Imports.ProtectedRoute>
+                    }
+                />
+                <Imports.Route
+                    path={Imports.admin_Routes.UserMangment}
+                    element={
+                        <Imports.ProtectedRoute>
+                            <Imports.UserManagementIndex />
+                        </Imports.ProtectedRoute>
+                    }
+                />
         </Imports.Routes>
     );
 };

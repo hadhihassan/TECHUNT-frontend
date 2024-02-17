@@ -53,10 +53,12 @@ export const talent_routes: TALENT_ROUTES = {
 //Admin routes
 type ADMIN_ROUTES = {
     Login : string,
-    UserMangment : string
+    UserMangment : string,
+    JobCategoryManagment:string
 }
 
 export const admin_Routes: ADMIN_ROUTES = {
     Login: "/admin/login/",
-    UserMangment: "/admin/user-managment/"
+    UserMangment: "/admin/user-managment/",
+    JobCategoryManagment:"/admin/job-Catgory-managment/"
 }

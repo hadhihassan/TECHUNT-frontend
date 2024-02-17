@@ -8,31 +8,56 @@ import toast, { Toaster } from "react-hot-toast";
 import OtpInput from 'react-otp-input';
 import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
+import { checkValidNumber, updateNumberVerification } from "../../../../api/commonApi";
+import { useSelector } from "react-redux";
+import { ROOTSTORE } from "../../../../redux/store";
+import { useNavigate } from "react-router-dom"
+
 const NumberVerification = () => {
+    const navigate =  useNavigate()
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [phone, setPhone] = useState<string>("")
     const [user, setUser] = useState<any>(null)
     const [otp, setOtp] = useState<string>("")
     const [showOtpPage, setSwitch] = useState<boolean>(false)
     const [loading, setLoading] = useState(false);
+    console.log(phone)
     const sendOtp = async () => {
         try {
             // Ensure phone number is in E.164 format
-            const formattedPhone = `+${phone.replace(/\D/g, '')}`;
-            const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {})
-            const confirmation: ConfirmationResult = await signInWithPhoneNumber(auth, formattedPhone, recaptcha)
-            setUser(confirmation)
-            setLoading(true)
-            success("Otp sended your phone")
-            setSwitch(true)
+            checkValidNumber(phone.slice(2), basicData?.role, basicData?.id)
+                .then(async (res: any) => {
+                    console.log(res)
+                    if (res.error) {
+                        error(res?.error?.response?.data.message || "Error occurs While processing you request ")
+                    } else {
+                        console.log(res)
+                        setLoading(true)
+                        const formattedPhone = `+${phone.replace(/\D/g, '')}`;
+                        const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {})
+                        const confirmation: ConfirmationResult = await signInWithPhoneNumber(auth, formattedPhone, recaptcha)
+                        setUser(confirmation)
+                        success("Otp sended your phone")
+                        setSwitch(true)
+                    }
+                }).catch((err: any) => {
+                    error(err?.error?.response?.data.message || "Error occurs While processing you request ")
+                })
         } catch (err: any) {
             error(`Somthing went wrong!.${err.message}`)
         }
     }
     const verifyOtp = async () => {
         try {
-            const data = await user.confirm(otp)
+            const data: any = await user.confirm(otp)
             success("Your number is verified .")
-            
+            updateNumberVerification(basicData.role, basicData.id)
+                .then((res: any) => {
+                    console.log(res)
+                    navigate(`${basicData.role}/profile`)
+                }).catch((err: any) => {
+                    console.log(err)
+                })
         } catch (err: any) {
             error(`${err.message}`)
             console.log(err)
@@ -73,7 +98,7 @@ const NumberVerification = () => {
                                     onChange={setOtp}
                                     numInputs={6}
                                     renderSeparator={<span>-</span>}
-                                    renderInput={(props) => <input {...props}  className="w-40 border m-5 border-gray-400  h-8 rounded-md "/>}
+                                    renderInput={(props) => <input {...props} className="w-40 border m-5 border-gray-400  h-8 rounded-md " />}
                                     disabled={false}
                                     autoFocus
                                     className="opt-container "
@@ -132,23 +157,3 @@ const NumberVerification = () => {
 };
 
 export default NumberVerification;
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <div className="bg-white text-emerald-500  w-fit mx-auto p-4 rounded-full">
-                                <BsFillShieldLockFill size={30} />
-                            </div> */}
-
-
-// <div className="bg-white text-emerald-500  w-fit mx-auto p-4 rounded-full">
-//     <BsFillShieldLockFill size={30} />
-// </div>

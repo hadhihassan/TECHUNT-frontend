@@ -3,7 +3,7 @@ import Footer from "../../components/General/Home/footer/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { INITIALSTATE, setEmail } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
-import Routers, { Routes } from "../../util/pathVariables";
+import Routers, { Routes } from "../../routes/pathVariables";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../api/commonApi";
 import Alert from '@mui/material/Alert';
@@ -84,8 +84,8 @@ const Login = () => {
             <div className="w-full flex flex-col justify-center items-center">
                 <div className="relative py-3 sm:max-w-xl sm:mx-auto">
                     <div className="relative px-4 py-10 bg-white border shadow-xl mx-8 md:mx-0 rounded-3xl sm:p-10">
-                        <div className="max-w-md mx-auto text-white">
-                            <div className="flex items-center space-x-5 justify-center text-white">
+                        <div className="max-w-md mx-auto text-black">
+                            <div className="flex items-center space-x-5 justify-center text-black">
                                 <p className="text-black">Get your Techunt free account</p>
                             </div>
                             <div className="mt-5">
@@ -96,6 +96,7 @@ const Login = () => {
                                     className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="text"
                                     id="login"
+                                    placeholder="Enter your email"
                                 />
                                 <label className="font-semibold text-sm  pb-1 block">Password</label>
                                 {PasswordErrors && <p className="text-red-500 text-xs text-end">{PasswordErrors}</p>}
@@ -104,6 +105,7 @@ const Login = () => {
                                     className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="password"
                                     id="password"
+                                    placeholder="Enter your password"
                                 />
                             </div>
                             <div className="text-right mb-4">

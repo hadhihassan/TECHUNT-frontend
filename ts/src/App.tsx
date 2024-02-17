@@ -1,16 +1,18 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import WebRouters from './util/routes';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-
-
+import WebRouters from './routes/routes';
+import ErrorBoundary from './components/General/ErrorBoundary/errorBoundary ';
+import Loader from './components/General/loader';
+import { Suspense } from 'react';
 function App() {
 
   return (
-    <GoogleOAuthProvider clientId={'789696358541-g2m8o8ik8de7j8f662n3281rtbcec9uc.apps.googleusercontent.com'} >
-      <Router>
-        <WebRouters />
-      </Router>
-    </GoogleOAuthProvider>
+    <ErrorBoundary>
+      <Suspense fallback={<Loader />}>
+        <Router>
+          <WebRouters />
+        </Router>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

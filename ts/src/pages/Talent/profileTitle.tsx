@@ -7,7 +7,7 @@ import { ROOTSTORE } from "../../redux/store";
 import Button from '@mui/material/Button'
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { talent_routes } from "../../util/pathVariables";
+import { talent_routes } from "../../routes/pathVariables";
 import Alert from '@mui/material/Alert';
 
 

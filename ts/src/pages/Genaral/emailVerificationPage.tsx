@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { setVerify } from "../../redux/Slice/signupSlice";
-import routerVariables from '../../util/pathVariables'
+import routerVariables from '../../routes/pathVariables'
 import { ROOTSTORE } from "../../redux/store";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { get } from "../../config/axios";

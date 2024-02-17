@@ -1,34 +1,19 @@
 import "./panel.css"
 import { useNavigate } from 'react-router-dom';
-import { admin_Routes } from "../../util/pathVariables";
-import React, { useState, useImperativeHandle, forwardRef } from "react"
-
-const SidePanel = forwardRef((props: any, ref) => {
+import { admin_Routes } from "../../routes/pathVariables";
+import React from "react"
+const SidePanel = () => {
     const navigate = useNavigate();
-    const [tablesState, setTablesState] = useState({
-        userManamgent: false,
-        jobCategories: true,
-    });
-    console.log(tablesState)
-
     const handleLogout = () => {
         localStorage.removeItem("admin");
         navigate(admin_Routes.Login);
     };
 
-    useImperativeHandle(ref, () => ({
-        tablesState
-    }));
-    const handleChangeState = () => {
-        props.state({
-            user: tablesState?.userManamgent,
-            job: tablesState?.jobCategories
-        })
-    }
-    handleChangeState()
+
+
     return (
         <>
-            <div className="relative min-h-screen md:flex" ref={ref} >
+            <div className="relative min-h-screen md:flex" >
                 <input type="checkbox" id="menu-open" className="hidden" />
                 <label htmlFor="menu-open" className="absolute right-2 bottom-2 shadow-lg rounded-full p-2 bg-gray-100 text-gray-600 md:hidden" data-dev-hint="floating action button">
                     <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,37 +43,31 @@ const SidePanel = forwardRef((props: any, ref) => {
                                     </svg>
                                     <span className="ml-2 text-sm font-medium">Dasboard</span>
                                 </a>
-                                <a
-                                    onClick={() => setTablesState({
-                                        userManamgent: true,
-                                        jobCategories: false,
-                                    })}
-                                    className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
+                                <a onClick={() => { navigate(admin_Routes.UserMangment) }}
+                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === '/admin/user-managment/' ? 'bg-gray-700 text-gray-300' : ""}`}>
                                     <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
-                                    <span className="ml-2 text-sm font-medium">UserManagement</span>
+                                    <span className="ml-2 text-sm font-medium">User Management</span>
                                 </a>
-                                <a className="flex items-center w-full h-12 px-3 mt-2 text-gray-200 bg-gray-700 rounded" href="#">
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <a
+                                    className="flex items-center w-full h-12 px-3 mt-2 hover:text-gray-200 hover:bg-gray-700 rounded" href="#">
+                                    <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
-                                    <span className="ml-2 text-sm font-medium">Transaction</span>
+                                    <span className="ml-2 text-sm font-medium">Transactions <small>invoice</small></span>
                                 </a>
                                 <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
                                     <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                     </svg>
-                                    <span className="ml-2 text-sm font-medium">Invoices</span>
+                                    <span className="ml-2 text-sm font-medium">Banner</span>
                                 </a>
                             </div>
                             <div className="flex flex-col items-center w-full mt-2 border-t border-gray-700">
                                 <a
-                                    onClick={() => setTablesState({
-                                        userManamgent: false,
-                                        jobCategories: true,
-                                    })}
-                                    className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
+                                    onClick={() => { navigate(admin_Routes.JobCategoryManagment) }}
+                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === admin_Routes.JobCategoryManagment ? 'bg-gray-700 text-gray-300' : ""}`}>
                                     <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
@@ -113,13 +92,13 @@ const SidePanel = forwardRef((props: any, ref) => {
                             <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span className="ml-2 text-sm font-medium" onClick={handleLogout}>Account</span>
+                            <span className="ml-2 text-sm font-medium" onClick={handleLogout}>LogOut</span>
                         </a>
                     </div>
                 </aside>
             </div>
         </>
     )
-})
+}
 
-export default React.memo(SidePanel);
+export default SidePanel

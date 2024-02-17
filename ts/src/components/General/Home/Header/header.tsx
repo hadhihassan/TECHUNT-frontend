@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Routers from "../../../../util/pathVariables";
+import Routers from "../../../../routes/pathVariables";
 import { useContext } from "react";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import io from 'socket.io-client';
