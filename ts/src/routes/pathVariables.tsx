@@ -26,11 +26,17 @@ const routerVariables: Routes = {
 export default routerVariables;
 //Client routes
 export interface CLIENTROUTES {
+    EDIT_JOB_POST:string,
+    CREATE_JOB_POST:string,
+    CLIENT_HOME : string,
     ADD_PROFILE_DESCRIPTION: string,
     ADD_CONTACT_DETAILS: string
     Profile: string
 }
 export const clientRoutes: CLIENTROUTES = {
+    EDIT_JOB_POST:"/client/edit-job-post/:id",
+    CREATE_JOB_POST:'/client/create-job-post/',
+    CLIENT_HOME : "/client/home/",
     ADD_PROFILE_DESCRIPTION: "/client/profile-description/",
     ADD_CONTACT_DETAILS: "/client/add-contact/",
     Profile: "/client/profile/"

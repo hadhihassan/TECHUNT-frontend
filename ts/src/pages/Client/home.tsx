@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Header from "../../components/General/Home/Header/afterLoginHeader";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Avatar from "react-avatar";
@@ -11,24 +11,33 @@ import { FlagOutlined } from "@mui/icons-material";
 import Box from '@mui/material/Box';
 import { LinearProgressWithLabel } from "../../components/General/linerProgressBar";
 import EmailIcon from '@mui/icons-material/Email';
-
+import { useNavigate } from "react-router-dom";
+import { clientRoutes } from "../../routes/pathVariables";
+import { fetchAllJobPost } from '../../api/client.Api'
+import ListDiscoverTalent from "../../components/Client/clientHome/listDiscoverTalent";
+import ListJobPost from "../../components/Client/clientHome/listJobPost";
 
 const home = () => {
     const [activeTab, setActiveTab] = useState(1);
-
+    const [jobs, setJobs] = useState<any[]>([])
+    const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
     };
     const [progress, setProgress] = React.useState(80);
+    useEffect(() => {
 
-    // React.useEffect(() => {
-    // const timer = setInterval(() => {
-    //     setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-    // }, 800);
-    // return () => {
-    //     clearInterval(timer);
-    // };
-    // }, []);
+        fetchAllJobPost()
+            .then((res: any) => {
+                console.log(res?.data?.data?.data)
+                setJobs(res?.data?.data?.data)
+            }).catch((err: any) => {
+                console.log(err)
+            })
+    }, [])
+
+
+
     return (
         <>
             <Header />
@@ -40,17 +49,44 @@ const home = () => {
                         <p className='font-sans font-normal text-xl '>Welcome back, <span className="font-sans font-bold text-xl">Hadhi</span> </p>
                     </div>
                     {/* job post banners */}
-                    <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between">
-                        <div className="m-5">
-                            <p className=" font-sans font-semibold text-xl mb-1">No job post</p>
-                            <p className=" font-sans font-normal text-xs m-2">You have not posted any job, post your job <br />
-                                and find world’s best talent here.</p>
-                            <button className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post now</button>
+                    {
+                        !jobs ? <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between">
+                            <div className="m-5">
+                                <p className=" font-sans font-semibold text-xl mb-1">No job post</p>
+                                <p className=" font-sans font-normal text-xs m-2">You have not posted any job, post your job <br />
+                                    and find world’s best talent here.</p>
+                                <button onClick={() => {
+                                    navigate(clientRoutes.CREATE_JOB_POST)
+                                }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post now</button>
+                            </div>
+                            <div className="-mt-9 mr-10">
+                                <img src={IMAGE1} alt="" className="h-[30vh] " />
+                            </div>
                         </div>
-                        <div className="-mt-9 mr-10">
-                            <img src={IMAGE1} alt="" className="h-[30vh] " />
-                        </div>
-                    </div>
+                            :
+                            <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl">
+                                <div className="border-b-2 flex justify-between w-full h-[50px]">
+                                    <p className=" font-sans font-semibold text-xl m-3">Your posting</p>
+                                    <button className="border border-red-500 text-red-500 font-sans font-normal px-3 rounded-full text-xs h-[2vw] m-3">View all jobs</button>
+                                </div>
+                                <div className=" flex justify-between">
+                                    <div>
+                                        <p className="m-3 font-sans font-semibold text-sm">{jobs[0]?.Title}</p>
+                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">{jobs[0]?.WorkType} - {jobs[0]?.Expertiselevel}</p>
+                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">Est. Budget: {jobs[0]?.Amount} amount - {jobs[0]?.createdAt}</p>
+                                    </div>
+                                    <div className="mr-10">
+                                        <div className="flex mr-10  justify-between">
+                                            <p className="m-3 font-sans font-semibold text-sm ">Proposals</p>
+                                            <p className="m-3 font-sans font-semibold text-sm ">Hired</p>
+                                        </div>
+                                        <div className=" mr-10 flex justify-between">
+                                            <p className="m-3 font-sans font-normal text-sm ">00</p>
+                                            <p className="m-3 font-sans font-normal text-sm ">00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>}
                     {/* search */}
                     <div className="w-full mt-5 border rounded-xl shadow-xl">
                         <div className="flex">
@@ -85,6 +121,12 @@ const home = () => {
                                 >
                                     Your hired
                                 </button>
+                                <button
+                                    onClick={() => handleTabClick(4)}
+                                    className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 4 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
+                                >
+                                    Job Posts
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -96,183 +138,19 @@ const home = () => {
                         </div>
                     </div>
                     {/* talents */}
-                    <div className="w-full mt-5 border rounded-xl shadow-xl h-[30vh]">
-                        <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
-                        <div className="flex justify-between p-4">
-                            <div className="flex">
-                                <IconButton size="small">
-                                    <Avatar src={IMAGE} className="w-8 h-8" />
-                                </IconButton>
-                                <div className="ml-4">
-                                    <p className="text-md font-bold">Bhuvesh Singh</p>
-                                    <p className="text-sm text-gray-500">UX designer, Graphic designer</p>
-                                    <div className="mt-2">
-                                        <p className="text-sm text-gray-500">Total earnings <b>$76k</b> on web and mobile design</p>
-                                        <div className="flex mt-2">
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border">
-                                                Web Designer
-                                            </p>
-                                            <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer">more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center">Invite</button>
-                        </div>
-                        <div className="ml-30 flex ml-36">
-                            <div className="flex">
-                                <Stack spacing={1}>
-                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
-                                </Stack>
-                                <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                            </div>
-                            <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div>
-                            <div>
-                                <FlagOutlined />
-                                <span className="text-gray-500 font-sans font-normal text-sm">Manhattan, USA</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full mt-5 border rounded-xl shadow-xl h-[30vh]">
-                        <div className="flex justify-between p-4">
-                            <div className="flex">
-                                <IconButton size="small">
-                                    <Avatar src={IMAGE} className="w-8 h-8" />
-                                </IconButton>
-                                <div className="ml-4">
-                                    <p className="text-md font-bold">Bhuvesh Singh</p>
-                                    <p className="text-sm text-gray-500">UX designer, Graphic designer</p>
-                                    <div className="mt-2">
-                                        <p className="text-sm text-gray-500">Total earnings <b>$76k</b> on web and mobile design</p>
-                                        <div className="flex mt-2">
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border">
-                                                Web Designer
-                                            </p>
-                                            <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer">more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center">Invite</button>
-                        </div>
-                        <div className="ml-30 flex ml-36">
-                            <div className="flex">
-                                <Stack spacing={1}>
-                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
-                                </Stack>
-                                <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                            </div>
-                            <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div>
-                            <div>
-                                <FlagOutlined />
-                                <span className="text-gray-500 font-sans font-normal text-sm">Manhattan, USA</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full mt-5 border rounded-xl shadow-xl h-[30vh]">
-                        <button className="bg-rose-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
-                        <div className="flex justify-between p-4">
-                            <div className="flex">
-                                <IconButton size="small">
-                                    <Avatar src={IMAGE} className="w-8 h-8" />
-                                </IconButton>
-                                <div className="ml-4">
-                                    <p className="text-md font-bold">Bhuvesh Singh</p>
-                                    <p className="text-sm text-gray-500">UX designer, Graphic designer</p>
-                                    <div className="mt-2">
-                                        <p className="text-sm text-gray-500">Total earnings <b>$76k</b> on web and mobile design</p>
-                                        <div className="flex mt-2">
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border">
-                                                Web Designer
-                                            </p>
-                                            <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer">more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center">Invite</button>
-                        </div>
-                        <div className="ml-30 flex ml-36">
-                            <div className="flex">
-                                <Stack spacing={1}>
-                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
-                                </Stack>
-                                <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                            </div>
-                            <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div>
-                            <div>
-                                <FlagOutlined />
-                                <span className="text-gray-500 font-sans font-normal text-sm">Manhattan, USA</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full mt-5 border rounded-xl shadow-xl h-[30vh]">
-                        <div className="flex justify-between p-4">
-                            <div className="flex">
-                                <IconButton size="small">
-                                    <Avatar src={IMAGE} className="w-8 h-8" />
-                                </IconButton>
-                                <div className="ml-4">
-                                    <p className="text-md font-bold">Bhuvesh Singh</p>
-                                    <p className="text-sm text-gray-500">UX designer, Graphic designer</p>
-                                    <div className="mt-2">
-                                        <p className="text-sm text-gray-500">Total earnings <b>$76k</b> on web and mobile design</p>
-                                        <div className="flex mt-2">
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                Web Designer
-                                            </p>
-                                            <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border">
-                                                Web Designer
-                                            </p>
-                                            <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer">more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center">Invite</button>
-                        </div>
-                        <div className="ml-30 flex ml-36">
-                            <div className="flex">
-                                <Stack spacing={1}>
-                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
-                                </Stack>
-                                <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                            </div>
-                            <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div>
-                            <div>
-                                <FlagOutlined />
-                                <span className="text-gray-500 font-sans font-normal text-sm">Manhattan, USA</span>
-                            </div>
-                        </div>
+                    <div className="w-full h-[30vh]">
+                        {
+                            activeTab === 1 ? <><ListDiscoverTalent /></> : <> <ListJobPost /></>
+                        }
                     </div>
                 </div>
-
                 {/* left side */}
 
                 <div className=" ml-10 w-[30vw] mt-5">
                     <div className="flex ml-48 mb-2 ">
-                        <button className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post New Job</button>
+                        <button onClick={() => {
+                            navigate(clientRoutes.CREATE_JOB_POST)
+                        }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post New Job</button>
                     </div>
 
                     {/* porfile proggress sections */}
@@ -369,6 +247,9 @@ const home = () => {
                                 <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
                                 <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
                             </div>
+                        </div>
+                        <div className="flex justify-center items-center m-5 ">
+                            <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
                         </div>
                     </div>
                 </div>

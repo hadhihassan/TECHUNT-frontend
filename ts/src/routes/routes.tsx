@@ -2,6 +2,8 @@ import React from 'react';
 import * as Imports from '../../src/util/imports';
 import IndexDashBoard from '../pages/Admin/dashboard';
 import Home from '../pages/Client/home';
+import JobPostForm from '../components/Client/jobPostForm';
+import EditjobPostForm from '../components/Client/editJobPostForm';
 
 const WebRouters: React.FC = () => {
     return (
@@ -10,6 +12,10 @@ const WebRouters: React.FC = () => {
             <Imports.Route element={<Imports.IsLoggedUser />}>
                 <Imports.Route path={Imports.clientRoutes.Profile} element={<Imports.Profile />} />
                 <Imports.Route path={Imports.talent_routes.Profile} element={<Imports.Profile />} />
+                <Imports.Route path={Imports.clientRoutes.CLIENT_HOME} element={<Home />} />
+                <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
+                <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
+                <Imports.Route path={Imports.clientRoutes.EDIT_JOB_POST} element={<EditjobPostForm />} />
             </Imports.Route>
 
             <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
@@ -35,7 +41,7 @@ const WebRouters: React.FC = () => {
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Home />} />
+            <Imports.Route path={"*"} element={<JobPostForm />} />
             {/* ADMIN ROUTES */}
             <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
 

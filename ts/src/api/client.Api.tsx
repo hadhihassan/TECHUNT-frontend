@@ -25,11 +25,26 @@ export async function uploadProfilePhoto(image: FormData, role: string) {
     );
 }
 
-export async function Login(data:{}) {
-    console.log("email =>", data, "password => ", data);
+export async function Login(data: {}) {
     return await resolve(
-        axiosInstance.post(`${BASE_URL}login/`,data)
+        axiosInstance.post(`${BASE_URL}login/`, data)
     )
 
 }
-//^ COMMAN API 
+
+export async function postJob(data: {}) {
+    return await resolve(
+        axiosInstance.post(`${BASE_URL}CLIENT/post-job/`, data)
+    )
+}
+export async function fetchAllJobPost() {
+    return await resolve(
+        axiosInstance.get(`${BASE_URL}CLIENT/get-all-jobpost/`)
+    )
+}
+export async function editJobPost(data:{},id:string) {
+    return await resolve(
+        axiosInstance.patch(`${BASE_URL}CLIENT/edit-jobpost/`,{data,id})
+    )
+}
+

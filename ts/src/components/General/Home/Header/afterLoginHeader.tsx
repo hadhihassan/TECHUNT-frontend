@@ -18,12 +18,11 @@ const AfterLoginHeader = () => {
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [IMG, setIMG] = useState<string>("")
     const basicdata:any = useContext(MyContext); // Move useContext here
-    console.log("conetxtData",basicdata)
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
                 .then((res: any) => {
-                    setIMG(`http://localhost:3000/images/${res.data.data?.Profile?.profile_Dp}`)
+                    setIMG(`http://localhost:3000/images/${res?.data?.data?.Profile?.profile_Dp}`)
                 }).catch((err: any) => {
                     console.log(err)
                 })
@@ -38,7 +37,7 @@ const AfterLoginHeader = () => {
     };
 
     const handleClose = (event: React.MouseEvent<Document> | React.ChangeEvent<HTMLInputElement>) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target as Node)) {
+        if (anchorRef?.current && anchorRef?.current?.contains(event.target as Node)) {
             return;
         }
         setOpen(false);
