@@ -1,20 +1,23 @@
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useState,useEffect } from "react"
 import { IMG_URL } from "../../../constant/columns";
+import { editJobCategory } from "../../../api/admin.Api";
+import { InputSharp } from "@mui/icons-material";
 
 interface JobCategoryFormProps {
-    editable: boolean;
     formData: any;
-    handleChnage: (e: ChangeEvent<HTMLInputElement>) => void;
-    OnSubmit: () => void
+    success: () => any,
+    error: () => any,
+    reCall: () => any
 }
 
-const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, handleChnage, OnSubmit }) => {
+const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, error, reCall }) => {
     const [image, setimg] = useState<File | null>(null)
     const [inputData, setData] = useState<{} | any>({
         name: formData?.name,
         description: formData?.description,
         image: formData?.image
     })
+    // setimg(formData?.image)
     const changeData = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
             const selectedImage = e.target.files[0];
@@ -30,14 +33,44 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                 [e.target.name]: e.target.value,
             });
         }
-        handleChnage(e)
+        console.log(inputData)
     }
+
+    useEffect(() => {
+        setimg(formData.image)
+    }, [])
+    const chandleEditJobCategory = () => {
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('name', inputData.name);
+        formDataToUpload.append('description', inputData.description);
+        if (formData.image) {
+            formDataToUpload.append('image', inputData.image);
+            console.log(formDataToUpload)
+        }
+        formDataToUpload.append("id", formData._id)
+        editJobCategory(formDataToUpload)
+            .then((res: any) => {
+                console.log(res)
+                if (res?.data?.data.status === 200) {
+                    success(res?.data?.data?.message);
+                    reCall();
+                } else if (res?.error?.response?.data.message) {
+                    error(res?.error?.response?.data?.message);
+                } else {
+                    error(res?.error?.response?.data?.message);
+                }
+            })
+            .catch((err: any) => {
+                console.log(err);
+                error(err?.error?.response?.data?.message);
+            });
+    };
 
     return (
         <>
             <div className="w-full  ">
                 <div className="mb-1">
-                    <p className="m-4 font-sans font-semibold text-center">{editable ? "Add new Job category" : "Edit job category"}</p>
+                    <p className="m-4 font-sans font-semibold text-center">Edit job category</p>
                     <hr />
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
@@ -73,23 +106,16 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                    {image &&
-                        <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                            <div className="w-full px-3">
-                                <img className="rounded-full h-20 w-20" src={URL.createObjectURL(image)} alt="Selected" />
-                            </div>
+                    {image  && (
+                    <div className="flex flex-wrap -mx-3 mb-1 mt-2">
+                        <div className="w-full px-3">
+                            <img
+                                className="rounded-full h-20 w-20"
+                                src={image  instanceof File ? URL.createObjectURL(image) : `${IMG_URL}${image}`}
+                                alt="Selected"
+                            />
                         </div>
-                    }
-                    {editable && formData.image && (
-                        <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                            <div className="w-full px-3">
-                                <img
-                                    className="rounded-full h-20 w-20"
-                                    src={formData.image instanceof File ? URL.createObjectURL(formData.image) : `${IMG_URL}${formData.image}`}
-                                    alt="Selected"
-                                />
-                            </div>
-                        </div>
+                    </div>
                     )}
                 </div>
 
@@ -117,11 +143,11 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                 </div>
                 <div className="mt-10">
                     <button
-                        onClick={OnSubmit}
+                        onClick={chandleEditJobCategory}
                         type="submit" className="block w-full rounded-md text-center px-3.5 py-2.5  text-sm font-semibold text-white shadow-sm bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add</button>
                 </div>
             </div>
         </>
     )
 }
-export default JobCategoryForm
+export default JobCategoryForm;

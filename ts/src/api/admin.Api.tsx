@@ -1,4 +1,4 @@
-import { resolve, resolve1 } from '../config/axios';
+import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 
 export async function login(data: {}) {
@@ -12,7 +12,7 @@ export async function getAllUser() {
     )
 }
 export async function blockUser(data: any) {
-    return await resolve1(
+    return await resolve(
         axiosInstance.post(`${BASE_URL}admin/block-user/`, data)
     )
 }
@@ -27,13 +27,18 @@ export async function getAllJobCategoies() {
         axiosInstance.get(`${BASE_URL}admin/get-all-job-category/`)
     )
 }
-export async function softDeleteJobCategory(status:boolean, id:string) {
+export async function softDeleteJobCategory(status: boolean, id: string) {
     return await resolve(
-        axiosInstance.patch(`${BASE_URL}admin/change-job-category-status/`,{status, id})
+        axiosInstance.patch(`${BASE_URL}admin/change-job-category-status/`, { status, id })
     )
 }
-export async function editJobCategory(data:{},id:string | null) {
+export async function editJobCategory(data: {}) {
     return await resolve(
-        axiosInstance.post(`${BASE_URL}admin/edit-job-category-status/`,{data,id})
+        axiosInstance.post(`${BASE_URL}admin/edit-job-category-status/`, data)
+    )
+}
+export async function getJobPosts(id: string | null) {
+    return await resolve(
+        axiosInstance.patch(`${BASE_URL}admin/get-job-post/`, { id: id })
     )
 }

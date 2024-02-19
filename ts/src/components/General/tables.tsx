@@ -6,6 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import toast, { Toaster } from "react-hot-toast";
 import JobCategoryForm from "../Admin/jobcategory/jobCategoryForm";
+import EditJobCategoryForm from "../../components/Admin/jobcategory/editJobCategory";
+
 //interface for props data shap 
 interface TablesProps {
     data: any[];
@@ -40,7 +42,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         description: "",
         image: null,
     })
-    const handleChnage: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
+    const handleChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
             const selectedImage = e.target.files[0];
             setFormData({
@@ -53,7 +55,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                 [e.target.name]: e.target.value,
             });
         }
-    }
+    };
     //create a api call for the save new job category
     const chandleAddNewJobCategory: () => void = () => {
         const formDataToUpload = new FormData();
@@ -122,24 +124,25 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         const formDataToUpload = new FormData();
         formDataToUpload.append('name', formData.name);
         formDataToUpload.append('description', formData.description);
-        // if (formData.image) {
-        //     formDataToUpload.append('image', formData.image );
-        // }
-        editJobCategory({ name: formData.name, description: formData.description }, editData?._id)
+        if (formData.image) {
+            formDataToUpload.append('image', formData.image);
+        }
+        editJobCategory(formDataToUpload, editData?._id)
             .then((res: any) => {
                 if (res?.data?.data.status === 200) {
                     success(res?.data?.data?.message);
-                    reCall()
+                    reCall();
                 } else if (res?.error?.response?.data.message) {
                     error(res.error.response.data.message);
                 } else {
                     error(res?.error?.response?.data?.message);
                 }
-            }).catch((err: any) => {
-                console.log(err)
-                error(err?.error?.response?.data?.message);
             })
-    }
+            .catch((err: any) => {
+                console.log(err);
+                error(err?.error?.response?.data?.message);
+            });
+    };
 
 
     return <>
@@ -241,17 +244,18 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
             <JobCategoryForm
                 editable={false}
                 formData={undefined}
-                handleChnage={handleChnage}
+                handleChnage={handleChange}
                 OnSubmit={chandleAddNewJobCategory} />
         </Modal>
         {/* Modal end */}
         {/* editjob category modal starting */}
         <Modal isOpen={isOpen1} onClose={closeModal1}>
-            <JobCategoryForm
-                editable={true}
+            <EditJobCategoryForm
                 formData={editData}
-                handleChnage={handleChnage}
-                OnSubmit={chandleEditJobCategory} />
+                success={success}
+                error={error}
+                reCall={reCall}
+            />
         </Modal>
         {/* Modal end */}
 

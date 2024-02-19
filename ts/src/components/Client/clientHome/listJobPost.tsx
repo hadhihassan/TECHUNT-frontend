@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { fetchAllJobPost } from "../../../api/client.Api";
-import {clientRoutes} from '../../../routes/pathVariables'
 import { useNavigate } from "react-router-dom";
 
 const listJobPost = () => {

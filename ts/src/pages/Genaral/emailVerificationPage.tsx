@@ -34,7 +34,8 @@ const emailVerificationPage = () => {
                         navigate("/profile-create/")
                     }
                 })
-        } catch (error) {
+        } catch (error:any) {
+            console.log(error.message)
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
