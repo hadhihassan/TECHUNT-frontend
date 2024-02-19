@@ -28,9 +28,6 @@ const home = () => {
                 console.log(err)
             })
     }, [])
-
-
-
     return (
         <>
             <Header />
