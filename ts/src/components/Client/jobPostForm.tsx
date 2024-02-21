@@ -12,7 +12,8 @@ import FormControl from '@mui/material/FormControl';
 import { useForm } from 'react-hook-form';
 import { postJob } from "../../api/client.Api";
 import toast, { Toaster } from "react-hot-toast";
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const top100Films = [
     'The Shawshank Redemption',
@@ -24,23 +25,20 @@ const top100Films = [
     'Pulp Fiction',
 
 ];
-const jobPostForm = () => {
+const JobPostForm = () => {
     const success = (message: string) => {
-
         toast.success(message);
     }
     //error toast host message
     const error = (err: string) => toast.error(err);
-    const fixedOptions:any = [];
-    const [value, setValue] = React.useState([]);
+    const fixedOptions: string[] = [];
+    const [value, setValue] = useState<string[]>([]);
     const [selectedOption, setSelectedOption] = useState(null);
-    const handleOptionChange = (event: { target: { value: any, }; }) => {
+    const handleOptionChange = (event: { target: { value: string, }; }) => {
         setSelectedOption(event.target.value);
         onChangeInput(event)
     };
-
     const { register, handleSubmit, formState: { errors } } = useForm();
-
     interface FormData {
         Title: string;
         Description: string;
@@ -50,7 +48,6 @@ const jobPostForm = () => {
         WorkType: string | 'Fixed' | 'Milestone';
         Amount: number;
     }
-
     const [formData, setFormData] = useState<FormData>({
         Title: '',
         Description: '',
@@ -85,9 +82,8 @@ const jobPostForm = () => {
                 console.log(err)
             })
     };
-
     const onChangeInput: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
-        
+
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -97,12 +93,17 @@ const jobPostForm = () => {
         console.log(formData)
     };
 
-    const onChangeForTextArea: (e: ChangeEvent<HTMLTextAreaElement>) => void = (e) => {
-        const { name, value } = e.target;
+    const [editorHtml, setEditorHtml] = useState('');
+
+    const handleEditorChange = (html: string) => {
+        console.log(editorHtml)
+        setEditorHtml(html);
+        // const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            ["Description"]: html,
         }));
+
     };
     return (
         <>
@@ -150,7 +151,23 @@ const jobPostForm = () => {
                                 </div>
                                 <p className="mt-5">Describe about the project</p>
                                 <div className=" mt-4">
-                                    <textarea name="Description" onChange={onChangeForTextArea} rows={10} className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[95%] rounded-xl p-2.5 checked:bg-emerald-500" placeholder="write here.." />
+                                    <ReactQuill
+
+                                        theme="snow"
+                                        value={editorHtml}
+                                        onChange={handleEditorChange}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                                                [{ size: [] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' },
+                                                { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link', 'image', 'video'],
+                                                ['clean']
+                                            ],
+                                        }}
+                                    />
                                 </div>
                                 <p className="mt-5">Required Skills</p>
                                 <div className=" mt-4">
@@ -295,4 +312,4 @@ const jobPostForm = () => {
 }
 
 
-export default jobPostForm;
+export default JobPostForm;

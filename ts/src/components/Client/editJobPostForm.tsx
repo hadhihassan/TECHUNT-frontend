@@ -13,7 +13,10 @@ import { useForm } from 'react-hook-form';
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from 'react-router-dom';
 import { editJobPost, fetchAllJobPost } from "../../api/client.Api"
-const top100Films = [
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { AxiosError, AxiosResponse } from "axios";
+const top100Films: string[] = [
     'The Shawshank Redemption',
     'The Godfather',
     'The Godfather: Part II',
@@ -21,7 +24,6 @@ const top100Films = [
     '12 Angry Men',
     "Schindler's List",
     'Pulp Fiction',
-
 ];
 const EditjobPostForm = () => {
     const { id } = useParams();
@@ -30,16 +32,16 @@ const EditjobPostForm = () => {
         toast.success(message);
     }
     const error = (err: string) => toast.error(err);
-    const fixedOptions: any = [];
+    const fixedOptions: string[] = [];
     const [value, setValue] = React.useState([]);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const handleOptionChange = (event: { target: { value: any, }; }) => {
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+    const handleOptionChange: (event: ChangeEvent<HTMLSelectElement>) => void = (event: { target: { value: string, }; }) => {
         setSelectedOption(event.target.value);
         onChangeInput(event)
     };
 
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [docId,setId] = useState<string | null>(null)
+    const [docId, setId] = useState<string | null>(null)
     interface FormData {
         Title: string;
         Description: string;
@@ -59,9 +61,21 @@ const EditjobPostForm = () => {
         WorkType: '',
         Amount: 0,
     });
+    const [editorHtml, setEditorHtml] = useState("");
+    console.log(editorHtml, "this is the rivh text data ",)
+    const handleEditorChange = (html: string) => {
+        console.log(editorHtml)
+        setEditorHtml(html);
+        // const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            ["Description"]: html,
+        }));
+
+    };
     useEffect(() => {
         fetchAllJobPost()
-            .then((res: any) => {
+            .then((res: AxiosResponse) => {
                 const data = res?.data?.data?.data.find((item: { _id: string | undefined; }) => item._id === id)
                 console.log(data, res?.data?.data?.data)
                 setId(data?._id)
@@ -76,10 +90,11 @@ const EditjobPostForm = () => {
                     WorkType: data?.WorkType,
                     Amount: data?.Amount,
                 })
+                setEditorHtml(data?.Description)
             })
 
     }, [])
-    const onChangeInput: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
+    const onChangeInput: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void = (e) => {
 
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -88,43 +103,34 @@ const EditjobPostForm = () => {
         }));
         console.log(formData)
     };
+    // const handleChangeSkill = (_event, newValue) => {
+    //     const uniqueSkills = newValue.filter((option) => !formData.Skills.includes(option));
 
-    const onChangeForTextArea: (e: ChangeEvent<HTMLTextAreaElement>) => void = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        console.log(formData)
-    };
-    const handleChangeSkill = (_event, newValue) => {
-        const uniqueSkills = newValue.filter((option) => !formData.Skills.includes(option));
+    //     setValue([
+    //         ...value,
+    //         ...uniqueSkills
+    //     ]);
 
-        setValue([
-            ...value,
-            ...uniqueSkills
-        ]);
-
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            Skills: [
-                ...prevFormData.Skills,
-                ...uniqueSkills
-            ]
-        }));
-    };
+    //     setFormData((prevFormData) => ({
+    //         ...prevFormData,
+    //         Skills: [
+    //             ...prevFormData.Skills,
+    //             ...uniqueSkills
+    //         ]
+    //     }));
+    // };
 
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
-        editJobPost(formData,docId)
-            .then((res: any) => {
+        editJobPost(formData, docId)
+            .then((res: AxiosResponse) => {
                 console.log(res)
                 if (res.data) {
                     success(res?.data?.data?.message)
                 } else {
                     error(res?.error?.response?.data?.message)
                 }
-            }).catch((err: any) => {
+            }).catch((err: AxiosError) => {
                 error("Internal server error.")
             })
     }
@@ -175,9 +181,22 @@ const EditjobPostForm = () => {
                                 </div>
                                 <p className="mt-5">Describe about the project</p>
                                 <div className=" mt-4">
-
-                                    <textarea name="Description" value={formData.Description} onChange={onChangeForTextArea} rows={10} className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[95%] rounded-xl p-2.5 checked:bg-emerald-500" placeholder="write here.." />
-                                </div>
+                                    <ReactQuill
+                                        theme="snow"
+                                        value={editorHtml}
+                                        onChange={handleEditorChange}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                                                [{ size: [] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' },
+                                                { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link', 'image', 'video'],
+                                                ['clean']
+                                            ],
+                                        }}
+                                    />                                </div>
                                 <p className="mt-5">Required Skills</p>
                                 <div className=" mt-4">
                                     <Autocomplete

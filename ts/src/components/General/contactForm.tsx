@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import routerVariables from "../../routes/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 import Select from 'react-select'
-import { AxiosError, AxiosResponse } from "axios";}.axios from 'axios';
+import { AxiosError, AxiosResponse } from "axios"
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../src/config/validators'
 import toast, { Toaster } from "react-hot-toast";
 
