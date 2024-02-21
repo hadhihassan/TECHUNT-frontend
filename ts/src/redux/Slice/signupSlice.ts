@@ -5,7 +5,8 @@ export type INITIALSTATE = {
     verify: boolean;
     role: "CLIENT" | "ADMIN" | "TALENT" | "NOTHING",
     isLogged: Boolean,
-    id: number | null
+    id: number | null,
+    numberVerify: boolean
 };
 
 const initialState: INITIALSTATE = {
@@ -13,7 +14,8 @@ const initialState: INITIALSTATE = {
     verify: false,
     role: "NOTHING",
     isLogged: false,
-    id: null
+    id: null,
+    numberVerify: false
 };
 
 const Signup = createSlice({
@@ -36,15 +38,20 @@ const Signup = createSlice({
         setId: (state, action: PayloadAction<number>) => {
             state.id = action.payload
         },
+        isNumberVerify: (state, action: PayloadAction<boolean>) => {
+            state.numberVerify = action.payload
+        },
         cleanAllData: (state, action: PayloadAction) => {
             state.email = ""
             state.verify = false
             state.role = "NOTHING"
             state.isLogged = false
-        }
+            state.id = null
+            state.numberVerify = false
+        },
 
     }
 })
-export const { setEmail, setVerify, setRole, setLogged, cleanAllData, setId } = Signup.actions
+export const { setEmail, setVerify, setRole, setLogged, cleanAllData, setId, isNumberVerify } = Signup.actions
 export default Signup.reducer
 

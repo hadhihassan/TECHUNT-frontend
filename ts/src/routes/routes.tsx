@@ -16,12 +16,13 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
                 <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
                 <Imports.Route path={Imports.clientRoutes.EDIT_JOB_POST} element={<EditjobPostForm />} />
+                <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
             </Imports.Route>
 
+            <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
             <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
             {/* Email verified users only access routes */}
             <Imports.Route element={<Imports.IsVerified />}>
-                <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
                 <Imports.Route path={Imports.talent_routes.AddWorkExperiance} element={<Imports.Addexperiance />} />
                 <Imports.Route path={Imports.clientRoutes.ADD_PROFILE_DESCRIPTION} element={<Imports.ProfileDescription />} />
                 <Imports.Route path={Imports.clientRoutes.ADD_CONTACT_DETAILS} element={<Imports.ContractDetails />} />
@@ -41,26 +42,16 @@ const WebRouters: React.FC = () => {
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<JobPostForm />} />
-            {/* ADMIN ROUTES */}
-            <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
+            <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
 
-                <Imports.Route
-                    path={Imports.admin_Routes.JobCategoryManagment}
-                    element={
-                        <Imports.ProtectedRoute>
-                            <Imports.JobCategories />
-                        </Imports.ProtectedRoute>
-                    }
-                />
-                <Imports.Route
-                    path={Imports.admin_Routes.UserMangment}
-                    element={
-                        <Imports.ProtectedRoute>
-                            <Imports.UserManagementIndex />
-                        </Imports.ProtectedRoute>
-                    }
-                />
+            {/*ADMIN ROUTES  */}
+            <Imports.Route path='admin' element={<Imports.AdminLayout />}>
+                <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
+                <Imports.Route path={Imports.admin_Routes.Dashboard} element={<Imports.ProtectedRoute><Imports.IndexDashBoard /></Imports.ProtectedRoute>} />
+                <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
+                <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
+            </Imports.Route>
+
         </Imports.Routes>
     );
 };

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const listJobPost = () => {
     const [jobs, setJobs] = useState<any[]>([])
-    const navigate =  useNavigate()
+    const navigate = useNavigate()
     useEffect(() => {
 
         fetchAllJobPost()
@@ -17,7 +17,7 @@ const listJobPost = () => {
     }, [])
     return (
         <>
-            {
+            {jobs &&
                 jobs.map((job: any, index: number) => (
                     <>
                         <div key={index} className="w-full mt-5 border rounded-xl shadow-xl h-[39vh]">
@@ -31,7 +31,7 @@ const listJobPost = () => {
                                 <div>
                                     <p className="m-3 font-sans font-semibold text-sm">{job?.Title}</p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500">{job?.WorkType} - {job?.Expertiselevel}</p>
-                                    <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Est. Budget:</b> {job?.Amount} amount - {job?.createdAt}</p>
+                                    <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Est. Budget:</b> {job?.Amount} created at  - {job?.createdAt}</p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Expertise level:</b> {job?.Expertiselevel} </p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"><b>Time Line:</b> {job?.TimeLine} </p>
                                     <div className="flex ml-2 mt-4">

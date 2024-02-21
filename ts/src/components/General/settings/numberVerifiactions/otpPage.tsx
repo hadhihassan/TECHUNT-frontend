@@ -54,7 +54,7 @@ const NumberVerification = () => {
             updateNumberVerification(basicData.role, basicData.id)
                 .then((res: any) => {
                     console.log(res)
-                    navigate(`${basicData.role}/profile`)
+                    navigate(`/${basicData.role}/profile`)
                 }).catch((err: any) => {
                     console.log(err)
                 })

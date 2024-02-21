@@ -27,5 +27,3 @@ export async function updateNumberVerification(role: string, id: string){
         axiosInstance.patch(`${BASE_URL}update-number-verified/`,{ role, id})
     )
 }
-
-

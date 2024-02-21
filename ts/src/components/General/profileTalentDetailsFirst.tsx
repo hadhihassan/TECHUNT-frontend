@@ -1,4 +1,3 @@
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
@@ -7,30 +6,42 @@ import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
 import { editMainProfileSection } from '../../api/commonApi';
-import { MyContext, Context } from '../../context/myContext';
+import { MyContext } from '../../context/myContext';
 import { uploadProfilePhoto } from '../../api/client.Api';
 import Swal from 'sweetalert2';
 import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
-import { nameValidator, addressValidator, descriptionValidator } from '../../../src/config/validators'
+import { nameValidator, descriptionValidator } from '../../../src/config/validators'
+import { Context as ContextInterface } from '../../context/myContext'
+import { UserProfile } from '../interface/loginSliceType'
+import toast, { Toaster } from "react-hot-toast";
 
 
-const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
-    const basicData: any = useContext(MyContext);
-    const [details, setDetails] = useState<any>(null);
-    const [sp_Message, setMessage] = useState<Boolean>(false);
-    const IMG = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
-    const truncatedDescription = details?.Profile?.Description?.slice(0, 200); // Display only first 200 characters
-    const remainingDescription = details?.Profile?.Description?.slice(10); // Display remaining characters
+
+
+interface ValidationsError {
+    fName: string | null,
+    lName: string | null,
+    description: string | null,
+    title: string | null
+}
+import { AxiosError, AxiosResponse } from 'axios'
+
+const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => void }> = ({ datas, onUpdate }) => {
+
+    const error = (err: string) => toast.error(err);
+    const basicData: ContextInterface = useContext<ContextInterface>(MyContext);
+    const [details, setDetails] = useState<object | null>(null);
+    const [sp_Message, setMessage] = useState<boolean>(false);
+    const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
+    const truncatedDescription: string | null = details?.Profile?.Description?.slice(0, 200); // Display only first 200 characters
+    const remainingDescription: string | null = details?.Profile?.Description?.slice(10); // Display remaining characters
     const [image, setImage] = useState<any>(null);
 
     const [fNameError, setfNameErro] = useState<any>(null);
     const [lNameError, setlNameErro] = useState<any>(null);
     const [titleError, setTitleError] = useState<any>(null);
     const [descriptionError, setDescError] = useState<any>(null);
-
-
 
     const [formData, setData] = useState({
         first_name: "",
@@ -39,7 +50,12 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
         title: "",
     })
     const validateForm = () => {
-        const errors: any = {};
+        const errors: ValidationsError = {
+            fName: "",
+            lName: "",
+            description: "",
+            title: ""
+        };
         errors.fName = nameValidator(formData.first_name, "First Name");
         errors.lName = nameValidator(formData.last_name, "Last Name");
         errors.description = descriptionValidator(formData.description);
@@ -75,12 +91,24 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
     };
     function uploadPhoto(e: ChangeEvent<HTMLInputElement>): void {
         if (e.target.files && e.target.files.length > 0) {
+            const img: File | null = e.target.files[0];
+            if (img) {
+                if (img.size > 5242880) { // Max file size: 5MB (in bytes)
+                    error('File size exceeds the limit (5MB)');
+                    return;
+                }
+                if (!['image/jpeg', 'image/png'].includes(img.type)) {
+                    error('Invalid file type. Only JPG and PNG files are allowed.');
+                    return;
+                }
+            }
             setImage(e.target.files[0]);
-            let img: any = e.target.files[0];
             const data = new FormData();
             data.append('image', img);
+
+
             uploadProfilePhoto(data, basicData?.role)
-                .then((res: any) => {
+                .then((_res) => {
                     onUpdate()
                     let timerInterval: string | number | NodeJS.Timeout | undefined;
                     Swal.fire({
@@ -98,13 +126,13 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
                         willClose: () => {
                             clearInterval(timerInterval);
                         }
-                    }).then((result) => {
+                    }).then((result: AxiosResponse) => {
                         /* Read more about handling dismissals below */
                         if (result.dismiss === Swal.DismissReason.timer) {
                             console.log("I was closed by the timer");
                         }
                     })
-                }).catch((error: any) => {
+                }).catch((error: AxiosError) => {
                     console.log(error);
                     // Show SweetAlert with error message
                     Swal.fire({
@@ -130,13 +158,13 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
         if (valid) {
 
             editMainProfileSection(formData, basicData?.role)
-                .then((res) => {
+                .then((_res: AxiosResponse) => {
                     onUpdate()
                     setMessage(true)
                     setTimeout(() => {
                         setMessage(false)
                     }, 3000);
-                }).catch((error) => {
+                }).catch((error: AxiosError) => {
                     console.log(error)
                 })
         }
@@ -178,7 +206,10 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
             </div>
 
             {/* profile main section edit modal  */}
-
+            <Toaster
+                position="top-left"
+                reverseOrder={false}
+            />
             <Modal isOpen={isOpen} onClose={closeModal}>
                 {sp_Message ? <Alert severity="success">Profile Updated .</Alert> : null}
 
@@ -269,4 +300,4 @@ const profileTalentDetailsFirst: React.FC<{ datas: any, onUpdate: () => void }> 
 
 
 
-export default profileTalentDetailsFirst;
+export default ProfileTalentDetailsFirst;

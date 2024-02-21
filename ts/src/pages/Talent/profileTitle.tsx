@@ -5,19 +5,28 @@ import { ProgressBar } from "../../components/General/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import Button from '@mui/material/Button'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../routes/pathVariables";
 import Alert from '@mui/material/Alert';
-
+import { fetchAllJobCategory } from '../../api/talent.Api'
 
 
 const ProfileTitle: React.FC = () => {
+    const [titiles, setTitles] = useState<any[]>([])
+    useEffect(() => {
+        fetchAllJobCategory()
+            .then((res: any) => {
+                console.log(res)
+                setTitles(res?.data?.data?.data)
+            })
+    }, [])
     const navigate = useNavigate()
     const data = useSelector((state: ROOTSTORE) => state.signup)
     const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<string>("")
     const saveProfileTitle = (e: React.FormEvent) => {
+        console.log(title, "this is a title")
         e.preventDefault();
         if (title.trim() === "") {
             setError("Title is required");
@@ -79,13 +88,18 @@ const ProfileTitle: React.FC = () => {
                                 <p className="text-xs pt-4   font-normal">Write here the write the title of the work .</p>
 
                                 {/* <label className="block mt-5 mb-5 text-sm font-medium ">Profile description</label> */}
-                                <input
-                                    value={title}
+                                <select
                                     onChange={(e) => setTitle(e.target.value)}
                                     id="message"
-                                    className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Example: Web developer | Web & Mobile"
-                                ></input>
+                                    className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                >
+                                    <option disabled selected>Select one</option>
+                                    {
+                                        titiles?.map((value, index) => (
+                                            <option key={index} value={value.name}>{value?.name}</option>
+                                        ))
+                                    }
+                                </select>
 
                                 {error && <Alert severity="warning">{error}</Alert>}
                             </div>

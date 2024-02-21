@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import routerVariables from "../../routes/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 import Select from 'react-select'
-import axios from 'axios';
+import { AxiosError, AxiosResponse } from "axios";}.axios from 'axios';
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../src/config/validators'
+import toast, { Toaster } from "react-hot-toast";
 
 // interface for the form data shap
 export interface CONTACT_FROM {
@@ -24,6 +25,7 @@ export interface CONTACT_FROM {
 }
 
 const ContactForm: React.FC = () => {
+    const error = (err: string) => toast.error(err);
 
     const naviagte = useNavigate()
     const [image, setImage] = useState<any>(null)
@@ -89,14 +91,14 @@ const ContactForm: React.FC = () => {
         if (!image) {
             setPhotoErro("Photo is required");
         }
-    
+
         setfError(errors.fName);
         setlError(errors.lName);
         setCityError(errors.city);
         setNumberError(errors.number);
         setPinCodeError(errors.pinCode);
         setAddressError(errors.address);
-    
+
         return !(errors.city || errors.number || errors.pinCode || errors.address || formData.Country === "" || !image);
     };
     const handleFormSubmit = (e: React.FormEvent) => {
@@ -107,16 +109,26 @@ const ContactForm: React.FC = () => {
                 .then((res: any) => {
                     console.log("response =>", res);
                     naviagte(routerVariables.Login)
-                }).catch((e: any) => {
+                }).catch((e: AxiosError) => {
                     console.log(e.message)
                 })
         }
     }
     const handlePhotoChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.files && e.target.files.length > 0) {
+            let img: any = e.target.files[0];
+            if (img) {
+                if (img.size > 5242880) { // Max file size: 5MB (in bytes)
+                    error('File size exceeds the limit (5MB)');
+                    return;
+                }
+                if (!['image/jpeg', 'image/png'].includes(img.type)) {
+                    error('Invalid file type. Only JPG and PNG files are allowed.');
+                    return;
+                }
+            }
             setImage(e.target.files[0]);
             setPhotoErro("")
-            let img: any = e.target.files[0];
             const data = new FormData();
             data.append('image', img);
             uploadProfilePhoto(data, role)
@@ -170,6 +182,10 @@ const ContactForm: React.FC = () => {
                     {photoError && <p className="text-red-500 text-xs text-center">{photoError}</p>}
                 </div>
             </div>
+            <Toaster
+                position="top-left"
+                reverseOrder={false}
+            />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
                 <div>

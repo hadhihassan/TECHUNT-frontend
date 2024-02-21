@@ -24,3 +24,11 @@ export async function updateExperiance(data:string[]) {
         axiosInstance.post(`${BASE_URL}TALENT/update-experiance/`, data)
     )
 }
+export async function fetchAllJobCategory(){
+    return await resolve(
+        axiosInstance.get(`${BASE_URL}TALENT/fetch-job-cate/`)
+    )
+}
+
+
+

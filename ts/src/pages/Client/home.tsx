@@ -5,12 +5,16 @@ import Box from '@mui/material/Box';
 import { LinearProgressWithLabel } from "../../components/General/linerProgressBar";
 import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from "react-router-dom";
-import { clientRoutes } from "../../routes/pathVariables";
+import routerVariables, { clientRoutes } from "../../routes/pathVariables";
 import { fetchAllJobPost } from '../../api/client.Api'
 import ListDiscoverTalent from "../../components/Client/clientHome/listDiscoverTalent";
 import ListJobPost from "../../components/Client/clientHome/listJobPost";
+import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
+import { useSelector } from "react-redux"; 
+import { ROOTSTORE } from "../../redux/store"; 
 
 const home = () => {
+    const basicData = useSelector((state:ROOTSTORE) => state.signup)
     const [activeTab, setActiveTab] = useState(1);
     const [jobs, setJobs] = useState<any[]>([])
     const navigate = useNavigate()
@@ -40,7 +44,7 @@ const home = () => {
                     </div>
                     {/* job post banners */}
                     {
-                        !jobs ? <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between">
+                        !jobs || !jobs.length ? <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between">
                             <div className="m-5">
                                 <p className=" font-sans font-semibold text-xl mb-1">No job post</p>
                                 <p className=" font-sans font-normal text-xs m-2">You have not posted any job, post your job <br />
@@ -63,7 +67,7 @@ const home = () => {
                                     <div>
                                         <p className="m-3 font-sans font-semibold text-sm">{jobs[0]?.Title}</p>
                                         <p className="ml-3 font-sans font-normal text-xs text-gray-500">{jobs[0]?.WorkType} - {jobs[0]?.Expertiselevel}</p>
-                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">Est. Budget: {jobs[0]?.Amount} amount - {jobs[0]?.createdAt}</p>
+                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">Est. Budget: {jobs[0]?.Amount} created at  - {jobs[0]?.createdAt}</p>
                                     </div>
                                     <div className="mr-10">
                                         <div className="flex mr-10  justify-between">
@@ -189,7 +193,10 @@ const home = () => {
                                 <span className="text-start  ml-2 text-sm font-normal font-sans">Phone Number Verify</span>
                             </div>
                             <div>
-                                <span className="text-blue-600 ml-12 text-sm hover:text-red-500">Verify</span>
+                                <span
+                                onClick={()=> {
+                                    navigate(routerVariables.Settings)
+                                }} className={` ml-12 text-sm hover:text-red-500 ${ basicData.numberVerify ? "text-red-500" :" text-blue-600"} `}>{basicData.numberVerify ? "Verified" : "Verify"}</span>
                             </div>
                         </div>
                         <div className="flex justify-between m-5 ">
@@ -198,14 +205,14 @@ const home = () => {
                                 <span className="text-start ml-2 text-sm font-normal font-sans">Email Verify</span>
                             </div>
                             <div>
-                                <span className="text-blue-600 ml-12 text-sm hover:text-red-500">Verify</span>
+                                <span className="text-red-500 ml-12 text-sm hover:text-red-500">Verified</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Jobs */}
 
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-[38vh] mt-6 ">
+                    <div className="border  shadow-xl w-[80%] rounded-xl h-[40vh] mt-6 ">
                         <div className="w-full border-b-2 mt-5  flex justify-between">
                             <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All Job</p>
                             <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>

@@ -1,18 +1,12 @@
-import React from "react"
-import BarChart from "../../../components/Admin/charts/barCharts";
-import { SidePanel } from "../../../util/imports";
 import CurrencyRupeeSharpIcon from '@mui/icons-material/CurrencyRupeeSharp';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import EngineeringIcon from '@mui/icons-material/Engineering';
-import CustomStyles from "../../../components/Admin/charts/customStyle";
-import MultipleAxes from "../../../components/Admin/charts/bar";
 
 const indexDashBoard = () => {
     return (
-        <div className="bg-slate-50">
+        <div className="bg-slate-50 w-full">
             <div className="md:flex">
-                <SidePanel />
                 <div className="w-full h-100vh mt-10">
                     <div className="flex items-center justify-around">
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[18vw]  rounded-2xl shadow-xl">
@@ -56,15 +50,15 @@ const indexDashBoard = () => {
                         <div className="flex justify-between">
                             <div>
                                 <p className="ml-6 font-sans font-semibold text-md">Client</p>
-                                <CustomStyles />
+                                {/* <CustomStyles /> */}
                             </div>
                             <div>
                                 <p className="ml-6 font-sans font-semibold text-md">Talent</p>
-                                <CustomStyles />
+                                {/* <CustomStyles /> */}
                             </div>
                             <div>
                                 <p className="ml-6 font-sans font-semibold text-md">Revenue</p>
-                                <CustomStyles />
+                                {/* <CustomStyles /> */}
                             </div>
                         </div>
                     </div>
@@ -99,9 +93,9 @@ const indexDashBoard = () => {
                                 <p className="m-5">60%</p>
                             </div>
                         </div>
-                        <div>
-                            <MultipleAxes />
-                        </div>
+                        {/* <div>
+
+                        </div> */}
                     </div>
                 </div>
             </div>

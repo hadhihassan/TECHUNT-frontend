@@ -1,18 +1,17 @@
-import React, { ChangeEvent, useState,useEffect } from "react"
+import React, { ChangeEvent, useState, useEffect } from "react"
 import { IMG_URL } from "../../../constant/columns";
 import { editJobCategory } from "../../../api/admin.Api";
-import { InputSharp } from "@mui/icons-material";
-
+import { AxiosError, AxiosResponse } from "axios"
 interface JobCategoryFormProps {
-    formData: any;
-    success: () => any,
-    error: () => any,
-    reCall: () => any
+    formData: object;
+    success: () => void,
+    error: () => void,
+    reCall: () => void
 }
 
 const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, error, reCall }) => {
     const [image, setimg] = useState<File | null>(null)
-    const [inputData, setData] = useState<{} | any>({
+    const [inputData, setData] = useState<{ name: string, description: string, image: File | undefined }>({
         name: formData?.name,
         description: formData?.description,
         image: formData?.image
@@ -40,7 +39,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         setimg(formData.image)
     }, [])
     const chandleEditJobCategory = () => {
-        const formDataToUpload = new FormData();
+        const formDataToUpload: HTMLFormElement = new FormData();
         formDataToUpload.append('name', inputData.name);
         formDataToUpload.append('description', inputData.description);
         if (formData.image) {
@@ -49,7 +48,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         }
         formDataToUpload.append("id", formData._id)
         editJobCategory(formDataToUpload)
-            .then((res: any) => {
+            .then((res: AxiosResponse) => {
                 console.log(res)
                 if (res?.data?.data.status === 200) {
                     success(res?.data?.data?.message);
@@ -60,7 +59,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                     error(res?.error?.response?.data?.message);
                 }
             })
-            .catch((err: any) => {
+            .catch((err: AxiosError) => {
                 console.log(err);
                 error(err?.error?.response?.data?.message);
             });
@@ -106,16 +105,16 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                    {image  && (
-                    <div className="flex flex-wrap -mx-3 mb-1 mt-2">
-                        <div className="w-full px-3">
-                            <img
-                                className="rounded-full h-20 w-20"
-                                src={image  instanceof File ? URL.createObjectURL(image) : `${IMG_URL}${image}`}
-                                alt="Selected"
-                            />
+                    {image && (
+                        <div className="flex flex-wrap -mx-3 mb-1 mt-2">
+                            <div className="w-full px-3">
+                                <img
+                                    className="rounded-full h-20 w-20"
+                                    src={image instanceof File ? URL.createObjectURL(image) : `${IMG_URL}${image}`}
+                                    alt="Selected"
+                                />
+                            </div>
                         </div>
-                    </div>
                     )}
                 </div>
 

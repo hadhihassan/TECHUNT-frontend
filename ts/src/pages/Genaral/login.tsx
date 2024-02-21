@@ -4,7 +4,7 @@ import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../api/client.Api";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE, setEmail, setVerify, setRole, setLogged,setId } from "../../redux/Slice/signupSlice";
+import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../config/validators";
 import Swal from 'sweetalert2'
@@ -18,7 +18,6 @@ const LoginPage: React.FC = () => {
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
-
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
         setErrorsEmail(emailValidator(email))
@@ -37,15 +36,20 @@ const LoginPage: React.FC = () => {
                         if (!res?.data) {
                             setError("Email Or Password incorrect")
                         } else {
-                            console.log("he entered");
+                            console.log("he entered",res.data);
                             dispatch(setLogged(true));
                             dispatch(setVerify(true));
                             dispatch(setRole(res?.data?.data.role));
                             dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
+                            dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
                             console.log(res?.data?.data?.token);
                             localStorage.setItem("token", res?.data?.data.token)
-                            navigate("/");
+                            if (res?.data?.data.role === "CLIENT") {
+                                navigate("/client/home/");
+                            } else {
+                                navigate("/");
+                            }
                         }
                     }
                 })

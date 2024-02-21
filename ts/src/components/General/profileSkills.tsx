@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "./profileEditModal";
 import { updateSkills } from "../../api/talent.Api";
 import Alert from '@mui/material/Alert';
+import { Combobox } from '@headlessui/react'
+import axios from "axios";
 
 
 
-const profileSkills: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
-
+const profileSkills: React.FC<{ data: object, onUpdate: () => void }> = ({ data, onUpdate }) => {
+    const [selectedPerson, setSelectedPerson] = useState<string[] | string>("")
+    const [query, setQuery] = useState('')
+    const [people, setPeople] = useState<string[]>([])
+    const filteredPeople =
+        query === ''
+            ? people
+            : people.filter((person) => {
+                return person.toLowerCase().includes(query.toLowerCase())
+            })
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [text, setText] = useState<string>("");
     const [skills, setSkills] = useState<string[]>([]);
@@ -23,36 +34,41 @@ const profileSkills: React.FC<{ data: any, onUpdate: () => void }> = ({ data, on
     const closeModal: () => void = () => {
         setIsOpen(false);
     };
-
-    const addSkill: () => void = () => {
-        if (text.trim() !== "") {
-            setSkills(prevSkills => [...prevSkills, text.trim()]);
-            setText("");
+    const addSkill: (value: string) => void = (value) => {
+        if (value.trim() !== "") {
+            if (!skills.includes(value.trim())) {
+                setSkills(prevSkills => [...prevSkills, value.trim()]);
+                setText("");
+            }
         }
     };
-
     const removeSkill = (index: number) => {
         setSkills(prevSkills => prevSkills.filter((_, idx) => idx !== index));
     };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-    };
-
     const handleUpdateSkills: () => void = () => {
         updateSkills(skills)
-            .then((res: any) => {
+            .then((res: unknown) => {
                 console.log(res);
                 onUpdate();
                 setSuccess_Message(true)
                 setTimeout(() => {
                     setSuccess_Message(false)
                 }, 3000);
-            }).catch((err: any) => {
+            }).catch((err: unknown) => {
                 console.log(err);
             });
     };
-
+    const onChangeQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value)
+        const query = e.target.value
+        const response = await axios.get(`https://api.apilayer.com/skills?q=${query}`, {
+            headers: {
+                'apikey': 'W7KRn2JNTycH8QoI9b0CVHczMD0rTofH'
+            }
+        });
+        console.log(response.data)
+        setPeople(response.data)
+    }
     return (
         <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
             <div className="flex justify-between">
@@ -65,14 +81,27 @@ const profileSkills: React.FC<{ data: any, onUpdate: () => void }> = ({ data, on
                         {success_Message ? <Alert severity="success">Skills set updated .</Alert> : null}
                         <h1 className="text-2xl font-medium tracking-tight text-gray-900">Add your skills.</h1>
                         <p className="text-xs pt-4 font-normal">Add skills that increase your rating.</p>
-                        <input
+                        {/* <input
                             value={text}
                             onChange={handleChange}
                             id="message"
                             className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Example: node js | react js"
-                        />
-                        <label className="text-red-500 text-sm font-medium" onClick={addSkill}>+ Add skills</label>
+                        /> */}
+                        <Combobox value={selectedPerson} onChange={setSelectedPerson} >
+                            <Combobox.Input value={text} onChange={onChangeQuery}
+                                className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Example: node js | react js"
+                            />
+                            <Combobox.Options>
+                                {filteredPeople.map((person) => (
+                                    <Combobox.Option onClick={() => addSkill(person)} key={person} value={person}>
+                                        {person}
+                                    </Combobox.Option>
+                                ))}
+                            </Combobox.Options>
+                        </Combobox>
+                        {/* <label className="text-red-500 text-sm font-medium" onClick={addSkill}>+ Add skills</label> */}
                         <div className="flex flex-wrap mt-2">
                             {skills &&
                                 skills.map((value, key) => (
@@ -88,9 +117,7 @@ const profileSkills: React.FC<{ data: any, onUpdate: () => void }> = ({ data, on
                                             >
                                                 X
                                             </label>
-
                                         </p>
-
                                     </div>
                                 ))}
                         </div>

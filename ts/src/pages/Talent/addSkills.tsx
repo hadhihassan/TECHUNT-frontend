@@ -5,28 +5,40 @@ import { ProgressBar } from "../../components/General/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import Button from '@mui/material/Button';
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes, talent_routes } from "../../routes/pathVariables";
 import { storeWorkBasedDataBioData } from "../../api/talent.Api";
 import Alert from '@mui/material/Alert';
+import { Combobox } from '@headlessui/react'
+import axios from "axios";
 
 
 
 const AddSkills: React.FC = () => {
+    const [selectedPerson, setSelectedPerson] = useState("")
+    const [query, setQuery] = useState('')
+    const [people, setPeople] = useState<string[]>([])
+
+    const filteredPeople =
+        query === ''
+            ? people
+            : people.filter((person) => {
+                return person.toLowerCase().includes(query.toLowerCase())
+            })
     const data = useSelector((state: ROOTSTORE) => state.signup);
     const [text, setText] = useState<string>("");
     const [skills, setSkills] = useState<string[]>([]);
     const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
-    const addSkill = () => {
-        if (text.trim() !== "") {
-            // Check if the skill already exists in the array
-            if (!skills.includes(text.trim())) {
-                setSkills(prevSkills => [...prevSkills, text.trim()]);
+    const addSkill: (value: string) => void = (value) => {
+
+        if (value.trim() !== "") {
+            if (!skills.includes(value.trim())) {
+                setSkills(prevSkills => [...prevSkills, value.trim()]);
                 setText("");
-                setError("");
+                setError(""); setText("");
             } else {
                 setError("Skill already exists");
                 setTimeout(() => {
@@ -54,7 +66,7 @@ const AddSkills: React.FC = () => {
             localStorage.setItem("talent_Data", JSON.stringify(data));
 
             storeWorkBasedDataBioData(data)
-                .then((res) => {
+                .then((res: any) => {
                     console.log(res.data)
                     navigate(clientRoutes.ADD_PROFILE_DESCRIPTION);
                 })
@@ -63,14 +75,24 @@ const AddSkills: React.FC = () => {
                 })
                 .finally(() => {
                 });
-        }else{
+        } else {
             setError("Minimum 5 skill you want ")
             setTimeout(() => {
                 setError("");
             }, 300);
         }
     };
-
+    const onChangeQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value)
+        const query = e.target.value
+        const response = await axios.get(`https://api.apilayer.com/skills?q=${query}`, {
+            headers: {
+                'apikey': 'W7KRn2JNTycH8QoI9b0CVHczMD0rTofH'
+            }
+        });
+        console.log(response.data)
+        setPeople(response.data)
+    }
 
     return (
         <div>
@@ -110,13 +132,26 @@ const AddSkills: React.FC = () => {
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900">Add your skills.</h1>
                                 <p className="text-xs pt-4 font-normal">Add skills that increase your rating.</p>
 
-                                <input
+                                {/* <input
                                     value={text}
                                     onChange={handleChange}
                                     id="message"
                                     className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Example: node js | react js"
-                                />
+                                /> */}
+                                <Combobox value={selectedPerson} onChange={setSelectedPerson} >
+                                    <Combobox.Input value={text} onChange={onChangeQuery}
+                                        className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Example: node js | react js"
+                                    />
+                                    <Combobox.Options>
+                                        {filteredPeople.map((person) => (
+                                            <Combobox.Option onClick={() => addSkill(person)} key={person} value={person}>
+                                                {person}
+                                            </Combobox.Option>
+                                        ))}
+                                    </Combobox.Options>
+                                </Combobox>
                                 <label className="text-red-500 text-sm font-medium" onClick={addSkill}>+ Add skills</label>
                                 {error && <Alert severity="warning">{error}</Alert>}
                                 <div className="flex flex-wrap mt-2">

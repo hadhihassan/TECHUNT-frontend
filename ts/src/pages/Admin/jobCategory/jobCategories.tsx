@@ -20,10 +20,7 @@ const jobCategories = () => {
     }
     return (
         <>
-            <div className="flex">
-                <SidePanel/>
                 <Tables columns={JOB_CATEGORY_COLUMN} data={data} reCall={fetchAllJobCategories} />;
-            </div>
         </>
     )
 };

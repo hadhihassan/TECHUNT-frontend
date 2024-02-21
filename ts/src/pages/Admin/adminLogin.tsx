@@ -38,13 +38,13 @@ function adminLogin() {
                         console.log(res.data)
                         localStorage.setItem('adminToken', res?.data?.data?.token);
                         if (!res.data) {
-                            setError(res?.error.response.data.message);
+                            setError(res?.error?.response?.data?.message);
                             setTimeout(() => {
                                 setError('');
                             }, 5000);
                         } else {
                             localStorage.setItem('admin', JSON.stringify({ isLogged: true }));
-                            setSuccess(res?.data.data.message);
+                            setSuccess(res?.data?.data?.message);
                             setTimeout(() => {
                                 setSuccess('');
                             }, 5000);

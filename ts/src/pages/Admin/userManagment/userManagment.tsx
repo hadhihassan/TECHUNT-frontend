@@ -224,6 +224,7 @@ const UserManagement: React.FC = () => {
     const { globalFilter, pageIndex } = state;
     const openDrawer = () => {
         const drawerId: any = JSON.parse(localStorage.getItem("drawerData"))
+        console.log(drawerId, "sdfsdfsdfdsfjsahkdlj")
         const id = drawerId?._id
         getJobPosts(id)
             .then((res: any) => {
@@ -315,24 +316,28 @@ const UserManagement: React.FC = () => {
                 </div>
                 <div>
                     <Drawer open={open} onClose={closeDrawer} className="p-4 flex flex-col" placeholder={undefined} size={400} >
-                        <div >
+                        <div>
                             <div className='flex justify-center rounded-full'>
                                 <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}`} className="w-16 h-16 rounded-full" />
                             </div>
                             <div>
                                 {
-                                    drawerData?.Profile.Skills && (
-                                        <>  <div className='w-full'>
-                                            <p className='font-sans font-medium font'>Skills</p>
-                                            {drawerData && drawerData.Profile?.Skills && drawerData.Profile?.Skills.map((value: string, index: number) => (
-                                                <span key={index} className='border border-red-500 font-sans text-sm text-red-500 spanx-1 rounded-full mt-1 px-2 ml-1'>{value}</span>
-                                            ))}</div>
-                                            <div className='w-full'>
-                                            <p className='font-sans font-medium font mt-2'>Experience</p>
-                                            {drawerData && drawerData?.Profile?.Work_Experiance && drawerData?.Profile?.Work_Experiance.map((value: string, index: number) => (
-                                                <span key={index} className='border border-red-500 font-sans text-sm text-red-500 px-2 rounded-full mt-1 ml-1'>{value}</span>
-                                            ))}</div>
-                                        </> 
+                                    drawerData?.Profile && drawerData.Profile.Skills && (
+                                        <>
+                                            <div className='w-full flex flex-col'>
+                                                <p className='font-sans font-medium font'>Skills</p>
+                                                {drawerData.Profile.Skills.map((value: string, index: number) => (
+                                                    <span key={index} className=' font-sans text-sm text-gray-500 spanx-1 rounded-full mt-1 px-2 ml-1'>{value}</span>
+                                                ))}
+                                            </div>
+                                            <div className='w-full flex flex-col'>
+                                                <p className='font-sans font-medium font mt-2'>Experience</p>
+                                                {drawerData?.Profile?.Work_Experiance && drawerData.Profile.Work_Experiance.map((value: string, index: number) => (
+                                                    <p key={index} className=' font-sans text-sm text-gray-500 px-2 rounded-full mt-1 ml-1'>{value}</p>
+                                                ))}
+                                                {drawerData?.Profile?.Work_Experiance?.length === 0 && <p className='font-sans text-sm font-semibold text-red-500'>Fresher</p>}
+                                            </div>
+                                        </>
                                     )
                                 }
                                 <div className='flex mt-2 mb-5'>
@@ -355,14 +360,14 @@ const UserManagement: React.FC = () => {
                                     </span>
                                     <span className="font-sans font-semibold text-xl mt-2 mb-5">About</span>
                                 </div>
-                                <p className='font-sans font-semibold text-xl mt-2 mb-2'>Conatct Deatils</p>
+                                <p className='font-sans font-semibold text-xl mt-2 mb-2'>Contact Details</p>
                                 <p className='font-sans font-semibold'>City : <span className='font-sans font-normal text-gray-500'>{drawerData?.City}</span></p>
                                 <p className='font-sans font-semibold'>Country : <span className='font-sans font-normal text-gray-500'>{drawerData?.Country}</span></p>
                                 <p className='font-sans font-semibold'>Number : <span className='font-sans font-normal text-gray-500'>{drawerData?.Number}</span></p>
                                 <p className='font-sans font-semibold'>Pin code : <span className='font-sans font-normal text-gray-500'>{drawerData?.PinCode}</span></p>
                                 <div className='mt-5'>
                                     {
-                                        !drawerData?.Profile.Skills && (
+                                        !drawerData?.Profile?.Skills && (
                                             <p className='font-sans font-semibold text-xl mt-2 mb-2'>Total job posts : {drawerjobPost?.length}</p>
                                         )
                                     }

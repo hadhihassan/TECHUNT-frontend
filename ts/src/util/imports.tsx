@@ -26,7 +26,10 @@ import ProtectedRoute from '../routes/protectedRoutes/adminProtectedRoutes';
 import SidePanel from '../components/Admin/sidePanel';
 import JobCategories from '../pages/Admin/jobCategory/jobCategories';
 import UserManagementIndex from '../pages/Admin/userManagment';
+import IndexDashBoard from '../pages/Admin/dashboard';
 
+// admin layout 
+import AdminLayout from '../components/Admin/adminLayout'
 
 
 export {
@@ -58,5 +61,7 @@ export {
     SidePanel,
     Settings,
     JobCategories,
-    UserManagementIndex
+    UserManagementIndex,
+    IndexDashBoard,
+    AdminLayout
 };

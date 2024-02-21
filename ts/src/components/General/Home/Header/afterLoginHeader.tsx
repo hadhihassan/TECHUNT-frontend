@@ -7,17 +7,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList, IconButton } from '@mui/material';
 import { Logout, Person } from '@mui/icons-material';
-import { persistor} from '../../../../redux/store'
-import { useNavigate } from "react-router-dom"; 
+import { persistor } from '../../../../redux/store'
+import { useNavigate } from "react-router-dom";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { MyContext } from "../../../../context/myContext";
 import { cleanAllData } from "../../../../redux/Slice/signupSlice";
+import routerVariables, { } from "../../../../routes/pathVariables";
+
+
 const AfterLoginHeader = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [IMG, setIMG] = useState<string>("")
-    const basicdata:any = useContext(MyContext); // Move useContext here
+    const basicdata: any = useContext(MyContext); // Move useContext here
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -28,21 +31,18 @@ const AfterLoginHeader = () => {
                 })
         }
     }, [role]);
-
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
-
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
-
     const handleClose = (event: React.MouseEvent<Document> | React.ChangeEvent<HTMLInputElement>) => {
         if (anchorRef?.current && anchorRef?.current?.contains(event.target as Node)) {
             return;
         }
         setOpen(false);
     };
-    
+
     const handleLogout = () => { // Removed event parameter
         localStorage.removeItem('token')
         persistor.purge();
@@ -50,7 +50,6 @@ const AfterLoginHeader = () => {
         dispatch(cleanAllData())
         navigate("/")
     }
-
 
     return (
         <div>
@@ -66,7 +65,6 @@ const AfterLoginHeader = () => {
                             <input type="text" placeholder="Search..." className="flex justify-between bg-zinc-700 rounded-xl text-white  d-[20px] w-[100%] sm:w-[300px] h-[30px]" >
                             </input>
                             <SearchOutlinedIcon className="mt-1 mr-1" />
-
                         </div>
                     </div>
                 </div>
@@ -90,9 +88,11 @@ const AfterLoginHeader = () => {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow">
-                                            <MenuItem ><Person sx={{ mr: 1 }} /> Profile</MenuItem>
+                                            <MenuItem onClick={() => navigate(`/${basicdata.role}/profile/`)}>
+                                                <Person sx={{ mr: 1 }} /> Profile
+                                            </MenuItem>
                                             <MenuItem onClick={handleLogout}><Logout sx={{ mr: 1 }} /> Logout</MenuItem>
-                                            <MenuItem ><SettingsIcon sx={{ mr: 1 }} /> Settings</MenuItem>
+                                            <MenuItem onClick={() => navigate(routerVariables.Settings)}><SettingsIcon sx={{ mr: 1 }} /> Settings</MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>

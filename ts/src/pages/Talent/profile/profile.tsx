@@ -2,28 +2,50 @@ import Footer from "../../../components/General/Home/footer/footer";
 import AfterLoginHeader from "../../../components/General/Home/Header/afterLoginHeader";
 import ProfileTalentDetailsFirst from "../../../components/General/profileTalentDetailsFirst";
 import ProfileVerifications from "../../../components/General/profileVerifications";
-import ProfileConatct from "../../../components/General/profileConatct";
+import ProfileContact from "../../../components/General/profileConatct";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../../context/myContext";
 import { getUserProfileDetails } from "../../../api/talent.Api";
 import ProfileSkills from "../../../components/General/profileSkills";
 import ProfileExperiance from "../../../components/General/profileExperiance";
 import ProfileReviews from "../../../components/General/profileReviews";
-
-
-const profile = () => {
-    const [datas, setData] = useState<{} | any>({})
-    const { role }: any = useContext(MyContext);
+import { AxiosError, AxiosResponse } from "axios"
+interface UserProfile {
+    Last_name: string;
+    First_name: string;
+    Password: string;
+    Email: string;
+    Number: string;
+    Profile: {
+        profile_Dp: string;
+        Description: string;
+        Title: string;
+        Skills: string[];
+        Work_Experiance: string[];
+    };
+    Address: string;
+    PinCode: string;
+    City: string;
+    Country: string;
+    lastSeen?: Date;
+    isBlock?: boolean;
+    online?: boolean;
+    isVerify?: boolean;
+    isNumberVerify?: boolean;
+}
+const Profile = () => {
+    const [datas, setData] = useState<UserProfile>()
+    const { role } = useContext(MyContext);
     console.log(role)
 
     const getUserProfile = () => {
         console.log("get user profile");
 
         getUserProfileDetails(role)
-            .then((res: any) => {
-                console.log(res,"this is reponse for geting profile")
-                setData(res.data.data)
-            }).catch((err: any) => {
+            .then((res:unknown) => {
+                console.log(res, "this is reponse for getting profile")
+                setData(res?.data?.data)
+            }).catch((err: AxiosError) => {
                 console.log(err)
             })
     }
@@ -44,14 +66,14 @@ const profile = () => {
             <ProfileVerifications />
         </div>
         <div className={`flex items-center  flex-row  ${role === "CLIENT" ? "ml-[6rem]" : "justify-center"} `}>
-            <ProfileConatct data={datas} onUpdate={getUserProfile} />
+            <ProfileContact data={datas} onUpdate={getUserProfile} />
             {
-                role === "CLIENT" ? null : <ProfileSkills data={datas} onUpdate={getUserProfile}/>
+                role === "CLIENT" ? null : <ProfileSkills data={datas} onUpdate={getUserProfile} />
             }
         </div>
-        <div className="flex items-center  flex-row m-1 mb-5">      
+        <div className="flex items-center  flex-row m-1 mb-5">
             {
-                role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile}/>
+                role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
             }
         </div>
         <ProfileReviews />
@@ -61,4 +83,4 @@ const profile = () => {
 
 
 
-export default profile;
+export default Profile;
