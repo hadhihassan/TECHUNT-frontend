@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { INITIALSTATE, setRole } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import Avatar from "react-avatar";
-import { Typerole } from "../../interface/loginSliceType"
+import { Typerole } from "../../interface/interfaces"
 import { useNavigate } from "react-router-dom";
 import routerVariables from '../../routes/pathVariables'
 

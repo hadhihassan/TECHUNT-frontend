@@ -36,3 +36,12 @@ export interface JobInterface extends UserProfile{
     isDelete: boolean;
     createdAt?:string
 }
+// Proposal form Data interface 
+export interface Proposal {
+    title: string
+    coverLetter: string
+    rate: number
+    availability:Date | null
+    attachments:File | null
+    additionalInfo: string
+}

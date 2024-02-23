@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../util/validators'
 import { Context as ContextInterface } from '../../context/myContext'
-import { UserProfile } from '../../interface/loginSliceType'
+import { UserProfile } from '../../interface/interfaces'
 import toast, { Toaster } from "react-hot-toast";
 
 
