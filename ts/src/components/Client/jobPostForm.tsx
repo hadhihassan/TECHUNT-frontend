@@ -14,6 +14,7 @@ import { postJob } from "../../api/client.Api";
 import toast, { Toaster } from "react-hot-toast";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { AxiosError, AxiosResponse } from "axios";
 
 const top100Films = [
     'The Shawshank Redemption',
@@ -57,10 +58,10 @@ const JobPostForm = () => {
         WorkType: '',
         Amount: 0,
     });
-    const onSubmit = (data: React.FormEvent) => {
+    const onSubmit = () => {
         console.log("post submited data will be this", formData)
         postJob(formData)
-            .then((res: any) => {
+            .then((res: AxiosResponse) => {
                 console.log(res)
                 if (res?.data?.data.success) {
                     success(res?.data?.data.message)
@@ -78,7 +79,7 @@ const JobPostForm = () => {
                 } else {
                     error("Internal server error.")
                 }
-            }).catch((err: any) => {
+            }).catch((err: AxiosError) => {
                 console.log(err)
             })
     };

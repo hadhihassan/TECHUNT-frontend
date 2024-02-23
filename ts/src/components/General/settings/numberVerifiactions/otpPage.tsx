@@ -12,9 +12,10 @@ import { checkValidNumber, updateNumberVerification } from "../../../../api/comm
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { useNavigate } from "react-router-dom"
+import { AxiosResponse } from "axios";
 
 const NumberVerification = () => {
-    const navigate =  useNavigate()
+    const navigate = useNavigate()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [phone, setPhone] = useState<string>("")
     const [user, setUser] = useState<any>(null)
@@ -49,16 +50,16 @@ const NumberVerification = () => {
     }
     const verifyOtp = async () => {
         try {
-            const data: any = await user.confirm(otp)
+            const data: never = await user.confirm(otp)
             success("Your number is verified .")
-            updateNumberVerification(basicData.role, basicData.id)
-                .then((res: any) => {
+            updateNumberVerification(basicData?.role, basicData?.id)
+                .then((res: AxiosResponse) => {
                     console.log(res)
                     navigate(`/${basicData.role}/profile`)
-                }).catch((err: any) => {
+                }).catch((err: AxiosResponse) => {
                     console.log(err)
                 })
-        } catch (err: any) {
+        } catch (err) {
             error(`${err.message}`)
             console.log(err)
         }

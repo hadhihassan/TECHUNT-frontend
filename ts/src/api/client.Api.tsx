@@ -1,9 +1,7 @@
 import { resolve } from '../config/axios';
 import { CONTACT_FROM } from '../components/General/contactForm';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import { AxiosResponse } from 'axios';
 import { INITIALSTATE } from '../redux/Slice/signupSlice';
-import { useSelector } from 'react-redux';
-import { ROOTSTORE } from '../redux/store';
 import { axiosInstance, BASE_URL } from '../config/axios'
 
 
@@ -25,14 +23,13 @@ export async function uploadProfilePhoto(image: FormData, role: string) {
     );
 }
 
-export async function Login(data: {}) {
+export async function Login(data: object) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}login/`, data)
     )
-
 }
 
-export async function postJob(data: {}) {
+export async function postJob(data: object) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}CLIENT/post-job/`, data)
     )
@@ -42,9 +39,9 @@ export async function fetchAllJobPost() {
         axiosInstance.get(`${BASE_URL}CLIENT/get-all-jobpost/`)
     )
 }
-export async function editJobPost(data:{},id:string) {
+export async function editJobPost(data: object, id: string) {
     return await resolve(
-        axiosInstance.patch(`${BASE_URL}CLIENT/edit-jobpost/`,{data,id})
+        axiosInstance.patch(`${BASE_URL}CLIENT/edit-jobpost/`, { data, id })
     )
 }
 

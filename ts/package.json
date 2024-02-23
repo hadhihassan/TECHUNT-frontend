@@ -15,6 +15,7 @@
     "@material-tailwind/react": "^2.1.9",
     "@mui/icons-material": "^5.15.6",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-menubar": "^1.0.4",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.1.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@types/draft-js": "^0.11.17",
+    "@types/node": "^20.11.19",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@types/react-table": "^7.7.19",

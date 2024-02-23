@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import Swal from 'sweetalert2'
-import { useNavigate } from "react-router-dom"
 export const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = BASE_URL;

@@ -13,6 +13,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { MyContext } from "../../../../context/myContext";
 import { cleanAllData } from "../../../../redux/Slice/signupSlice";
 import routerVariables, { } from "../../../../routes/pathVariables";
+import { AxiosError, AxiosResponse } from "axios";
 
 
 const AfterLoginHeader = () => {
@@ -20,13 +21,13 @@ const AfterLoginHeader = () => {
     const navigate = useNavigate()
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [IMG, setIMG] = useState<string>("")
-    const basicdata: any = useContext(MyContext); // Move useContext here
+    const basicdata: onject = useContext(MyContext); // Move useContext here
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
-                .then((res: any) => {
+                .then((res: AxiosResponse) => {
                     setIMG(`http://localhost:3000/images/${res?.data?.data?.Profile?.profile_Dp}`)
-                }).catch((err: any) => {
+                }).catch((err: AxiosError) => {
                     console.log(err)
                 })
         }
@@ -56,7 +57,9 @@ const AfterLoginHeader = () => {
             <div className="flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
                 {/* Logo */}
                 <div className="w-full flex items-center justify-between ">
-                    <div className="m-auto">
+                    <div className="m-auto" onClick={()=>{
+                        navigate(`/${role.toLocaleLowerCase()}/home/`)
+                    }}>
                         <span className="text-white text-3xl font-extrabold font-montserrat break-words">TECH</span>
                         <span className="text-white text-3xl font-normal font-montserrat break-words">UNT</span>
                     </div>

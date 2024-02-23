@@ -12,11 +12,12 @@ import ListJobPost from "../../components/Client/clientHome/listJobPost";
 import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
 import { useSelector } from "react-redux"; 
 import { ROOTSTORE } from "../../redux/store"; 
+import { AxiosError, AxiosResponse } from "axios";
 
-const home = () => {
+const Home = () => {
     const basicData = useSelector((state:ROOTSTORE) => state.signup)
     const [activeTab, setActiveTab] = useState(1);
-    const [jobs, setJobs] = useState<any[]>([])
+    const [jobs, setJobs] = useState<object[]>([])
     const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
@@ -25,10 +26,10 @@ const home = () => {
     useEffect(() => {
 
         fetchAllJobPost()
-            .then((res: any) => {
+            .then((res: AxiosResponse) => {
                 console.log(res?.data?.data?.data)
                 setJobs(res?.data?.data?.data)
-            }).catch((err: any) => {
+            }).catch((err: AxiosError) => {
                 console.log(err)
             })
     }, [])
@@ -257,4 +258,4 @@ const home = () => {
 
 
 
-export default home;
+export default Home;

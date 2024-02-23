@@ -24,3 +24,15 @@ export interface UserProfile {
     isVerify?: boolean;
     isNumberVerify?: boolean;
 }
+export interface JobInterface extends UserProfile{
+    Title: string;
+    Client_id: string | UserProfile;
+    Skills: string[];
+    TimeLine: 'Small' | 'Medium' | 'Large';
+    Description: string;
+    Expertiselevel: 'Fresher' | 'Medium' | 'Experienced';
+    Amount: number;
+    WorkType: 'Fixed' | 'Milestone';
+    isDelete: boolean;
+    createdAt?:string
+}

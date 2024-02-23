@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
-import { emailValidator, passwordValidator } from "../../config/validators";
+import { emailValidator, passwordValidator } from "../../util/validators";
 import Swal from 'sweetalert2'
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch()

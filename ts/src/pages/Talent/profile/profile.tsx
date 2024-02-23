@@ -42,8 +42,8 @@ const Profile = () => {
         console.log("get user profile");
 
         getUserProfileDetails(role)
-            .then((res:unknown) => {
-                console.log(res, "this is reponse for getting profile")
+            .then((res:AxiosResponse) => {
+                console.log(res?.data?.data, "this is reponse for getting profile")
                 setData(res?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)

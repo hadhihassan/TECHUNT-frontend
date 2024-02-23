@@ -8,7 +8,7 @@ import routerVariables from "../../routes/pathVariables";
 import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
 import Select from 'react-select'
 import { AxiosError, AxiosResponse } from "axios"
-import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../src/config/validators'
+import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validators'
 import toast, { Toaster } from "react-hot-toast";
 
 // interface for the form data shap

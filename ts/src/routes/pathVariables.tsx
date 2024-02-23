@@ -23,7 +23,9 @@ interface TALENT_ROUTES {
     AddSkills: string,
     Profile_title: string,
     AddWorkExperiance: string
-    Profile: string
+    Profile: string,
+    Home:string,
+    JobViewPage:string
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -57,7 +59,9 @@ export const talent_routes: TALENT_ROUTES = {
     AddSkills: "/add-skills/",
     Profile_title: "/profile-title/",
     AddWorkExperiance: "/add-experiance/",
-    Profile: "/talent/profile/"
+    Profile: "/talent/profile/",
+    Home:"/talent/home/",
+    JobViewPage:"/talent/job-details-view/"
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

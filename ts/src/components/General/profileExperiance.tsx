@@ -4,11 +4,11 @@ import { updateExperiance } from "../../api/talent.Api";
 import Alert from '@mui/material/Alert';
 
 
-const profileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
+const ProfileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
 
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
     useEffect(() => {
-        setExperience(data.Profile?.Work_Experiance)
+        setExperience(data?.Profile?.Work_Experiance)
     }, [data])
     const [text, setText] = useState<string>("");
     const [experience, setExperience] = useState<string[]>([]);
@@ -130,4 +130,4 @@ const profileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data
 }
 
 
-export default profileExperiance;
+export default ProfileExperiance;

@@ -17,6 +17,8 @@ import Profile from '../pages/Talent/profile/profile';
 import ErrorPage from '../pages/Genaral/404/404ErrorPage';
 import AdminLogin from '../pages/Admin/adminLogin';
 import Settings from '../pages/Genaral/settings';
+import TalentLayout from '../components/Talent/talentLayout';
+import  TalentHomePage  from '../pages/Talent/home/talentHomePage';
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from '../routes/pathVariables';
 // Protected Routes
@@ -30,6 +32,7 @@ import IndexDashBoard from '../pages/Admin/dashboard';
 
 // admin layout 
 import AdminLayout from '../components/Admin/adminLayout'
+import JobViewPage from '../components/Talent/jobViewPage';
 
 
 export {
@@ -63,5 +66,8 @@ export {
     JobCategories,
     UserManagementIndex,
     IndexDashBoard,
-    AdminLayout
+    AdminLayout,
+    TalentLayout,
+    TalentHomePage,
+    JobViewPage
 };

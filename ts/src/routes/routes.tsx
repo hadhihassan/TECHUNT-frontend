@@ -1,9 +1,10 @@
 import React from 'react';
 import * as Imports from '../../src/util/imports';
-import IndexDashBoard from '../pages/Admin/dashboard';
 import Home from '../pages/Client/home';
 import JobPostForm from '../components/Client/jobPostForm';
 import EditjobPostForm from '../components/Client/editJobPostForm';
+import JobViewPage from '../components/Talent/jobViewPage';
+
 
 const WebRouters: React.FC = () => {
     return (
@@ -13,7 +14,6 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.clientRoutes.Profile} element={<Imports.Profile />} />
                 <Imports.Route path={Imports.talent_routes.Profile} element={<Imports.Profile />} />
                 <Imports.Route path={Imports.clientRoutes.CLIENT_HOME} element={<Home />} />
-                <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
                 <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<JobPostForm />} />
                 <Imports.Route path={Imports.clientRoutes.EDIT_JOB_POST} element={<EditjobPostForm />} />
                 <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
@@ -42,15 +42,27 @@ const WebRouters: React.FC = () => {
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.Home />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
+            <Imports.Route path={"*"} element={<JobViewPage />} />
 
             {/*ADMIN ROUTES  */}
+            <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
             <Imports.Route path='admin' element={<Imports.AdminLayout />}>
-                <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
                 <Imports.Route path={Imports.admin_Routes.Dashboard} element={<Imports.ProtectedRoute><Imports.IndexDashBoard /></Imports.ProtectedRoute>} />
                 <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
                 <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
             </Imports.Route>
+
+
+            {/* TALENT ROUTES */}
+            <Imports.Route path='talent' element={<Imports.TalentLayout />}>
+                <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
+                <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
+            </Imports.Route>
+
+            {/* CLIENT ROUTES */}
+            {/* <Imports.Route path='client' element={ }>
+                <Imports.Route path={ } element={ } />
+            </Imports.Route> */}
 
         </Imports.Routes>
     );

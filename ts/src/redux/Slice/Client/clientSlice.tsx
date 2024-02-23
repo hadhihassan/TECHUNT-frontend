@@ -11,7 +11,8 @@ export type Client_INITIALSTATE = {
         country: string,
         cityName: string,
         pinCode: number | null,
-    }
+    },
+    loading: boolean
 };
 //Set the initial state 
 const initialState: Client_INITIALSTATE = {
@@ -25,6 +26,7 @@ const initialState: Client_INITIALSTATE = {
     },
     fName: "",
     lName: "",
+    loading: false
 };
 //Create redux slice 
 const Client = createSlice({
@@ -45,13 +47,16 @@ const Client = createSlice({
         },
         setImageUrl: (state, action: PayloadAction<string>) => {
             state.imageUrl = action.payload
+        },
+        setLoader: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload
         }
 
 
     }
 })
 //exporting the actions
-export const { setFName, setContact, setImageUrl, setDescription, setLName } = Client.actions
+export const { setFName, setContact, setImageUrl, setDescription, setLName, setLoader } = Client.actions
 //exprting the slice reducers
 export default Client.reducer
 

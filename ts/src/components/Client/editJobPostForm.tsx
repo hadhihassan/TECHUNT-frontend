@@ -51,7 +51,6 @@ const EditjobPostForm = () => {
         WorkType: string | 'Fixed' | 'Milestone';
         Amount: number;
     }
-
     const [formData, setFormData] = useState<FormData>({
         Title: '',
         Description: '',
@@ -71,7 +70,6 @@ const EditjobPostForm = () => {
             ...prevData,
             ["Description"]: html,
         }));
-
     };
     useEffect(() => {
         fetchAllJobPost()
@@ -92,10 +90,8 @@ const EditjobPostForm = () => {
                 })
                 setEditorHtml(data?.Description)
             })
-
     }, [])
     const onChangeInput: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void = (e) => {
-
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -105,12 +101,10 @@ const EditjobPostForm = () => {
     };
     // const handleChangeSkill = (_event, newValue) => {
     //     const uniqueSkills = newValue.filter((option) => !formData.Skills.includes(option));
-
     //     setValue([
     //         ...value,
     //         ...uniqueSkills
     //     ]);
-
     //     setFormData((prevFormData) => ({
     //         ...prevFormData,
     //         Skills: [
@@ -119,7 +113,6 @@ const EditjobPostForm = () => {
     //         ]
     //     }));
     // };
-
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
         editJobPost(formData, docId)
@@ -130,7 +123,8 @@ const EditjobPostForm = () => {
                 } else {
                     error(res?.error?.response?.data?.message)
                 }
-            }).catch((err: AxiosError) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            }).catch((_err: AxiosError) => {
                 error("Internal server error.")
             })
     }
@@ -180,7 +174,7 @@ const EditjobPostForm = () => {
                                     {errors.Title && <p className="font-sans font-normal text-xs text-red-500 m-1">{errors.Title.message}</p>}
                                 </div>
                                 <p className="mt-5">Describe about the project</p>
-                                <div className=" mt-4">
+                                <div className="mt-4 w-[95%]">
                                     <ReactQuill
                                         theme="snow"
                                         value={editorHtml}
@@ -203,7 +197,6 @@ const EditjobPostForm = () => {
                                         multiple
                                         id="fixed-tags-demo"
                                         value={value}
-
                                         onChange={(_event, newValue) => {
                                             setValue([
                                                 ...fixedOptions,
@@ -236,12 +229,11 @@ const EditjobPostForm = () => {
                                         )}
                                     />
                                 </div>
-                                {errors.Skills && <p>{errors.Skills.message}</p>}
+                                {errors.Skills && <p>{errors?.Skills?.message}</p>}
                                 <label className="text-end text-sm font-sans font-normal">maximum 15 Skills</label>
                                 <p className="mt-5">Estimate your timeline here ? </p>
                                 <div className=" mt-4">
                                     <FormControl>
-
                                         <RadioGroup
                                             onChange={onChangeInput}
                                             row
@@ -262,14 +254,12 @@ const EditjobPostForm = () => {
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="Expertiselevel"
                                             onChange={onChangeInput}
-
                                         >
                                             <FormControlLabel value="Fresher" control={<Radio />} label="Fresher" checked={formData.Expertiselevel === "Fresher"} />
                                             <FormControlLabel value="Medium" control={<Radio />} label="Medium" checked={formData.Expertiselevel === "Medium"} />
                                             <FormControlLabel value="Experianced" control={<Radio />} label="Experinced" checked={formData.Expertiselevel === "Experianced"} />
                                         </RadioGroup>
                                     </FormControl>
-
                                 </div>
                                 <p className="mt-5">What is work type ?
                                 </p>
@@ -330,7 +320,7 @@ const EditjobPostForm = () => {
                             </div>
                             {/* right side for the  create button*/}
                             <div className="md:w-[20%]">
-                                <button className="bg-red-500 px-5 py-2 rounded-full text-white font-sans text-sm font-semibold md:mt-10 md:ml-10" onClick={handleSubmitForm}>Edit Post job </button>
+                                <button className="bg-red-500 px-5 py-2 rounded-full text-white font-sans text-sm font-semibold md:mt-10 md:ml-10" onClick={handleSubmitForm}>Edit job post  </button>
                                 <button className="border border-red-500 px-4 py-2 rounded-full font-sans text-sm font-semibold md:mt-2 md:ml-10 ">Saved as draft</button>
                             </div>
                         </div>
