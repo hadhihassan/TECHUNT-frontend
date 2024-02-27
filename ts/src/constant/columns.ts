@@ -6,3 +6,4 @@ export interface JOB_CATEGORY_FORM_DATA {
 }
 
 export const IMG_URL = "http://localhost:3000/images/" 
+export const BASE_URL = "http://localhost:3000" 

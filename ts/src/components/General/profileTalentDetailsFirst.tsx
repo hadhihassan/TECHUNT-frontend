@@ -5,9 +5,9 @@ import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
-import { editMainProfileSection } from '../../api/commonApi';
+import { editMainProfileSection } from '../../services/commonApiService';
 import { MyContext } from '../../context/myContext';
-import { uploadProfilePhoto } from '../../api/client.Api';
+import { uploadProfilePhoto } from '../../services/clientApiService';
 import Swal from 'sweetalert2';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../util/validators'

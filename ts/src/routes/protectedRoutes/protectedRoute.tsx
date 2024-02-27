@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import routerVariables from "../pathVariables";
-import { MyContext } from "../../context/myContext";
 import { ROOTSTORE } from "../../redux/store";
 import { useSelector } from "react-redux";
 export function IsLoggedUser() {

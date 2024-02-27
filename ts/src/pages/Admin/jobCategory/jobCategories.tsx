@@ -1,4 +1,4 @@
-import { getAllJobCategoies } from "../../../api/admin.Api";
+import { getAllJobCategoies } from "../../../services/adminApiService";
 import SidePanel from "../../../components/Admin/sidePanel";
 import Tables from "../../../components/General/tables";
 import { JOB_CATEGORY_COLUMN } from "../../../constant/columns";

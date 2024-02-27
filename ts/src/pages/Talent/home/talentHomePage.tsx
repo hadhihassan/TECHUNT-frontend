@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import { AxiosError, AxiosResponse } from 'axios';
-import { fetchAllJobPostForTalent } from '../../../api/talent.Api';
+import { fetchAllJobPostForTalent } from '../../../services/talentApiService';
 import 'quill/dist/quill.snow.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLoader } from '../../../redux/Slice/Client/clientSlice';
@@ -82,8 +82,8 @@ const HomePage:React.FC = () => {
                                     <p className=" font-sans font-semibold text-xl mb-1">Welcome back</p>
                                     <span className="text-red-500 mt-3 font-sans font-bold w-32 text-xl">hadhi</span>
                                 </div>
-                                <div className=" mr-10">
-                                    <img src={BannerImage} alt="" className="h-[24vh] " />
+                                <div className=" mr-10 md:bg-black">
+                                    <img src={BannerImage} alt="" className="h-[24vh]  " />
                                 </div>
                             </div>
                             {/* search */}

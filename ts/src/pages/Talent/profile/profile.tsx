@@ -5,7 +5,7 @@ import ProfileVerifications from "../../../components/General/profileVerificatio
 import ProfileContact from "../../../components/General/profileConatct";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../../context/myContext";
-import { getUserProfileDetails } from "../../../api/talent.Api";
+import { getUserProfileDetails } from "../../../services/talentApiService";
 import ProfileSkills from "../../../components/General/profileSkills";
 import ProfileExperiance from "../../../components/General/profileExperiance";
 import ProfileReviews from "../../../components/General/profileReviews";

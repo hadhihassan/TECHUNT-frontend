@@ -4,8 +4,8 @@ export type INITIALSTATE = {
     email: string;
     verify: boolean;
     role: "CLIENT" | "ADMIN" | "TALENT" | "NOTHING",
-    isLogged: Boolean,
-    id: number | null,
+    isLogged: boolean,
+    id:  string,
     numberVerify: boolean
 };
 

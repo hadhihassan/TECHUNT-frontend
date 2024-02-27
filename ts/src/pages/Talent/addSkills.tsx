@@ -1,14 +1,13 @@
 import Avatar from "react-avatar";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../components/General/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import Button from '@mui/material/Button';
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes, talent_routes } from "../../routes/pathVariables";
-import { storeWorkBasedDataBioData } from "../../api/talent.Api";
+import { storeWorkBasedDataBioData } from "../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 import { Combobox } from '@headlessui/react'
 import axios from "axios";

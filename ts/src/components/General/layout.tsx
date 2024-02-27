@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
-import AfterLoginHeader from "../General/Home/Header/afterLoginHeader";
+import AfterLoginHeader from "./Home/Header/afterLoginHeader";
 
-function TalentLayout() {
+function Layout() {
     return (
         <>
             <AfterLoginHeader />
@@ -9,4 +9,4 @@ function TalentLayout() {
         </>
     )
 }
-export default TalentLayout;
+export default Layout;

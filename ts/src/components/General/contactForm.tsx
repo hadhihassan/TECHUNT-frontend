@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { createContactDetails, uploadProfilePhoto } from "../../api/client.Api";
+import { createContactDetails, uploadProfilePhoto } from "../../services/clientApiService";
 import { useSelector } from "react-redux";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";

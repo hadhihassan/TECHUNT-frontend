@@ -3,9 +3,9 @@ import WebRouters from './routes/routes';
 import ErrorBoundary from './components/General/ErrorBoundary/errorBoundary ';
 import Loader from './components/General/loader/loader';
 import { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 window.global = window;
 function App() {
-
   return (
     <ErrorBoundary>
       <Suspense fallback={<Loader />}>

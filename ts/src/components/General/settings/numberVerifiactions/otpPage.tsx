@@ -8,13 +8,16 @@ import toast, { Toaster } from "react-hot-toast";
 import OtpInput from 'react-otp-input';
 import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
-import { checkValidNumber, updateNumberVerification } from "../../../../api/commonApi";
-import { useSelector } from "react-redux";
+import { checkValidNumber, updateNumberVerification } from "../../../../services/commonApiService";
+import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { useNavigate } from "react-router-dom"
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { isNumberVerify } from "../../../../redux/Slice/signupSlice";
+
 
 const NumberVerification = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [phone, setPhone] = useState<string>("")
@@ -27,13 +30,12 @@ const NumberVerification = () => {
         try {
             // Ensure phone number is in E.164 format
             checkValidNumber(phone.slice(2), basicData?.role, basicData?.id)
-                .then(async (res: any) => {
+                .then(async (res: AxiosResponse) => {
                     console.log(res)
                     if (res.error) {
                         error(res?.error?.response?.data.message || "Error occurs While processing you request ")
                     } else {
                         console.log(res)
-                        setLoading(true)
                         const formattedPhone = `+${phone.replace(/\D/g, '')}`;
                         const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {})
                         const confirmation: ConfirmationResult = await signInWithPhoneNumber(auth, formattedPhone, recaptcha)
@@ -41,10 +43,10 @@ const NumberVerification = () => {
                         success("Otp sended your phone")
                         setSwitch(true)
                     }
-                }).catch((err: any) => {
+                }).catch((err: AxiosError) => {
                     error(err?.error?.response?.data.message || "Error occurs While processing you request ")
                 })
-        } catch (err: any) {
+        } catch (err) {
             error(`Somthing went wrong!.${err.message}`)
         }
     }
@@ -55,11 +57,12 @@ const NumberVerification = () => {
             updateNumberVerification(basicData?.role, basicData?.id)
                 .then((res: AxiosResponse) => {
                     console.log(res)
+                    dispatch(isNumberVerify(true))
                     navigate(`/${basicData.role}/profile`)
                 }).catch((err: AxiosResponse) => {
                     console.log(err)
                 })
-        } catch (err) {
+        } catch (err:AxiosError) {
             error(`${err.message}`)
             console.log(err)
         }

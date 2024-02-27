@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from 'react-router-dom';
-import { editJobPost, fetchAllJobPost } from "../../api/client.Api"
+import { editJobPost, fetchAllJobPost } from "../../services/clientApiService"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { AxiosError, AxiosResponse } from "axios";
@@ -168,13 +168,13 @@ const EditjobPostForm = () => {
                                         //     },
                                         // })}
                                         type="text"
-                                        className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[95%] rounded-xl p-2.5 checked:bg-emerald-500"
+                                        className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[94%] rounded-xl p-2.5 checked:bg-emerald-500"
                                         placeholder="ex, need Web devloper for figma"
                                     />
                                     {errors.Title && <p className="font-sans font-normal text-xs text-red-500 m-1">{errors.Title.message}</p>}
                                 </div>
                                 <p className="mt-5">Describe about the project</p>
-                                <div className="mt-4 w-[95%]">
+                                <div className="mt-4 w-[94%]">
                                     <ReactQuill
                                         theme="snow"
                                         value={editorHtml}

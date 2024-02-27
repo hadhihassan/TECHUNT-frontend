@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column } from 'react-table';
-import { blockUser, getAllUser, getJobPosts } from '../../../api/admin.Api';
+import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
 import Swal from 'sweetalert2';
 import {
     Drawer,

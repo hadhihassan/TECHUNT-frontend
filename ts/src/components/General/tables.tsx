@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from "react"
 import Modal from "./profileEditModal";
 import { IMG_URL, JOB_CATEGORY_FORM_DATA } from '../../constant/columns'
-import { createNewJobCategoru, editJobCategory, softDeleteJobCategory } from "../../api/admin.Api";
+import { createNewJobCategoru, editJobCategory, softDeleteJobCategory } from "../../services/adminApiService";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import toast, { Toaster } from "react-hot-toast";
@@ -10,12 +10,13 @@ import EditJobCategoryForm from "../../components/Admin/jobcategory/editJobCateg
 
 //interface for props data shap 
 interface TablesProps {
-    data: any[];
+    data: object[];
     columns: string[];
     reCall: () => void
 }
 
 const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
+  
     //sucess toast hot message
     const success = (message: string) =>
         toast.success(message);

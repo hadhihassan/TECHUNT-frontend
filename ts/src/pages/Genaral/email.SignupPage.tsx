@@ -5,7 +5,7 @@ import { INITIALSTATE, setEmail } from "../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../redux/store";
 import Routers, { Routes } from "../../routes/pathVariables";
 import { useNavigate } from "react-router-dom";
-import { signup } from "../../api/commonApi";
+import { signup } from "../../services/commonApiService";
 import Alert from '@mui/material/Alert';
 import Swal from 'sweetalert2'
 import { useState } from "react";

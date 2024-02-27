@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllJobPost } from "../../../api/client.Api";
+import { fetchAllJobPost } from "../../../services/clientApiService";
 import { useNavigate } from "react-router-dom";
 
 const listJobPost = () => {
@@ -22,7 +22,7 @@ const listJobPost = () => {
                     <>
                         <div key={index} className="w-full mt-5 border rounded-xl shadow-xl h-[39vh]">
                             <div className="border-b-2 flex justify-between w-full h-[50px]">
-                                <p className=" font-sans font-semibold text-xl m-3">Your posting</p>
+                                <p className=" font-sans font-semibold text-xl m-3"></p>
                                 <button onClick={() => {
                                     navigate(`/client/edit-job-post/${job._id}`)
                                 }} className="border border-red-500 text-red-500 font-sans font-normal px-3 rounded-full text-xs h-[2vw] m-3">Edit post</button>

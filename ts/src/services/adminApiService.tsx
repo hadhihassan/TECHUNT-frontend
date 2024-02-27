@@ -1,6 +1,6 @@
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
-
+/* eslint-disable react-refresh/only-export-components */
 export async function login(data: {}) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}admin/admin-login/`, data)

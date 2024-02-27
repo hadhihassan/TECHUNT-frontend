@@ -9,7 +9,8 @@ export type Routes = {
     CREATE_PROFILE_MESSAGE: string;
     signup: string,
     404: string,
-    Settings: string
+    Settings: string,
+    Message :string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -17,15 +18,16 @@ export interface CLIENTROUTES {
     CLIENT_HOME: string,
     ADD_PROFILE_DESCRIPTION: string,
     ADD_CONTACT_DETAILS: string
-    Profile: string
+    Profile: string,
+    viewProposal: string
 }
 interface TALENT_ROUTES {
     AddSkills: string,
     Profile_title: string,
     AddWorkExperiance: string
     Profile: string,
-    Home:string,
-    JobViewPage:string
+    Home: string,
+    JobViewPage: string,
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -42,7 +44,8 @@ const routerVariables: Routes = {
     CREATE_PROFILE_MESSAGE: '/profile-create/',
     signup: "/signup/",
     404: '/404/',
-    Settings: "/settings/"
+    Settings: "/settings/",
+    Message:"/client/message/"
 }
 export default routerVariables;
 //Client routes
@@ -52,7 +55,8 @@ export const clientRoutes: CLIENTROUTES = {
     CLIENT_HOME: "/client/home/",
     ADD_PROFILE_DESCRIPTION: "/client/profile-description/",
     ADD_CONTACT_DETAILS: "/client/add-contact/",
-    Profile: "/client/profile/"
+    Profile: "/client/profile/",
+    viewProposal: "/client/view-propsal/"
 }
 //Talent routes
 export const talent_routes: TALENT_ROUTES = {
@@ -60,8 +64,8 @@ export const talent_routes: TALENT_ROUTES = {
     Profile_title: "/profile-title/",
     AddWorkExperiance: "/add-experiance/",
     Profile: "/talent/profile/",
-    Home:"/talent/home/",
-    JobViewPage:"/talent/job-details-view/"
+    Home: "/talent/home/",
+    JobViewPage: "/talent/job-details-view/",
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

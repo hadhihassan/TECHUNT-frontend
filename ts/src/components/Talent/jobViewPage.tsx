@@ -126,6 +126,7 @@ const JobViewPage = () => {
                 </Card>
                 <ProposalForm
                 isOpen={term}
+                forClose={setTerm}
                 />
             </div>
         </>

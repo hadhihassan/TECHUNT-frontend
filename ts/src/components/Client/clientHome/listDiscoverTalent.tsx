@@ -1,16 +1,10 @@
 import IMAGE from '../../../assets/4950287_19874-removebg-preview.png'
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Avatar from "react-avatar";
 import { IconButton } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import { FlagOutlined } from "@mui/icons-material";
-import Box from '@mui/material/Box';
-import { LinearProgressWithLabel } from "../../components/General/linerProgressBar";
-import EmailIcon from '@mui/icons-material/Email';
-import { useNavigate } from "react-router-dom";
-import { clientRoutes } from "../../routes/pathVariables";
-import { fetchAllJobPost } from '../../api/client.Api'
+
 const listDiscoverTalent = () => {
     return (<>
         <div className="w-full mt-5 border rounded-xl shadow-xl h-[30vh]">

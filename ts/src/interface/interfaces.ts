@@ -37,11 +37,15 @@ export interface JobInterface extends UserProfile{
     createdAt?:string
 }
 // Proposal form Data interface 
-export interface Proposal {
+export interface ProposalInterface {
     title: string
     coverLetter: string
     rate: number
     availability:Date | null
     attachments:File | null
     additionalInfo: string
+    jobId?:string
+    _id?:string,
+    Client_id?:{_id : string} | string
+    talentId?:{_id : string} | string
 }

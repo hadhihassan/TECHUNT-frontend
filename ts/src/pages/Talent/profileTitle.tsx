@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../routes/pathVariables";
 import Alert from '@mui/material/Alert';
-import { fetchAllJobCategory } from '../../api/talent.Api'
+import { fetchAllJobCategory } from '../../services/talentApiService'
 
 
 const ProfileTitle: React.FC = () => {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "./profileEditModal";
-import { updateSkills } from "../../api/talent.Api";
+import { updateSkills } from "../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 import { Combobox } from '@headlessui/react'
 import axios from "axios";

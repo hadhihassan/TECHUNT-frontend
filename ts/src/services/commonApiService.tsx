@@ -1,5 +1,6 @@
+
 import React from "react";
-import axiosInstance, { BASE_URL, resolve, resolve1 } from "../config/axios";
+import axiosInstance, { BASE_URL, resolve } from "../config/axios";
 import routerVariables from '../routes/pathVariables'
 export async function editMainProfileSection(data: {}, role: string) {
 

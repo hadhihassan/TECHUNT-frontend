@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from "react"
 import { IMG_URL } from "../../../constant/columns";
-import { editJobCategory } from "../../../api/admin.Api";
+import { editJobCategory } from "../../../services/adminApiService";
 import { AxiosError, AxiosResponse } from "axios"
 interface JobCategoryFormProps {
     formData: object;

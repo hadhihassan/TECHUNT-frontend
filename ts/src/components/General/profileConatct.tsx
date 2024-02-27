@@ -1,11 +1,11 @@
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import Modal from "./profileEditModal";
-import { editProfileContact } from "../../api/commonApi";
-import { MyContext, Context } from "../../context/myContext";
+import { editProfileContact } from "../../services/commonApiService";
+import { MyContext } from "../../context/myContext";
 import Alert from '@mui/material/Alert';
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validators'
 
-const profileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
+const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
     const [details, setdetails] = useState<any>()
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
 
@@ -203,4 +203,4 @@ const profileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, o
 
 
 
-export default profileConatct;
+export default ProfileConatct;

@@ -5,7 +5,7 @@ interface AdminData {
     isLogged: boolean;
 }
 
-const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+const ProtectedRoute: React.FC<PropsWithChildren> = ({ children }) => {
     const adminData: AdminData | null = JSON.parse(localStorage.getItem("admin") || "null");
     const isLogged: boolean = adminData?.isLogged || false;
     const location = useLocation();
@@ -16,5 +16,15 @@ const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
     return <>{children}</>; // Render children using curly braces
 };
+// export const AdminIsLogged: React.FC<PropsWithChildren> = ({ children }) => {
+//     const adminData: AdminData | null = JSON.parse(localStorage.getItem("admin") || "null");
+//     const isLogged: boolean = adminData?.isLogged || false;
+
+//     if (isLogged) {
+//         return history.back()
+//     }
+
+//     return <>{children}</>; // Render children using curly braces
+// };
 
 export default ProtectedRoute;

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import './adminlogin.css';
-import { login } from '../../api/admin.Api';
+import { login } from '../../services/adminApiService';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
