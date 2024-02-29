@@ -25,7 +25,7 @@ import IndexDashBoard from '../pages/Admin/dashboard';
 // components
 import Layout from '../components/General/layout';
 import SidePanel from '../components/Admin/sidePanel';
-import JobViewPage from '../components/Talent/jobViewPage';
+import JobViewPage from '../components/General/jobViewPage';
 import EditjobPostForm from '../components/Client/editJobPostForm';
 import JobPostForm from '../components/Client/jobPostForm';
 

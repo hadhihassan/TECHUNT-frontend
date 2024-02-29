@@ -52,7 +52,7 @@ export async function makePayment(id: string) {
     return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, {id})
 }
 export async function updatePaymentStatus(status:string, proposalId:string) {
-    return await axiosInstance.post(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
+    return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
 }
 
 

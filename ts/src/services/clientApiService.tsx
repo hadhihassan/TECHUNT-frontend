@@ -48,4 +48,7 @@ export async function updateproposalAsAccept(id: string) {
 export async function updateproposalAsDecline(id: string) {
     return await axiosInstance.patch(`${BASE_URL}CLIENT/update-proposal-decline/`, { id })
 }
+export async function fetchConnectedTalent() {
+    return await axiosInstance.get(`${BASE_URL}CLIENT/fetch-Connected-talents/`)
+}
 

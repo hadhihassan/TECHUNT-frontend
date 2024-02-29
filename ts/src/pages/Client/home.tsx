@@ -17,6 +17,8 @@ import ListAllPropposals from "../../components/Client/clientHome/listProposals"
 import type { JobInterface } from '../../interface/interfaces'
 import ListConnectedFreelancers from "../../components/Client/clientHome/listConnectedTalent";
 
+
+
 const Home = () => {
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [activeTab, setActiveTab] = useState(1);
@@ -27,13 +29,11 @@ const Home = () => {
         setActiveTab(tabNumber);
     };
     const [lenProposal, setLength] = useState<number>(0)
-    const [progress, setProgress] = React.useState(80);
-    console.log(JSON.parse(localStorage.getItem("clientroot")))
+    const [progress, setProgress] = useState(80);
     useEffect(() => {
         console.log(basicData,"hfsdkjfhsdkjfhdsj")
         fetchAllJobPost()
             .then((res) => {
-                console.log(res, "this is the job poststs my job posts")
                 setJobs(res?.data?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
@@ -42,13 +42,16 @@ const Home = () => {
             .then((res) => {
                 setLength(res.data.data.length)
             })
-    }, [])
+    }, [basicData])
+
+
+
     return (
         <>
             <Header />
-            <div className=" flex w-full">
+            <div className=" flex w-full ">
                 {/* right side */}
-                <div className="flex flex-col mt-5 ml-28 w-[60%] ">
+                <div className="flex flex-col mt-5 ml-28 w-[60%] h-auto ">
                     {/* welcome page */}
                     <div>
                         <p className='font-sans font-normal text-xl '>Welcome back, <span className="font-sans font-bold text-xl">Hadhi</span> </p>
@@ -150,20 +153,16 @@ const Home = () => {
                     </div>
                 </div>
                 {/* left side */}
-
                 <div className=" ml-10 w-[30vw] mt-5">
                     <div className="flex ml-48 mb-2 ">
                         <button onClick={() => {
                             navigate(clientRoutes.CREATE_JOB_POST)
                         }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post New Job</button>
                     </div>
-
                     {/* porfile proggress sections */}
-
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-[35vh]">
+                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto">
                         <p className="text-center font-sans font-bold text-xl mt-5">Hadhi</p>
                         <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">techunt</p>
-
                         <Box className="m-auto mt-2" sx={{ width: '80%' }}>
                             <span className=" font-sans font-semibold text-sm">Set up your account</span>
                             <LinearProgressWithLabel value={progress} />
@@ -171,15 +170,13 @@ const Home = () => {
                         <div className="flex justify-center items-center m-2">
                             <button className=" border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">Complete your profile</button>
                         </div>
-                        <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center">
+                        <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center mb-2">
                             100% completion of  you profile will help <br />
                             your get more reach.
                         </p>
                     </div>
-
                     {/* verifications */}
-
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-[38vh] mt-6 ">
+                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto mt-6 ">
                         <div className="w-full border-b-2 mt-5">
                             <p className="m-2 font-sans ml-5 font-semibold text-xl mb-1">Verifications</p>
                         </div>
@@ -188,7 +185,6 @@ const Home = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                 </svg>
-
                                 <span className="text-start ml-2 text-sm font-normal font-sans">Payemtn Verify</span>
                             </div>
                             <div>
@@ -200,7 +196,6 @@ const Home = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-blue-600">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                                 </svg>
-
                                 <span className="text-start  ml-2 text-sm font-normal font-sans">Phone Number Verify</span>
                             </div>
                             <div>
@@ -220,14 +215,11 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-
                     {/* Jobs */}
-
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-[40vh] mt-6 ">
+                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-6 ">
                         <div className="w-full border-b-2 mt-5  flex justify-between">
-                            <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All Job</p>
+                            <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All contracts</p>
                             <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>
-
                         </div>
                         <div className="flex justify-between m-5 ">
                             <div className="flex">
