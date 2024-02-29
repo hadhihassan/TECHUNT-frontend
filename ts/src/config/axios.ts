@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 import Swal from 'sweetalert2'
 export const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
@@ -9,14 +10,14 @@ export const axiosInstance: AxiosInstance = axios.create({
   timeout: 5000,
 });
 
-let jwtToken = localStorage.getItem("token");
-if (!jwtToken ||jwtToken == null ) {
-  jwtToken = localStorage.getItem("adminToken");
-}
-const onRequest = (config: AxiosRequestConfig): any => {
+
+const onRequest = (config: AxiosRequestConfig) => {
+  let jwtToken = localStorage.getItem("token");
+  if (!jwtToken || jwtToken == null) {
+    jwtToken = localStorage.getItem("adminToken");
+  }
   config.headers = config.headers || {};
   config.headers['authorization'] = `Bearer ${jwtToken}`;
-  // config.headers['role'] = `Bearer ${jwtToken}`;
   return config;
 };
 
@@ -50,13 +51,13 @@ export const post = async <T>(url: string, data?: any): Promise<T> => {
   }
 };
 
-const handleRequestError = (error: any): void => {
+const handleRequestError = (error: AxiosError): void => {
   console.error('Request error:', error.message || 'Unknown error');
 };
 
 interface resolve {
-  data: {} | null,
-  error: {} | any
+  data: AxiosResponse | null,
+  error: AxiosError | null
 }
 export async function resolve(promise: Promise<any> | PromiseLike<null> | null) {
   const resolved: resolve = {

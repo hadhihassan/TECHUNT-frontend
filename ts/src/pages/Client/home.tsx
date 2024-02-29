@@ -12,29 +12,35 @@ import ListJobPost from "../../components/Client/clientHome/listJobPost";
 import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import ListAllPropposals from "../../components/Client/clientHome/listProposals";
-
-import type { ProposalInterface, JobInterface } from '../../interface/interfaces'
+import type { JobInterface } from '../../interface/interfaces'
+import ListConnectedFreelancers from "../../components/Client/clientHome/listConnectedTalent";
 
 const Home = () => {
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [activeTab, setActiveTab] = useState(1);
     const [jobs, setJobs] = useState<JobInterface[]>([])
-    const a = [<ListDiscoverTalent />, < ListAllPropposals />, < ListAllPropposals />, <ListJobPost />,]
+    const a = [<ListDiscoverTalent />, < ListAllPropposals />, < ListConnectedFreelancers />, <ListJobPost />,]
     const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
     };
+    const [lenProposal, setLength] = useState<number>(0)
     const [progress, setProgress] = React.useState(80);
+    console.log(JSON.parse(localStorage.getItem("clientroot")))
     useEffect(() => {
-
+        console.log(basicData,"hfsdkjfhsdkjfhdsj")
         fetchAllJobPost()
-            .then((res: AxiosResponse) => {
-                console.log(res?.data?.data?.data)
+            .then((res) => {
+                console.log(res, "this is the job poststs my job posts")
                 setJobs(res?.data?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
+            })
+        getAllProposalForClient(basicData.id)
+            .then((res) => {
+                setLength(res.data.data.length)
             })
     }, [])
     return (
@@ -70,9 +76,7 @@ const Home = () => {
                                 </div>
                                 <div className=" flex justify-between">
                                     <div>
-                                        <p className="m-3 font-sans font-semibold text-sm">{jobs[0]?.Title}</p>
-                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">{jobs[0]?.WorkType} - {jobs[0]?.Expertiselevel}</p>
-                                        <p className="ml-3 font-sans font-normal text-xs text-gray-500">Est. Budget: {jobs[0]?.Amount} created at  - {jobs[0]?.createdAt}</p>
+                                        <p className="m-3 mt-9 font-sans font-semibold text-xl">Totla job posting : {jobs.length}</p>
                                     </div>
                                     <div className="mr-10">
                                         <div className="flex mr-10  justify-between">
@@ -80,22 +84,22 @@ const Home = () => {
                                             <p className="m-3 font-sans font-semibold text-sm ">Hired</p>
                                         </div>
                                         <div className=" mr-10 flex justify-between">
-                                            <p className="m-3 font-sans font-normal text-sm ">00</p>
+                                            <p className="m-3 font-sans font-normal text-sm ">{lenProposal}</p>
                                             <p className="m-3 font-sans font-normal text-sm ">00</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>}
                     {/* search */}
-                    <div className="w-full mt-5 border rounded-xl shadow-xl">
-                        <div className="flex">
+                    <div className="w-full mt-5 border rounded-xl shadow-xl ">
+                        <div className="flex h-[46px]">
                             <div className="flex w-fll items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200  p-5">
-                                <svg viewBox="0 0 20 20" aria-hidden="true" className="pointer-events-none absolute w-5 fill-gray-500 transition">
+                                <svg viewBox="0 0 20 20" aria-hidden="true" className="pointer-events-none  w-5 fill-gray-500 transition">
                                     <path d="M16.72 17.78a.75.75 0 1 0 1.06-1.06l-1.06 1.06ZM9 14.5A5.5 5.5 0 0 1 3.5 9H2a7 7 0 0 0 7 7v-1.5ZM3.5 9A5.5 5.5 0 0 1 9 3.5V2a7 7 0 0 0-7 7h1.5ZM9 3.5A5.5 5.5 0 0 1 14.5 9H16a7 7 0 0 0-7-7v1.5Zm3.89 10.45 3.83 3.83 1.06-1.06-3.83-3.83-1.06 1.06ZM14.5 9a5.48 5.48 0 0 1-1.61 3.89l1.06 1.06A6.98 6.98 0 0 0 16 9h-1.5Zm-1.61 3.89A5.48 5.48 0 0 1 9 14.5V16a6.98 6.98 0 0 0 4.95-2.05l-1.06-1.06Z"></path>
                                 </svg>
                             </div>
-                            <input type="text" className="w-full   pl-2 text-base font-semibold outline-0" placeholder="Search talent here" id="" />
-                            <input type="button" value="Search" className="bg-red-500 p-2 rounded-tr-lg rounded-r-full rounded-br-lg text-white font-semibold hover:bg-red-800 transition-colors" />
+                            <input type="text" className="w-full rounded-r-full  pl-2 text-base font-semibold outline-0" placeholder="Search talent here" id="" />
+                            <input type="button" value="Search" className="bg-red-500 p-2  rounded-tr-xl rounded-br-xl  text-white font-semibold transition-colors " />
                         </div>
                     </div>
                     {/* tyes */}
@@ -118,7 +122,7 @@ const Home = () => {
                                     onClick={() => handleTabClick(3)}
                                     className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 3 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Your hired
+                                    hired(Connected)
                                 </button>
                                 <button
                                     onClick={() => handleTabClick(4)}

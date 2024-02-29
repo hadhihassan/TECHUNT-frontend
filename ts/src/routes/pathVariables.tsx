@@ -11,6 +11,7 @@ export type Routes = {
     404: string,
     Settings: string,
     Message :string
+    PaymentSuccess :string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -45,7 +46,8 @@ const routerVariables: Routes = {
     signup: "/signup/",
     404: '/404/',
     Settings: "/settings/",
-    Message:"/client/message/"
+    Message:"/client/message/",
+    PaymentSuccess:'/payment/success/:id/'
 }
 export default routerVariables;
 //Client routes

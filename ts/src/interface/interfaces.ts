@@ -2,6 +2,7 @@ export interface Typerole  {
     type: "NOTHING" | "CLIENT" | "ADMIN" | "TALENT"
 }
 export interface UserProfile {
+    _id :string;
     Last_name: string;
     First_name: string;
     Password: string;
@@ -48,4 +49,5 @@ export interface ProposalInterface {
     _id?:string,
     Client_id?:{_id : string} | string
     talentId?:{_id : string} | string
+    isAccept?:boolean
 }

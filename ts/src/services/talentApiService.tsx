@@ -48,8 +48,11 @@ export async function uploadFileToSignedUelInS3(signedUrl: string, file: File | 
 export async function submitProposal(formData: ProposalInterface) {
     return await axiosInstance.post(`${BASE_URL}TALENT/submit-proposal/`, formData)
 }
-export async function makePayment(data: string) {
-    return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, data)
+export async function makePayment(id: string) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, {id})
+}
+export async function updatePaymentStatus(status:string, proposalId:string) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
 }
 
 

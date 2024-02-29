@@ -8,7 +8,6 @@ import Modal from './profileEditModal';
 import { editMainProfileSection } from '../../services/commonApiService';
 import { MyContext } from '../../context/myContext';
 import { uploadProfilePhoto } from '../../services/clientApiService';
-import Swal from 'sweetalert2';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../util/validators'
 import { Context as ContextInterface } from '../../context/myContext'
@@ -30,18 +29,18 @@ import { AxiosError, AxiosResponse } from 'axios'
 const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
     const error = (err: string) => toast.error(err);
+    const success = (message: string) => toast.success(message);
     const basicData: ContextInterface = useContext<ContextInterface>(MyContext);
     const [details, setDetails] = useState<object | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
     const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
     const truncatedDescription: string | null = details?.Profile?.Description?.slice(0, 200); // Display only first 200 characters
-    const remainingDescription: string | null = details?.Profile?.Description?.slice(10); // Display remaining characters
-    const [image, setImage] = useState<any>(null);
+    const [image, setImage] = useState<File | null>(null);
 
-    const [fNameError, setfNameErro] = useState<any>(null);
-    const [lNameError, setlNameErro] = useState<any>(null);
-    const [titleError, setTitleError] = useState<any>(null);
-    const [descriptionError, setDescError] = useState<any>(null);
+    const [fNameError, setfNameErro] = useState<string | null>(null);
+    const [lNameError, setlNameErro] = useState<string | null>(null);
+    const [titleError, setTitleError] = useState<string | null>(null);
+    const [descriptionError, setDescError] = useState<string | null>(null);
 
     const [formData, setData] = useState({
         first_name: "",
@@ -105,41 +104,12 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
             setImage(e.target.files[0]);
             const data = new FormData();
             data.append('image', img);
-
-
             uploadProfilePhoto(data, basicData?.role)
-                .then((_res) => {
+                .then((_res:AxiosResponse) => {
                     onUpdate()
-                    let timerInterval: string | number | NodeJS.Timeout | undefined;
-                    Swal.fire({
-                        title: "Your profile photo uploading!",
-                        // html: "I will close in <b></b> milliseconds.",
-                        timer: 2000,
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading();
-                            const timer: any = Swal.getPopup().querySelector("b");
-                            timerInterval = setInterval(() => {
-                                timer!.textContent = `${Swal.getTimerLeft()}`;
-                            }, 100);
-                        },
-                        willClose: () => {
-                            clearInterval(timerInterval);
-                        }
-                    }).then((result: AxiosResponse) => {
-                        /* Read more about handling dismissals below */
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            console.log("I was closed by the timer");
-                        }
-                    })
+                    success("Image uploaded success")
                 }).catch((error: AxiosError) => {
                     console.log(error);
-                    // Show SweetAlert with error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while uploading the photo.',
-                    });
                 });
         }
     }
@@ -178,9 +148,6 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
 
     const formattedDate = `${month} ${day}, ${year}`;
 
-
-
-    console.log(formData, details)
     return <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
@@ -223,7 +190,6 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
                                 <span className="mt-1 text-xs leading-normal">Upload photo</span>
                                 <input type="file" accept="image/*" onChange={uploadPhoto} name='profile_dp' className="hidden" />
                             </label>
-                            <label className='text-red-500 font-sans text-sm font-normal'>{image}</label>
                         </div>
                     </div>
                     <div className="flex justify-between">

@@ -3,13 +3,10 @@ import { clientRoutes } from '../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../redux/store';
-import { INITIALSTATE } from '../../redux/Slice/signupSlice';
 import type { ProposalInterface } from '../../interface/interfaces'
 import { Drawer } from 'antd';
 import toast, { Toaster } from 'react-hot-toast';
-import { loadStripe } from '@stripe/stripe-js'
 import formatRelativeTime from '../../util/timeFormating';
-import axios, { AxiosResponse } from 'axios';
 import { makePayment } from '../../services/talentApiService';
 import useStripePayment from '../../hooks/usePayement';
 
@@ -35,6 +32,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
     const navigate = useNavigate()
     const [notifications, setNotifications] = useState<NotificationDrawerProps["notification"]>([]);
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [proposalId, setproposalId] = useState<null | string>(null)
     useEffect(() => {
         setNotifications(notification);
         setIsOpen(open)
@@ -50,18 +48,15 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
         localStorage.setItem("proposal", JSON.stringify(proposalData))
         navigate(clientRoutes.viewProposal)
     }
-    const handleProposalPaymenent: (index: number) => void = (index) => {
-        const proposalData = proposals.find((proposal: ProposalInterface) => proposal._id === notifications[index].metaData)
+    const handleProposalPaymenent: (index: number) => void = (index:number) => {
+        console.log(notification[index],"thihs is the proposla")
+        setproposalId(notification[index].metaData)
+        localStorage.setItem("paymentProposalId",notification[index].metaData)
         showPaymentComfirmaMessage()
     }
     const StartPayment: () => void = async () => {
-        // const stripe = await loadStripe("pk_test_51OoKcVSGYJl2P9c6eE2fC8jJ9HjF6YtD9AckIu93jRnm8eYDOL74GDpYAjq4dtVSuGAHL4S2EDyFkRHtwBdOmm9L006XTXlGew")
-        // const session = await makePayment("asdasdasd")
-        // console.log(session,"paument response")
-        // const result = stripe?.redirectToCheckout({
-        //     sessionId:session.id
-        // })
-        await handlePayment(id);
+        console.log(proposalId)
+        await handlePayment(proposalId);
     }
 
     const showPaymentComfirmaMessage = () => {
@@ -104,12 +99,12 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
                 reverseOrder={false}
             />
             <Drawer title="Notifications" open={isOpen} onClose={onClose}>
-                <div className="w-[100%]     mt-7 h-full ">
+                <div className="w-[100%] mt-7 h-auto ">
                     {
                         notifications?.map((noti: Notification, index: number) => (
                             <React.Fragment key={index}>
-                                <label className='m-1'>Yesterday</label>
-                                <div className='font-sans border rounded-xl border-red-400 mt-2 h-26'>
+                                {/* <label className='m-1'>Yesterday</label> */}
+                                <div className='font-sans border rounded-xl border-red-400 mt-2 h-auto'>
                                     <div className='flex justify-between'>
                                         <p className='font-semibold text-red-500 ml-5'> {noti.type == "proposal" ? `New proposal` : noti.type !== "proposalAccept" ? "Proposal rejeced (Payment requred)" : "Proposal accepted"}</p>
                                         <p className='text-xs text-gray-400 mr-1'>{formatRelativeTime(noti.createdAt)}</p>

@@ -6,6 +6,7 @@ import { CAllS3ServiceToStore, uploadFileToSignedUelInS3, submitProposal } from 
 import { AxiosError, AxiosResponse } from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from '../General/Home/Header/afterLoginHeader';
+import { useNavigate } from 'react-router-dom';
 
 interface ProposalFormProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ interface ProposalFormProps {
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
+    const navigate = useNavigate()
     const [receivedNotifications, setReceivedNotifications] = useState([]);
     const [open, setOpen] = useState(false);
     const jobid: ProposalInterface = JSON.parse(localStorage.getItem("deatildView")) || "N/a"
@@ -54,8 +56,13 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         });
     };
     //sucess toast hot message
-    const success = (message: string) =>
+    const success = (message: string) =>{
+
         toast.success(message);
+        setTimeout(() => {
+            navigate("/talent/home/")
+        }, 3000);
+    }
     //error toast host message
     const error = (err: string) => toast.error(err);
     const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {

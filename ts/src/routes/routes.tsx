@@ -40,6 +40,7 @@ const WebRouters: React.FC = () => {
 
             {/* everyone can access this route */}
             <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage/>} />
+            <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage/>} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
             <Imports.Route path={"*"} element={<PaymentSuccessPage />} />
             <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />

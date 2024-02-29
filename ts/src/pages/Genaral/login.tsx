@@ -36,6 +36,7 @@ const LoginPage: React.FC = () => {
                         if (!res?.data) {
                             setError("Email Or Password incorrect")
                         } else {
+                            localStorage.setItem("token", res?.data?.data.token)
                             console.log("he entered",res.data);
                             dispatch(setLogged(true));
                             dispatch(setVerify(true));
@@ -44,11 +45,11 @@ const LoginPage: React.FC = () => {
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
                             console.log(res?.data?.data?.token);
-                            localStorage.setItem("token", res?.data?.data.token)
+                            console.log(JSON.parse(localStorage.getItem("clientroot")))
                             if (res?.data?.data.role === "CLIENT") {
                                 navigate("/client/home/");
                             } else {
-                                navigate("/");
+                                navigate("/talent/home/");
                             }
                         }
                     }

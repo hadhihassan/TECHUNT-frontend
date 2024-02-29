@@ -38,6 +38,7 @@ import ProtectedRoute from '../routes/protectedRoutes/adminProtectedRoutes';
 // admin layout 
 import AdminLayout from '../components/Admin/adminLayout'
 import LandinHomePage from '../pages/Genaral/Home';
+import paymentSuccessPage from '../components/General/paymentSuccessPage';
 
 
 
@@ -80,4 +81,5 @@ export {
     ProposalClientView,
     EditjobPostForm,
     JobPostForm,
+    paymentSuccessPage
 };

@@ -11,7 +11,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { fetchAllJobPostForTalent } from '../../../services/talentApiService';
 import 'quill/dist/quill.snow.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLoader } from '../../../redux/Slice/Client/clientSlice';
+// import { setLoader } from '../../../redux/Slice/Client/clientSlice';
 import { ROOTSTORE } from '../../../redux/store';
 import Loader from '../../../components/General/loader/loader';
 import { talent_routes } from '../../../routes/pathVariables';
@@ -28,24 +28,24 @@ export interface Project {
     WorkType: 'Fixed' | 'Milestone';
     isDelete: boolean;
 }
-interface Props {
-    posts: Project[];
-}
+
 const HomePage:React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const loader: boolean = useSelector((state: ROOTSTORE) => state.client.loading)
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
-    const [posts, setposts] = useState<Props | []>([])
+    const [posts, setposts] = useState<Project[] | []>([])
     useEffect(() => {
-        dispatch(setLoader(false)); // Dispatch action to set loader to true before making API call
+        // dispatch(setLoader(false)); // Dispatch action to set loader to true before making API call
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
                 setposts(res.data.data);
-                dispatch(setLoader(true)); // Dispatch action to set loader to false after fetching data
+                console.log("this is the propsals ",res.data.data)
+                // dispatch(setLoader(true)); // Dispatch action to set loader to false after fetching data
+                console.log(JSON.parse(localStorage.getItem("clientroot")))
             })
             .catch((_err: AxiosError) => {
-                dispatch(setLoader(false)); // Dispatch action to set loader to false in case of error
+                // dispatch(setLoader(false)); // Dispatch action to set loader to false in case of error
             });
     }, []);
     const [activeTab, setActiveTab] = useState<number>(1);

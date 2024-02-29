@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react"
 import Avatar from "react-avatar";
 import image from '../../assets/istockphoto-1283536918-1024x1024.jpg'
@@ -7,20 +8,27 @@ import useSocket from "../../hooks/useSocket";
 import { BASE_URL } from "../../config/axios";
 import { Socket } from "socket.io-client";
 import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
+import { QuestionCircleOutlined, CheckCircleTwoTone } from '@ant-design/icons';
+import { Button, Popconfirm } from 'antd';
+import type { ProposalInterface } from '../../interface/interfaces'
+
 
 const ProposalClientView = () => {
+    const naviagte = useNavigate()
     const socket: Socket = useSocket(BASE_URL)
-    const [proposalData, setProposalData] = useState<object[]>([])
+    const [proposalData, setProposalData] = useState<ProposalInterface>([])
     useEffect(() => {
         const ProposalData = JSON.parse(localStorage.getItem("proposal"))
-        console.log(ProposalData,"view proposal")
+        console.log(ProposalData, "view proposal")
         setProposalData(ProposalData)
     }, [])
-    const handleAccepProposal: () => void = () => {
+    const handleAcceptProposal: () => void = () => {
         lodder()
         updateproposalAsAccept(proposalData?._id)
-            .then((_res:AxiosResponse) => {
-                successMesseg()
+            .then((_res: AxiosResponse) => {
+                messageApi.destroy()
+                successMesseg("accepted")
                 socket.emit("sendNotification", {
                     recipient_id: proposalData.talentId._id,
                     sender_id: proposalData.Client_id,
@@ -28,7 +36,7 @@ const ProposalClientView = () => {
                     type: "proposalAccept",
                     metaData: proposalData?.jobId?.Title
                 })
-            }).catch((err:AxiosError) => {
+            }).catch((err: AxiosError) => {
                 errorMesseg()
                 console.log("this error from update propsal", err)
             })
@@ -37,7 +45,8 @@ const ProposalClientView = () => {
         lodder()
         updateproposalAsDecline(proposalData?._id)
             .then((res) => {
-                successMesseg()
+                messageApi.destroy()
+                successMesseg("declined")
                 console.log("this RESPONSE  from update propsal", res)
             }).catch((err) => {
                 errorMesseg()
@@ -53,7 +62,12 @@ const ProposalClientView = () => {
                 duration: 1.5,
             })
     };
-    const successMesseg = () => message.success('updated success', 4.5)
+    const successMesseg = (status: string) => {
+        message.success(`Proposal ${status} successfully .`, 4.5)
+        setTimeout(() => {
+            naviagte("/client/home/")
+        }, 3000);
+    }
     const errorMesseg = () => message.info('white updating proposal status failed ', 4.5)
     return (
         <>
@@ -70,8 +84,37 @@ const ProposalClientView = () => {
                         <button className="ml-2 font-sans font-semibold">Back</button>
                     </div>
                     <div className="mt-1">
-                        <button className="font-semibold bg-red-500 text-white text-center font-sans px-5 py-1 rounded-full" onClick={handleAccepProposal}>Accept</button>
-                        <button className="border font-semibold border-black ml-2 mr-2 text-center font-sans px-5 py-1 rounded-full" onClick={handleDeclineProposal}>Decline </button>
+                        {
+                            proposalData && proposalData.isAccept !== undefined ? (
+                                proposalData.isAccept ? (
+                                    <label className="px-3 py-2 bg-blue-500 font-sans font-semibold text-white rounded-full ">The proposal is accepted</label>
+                                ) : (
+                                    <label className="px-3 py-2 bg-red-500 font-sans font-semibold text-white rounded-full ">The proposal is declined</label>
+                                )
+                            ) : (
+                                <>
+                                    <Popconfirm
+                                        onConfirm={handleAcceptProposal}
+                                        title="Accept proposal"
+                                        description="Are you sure to accept this proposal?"
+                                        icon={<CheckCircleTwoTone style={{ color: 'red' }} />}
+                                    >
+                                        <button className="font-semibold bg-red-500 text-white text-center font-sans px-5 py-1 rounded-full">Accept</button>
+                                    </Popconfirm>
+                                    <Popconfirm
+                                        onConfirm={handleDeclineProposal}
+                                        title="Decline proposal"
+                                        description="Are you sure to decline this proposal?"
+                                        icon={<CheckCircleTwoTone style={{ color: 'red' }} />}
+                                    >
+                                        <button className="border font-semibold border-black ml-2 mr-2 text-center font-sans px-5 py-1 rounded-full">Decline</button>
+                                    </Popconfirm>
+                                </>
+                            )
+                        }
+
+
+
                     </div>
                 </div>
                 <div className="border flex justify-start w-full shadow-md   rounded-xl mt-8  h-[20vh]">
@@ -109,7 +152,17 @@ const ProposalClientView = () => {
                         </div>
                         <div className="mb-2    border-gray-200">
                             <p className="font-semibold text-sm pt-5">Attachments</p>
-                            <p className="pt-3 text-sm font-normal text-blue-600 underline mb-5 hover:cursor-pointer">Show file</p>
+                            <p
+                                className="pt-3 text-sm font-normal text-blue-600 underline mb-5 hover:cursor-pointer"
+                                onClick={() => {
+                                    console.log("open please")
+                                    if (proposalData && proposalData?.attachments && proposalData?.attachments?.length > 0) {
+                                        window.open(proposalData?.attachments, '_blank');
+                                    }
+                                }}
+                            >
+                                Show file
+                            </p>
                         </div>
                     </div>
                 </div>

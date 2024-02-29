@@ -5,7 +5,7 @@ export type INITIALSTATE = {
     verify: boolean;
     role: "CLIENT" | "ADMIN" | "TALENT" | "NOTHING",
     isLogged: boolean,
-    id:  string,
+    id: null | string,
     numberVerify: boolean
 };
 
@@ -29,19 +29,20 @@ const Signup = createSlice({
             console.log(action.payload)
             state.verify = action.payload
         },
-        setRole: (state, action: PayloadAction<"CLIENT" | "ADMIN" | "TALENT" | "NOTHING">) => {
+        setRole: (state, action: PayloadAction<INITIALSTATE['role']>) => {
+            console.log("ROLE CHANGING ROLE IS ", action.payload)
             state.role = action.payload
         },
         setLogged: (state, action: PayloadAction<boolean>) => {
             state.isLogged = action.payload
         },
-        setId: (state, action: PayloadAction<number>) => {
+        setId: (state, action: PayloadAction<string>) => {
             state.id = action.payload
         },
         isNumberVerify: (state, action: PayloadAction<boolean>) => {
             state.numberVerify = action.payload
         },
-        cleanAllData: (state, action: PayloadAction) => {
+        cleanAllData: (state) => {
             state.email = ""
             state.verify = false
             state.role = "NOTHING"
