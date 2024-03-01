@@ -1,4 +1,4 @@
-import { Card, useSelect } from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { JobInterface } from '../../interface/interfaces'
 import { Button, notification, Space } from 'antd';

@@ -47,7 +47,53 @@ export interface ProposalInterface {
     additionalInfo: string
     jobId?:string
     _id?:string,
-    Client_id?:{_id : string} | string
-    talentId?:{_id : string} | string
+    Client_id?:{
+        _id :string;
+        Last_name: string;
+        First_name: string;
+        Password: string;
+        Email: string;
+        Number: string;
+        Profile: {
+            profile_Dp: string;
+            Description: string;
+            Title: string;
+            Skills: string[];
+            Work_Experiance: string[];
+        };
+        Address: string;
+        PinCode: string;
+        City: string;
+        Country: string;
+        lastSeen?: Date;
+        isBlock?: boolean;
+        online?: boolean;
+        isVerify?: boolean;
+        isNumberVerify?: boolean;
+    }| string
+    talentId?:{
+        _id :string;
+        Last_name: string;
+        First_name: string;
+        Password: string;
+        Email: string;
+        Number: string;
+        Profile: {
+            profile_Dp: string;
+            Description: string;
+            Title: string;
+            Skills: string[];
+            Work_Experiance: string[];
+        };
+        Address: string;
+        PinCode: string;
+        City: string;
+        Country: string;
+        lastSeen?: Date;
+        isBlock?: boolean;
+        online?: boolean;
+        isVerify?: boolean;
+        isNumberVerify?: boolean;
+    }    | string
     isAccept?:boolean
 }

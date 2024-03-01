@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import { FlagOutlined } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { clientRoutes, talent_routes } from '../../../routes/pathVariables';
-import JobViewPage from '../../General/jobViewPage';
+import type { ProposalInterface } from '../../../interface/interfaces';
 
 const ListConnectedFreelancers: React.FC = () => {
 

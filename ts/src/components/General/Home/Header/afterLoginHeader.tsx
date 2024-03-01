@@ -75,7 +75,7 @@ const AfterLoginHeader = () => {
     }
     return (
         <div>
-            <div className="flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
+            <div className=" flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
                 {/* Logo */}
                 <div className="w-full flex items-center justify-between ">
                     <div className="m-auto" onClick={() => {

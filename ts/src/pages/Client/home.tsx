@@ -5,25 +5,34 @@ import Box from '@mui/material/Box';
 import { LinearProgressWithLabel } from "../../components/General/linerProgressBar";
 import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from "react-router-dom";
-import routerVariables, { clientRoutes } from "../../routes/pathVariables";
-import { fetchAllJobPost, getAllProposalForClient } from '../../services/clientApiService'
+import routerVariables, { clientRoutes, talent_routes } from "../../routes/pathVariables";
+import { fetchAllJobPost, fetchConnectedTalent, getAllProposalForClient } from '../../services/clientApiService'
 import ListDiscoverTalent from "../../components/Client/clientHome/listDiscoverTalent";
 import ListJobPost from "../../components/Client/clientHome/listJobPost";
 import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import ListAllPropposals from "../../components/Client/clientHome/listProposals";
 import type { JobInterface } from '../../interface/interfaces'
 import ListConnectedFreelancers from "../../components/Client/clientHome/listConnectedTalent";
-
-
+import { ArrowUpward, Contrast, Message, Work } from '@mui/icons-material';
+import { Disclosure, Transition } from '@headlessui/react'
+import type { ProposalInterface, UserProfile } from '../../interface/interfaces'
+import Avatar from '@mui/material/Avatar';
+import HomeButton from "../../components/General/homeButtons";
+import type { MenuProps } from 'antd';
+import { Dropdown } from 'antd';
+import { CgProfile } from "react-icons/cg";
+import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 
 const Home = () => {
-    const basicData = useSelector((state: ROOTSTORE) => state.signup)
+    const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const [activeTab, setActiveTab] = useState(1);
     const [jobs, setJobs] = useState<JobInterface[]>([])
-    const a = [<ListDiscoverTalent />, < ListAllPropposals />, < ListConnectedFreelancers />, <ListJobPost />,]
+    const [connectedTalent, setTalents] = useState<ProposalInterface[]>([])
+    const tabList = [<ListDiscoverTalent />, < ListAllPropposals />, < ListConnectedFreelancers />, <ListJobPost />,]
+    const [menuIndex, setMenuINdex] = useState<number>(0)
     const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
@@ -31,21 +40,70 @@ const Home = () => {
     const [lenProposal, setLength] = useState<number>(0)
     const [progress, setProgress] = useState(80);
     useEffect(() => {
-        console.log(basicData,"hfsdkjfhsdkjfhdsj")
         fetchAllJobPost()
             .then((res) => {
                 setJobs(res?.data?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
-        getAllProposalForClient(basicData.id)
+        getAllProposalForClient(basicData?.id)
             .then((res) => {
                 setLength(res.data.data.length)
             })
+        fetchConnectedTalent()
+            .then((res: AxiosResponse) => {
+                setTalents(res.data.data)
+                console.log(res.data.data)
+            }).catch((err: AxiosError) => {
+                console.log(err.message)
+            })
     }, [basicData])
 
+    const items: MenuProps['items'] = [
+        {
+            label: 'Profile',
+            key: '1',
+            icon: <CgProfile />,
+            danger: true,
+            onClick: () => {
 
+            }
+        },
+        {
+            label: 'Proposal',
+            key: '2',
+            icon: < Contrast />,
+            danger: true,
+            onClick: () => {
+                localStorage.setItem("proposal", JSON.stringify(connectedTalent[menuIndex]))
+                navigate(clientRoutes.viewProposal)
+            }
+        },
+        {
+            label: 'Job',
+            key: '3',
+            icon: <Work />,
+            danger: true,
+            onClick: () => {
+                localStorage.setItem("deatildView", JSON.stringify(connectedTalent[menuIndex].jobId))
+                navigate(talent_routes.JobViewPage)
 
+            }
+        },
+        {
+            label: 'Message',
+            key: '3',
+            icon: <Message />,
+            danger: true,
+            onClick: () => {
+
+            }
+        },
+    ];
+
+    const menuProps = {
+        items,
+    };
     return (
         <>
             <Header />
@@ -147,7 +205,7 @@ const Home = () => {
                     <div className="w-full h-[30vh]">
                         <>
                             {
-                                a[activeTab - 1]
+                                tabList[activeTab - 1]
                             }
                         </>
                     </div>
@@ -176,82 +234,178 @@ const Home = () => {
                         </p>
                     </div>
                     {/* verifications */}
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto mt-6 ">
-                        <div className="w-full border-b-2 mt-5">
-                            <p className="m-2 font-sans ml-5 font-semibold text-xl mb-1">Verifications</p>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div className="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                                </svg>
-                                <span className="text-start ml-2 text-sm font-normal font-sans">Payemtn Verify</span>
-                            </div>
-                            <div>
-                                <span className="text-blue-600 ml-12 text-sm hover:text-red-500">Verify</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div className="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-blue-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-                                </svg>
-                                <span className="text-start  ml-2 text-sm font-normal font-sans">Phone Number Verify</span>
-                            </div>
-                            <div>
-                                <span
-                                    onClick={() => {
-                                        navigate(routerVariables.Settings)
-                                    }} className={` ml-12 text-sm hover:text-red-500 ${basicData.numberVerify ? "text-red-500" : " text-blue-600"} `}>{basicData.numberVerify ? "Verified" : "Verify"}</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div>
-                                <EmailIcon fontSize="small" />
-                                <span className="text-start ml-2 text-sm font-normal font-sans">Email Verify</span>
-                            </div>
-                            <div>
-                                <span className="text-red-500 ml-12 text-sm hover:text-red-500">Verified</span>
-                            </div>
-                        </div>
-                    </div>
+                    <Disclosure>
+                        {({ open }) => (
+                            <>
+                                <Disclosure.Button className='shadow-xl flex justify-between border px-2 py-2 rounded-xl  w-[80%] mt-5 bg-white '>
+                                    <label className="w-full h-full text-start font-sans font-semibold">
+                                        Verifications
+                                    </label>
+                                    <ArrowUpward className={`transition-transform   transform ${open ? 'duration-1000 rotate-180' : ''}`} />
+
+                                </Disclosure.Button>
+                                <Transition
+                                    enter="transition duration-100 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-75 ease-out"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0"
+                                >
+                                    <Disclosure.Panel>
+                                        <div className="border  shadow-xl w-[80%] rounded-xl h-auto mt-2 ">
+                                            <div className="w-full border-b-2 mt-5">
+                                                <p className="m-2 font-sans ml-5 font-semibold text-xl mb-1">Verifications</p>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div className="flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                                    </svg>
+                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Payemtn Verify</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-blue-600 ml-12 text-sm hover:text-red-500">Verify</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div className="flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-blue-600">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                                    </svg>
+                                                    <span className="text-start  ml-2 text-sm font-normal font-sans">Phone Number Verify</span>
+                                                </div>
+                                                <div>
+                                                    <span
+                                                        onClick={() => {
+                                                            navigate(routerVariables.Settings)
+                                                        }} className={` ml-12 text-sm hover:text-red-500 ${basicData.numberVerify ? "text-red-500" : " text-blue-600"} `}>{basicData.numberVerify ? "Verified" : "Verify"}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div>
+                                                    <EmailIcon fontSize="small" />
+                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Email Verify</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-red-500 ml-12 text-sm hover:text-red-500">Verified</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Disclosure.Panel>
+                                </Transition>
+                            </>
+                        )}
+                    </Disclosure>
                     {/* Jobs */}
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-6 ">
-                        <div className="w-full border-b-2 mt-5  flex justify-between">
-                            <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All contracts</p>
-                            <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div className="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-green-800">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                                </svg>
-                                <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
-                                <span className=" ml-2 hover:text-red-500 text-sm">: 02</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div className="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-500">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                                </svg>
-                                <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
-                                <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between m-5 ">
-                            <div className="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-600">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                                <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
-                                <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-center items-center m-5 ">
-                            <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
-                        </div>
-                    </div>
+                    <Disclosure>
+                        {({ open }) => (
+                            <>
+                                <Disclosure.Button className='shadow-xl flex justify-between  border px-2 py-2 rounded-xl  w-[80%] mt-5 bg-white'>
+                                    <label className='w-full h-full text-start font-sans font-semibold'>
+                                        All Contract
+                                    </label>
+                                    <ArrowUpward className={open ? 'rotate-180 transform' : ''} />
+                                </Disclosure.Button>
+                                <Transition
+                                    enter="transition duration-100 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-75 ease-out"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0"
+                                >
+                                    <Disclosure.Panel>
+                                        <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-2 ">
+                                            <div className="w-full border-b-2 mt-5  flex justify-between">
+                                                <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All contracts</p>
+                                                <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div className="flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-green-800">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                                                    </svg>
+                                                    <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 02</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div className="flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-500">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                                                    </svg>
+                                                    <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between m-5 ">
+                                                <div className="flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-600">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                    <span className="text-start text-sm ml-2 font-semibold font-sans">Active contracts </span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-center items-center m-5 ">
+                                                <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
+                                            </div>
+                                        </div>
+                                    </Disclosure.Panel>
+                                </Transition>
+                            </>
+                        )}
+                    </Disclosure>
+                    <Disclosure>
+                        {({ open }) => (
+                            <>
+                                <Disclosure.Button className='shadow-xl flex justify-between  border px-2 py-2 rounded-xl  w-[80%] mt-5 bg-white'>
+                                    <label className='w-full h-full text-start font-sans font-semibold'>
+                                        Connected
+                                    </label>
+                                    <ArrowUpward className={open ? 'rotate-180 transform' : ''} />
+                                </Disclosure.Button>
+                                <Transition
+                                    enter="transition duration-100 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-75 ease-out"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0"
+                                >
+                                    <Disclosure.Panel>
+                                        <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-2 ">
+                                            <div className="flex justify-between mt-2  border-b w-full">
+                                                {
+                                                    connectedTalent && connectedTalent?.map((talent: ProposalInterface, index: number) => (
+                                                        <div key={index} className="flex m-5 justify-between">{console.log(talent.talentId)}
+                                                            <div>
+                                                                <Avatar alt="Remy Sharp" src={`http://localhost:3000/images/${talent?.talentId?.Profile?.profile_Dp}`} />
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <span className="text-start text-sm ml-2 font-semibold font-sans">
+                                                                    {talent.talentId.First_name} {talent?.talentId?.Last_name}
+                                                                </span>
+                                                                <span className="text-gray-400 text-start text-sm ml-2 font-semibold font-sans">
+                                                                    {talent.talentId.Profile.Title}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-end">
+                                                                <Dropdown.Button className="ml-7" menu={menuProps} onOpenChange={() => setMenuINdex(index)}  >
+                                                                    Show
+                                                                </Dropdown.Button>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                    </Disclosure.Panel>
+                                </Transition>
+                            </>
+                        )}
+                    </Disclosure>
                 </div>
             </div >
         </>

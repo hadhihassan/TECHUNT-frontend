@@ -39,7 +39,7 @@ export async function editJobPost(data: object, id: string) {
         axiosInstance.patch(`${BASE_URL}CLIENT/edit-jobpost/`, { data, id })
     )
 }
-export async function getAllProposalForClient(id: string) {
+export async function getAllProposalForClient(id: string | null) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/get-all-proposals/`, { id });
 }
 export async function updateproposalAsAccept(id: string) {
@@ -50,5 +50,8 @@ export async function updateproposalAsDecline(id: string) {
 }
 export async function fetchConnectedTalent() {
     return await axiosInstance.get(`${BASE_URL}CLIENT/fetch-Connected-talents/`)
+}
+export async function getALlTalent() {
+    return await axiosInstance.get(`${BASE_URL}CLIENT/get-all-talent/`)
 }
 
