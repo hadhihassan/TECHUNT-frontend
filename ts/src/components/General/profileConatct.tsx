@@ -3,7 +3,7 @@ import Modal from "./profileEditModal";
 import { editProfileContact } from "../../services/commonApiService";
 import { MyContext } from "../../context/myContext";
 import Alert from '@mui/material/Alert';
-import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validators'
+import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validatorsUtils'
 
 const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
     const [details, setdetails] = useState<any>()

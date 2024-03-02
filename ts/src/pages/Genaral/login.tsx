@@ -6,16 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
-import { emailValidator, passwordValidator } from "../../util/validators";
+import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
 import Swal from 'sweetalert2'
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
-
+   
     const [email, setUserEmail] = useState<string>("")
     const [error, setError] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
+    // const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
                             console.log(res?.data?.data?.token);
-                            console.log(JSON.parse(localStorage.getItem("clientroot")))
+                            console.log(JSON.parse(localStorage.getItem("clientroot") || ""))
                             if (res?.data?.data.role === "CLIENT") {
                                 navigate("/client/home/");
                             } else {

@@ -26,7 +26,7 @@ const profileVerifications = () => {
                 <span className="font-normal font-sans ">Phone Number Verify</span>
                 <span
                     onClick={() => navigate(routerVariables.Settings)}
-                    className={`${numberIsVerify     ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}> {numberIsVerify ? "Verified" : "Verify"} </span>
+                    className={`${numberIsVerify ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}> {numberIsVerify ? "Verified" : "Verify"} </span>
             </div>
             <div className="flex items-center justify-between m-8">
                 <EmailIcon fontSize="small" />
@@ -36,7 +36,8 @@ const profileVerifications = () => {
                 </span>
 
             </div>
-        </div >);
+        </div >
+    );
 }
 
 

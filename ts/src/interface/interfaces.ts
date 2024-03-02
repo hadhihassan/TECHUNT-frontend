@@ -1,8 +1,8 @@
-export interface Typerole  {
+export interface Typerole {
     type: "NOTHING" | "CLIENT" | "ADMIN" | "TALENT"
 }
 export interface UserProfile {
-    _id :string;
+    _id: string;
     Last_name: string;
     First_name: string;
     Password: string;
@@ -25,7 +25,7 @@ export interface UserProfile {
     isVerify?: boolean;
     isNumberVerify?: boolean;
 }
-export interface JobInterface extends UserProfile{
+export interface JobInterface extends UserProfile {
     Title: string;
     Client_id: string | UserProfile;
     Skills: string[];
@@ -35,20 +35,20 @@ export interface JobInterface extends UserProfile{
     Amount: number;
     WorkType: 'Fixed' | 'Milestone';
     isDelete: boolean;
-    createdAt?:string
+    createdAt:Date
 }
 // Proposal form Data interface 
 export interface ProposalInterface {
     title: string
     coverLetter: string
     rate: number
-    availability:Date | null
-    attachments:File | null
+    availability: Date | null
+    attachments: File | null
     additionalInfo: string
-    jobId?:string
-    _id?:string,
-    Client_id?:{
-        _id :string;
+    jobId?: string
+    _id?: string,
+    Client_id?: {
+        _id: string;
         Last_name: string;
         First_name: string;
         Password: string;
@@ -70,9 +70,9 @@ export interface ProposalInterface {
         online?: boolean;
         isVerify?: boolean;
         isNumberVerify?: boolean;
-    }| string
-    talentId?:{
-        _id :string;
+    } | string
+    talentId?: {
+        _id: string;
         Last_name: string;
         First_name: string;
         Password: string;
@@ -94,6 +94,6 @@ export interface ProposalInterface {
         online?: boolean;
         isVerify?: boolean;
         isNumberVerify?: boolean;
-    }    | string
-    isAccept?:boolean
+    } | string
+    isAccept?: boolean
 }

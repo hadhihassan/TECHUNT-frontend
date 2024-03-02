@@ -29,6 +29,7 @@ interface TALENT_ROUTES {
     Profile: string,
     Home: string,
     JobViewPage: string,
+    ProfileView:string
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -58,21 +59,22 @@ export const clientRoutes: CLIENTROUTES = {
     ADD_PROFILE_DESCRIPTION: "/client/profile-description/",
     ADD_CONTACT_DETAILS: "/client/add-contact/",
     Profile: "/client/profile/",
-    viewProposal: "/client/view-propsal/"
+    viewProposal: "/client/view-proposal/",
 }
 //Talent routes
 export const talent_routes: TALENT_ROUTES = {
     AddSkills: "/add-skills/",
     Profile_title: "/profile-title/",
-    AddWorkExperiance: "/add-experiance/",
+    AddWorkExperiance: "/add-experience/",
     Profile: "/talent/profile/",
     Home: "/talent/home/",
     JobViewPage: "/talent/job-details-view/",
+    ProfileView: "/talent/talent/profile/",
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {
     Login: "/admin/login/",
-    UserMangment: "/admin/user-managment/",
-    JobCategoryManagment: "/admin/job-Catgory-managment/",
+    UserMangment: "/admin/user-management/",
+    JobCategoryManagment: "/admin/job-Category-management/",
     Dashboard: "/admin/dashboard/"
 }

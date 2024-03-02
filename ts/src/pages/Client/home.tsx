@@ -66,7 +66,8 @@ const Home = () => {
             icon: <CgProfile />,
             danger: true,
             onClick: () => {
-
+                localStorage.setItem("profileData", JSON.stringify(connectedTalent[menuIndex].talentId))
+                navigate(talent_routes.ProfileView)
             }
         },
         {
@@ -198,7 +199,7 @@ const Home = () => {
                     <div className="w-full mt-5 flex justify-between ">
                         <p className="text-sans font-semibold">Best matches for you (200)</p>
                         <div>
-                            <FilterAltIcon color="error" /><span className="text-sans font-normal text-red-500">fiter here</span>
+                            <FilterAltIcon color="error" /><span className="text-sans font-normal text-red-500">filter here</span>
                         </div>
                     </div>
                     {/* talents */}

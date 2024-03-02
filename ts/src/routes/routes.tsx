@@ -1,7 +1,8 @@
 import React from 'react';
-import * as Imports from '../../src/util/imports';
+import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import PaymentSuccessPage from '../components/General/paymentSuccessPage';
+import Search from '../pages/Genaral/searchPage';
 
 
 const WebRouters: React.FC = () => {
@@ -39,15 +40,15 @@ const WebRouters: React.FC = () => {
 
 
             {/* everyone can access this route */}
-            <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage/>} />
-            <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage/>} />
+            <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
+            <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<PaymentSuccessPage />} />
+            <Imports.Route path={"*"} element={<Search />} />
             <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
 
             {/*ADMIN ROUTES  */}
-            <Imports.Route path={Imports.admin_Routes.Login} element={  <Imports.AdminLogin /> } />
+            <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
             <Imports.Route path='admin' element={<Imports.AdminLayout />}>
                 <Imports.Route path={Imports.admin_Routes.Dashboard} element={<Imports.ProtectedRoute><Imports.IndexDashBoard /></Imports.ProtectedRoute>} />
                 <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
@@ -59,6 +60,10 @@ const WebRouters: React.FC = () => {
             <Imports.Route path='talent' element={<Imports.Layout />}>
                 <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
                 <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
+
+                {/*  */}
+                <Imports.Route path={Imports.talent_routes.ProfileView} element={<Imports.ClientProfileView />} />
+
             </Imports.Route>
 
             {/* CLIENT ROUTES */}

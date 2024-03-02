@@ -30,15 +30,16 @@ import EditjobPostForm from '../components/Client/editJobPostForm';
 import JobPostForm from '../components/Client/jobPostForm';
 
 // Path Variables
-import Path, { admin_Routes, clientRoutes, talent_routes } from '../routes/pathVariables';
+import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
 // Protected Routes
-import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from '../routes/protectedRoutes/protectedRoute';
+import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from './protectedRoutes/protectedRoute';
 //Admin protected routes
-import ProtectedRoute from '../routes/protectedRoutes/adminProtectedRoutes';
+import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
 import AdminLayout from '../components/Admin/adminLayout'
 import LandinHomePage from '../pages/Genaral/Home';
 import paymentSuccessPage from '../components/General/paymentSuccessPage';
+import ClientProfileView from '../pages/Client/profileView';
 
 
 
@@ -81,5 +82,6 @@ export {
     ProposalClientView,
     EditjobPostForm,
     JobPostForm,
-    paymentSuccessPage
+    paymentSuccessPage,
+    ClientProfileView
 };

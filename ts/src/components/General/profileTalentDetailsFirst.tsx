@@ -9,7 +9,7 @@ import { editMainProfileSection } from '../../services/commonApiService';
 import { MyContext } from '../../context/myContext';
 import { uploadProfilePhoto } from '../../services/clientApiService';
 import Alert from '@mui/material/Alert';
-import { nameValidator, descriptionValidator } from '../../util/validators'
+import { nameValidator, descriptionValidator } from '../../util/validatorsUtils'
 import { Context as ContextInterface } from '../../context/myContext'
 import { UserProfile } from '../../interface/interfaces'
 import toast, { Toaster } from "react-hot-toast";
@@ -105,7 +105,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
             const data = new FormData();
             data.append('image', img);
             uploadProfilePhoto(data, basicData?.role)
-                .then((_res:AxiosResponse) => {
+                .then((_res: AxiosResponse) => {
                     onUpdate()
                     success("Image uploaded success")
                 }).catch((error: AxiosError) => {

@@ -9,7 +9,7 @@ import { signup } from "../../services/commonApiService";
 import Alert from '@mui/material/Alert';
 import Swal from 'sweetalert2'
 import { useState } from "react";
-import { emailValidator, passwordValidator } from "../../util/validators";
+import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
 
 
 const Login = () => {
