@@ -48,7 +48,7 @@ const routerVariables: Routes = {
     signup: "/signup/",
     404: '/404/',
     Settings: "/settings/",
-    Message: "/client/message/",
+    Message: "/message/",
     PaymentSuccess: '/payment/success/:id/'
 }
 export default routerVariables;

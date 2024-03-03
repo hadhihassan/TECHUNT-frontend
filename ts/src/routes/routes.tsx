@@ -70,9 +70,9 @@ const WebRouters: React.FC = () => {
             {/* CLIENT ROUTES */}
             <Imports.Route path='client' element={<Imports.Layout />}>
                 <Imports.Route path={Imports.clientRoutes.viewProposal} element={<Imports.ProposalClientView />} />
-                <Imports.Route path={Imports.Path.Message} element={<Message />} />
             </Imports.Route>
 
+                <Imports.Route path={Imports.Path.Message} element={<Message />} />
         </Imports.Routes>
     );
 };
