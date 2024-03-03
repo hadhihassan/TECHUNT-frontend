@@ -9,15 +9,32 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
+import { useEffect, useState } from 'react';
+import { getDashBoardData } from '../../../services/adminApiService';
+import { AxiosResponse } from 'axios';
+import { map } from 'lodash';
 
 const indexDashBoard = () => {
-    const chartConfig = {
+    const [clientData, setClientData] = useState()
+    const [talentData, setTalentData] = useState()
+    const [mostWorkignFreelancer, setmostWorkignFreelancer] = useState()
+    useEffect(() => {
+        getDashBoardData()
+            .then((res: AxiosResponse) => {
+                setClientData(res?.data.monthlyClient)
+                console.log(res?.data.monthlyClient)
+                setmostWorkignFreelancer(res?.data.mostWorkignFreelancer)
+                console.log(res?.data.mostWorkignFreelancer)
+                setTalentData(res?.data.monthlyTalent)
+            })
+    }, [])
+    const chartConfigClient = {
         type: "line",
         height: 240,
         series: [
             {
-                name: "Sales",
-                data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+                name: "Client",
+                data: clientData?.map((item) => item?.count),
             },
         ],
         options: {
@@ -55,17 +72,7 @@ const indexDashBoard = () => {
                         fontWeight: 400,
                     },
                 },
-                categories: [
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Nov",
-                    "Dec",
-                ],
+                categories: clientData?.map((item) => item?.month),
             },
             yaxis: {
                 labels: {
@@ -99,7 +106,85 @@ const indexDashBoard = () => {
             },
         },
     };
-    const chartConfig1 = {
+    const chartConfigTalent = {
+        type: "line",
+        height: 240,
+        series: [
+            {
+                name: "Talent",
+                data: talentData?.map((item) => item?.count),
+            },
+        ],
+        options: {
+            chart: {
+                toolbar: {
+                    show: false,
+                },
+            },
+            title: {
+                show: "",
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            colors: ["#020617"],
+            stroke: {
+                lineCap: "round",
+                curve: "smooth",
+            },
+            markers: {
+                size: 0,
+            },
+            xaxis: {
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+                labels: {
+                    style: {
+                        colors: "#616161",
+                        fontSize: "12px",
+                        fontFamily: "inherit",
+                        fontWeight: 400,
+                    },
+                },
+                categories: talentData?.map((item) => item?.month),
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: "#616161",
+                        fontSize: "12px",
+                        fontFamily: "inherit",
+                        fontWeight: 400,
+                    },
+                },
+            },
+            grid: {
+                show: true,
+                borderColor: "#dddddd",
+                strokeDashArray: 5,
+                xaxis: {
+                    lines: {
+                        show: true,
+                    },
+                },
+                padding: {
+                    top: 5,
+                    right: 20,
+                },
+            },
+            fill: {
+                opacity: 0.8,
+            },
+            tooltip: {
+                theme: "dark",
+            },
+        },
+    };
+    const chartConfigMonth = {
         type: "bar",
         height: 240,
         series: [
@@ -198,7 +283,10 @@ const indexDashBoard = () => {
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Users</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000</p>
+                                <p className="font-bold font-sans text-sm text-gray-600">
+                                    {(clientData?.reduce((acc: number, item: object) => acc + item.count, 0) || 0) +
+                                        (talentData?.reduce((acc: number, item: object) => acc + item.count, 0) || 0)}
+                                </p>
                             </div>
                         </div>
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[25vw]  rounded-2xl shadow-xl">
@@ -207,7 +295,7 @@ const indexDashBoard = () => {
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Clients</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000k</p>
+                                <p className="font-bold font-sans text-sm text-gray-600">{clientData?.reduce((acc: number, item: object) => acc + item.count, 0)}</p>
                             </div>
                         </div>
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[25vw]  rounded-2xl shadow-xl">
@@ -216,7 +304,7 @@ const indexDashBoard = () => {
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Talents</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000k</p>
+                                <p className="font-bold font-sans text-sm text-gray-600">{talentData?.reduce((acc: number, item: object) => acc + item.count, 0)}</p>
                             </div>
                         </div>
                     </div>
@@ -283,7 +371,7 @@ const indexDashBoard = () => {
                                 </div>
                             </CardHeader>
                             <CardBody className="px-2 pb-0" placeholder={undefined}>
-                                <Chart {...chartConfig} />
+                                <Chart {...chartConfigClient} />
                             </CardBody>
                         </Card>
                         <Card placeholder={undefined} className=' m-5'>
@@ -310,7 +398,7 @@ const indexDashBoard = () => {
                                 </div>
                             </CardHeader>
                             <CardBody className="px-2 pb-0" placeholder={undefined}>
-                                <Chart {...chartConfig} />
+                                <Chart {...chartConfigTalent} />
                             </CardBody>
                         </Card>
                     </div>
@@ -338,43 +426,29 @@ const indexDashBoard = () => {
                             </div>
                         </CardHeader>
                         <CardBody className="px-2 pb-0" placeholder={undefined}>
-                            <Chart {...chartConfig1} />
+                            <Chart {...chartConfigMonth} />
                         </CardBody>
                     </Card>
                     <div className="ml-7 m-2 flex">
                         <div className="w-full h-auto mb-9 rounded-xl shadow-2xl border">
                             <div className="w-full h-[70px]">
-                                <p className="m-5 font-sans font-bold text-xl">Most Freelancer Job</p>
+                                <p className="m-5 font-sans font-bold text-xl">Most Freelancer Types</p>
                                 <div className="flex justify-between text-sm font-sans m-5 font-bold">
-                                    <p>Title</p>
                                     <p className='text-end'>No</p>
-                                    <p>percentage</p>
+                                    <p>Title</p>
+                                    <p>count</p>
                                 </div>
                             </div><hr />
-                            <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
-                                <p className="m-5">web developer</p>
-                                <p className="mr-5 mt-5 text-start">230000</p>
-                                <p className="m-5">60%</p>
-                            </div>
-                            <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
-                                <p className="m-5">web developer</p>
-                                <p className="mr-5 mt-5 text-start">230000</p>
-                                <p className="m-5 text-start">60%</p>
-                            </div>
-                            <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
-                                <p className="m-5">web developer</p>
-                                <p className="mr-5 mt-5 text-start">230000</p>
-                                <p className="m-5">60%</p>
-                            </div>
-                            <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
-                                <p className="m-5">web developer</p>
-                                <p className="mr-5 mt-5 text-start">230000</p>
-                                <p className="m-5">60%</p>
-                            </div>
+                            {
+                                mostWorkignFreelancer?.map((most,index) => (
+                                    <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
+                                        <p className="mr-5 mt-5 text-start">{index+1}</p>
+                                        <p className="m-5">{most._id}</p>
+                                        <p className="m-5">{most.count}</p>
+                                    </div>
+                                ))
+                            }
                         </div>
-                        {/* <div>
-
-                        </div> */}
                     </div>
                 </div>
             </div>

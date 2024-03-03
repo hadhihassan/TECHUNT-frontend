@@ -8,7 +8,7 @@ import { ROOTSTORE } from "../../redux/store";
 
 const JobViewPage = () => {
 
-    const { role } = useSelector((state: ROOTSTORE) => state.signup.role)
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
 
     const close = () => {
         console.log(
@@ -111,7 +111,7 @@ const JobViewPage = () => {
                         {/* right side */}
                         <div className="sm:w-[25%]">
                             {
-                                role === "TALENT" && <>
+                                basicData.role == "TALENT" && <>
                                     <div className="w-full  font-sans flex flex-col">
                                         <button onClick={openNotification} className="bg-red-500 border mt-5 rounded-full py-2 text-white font-semibold">Submit propsoal</button>
                                         <button className="border border-black mt-2 text-black py-2 font-semibold   rounded-full">Save</button>

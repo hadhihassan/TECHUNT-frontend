@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import PaymentIcon from '@mui/icons-material/Payment';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
-import  { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import ProfileReviews from "../../components/General/profileReviews";
+import { useSelector } from "react-redux";
+import { ROOTSTORE } from "../../redux/store";
+import { ProposalInterface } from "../../interface/interfaces";
+import { getAllClientProposalsForTalent } from "../../services/talentApiService";
+import { AxiosError, AxiosResponse } from "axios";
 interface UserProfile {
+    _id:string
     Last_name: string;
     First_name: string;
     Password: string;
@@ -34,12 +40,23 @@ interface UserProfile {
     createdAt: Date
 }
 const Profile = () => {
+
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
+    const [proposal, setPropsal] = useState<ProposalInterface[]>([])
     const [datas, setData] = useState<UserProfile>()
     useEffect(() => {
-        const data: UserProfile = JSON.parse(localStorage.getItem("profileData") || "")  
+        const data: UserProfile = JSON.parse(localStorage.getItem("profileData") || "")
         setData(data)
+        if(basicData.role){
+            getAllClientProposalsForTalent(data?._id)
+            .then((res: AxiosResponse) => {
+                setPropsal(res.data)
+            }).catch((err: AxiosError) => {
+                console.log(err)
+            })
+        }
     }, [])
-    const truncatedDescription: string | undefined  = datas?.Profile?.Description?.slice(0, 200);
+    const truncatedDescription: string | undefined = datas?.Profile?.Description?.slice(0, 200);
     const [showMore, setShowMore] = useState(false);
     const toggleShowMore = () => {
         setShowMore(!showMore);
@@ -52,18 +69,18 @@ const Profile = () => {
                 <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
                     <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
                         <div>
-                            <img className="border border-black rounded-xl" src={`http://localhost:3000/images/${datas?.Profile.profile_Dp}`} alt="" />
+                            <img className="border border-black rounded-xl" src={`http://localhost:3000/images/${datas?.Profile.profile_Dp}`} alt="Loading" />
                         </div>
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>
                             {/* <AccessTimeRoundedIcon fontSize="inherit" /> */}
-                            <span className="font-sans font-normal text-xs ml-2" >It's currently 4:45 PM here</span><br />
+                            <span className="font-sans font-normal text-xs" >It's currently 4:45 PM here</span><br />
                             <EditCalendarRoundedIcon fontSize="inherit" />
-                            <span className="font-sans font-normal text-xs ml-2">  Joined {}</span>
+                            <span className="font-sans font-normal text-xs ml-2">  Joined {datas?.createdAt}</span>
                         </div>
                     </div>
                     <div className=" w-full ">
-                        <div className="flex justify-between ">
+                        <div className={`flex justify-between ${basicData.role == "TALENT" ? "mb-4 " : ""}`}>
                             <div className="mt-4">
                                 <p className="text-2xl font-sans font-bold">{datas?.First_name},  {datas?.Last_name}</p>
                                 <p className=" font-sans font-medium opacity-45">{datas?.Profile?.Title}</p>
@@ -82,12 +99,11 @@ const Profile = () => {
                             </div>
                             <div className="border-r border-solid  border-gray-500 h-8 "></div>
                             <div>
-                                <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
-                                <span className="text-gray-500 font-sans font-normal text-sm">Total earnings :  0  Rs</span>
+                                <span className="text-gray-500 font-sans font-normal text-sm">Total job post : {proposal.length} <b>0</b> </span>
                             </div><div className="border-r border-solid border-gray-500 h-8"></div>
                             <div>
                                 <VerifiedTwoToneIcon fontSize="inherit" color="primary" />
-                                <span className="text-gray-500 font-sans ml-1 font-normal text-sm">0 projects completed</span>
+                                <span className="text-gray-500 font-sans ml-1 font-normal text-sm"><b>0</b> projects completed</span>
                             </div>
                         </div>
                         <div className="mr-3 mt-4">
@@ -170,25 +186,28 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
-                    <div className="flex justify-between">
-                        <p className="m-4 font-sans font-medium">Top Skills</p>
+                {
+                    basicData.role === "CLIENT" &&
+                    <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
+                        <div className="flex justify-between">
+                            <p className="m-4 font-sans font-medium">Top Skills</p>
+                        </div>
+                        <hr />
+                        <div className="flex flex-col space-y-5 items-start m-5">
+                            {
+                                datas && datas.Profile && datas.Profile.Skills && datas.Profile.Skills.length > 0 ? (
+                                    datas?.Profile?.Skills.map((value: string, key: number) => (
+                                        <span className="text-start font-semibold font-sans" key={key}>
+                                            {value}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <p className="font-sans font-medium text-red-300">Add skills here</p>
+                                )
+                            }
+                        </div>
                     </div>
-                    <hr />
-                    <div className="flex flex-col space-y-5 items-start m-5">
-                        {
-                            datas && datas.Profile && datas.Profile.Skills && datas.Profile.Skills.length  > 0 ? (
-                                datas?.Profile?.Skills.map((value: string, key: number) => (
-                                    <span className="text-start font-semibold font-sans" key={key}>
-                                        {value}
-                                    </span>
-                                ))
-                            ) : (
-                                <p className="font-sans font-medium text-red-300">Add skills here</p>
-                            )
-                        }
-                    </div>
-                </div>
+                }
             </div>
             <div className="flex items-center  flex-row m-1 mb-5">
             </div>

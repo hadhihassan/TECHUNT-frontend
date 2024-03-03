@@ -10,8 +10,8 @@ export type Routes = {
     signup: string,
     404: string,
     Settings: string,
-    Message :string
-    PaymentSuccess :string
+    Message: string
+    PaymentSuccess: string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -29,7 +29,8 @@ interface TALENT_ROUTES {
     Profile: string,
     Home: string,
     JobViewPage: string,
-    ProfileView:string
+    ProfileView: string
+    viewClient: string
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -47,8 +48,8 @@ const routerVariables: Routes = {
     signup: "/signup/",
     404: '/404/',
     Settings: "/settings/",
-    Message:"/client/message/",
-    PaymentSuccess:'/payment/success/:id/'
+    Message: "/client/message/",
+    PaymentSuccess: '/payment/success/:id/'
 }
 export default routerVariables;
 //Client routes
@@ -70,6 +71,7 @@ export const talent_routes: TALENT_ROUTES = {
     Home: "/talent/home/",
     JobViewPage: "/talent/job-details-view/",
     ProfileView: "/talent/talent/profile/",
+    viewClient: '/talent/view-client-profile/'
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

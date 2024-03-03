@@ -14,7 +14,6 @@ import { fetchAllJobPostForTalent } from '../../services/talentApiService';
 import type { JobInterface } from '../../interface/interfaces'
 import { AxiosError, AxiosResponse } from 'axios';
 import formatRelativeTime from '../../util/timeFormating';
-import { FilterDrama } from '@mui/icons-material';
 import { talent_routes } from '../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { findMostSuitableJobPost } from '../../util/jobSearchUtils';
@@ -101,12 +100,9 @@ const Search = () => {
     };
     const onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         searchChange(query)
-
         searchChange(e.target.value)
     }
-
     const searchChange: (value: string) => void = (value) => {
-
         setQuery(value);
         // Filter by title
         const filteredPosts = actualPosts.filter((item: JobInterface) => {

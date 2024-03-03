@@ -54,6 +54,12 @@ export async function makePayment(id: string) {
 export async function updatePaymentStatus(status:string, proposalId:string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
 }
+export async function getAllClientForTalent(){
+    return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-clients/`)
+}
+export async function getAllClientProposalsForTalent(id:string){
+    return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-clients-proposal/${id}/`)
+}
 
 
 

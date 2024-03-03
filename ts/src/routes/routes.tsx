@@ -60,6 +60,7 @@ const WebRouters: React.FC = () => {
             <Imports.Route path='talent' element={<Imports.Layout />}>
                 <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
                 <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
+                <Imports.Route path={Imports.talent_routes.viewClient} element={<Imports.ClientProfileView />} />
 
                 {/*  */}
                 <Imports.Route path={Imports.talent_routes.ProfileView} element={<Imports.ClientProfileView />} />

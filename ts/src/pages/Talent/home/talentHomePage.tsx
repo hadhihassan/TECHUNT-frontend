@@ -4,11 +4,11 @@ import { LinearProgressWithLabel } from '../../../components/General/linerProgre
 import EmailIcon from '@mui/icons-material/Email';
 import BannerImage from '../../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import { AxiosError, AxiosResponse } from 'axios';
-import { fetchAllJobPostForTalent } from '../../../services/talentApiService';
+import { fetchAllJobPostForTalent, getAllClientForTalent } from '../../../services/talentApiService';
 import 'quill/dist/quill.snow.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { Disclosure, Transition } from '@headlessui/react'
@@ -17,6 +17,7 @@ import Loader from '../../../components/General/loader/loader';
 import { talent_routes } from '../../../routes/pathVariables';
 import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
+import ClientList from '../../../components/Talent/clientListing';
 // jobPst interface
 
 export interface Project {
@@ -37,18 +38,20 @@ const HomePage: React.FC = () => {
     const loader: boolean = useSelector((state: ROOTSTORE) => state.client.loading)
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const [posts, setposts] = useState<Project[] | []>([])
+    const [client, setClients] = useState<object[]>([])
     useEffect(() => {
-        // dispatch(setLoader(false)); // Dispatch action to set loader to true before making API call
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
                 setposts(res.data.data);
-                console.log("this is the propsals ", res.data.data)
-                // dispatch(setLoader(true)); // Dispatch action to set loader to false after fetching data
-                console.log(JSON.parse(localStorage.getItem("clientroot")))
             })
             .catch((_err: AxiosError) => {
-                // dispatch(setLoader(false)); // Dispatch action to set loader to false in case of error
             });
+        getAllClientForTalent()
+            .then((res) => {
+                setClients(res.data)
+            }).catch((err) => {
+                console.log(err)
+            })
     }, []);
     const [activeTab, setActiveTab] = useState<number>(1);
     // const navigate: NavigateFunction = useNavigate()
@@ -111,13 +114,13 @@ const HomePage: React.FC = () => {
                                             onClick={() => handleTabClick(1)}
                                             className={`text-sans font-semibold ml-5 px-4 py-2 focus:outline-none ${activeTab === 1 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                         >
-                                            Best match
+                                            Clients
                                         </button>
                                         <button
                                             onClick={() => handleTabClick(2)}
                                             className={`text-sans font-semibold px-4 py-2 focus:outline-none ${activeTab === 2 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                         >
-                                            Recent
+                                            Best match
                                         </button>
                                         <button
                                             onClick={() => handleTabClick(3)}
@@ -130,25 +133,28 @@ const HomePage: React.FC = () => {
                             </div>
                             {/* filter */}
                             {
-                                posts?.map((post: Project, _index: number) => (
-                                    <div className="w-full mt-5" key={_index} onClick={() => handleShowJobPostDetails(_index)}>
-                                        <div className="m-3 mt-5 w-full">
-                                            <p className="font-sans font-semibold mt-1">{post.Title}</p>
-                                            <p className='font-sans text-gray-600 mt-1 text-xs font-normal'>{post.TimeLine} - {post.Expertiselevel} - Est. Budget: ${post.Amount} - Posted  8 hours ago</p>
-                                            <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
+
+                                activeTab == 2 ?
+                                    posts?.map((post: Project, _index: number) => (
+                                        <div className="w-full mt-5" key={_index} onClick={() => handleShowJobPostDetails(_index)}>
+                                            <div className="m-3 mt-5 w-full">
+                                                <p className="font-sans font-semibold mt-1">{post.Title}</p>
+                                                <p className='font-sans text-gray-600 mt-1 text-xs font-normal'>{post.TimeLine} - {post.Expertiselevel} - Est. Budget: ${post.Amount} - Posted  8 hours ago</p>
+                                                <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
+                                            </div>
+                                            <div className='flex justify-between w-[60%] sm:ml-3'>
+                                                <p>{post?.WorkType}</p>
+                                                {/* <p ></p> */}
+                                                <Stack spacing={1}>
+                                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
+                                                </Stack>
+                                                <p>4/5  12 Reviews</p>
+                                                <p>Kerala, India</p>
+                                            </div>
+                                            <div className="w-full border-b-2 m-3"></div>
                                         </div>
-                                        <div className='flex justify-between w-[60%] sm:ml-3'>
-                                            <p>{post?.WorkType}</p>
-                                            {/* <p ></p> */}
-                                            <Stack spacing={1}>
-                                                <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
-                                            </Stack>
-                                            <p>4/5  12 Reviews</p>
-                                            <p>Kerala, India</p>
-                                        </div>
-                                        <div className="w-full border-b-2 m-3"></div>
-                                    </div>
-                                ))
+                                    ))
+                                    : <ClientList />
                             }
                             {/* talents */}
                             <div className="w-full h-[30vh]">

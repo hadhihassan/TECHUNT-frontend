@@ -10,7 +10,6 @@ export const axiosInstance: AxiosInstance = axios.create({
   timeout: 5000,
 });
 
-
 const onRequest = (config: AxiosRequestConfig) => {
   let jwtToken = localStorage.getItem("token");
   if (!jwtToken || jwtToken == null) {
@@ -74,19 +73,16 @@ export async function resolve(promise: Promise<any> | PromiseLike<null> | null) 
       title: "You're blocked!",
       text: "You are blocked by the admin.",
       icon: "warning"
-    }).then((res) => {
+    }).then((_res) => {
       localStorage.clear()
-      window.location.href = '/';
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 3000);
     });
   } else {
     return resolved;
   }
 
 }
-
-
-
-
-
 
 export default axiosInstance;

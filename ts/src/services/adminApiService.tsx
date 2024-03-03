@@ -42,3 +42,7 @@ export async function getJobPosts(id: string | null) {
         axiosInstance.patch(`${BASE_URL}admin/get-job-post/`, { id: id })
     )
 }
+export async function getDashBoardData() {
+    return await axiosInstance.get(`${BASE_URL}admin/get-dashBoardData/`)
+    
+}
