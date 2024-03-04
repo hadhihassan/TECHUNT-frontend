@@ -251,7 +251,7 @@ const Message = () => {
                                     <button
                                         className=" flex items-center justify-center bg-red-500 hover:bg-red-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
                                     >
-                                        <span>Send</span>
+                                        <span >Send</span>
                                         <span className="ml-2">
                                             <svg
                                                 className="w-4 h-4 transform rotate-45 -mt-px"

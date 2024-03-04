@@ -31,6 +31,7 @@ const Search = () => {
 
     const [selectedSkills, setSelectedSkills] = useState<string[]>([])
     useEffect(() => {
+        console.log("====================================")
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
                 setPost(res.data.data)
@@ -39,7 +40,7 @@ const Search = () => {
                 setMax(maxValue)
                 setMaxInputValue(maxValue)
                 const allSkills = res?.data?.data?.flatMap(obj => obj.Skills);
-                const uniqueSkills:string[] = Array.from(new Set(allSkills));
+                const uniqueSkills: string[] = Array.from(new Set(allSkills));
                 setAllskills(uniqueSkills)
             }).catch((err: AxiosError) => {
                 console.log(err)
@@ -47,22 +48,30 @@ const Search = () => {
     }, [])
     const navigate = useNavigate()
 
-    const onChangePrice = (e:string[]) => {
+    const onChangePrice = (e: string[]) => {
         const array = e
         setInputValue(array[0]);
         setMaxInputValue(array[1])
         searchChange(query)
     };
     const onChangeRadio: CheckboxProps['onChange'] = (e) => {
-        setPostType((prevPostType) => {
-            if (e.target.checked) {
-                return prevPostType ? [...prevPostType, e.target.value] : [e.target.value];
+        console.log(e.target, " this is the event")
+        const value = e.target.value
+        if (!postType.includes(value)) {
+            setPostType([...postType, value]);
+        } else {
+            if ("Milestone" === value) {
+                setPostType(["Fixed"]);
             } else {
-                return prevPostType ? prevPostType.filter((type) => type !== e.target.value) : [];
+                setPostType(["Milestone"]);
             }
-        });
-        searchChange(query)
+        }
+        console.log(postType)
+        a()
     };
+    const a = () => {
+        searchChange(query)
+    }
     const mockVal = (str: string, repeat = 1) => ({
         value: str.repeat(repeat)
 
@@ -113,20 +122,20 @@ const Search = () => {
         let typeFilteredPosts = filteredPosts;
         if (postType.length > 0) {
             typeFilteredPosts = filteredPosts.filter((item: JobInterface) => {
-                return postType.includes(item.WorkType);
+                if(postType.includes(item.WorkType)){
+                    return item
+                }
             });
         }
 
         // Filter by price
         let priceFilteredPosts = typeFilteredPosts;
-        if (maxInputValue > inputValue ) {
-            console.log(inputValue, "this is the min value", maxInputValue, "max input value ")
+        if (maxInputValue > inputValue) {
             priceFilteredPosts = typeFilteredPosts.filter((item: JobInterface) => {
-                if(item.Amount >= inputValue && item.Amount <= maxInputValue){
+                if (item.Amount >= inputValue && item.Amount <= maxInputValue) {
                     return item
                 }
             });
-            console.log(priceFilteredPosts)
         }
 
         // Filter by skills
@@ -142,8 +151,10 @@ const Search = () => {
             setPost(priceFilteredPosts);
         } else if (typeFilteredPosts.length > 0) {
             setPost(typeFilteredPosts);
-        } else {
+        } else if(filteredPosts.length){
             setPost(filteredPosts);
+        }else{
+        
         }
     }
     const handleSetSkill = (value: string) => {
@@ -187,6 +198,14 @@ const Search = () => {
                             </p>
                             <Checkbox onChange={onChangeRadio} className='m-3 font-normal' value='Fixed'>Fixed </Checkbox>
                             <Checkbox onChange={onChangeRadio} className='m-3 font-normal' value="Milestone">Milestone </Checkbox>
+                        </div>
+                        <div className='text-black '>
+                            <p className='m-3'>
+                                Experiance Level
+                            </p>
+                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value="Milestone">Beginner</Checkbox> <br />
+                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value='Fixed'>Medium </Checkbox> <br />
+                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value="Milestone">Experianced</Checkbox>
                         </div>
                         <Row className='m-3'>
 
@@ -232,7 +251,7 @@ const Search = () => {
                         </Space>
                         {
                             selectedSkills?.map((skill: string, index: number) => (
-                                <><Checkbox onChange={onChangeRadio} className='ml-3 font-normal' checked key={index}>{skill}</Checkbox><br /></>
+                                <><Checkbox className='ml-3 font-normal' checked key={index}>{skill}</Checkbox><br /></>
                             ))
                         }
                     </div>

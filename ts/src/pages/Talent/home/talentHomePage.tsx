@@ -64,7 +64,7 @@ const HomePage: React.FC = () => {
     }
     return (
         <>
-            {!loader ? (
+            {false ? (
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
