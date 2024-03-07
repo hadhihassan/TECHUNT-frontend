@@ -72,7 +72,7 @@ const Search = () => {
         findProduct()
 
     };
- 
+
     const onChange3 = ({ target: { value } }: RadioChangeEvent) => {
         value3 = value
         findProduct()
@@ -81,10 +81,10 @@ const Search = () => {
         value4 = value
         findProduct()
     };
-   
 
 
-    
+
+
 
     const handleMenuClick: MenuProps['onClick'] = (e) => {
         message.info('Click on menu item.');
