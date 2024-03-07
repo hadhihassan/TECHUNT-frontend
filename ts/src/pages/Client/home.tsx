@@ -20,7 +20,6 @@ import { ArrowUpward, Contrast, Message, Work } from '@mui/icons-material';
 import { Disclosure, Transition } from '@headlessui/react'
 import type { ProposalInterface, UserProfile } from '../../interface/interfaces'
 import Avatar from '@mui/material/Avatar';
-import HomeButton from "../../components/General/homeButtons";
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
 import { CgProfile } from "react-icons/cg";
@@ -125,11 +124,11 @@ const Home = () => {
                         !jobs || !jobs.length ? <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between">
                             <div className="m-5">
                                 <p className=" font-sans font-semibold text-xl mb-1">No job post</p>
-                                <p className=" font-sans font-normal text-xs m-2">You have not posted any job, post your job <br />
+                                <p className=" font-sans font-normal text-xs m-2">You have not posted any work, post your work <br />
                                     and find world’s best talent here.</p>
                                 <button onClick={() => {
                                     navigate(clientRoutes.CREATE_JOB_POST)
-                                }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post now</button>
+                                }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">work now</button>
                             </div>
                             <div className="-mt-9 mr-10">
                                 <img src={IMAGE1} alt="" className="h-[30vh] " />
@@ -143,7 +142,7 @@ const Home = () => {
                                 </div>
                                 <div className=" flex justify-between">
                                     <div>
-                                        <p className="m-3 mt-9 font-sans font-semibold text-xl">Totla job posting : {jobs.length}</p>
+                                        <p className="m-3 mt-9 font-sans font-semibold text-xl">Totla work posting : {jobs.length}</p>
                                     </div>
                                     <div className="mr-10">
                                         <div className="flex mr-10  justify-between">
@@ -195,7 +194,7 @@ const Home = () => {
                                     onClick={() => handleTabClick(4)}
                                     className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 4 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Job Posts
+                                    Work Posts
                                 </button>
                             </div>
                         </div>

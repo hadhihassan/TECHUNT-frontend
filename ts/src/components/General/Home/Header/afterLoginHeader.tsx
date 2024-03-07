@@ -39,15 +39,15 @@ const AfterLoginHeader = () => {
                 }).catch((err: AxiosError) => {
                     console.log(err)
                 })
-                if(role === "CLIENT"){
-                    getAllProposalForClient(sender_id)
-                        .then((res: AxiosResponse) => {
-                            setProposals(res.data.data)
-                        }).catch((err: AxiosError) => {
-                            console.log(err.message)
-                        })
+            if (role === "CLIENT") {
+                getAllProposalForClient(sender_id)
+                    .then((res: AxiosResponse) => {
+                        setProposals(res.data.data)
+                    }).catch((err: AxiosError) => {
+                        console.log(err.message)
+                    })
 
-                }
+            }
         }
         socket.emit("getNotifications", sender_id);
         socket.on("recevieNotification", (notification) => {

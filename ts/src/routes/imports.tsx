@@ -1,33 +1,37 @@
 /* eslint-disable react-refresh/only-export-components */
+import React, { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-// Pages
-import EmailVerification from '../pages/Genaral/email.SignupPage';
-import FidnTypeUser from '../pages/Genaral/findTypeUser';
-import EmailVerificationPage from '../pages/Genaral/emailVerificationPage';
-import ProfileStarMessage from '../pages/Genaral/profileStarMessage';
-import ProfileDescription from '../pages/Client/profileDescription';
-import ContractDetails from '../pages/Client/contactDetails';
-import Login from '../pages/Genaral/login';
-import ProfileTitle from '../pages/Talent/profileTitle';
-import AddSkills from '../pages/Talent/addSkills';
-import Addexperiance from '../pages/Talent/addWorkExperiance';
-import Profile from '../pages/Talent/profile/profile';
-import ErrorPage from '../pages/Genaral/404/404ErrorPage';
-import AdminLogin from '../pages/Admin/adminLogin';
-import Settings from '../pages/Genaral/settings';
-import TalentHomePage from '../pages/Talent/home/talentHomePage';
-import ProposalClientView from '../pages/Client/proposalView';
-import Home from '../pages/Client/home';
-import JobCategories from '../pages/Admin/jobCategory/jobCategories';
-import UserManagementIndex from '../pages/Admin/userManagment';
-import IndexDashBoard from '../pages/Admin/dashboard';
 
-// components
-import Layout from '../components/General/layout';
-import SidePanel from '../components/Admin/sidePanel';
-import JobViewPage from '../components/General/jobViewPage';
-import EditjobPostForm from '../components/Client/editJobPostForm';
-import JobPostForm from '../components/Client/jobPostForm';
+// Lazy-loaded components
+const EmailVerification = lazy(() => import('../pages/Genaral/email.SignupPage'));
+const FidnTypeUser = lazy(() => import('../pages/Genaral/findTypeUser'));
+const EmailVerificationPage = lazy(() => import('../pages/Genaral/emailVerificationPage'));
+const ProfileStarMessage = lazy(() => import('../pages/Genaral/profileStarMessage'));
+const ProfileDescription = lazy(() => import('../pages/Client/profileDescription'));
+const ContractDetails = lazy(() => import('../pages/Client/contactDetails'));
+const Login = lazy(() => import('../pages/Genaral/login'));
+const ProfileTitle = lazy(() => import('../pages/Talent/profileTitle'));
+const AddSkills = lazy(() => import('../pages/Talent/addSkills'));
+const Addexperiance = lazy(() => import('../pages/Talent/addWorkExperiance'));
+const Profile = lazy(() => import('../pages/Talent/profile/profile'));
+const ErrorPage = lazy(() => import('../pages/Genaral/404/404ErrorPage'));
+const AdminLogin = lazy(() => import('../pages/Admin/adminLogin'));
+const Settings = lazy(() => import('../pages/Genaral/settings'));
+const TalentHomePage = lazy(() => import('../pages/Talent/home/talentHomePage'));
+const ProposalClientView = lazy(() => import('../pages/Client/proposalView'));
+const Home = lazy(() => import('../pages/Client/home'));
+const JobCategories = lazy(() => import('../pages/Admin/jobCategory/jobCategories'));
+const UserManagementIndex = lazy(() => import('../pages/Admin/userManagment'));
+const IndexDashBoard = lazy(() => import('../pages/Admin/dashboard'));
+const Layout = lazy(() => import('../components/General/layout'));
+const SidePanel = lazy(() => import('../components/Admin/sidePanel'));
+const JobViewPage = lazy(() => import('../components/General/jobViewPage'));
+const EditjobPostForm = lazy(() => import('../components/Client/editJobPostForm'));
+const JobPostForm = lazy(() => import('../components/Client/jobPostForm'));
+const LandinHomePage = lazy(() => import('../pages/Genaral/Home'));
+const paymentSuccessPage = lazy(() => import('../components/General/paymentSuccessPage'));
+const ClientProfileView = lazy(() => import('../pages/Client/profileView'));
+const ContractForm = lazy(() => import('../components/Client/contract/contract'));
 
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
@@ -36,14 +40,13 @@ import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from './protectedR
 //Admin protected routes
 import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
-import AdminLayout from '../components/Admin/adminLayout'
-import LandinHomePage from '../pages/Genaral/Home';
-import paymentSuccessPage from '../components/General/paymentSuccessPage';
-import ClientProfileView from '../pages/Client/profileView';
-
+import AdminLayout from '../components/Admin/adminLayout';
+import Loader from '../components/General/loader/loader';
 
 
 export {
+    ContractForm,
+    Loader,
     LandinHomePage,
     Route,
     Routes,

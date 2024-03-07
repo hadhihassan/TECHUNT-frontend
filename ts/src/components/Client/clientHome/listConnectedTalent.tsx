@@ -33,24 +33,34 @@ const ListConnectedFreelancers: React.FC = () => {
     const toggleSkills = () => {
         setShowAllSkills(!showAllSkills);
     };
-    const hadnleShowProposalDetails = (index:number) => {
-        localStorage.setItem("proposal",JSON.stringify(connections[index]))
+    const hadnleShowProposalDetails = (index: number) => {
+        localStorage.setItem("proposal", JSON.stringify(connections[index]))
         navigate(clientRoutes.viewProposal)
     }
-    const hadnleShowJobDetails = (index:number) => {
+    const hadnleShowJobDetails = (index: number) => {
         localStorage.setItem("deatildView", JSON.stringify(connections[index].jobId))
         navigate(talent_routes.JobViewPage)
     }
     const handleMessage = (index: number) => {
-        createConversation(connections[index].talentId._id)
-        .then((res)=>{
-            navigate('/message')
-        })
+        createConversation(connections[index]?.talentId?._id)
+            .then((res: AxiosResponse) => {
+                navigate('/message')
+            })
+    }
+    const handleSendContract = (index: number) => {
+        const selectConnection: ProposalInterface = connections[index] || {}
+        // if (paymentStatus == "Completed") {
+
+        // } else {
+
+        // }
+
+
     }
     return (
         <>
             {connections.map((connection: ProposalInterface, index: number) => (
-                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index}>
+                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} onClick={() => { handleSendContract(index) }}>
                     <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
                     <div className="flex justify-between p-4">
                         <div className="flex">
@@ -83,9 +93,9 @@ const ListConnectedFreelancers: React.FC = () => {
                             </div>
                         </div>
                         <div className='flex flex-col'>
-                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center" onClick={()=>handleMessage(index)}>Message</button>
-                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-10 py-2 font-sans font-bold rounded-full self-center" onClick={()=>hadnleShowJobDetails(index)}> Job details</button>
-                            <button className="border border-red-500 text-red-500 ml-5 text-xs px-7 py-2 font-sans font-bold rounded-full self-center" onClick={()=>hadnleShowProposalDetails(index)}> Proposal details</button>
+                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center" onClick={() => handleMessage(index)}>Message</button>
+                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-10 py-2 font-sans font-bold rounded-full self-center" onClick={() => hadnleShowJobDetails(index)}> Job details</button>
+                            <button className="border border-red-500 text-red-500 ml-5 text-xs px-7 py-2 font-sans font-bold rounded-full self-center" onClick={() => hadnleShowProposalDetails(index)}> Proposal details</button>
                         </div>
                     </div>
                     <div className="ml-30 flex ml-36 mb-3">

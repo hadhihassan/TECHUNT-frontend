@@ -45,12 +45,10 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
 
     const handleShowProposal: (index: number) => void = (index) => {
         const proposalData = proposals.find((proposal: ProposalInterface) => proposal._id === notifications[index].metaData)
-        console.log(proposalData, "this is the going to see the view proposal")
         localStorage.setItem("proposal", JSON.stringify(proposalData))
         navigate(clientRoutes.viewProposal)
     }
-    const handleProposalPaymenent: (index: number) => void = (index:number) => {
-        console.log(notification[index],"thihs is the proposla")
+    const handleProposalPayment: (index: number) => void = (index:number) => {
         setproposalId(notification[index].metaData)
         localStorage.setItem("paymentProposalId",JSON.stringify(notification[index].metaData))
         showPaymentComfirmaMessage()
@@ -107,10 +105,10 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
                                 {/* <label className='m-1'>Yesterday</label> */}
                                 <div className='font-sans border rounded-xl border-red-400 mt-2 h-auto'>
                                     <div className='flex justify-between'>
-                                        <p className='font-semibold text-red-500 ml-5'> {noti.type == "proposal" ? `New proposal` : noti.type !== "proposalAccept" ? "Proposal rejeced (Payment requred)" : "Proposal accepted"}</p>
+                                        <p className='font-semibold text-red-500 ml-5'> {noti.type == "proposal" ? `New proposal` : noti.type !== "proposalAccept" ? "Proposal rejected (Payment required)" : "Proposal accepted"}</p>
                                         <p className='text-xs text-gray-400 mr-1'>{formatRelativeTime(noti.createdAt)}</p>
                                     </div>
-                                    <span className=' ml-5 font-semibold '>{noti.content}</span><span onClick={() => role === "CLIENT" ? handleShowProposal(index) : handleProposalPaymenent(index)} className='hover:cursor-pointer ml-1 font-mono text-xs text-red-500'
+                                    <span className=' ml-5 font-semibold '>{noti.content}</span><span onClick={() => role === "CLIENT" ? handleShowProposal(index) : handleProposalPayment(index)} className='hover:cursor-pointer ml-1 font-mono text-xs text-red-500'
                                     >{role === "TALENT" ? "Pay" : "Show"}</span>
                                 </div>
                             </React.Fragment>

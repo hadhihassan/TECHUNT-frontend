@@ -54,4 +54,6 @@ export async function fetchConnectedTalent() {
 export async function getALlTalent() {
     return await axiosInstance.get(`${BASE_URL}CLIENT/get-all-talent/`)
 }
-
+export async function sendContract(contarct, milestone, isMilestone:boolean){
+    return await axiosInstance.get(`${BASE_URL}CLIENT/contract/send-contract/`)
+}

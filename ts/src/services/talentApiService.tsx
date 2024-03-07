@@ -2,6 +2,7 @@ import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import type { Proposal as ProposalInterface } from '../interface/interfaces';
+import { ObjectId } from 'mongoose';
 /* eslint-disable react-refresh/only-export-components */
 
 
@@ -51,7 +52,7 @@ export async function submitProposal(formData: ProposalInterface) {
 export async function makePayment(id: string) {
     return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, {id})
 }
-export async function updatePaymentStatus(status:string, proposalId:string) {
+export async function updatePaymentStatus(status:string, proposalId:ObjectId) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
 }
 export async function getAllClientForTalent(){

@@ -1,7 +1,6 @@
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import AfterLoginHeader from '../../components/General/Home/Header/afterLoginHeader';
-import { CheckboxProps } from 'antd';
 import { Col, InputNumber, Row, Slider, Space } from 'antd';
 import { Radio } from 'antd';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
@@ -81,12 +80,7 @@ const Search = () => {
         value4 = value
         findProduct()
     };
-
-
-
-
-
-    const handleMenuClick: MenuProps['onClick'] = (e) => {
+    const handleMenuClick: MenuProps['onClick'] = () => {
         message.info('Click on menu item.');
     };
     const items: MenuProps['items'] = [
@@ -114,63 +108,12 @@ const Search = () => {
         onClick: handleMenuClick,
     };
     const onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
-        // searchChange(query)
         const { value } = e.target;
         setQuery(value)
-        // searchChange(value)
-        const filteredPosts = actualPosts.filter((item: JobInterface) => {
-            return item.Title.toLowerCase().includes(value.trim().toLowerCase());
-        });
-        // setPost(filteredPosts)
         findProduct()
 
     }
-    const searchChange: (value: string) => void = (value) => {
-        setQuery(value);
-        // Filter by title
-        const filteredPosts = actualPosts.filter((item: JobInterface) => {
-            return item.Title.toLowerCase().includes(value.trim().toLowerCase());
-        });
 
-        // Filter by work type
-        let typeFilteredPosts = filteredPosts;
-        if (postType.length > 0) {
-            typeFilteredPosts = filteredPosts.filter((item: JobInterface) => {
-                if (postType.includes(item.WorkType)) {
-                    return item
-                }
-            });
-        }
-
-        // Filter by price
-        let priceFilteredPosts = typeFilteredPosts;
-        if (maxInputValue > inputValue) {
-            priceFilteredPosts = typeFilteredPosts.filter((item: JobInterface) => {
-                if (item.Amount >= inputValue && item.Amount <= maxInputValue) {
-                    return item
-                }
-            });
-        }
-
-        // Filter by skills
-        let skillsFilteredPosts = priceFilteredPosts;
-        if (selectedSkills.length > 0) {
-            skillsFilteredPosts = findMostSuitableJobPost(priceFilteredPosts, selectedSkills);
-        }
-
-        // Set the final filtered posts
-        if (skillsFilteredPosts.length > 0) {
-            setPost(skillsFilteredPosts);
-        } else if (priceFilteredPosts.length > 0) {
-            setPost(priceFilteredPosts);
-        } else if (typeFilteredPosts.length > 0) {
-            setPost(typeFilteredPosts);
-        } else if (filteredPosts.length) {
-            setPost(filteredPosts);
-        } else {
-
-        }
-    }
     const findProduct = () => {
         setLoading(true)
         const filteredJobPosts: JobInterface[] = posts;

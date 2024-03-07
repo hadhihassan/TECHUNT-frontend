@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react"
 import Avatar from "react-avatar";
 import image from '../../assets/istockphoto-1283536918-1024x1024.jpg'
@@ -20,7 +20,7 @@ const ProposalClientView = () => {
     const socket: Socket = useSocket(BASE_URL)
     const [proposalData, setProposalData] = useState<ProposalInterface>([])
     useEffect(() => {
-        const ProposalData1 = JSON.parse(localStorage.getItem("proposal"))
+        const ProposalData1 = JSON.parse(localStorage.getItem("proposal") || "")
         console.log(ProposalData1, "view proposal")
         setProposalData(ProposalData1)
     }, [])
@@ -35,7 +35,7 @@ const ProposalClientView = () => {
                     sender_id: proposalData.Client_id,
                     content: "Proposal accepted",
                     type: "proposalAccept",
-                    metaData: proposalData?.jobId?._id
+                    metaData: proposalData?._id
                 })
                 setProposalData(prevState => ({
                     ...prevState,

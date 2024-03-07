@@ -2,16 +2,20 @@ import { useEffect } from "react";
 import { updatePaymentStatus } from "../../services/talentApiService";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import mongoose from 'mongoose'
 
 const PaymentSuccessPage = () => {
     const navigate = useNavigate()
     useEffect(() => {
-        const proposalId:string = localStorage.getItem("paymentProposalId")
-        console.log(proposalId," this it e" )
-        updatePaymentStatus("Completed", proposalId)
-        .then((res:AxiosResponse)=>{
-            console.log(res,"payment")
-        })
+        const proposalId: string = localStorage.getItem("paymentProposalId") || "" 
+        if(!proposalId == ""){
+            console.log(proposalId, " <=  this is the proposal id ")
+            const newId = new mongoose.Schema.Types.ObjectId(proposalId)
+            updatePaymentStatus("Completed", newId)
+                .then((res: AxiosResponse) => {
+                    console.log(res, "payment")
+                })
+        }
     }, [])
     return (
         <div className="bg-gray-100 min-h-screen flex justify-center items-center">
