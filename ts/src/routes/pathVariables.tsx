@@ -49,7 +49,7 @@ const routerVariables: Routes = {
     404: '/404/',
     Settings: "/settings/",
     Message: "/message/",
-    PaymentSuccess: '/payment/success/:id/'
+    PaymentSuccess: '/payment-success/:id/'
 }
 export default routerVariables;
 //Client routes

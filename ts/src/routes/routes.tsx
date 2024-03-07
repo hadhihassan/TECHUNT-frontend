@@ -43,7 +43,7 @@ const WebRouters: React.FC = () => {
             <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
             <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
             <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-            <Imports.Route path={"*"} element={<Search />} />
+            <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
             <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
 
@@ -72,7 +72,8 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.clientRoutes.viewProposal} element={<Imports.ProposalClientView />} />
             </Imports.Route>
 
-                <Imports.Route path={Imports.Path.Message} element={<Message />} />
+            <Imports.Route path={Imports.Path.Message} element={<Message />} />
+            <Imports.Route path={"/search"} element={< Search />} />
         </Imports.Routes>
     );
 };

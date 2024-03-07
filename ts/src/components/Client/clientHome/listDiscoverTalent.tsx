@@ -9,6 +9,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { UserProfile } from '../../../interface/interfaces';
 import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../../routes/pathVariables";
+import { createConversation } from "../../../services/commonApiService";
 
 const ListDiscoverTalent = () => {
     const navigate = useNavigate()
@@ -34,6 +35,12 @@ const ListDiscoverTalent = () => {
         localStorage.setItem("profileData", JSON.stringify(discoverTalent[index]))
         navigate(talent_routes.ProfileView)
     };
+    const handleMessage = (index: number) => {
+        createConversation(discoverTalent[index]._id)
+        .then((res)=>{
+            navigate('/message')
+        })
+    }
 
     return (<>
         {
@@ -71,7 +78,7 @@ const ListDiscoverTalent = () => {
                             </div>
                         </div>
                         <div className="flex flex-col mt-10">
-                            <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center">Invite</button>
+                            <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={() => handleMessage(index)}>Message</button>
                             <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-2 rounded-full self-center" onClick={() => handleNavigateProfile(index)}>See profile</button>
                         </div>
                     </div>
@@ -91,8 +98,6 @@ const ListDiscoverTalent = () => {
                 </div>
             ))
         }
-
-
     </>)
 }
 

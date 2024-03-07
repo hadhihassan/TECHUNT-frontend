@@ -16,12 +16,13 @@ import type { ProposalInterface } from '../../interface/interfaces'
 
 const ProposalClientView = () => {
     const naviagte = useNavigate()
+    const [view, setView] = useState("")
     const socket: Socket = useSocket(BASE_URL)
     const [proposalData, setProposalData] = useState<ProposalInterface>([])
     useEffect(() => {
-        const ProposalData = JSON.parse(localStorage.getItem("proposal"))
-        console.log(ProposalData, "view proposal")
-        setProposalData(ProposalData)
+        const ProposalData1 = JSON.parse(localStorage.getItem("proposal"))
+        console.log(ProposalData1, "view proposal")
+        setProposalData(ProposalData1)
     }, [])
     const handleAcceptProposal: () => void = () => {
         lodder()
@@ -34,8 +35,13 @@ const ProposalClientView = () => {
                     sender_id: proposalData.Client_id,
                     content: "Proposal accepted",
                     type: "proposalAccept",
-                    metaData: proposalData?.jobId?.Title
+                    metaData: proposalData?.jobId?._id
                 })
+                setProposalData(prevState => ({
+                    ...prevState,
+                    isAccept: true
+                }));
+                setView("accepted")
             }).catch((err: AxiosError) => {
                 errorMesseg()
                 console.log("this error from update propsal", err)
@@ -45,9 +51,13 @@ const ProposalClientView = () => {
         lodder()
         updateproposalAsDecline(proposalData?._id)
             .then((res) => {
+                setView("declined")
                 messageApi.destroy()
                 successMesseg("declined")
-                console.log("this RESPONSE  from update propsal", res)
+                setProposalData(prevState => ({
+                    ...prevState,
+                    isAccept: false
+                }));
             }).catch((err) => {
                 errorMesseg()
                 console.log("this error from update propsal", err)
@@ -66,7 +76,7 @@ const ProposalClientView = () => {
         message.success(`Proposal ${status} successfully .`, 4.5)
         setTimeout(() => {
             naviagte("/client/home/")
-        }, 3000);
+        }, 2000);
     }
     const errorMesseg = () => message.info('white updating proposal status failed ', 4.5)
     return (
@@ -93,6 +103,7 @@ const ProposalClientView = () => {
                                 )
                             ) : (
                                 <>
+                                    
                                     <Popconfirm
                                         onConfirm={handleAcceptProposal}
                                         title="Accept proposal"
@@ -109,12 +120,10 @@ const ProposalClientView = () => {
                                     >
                                         <button className="border font-semibold border-black ml-2 mr-2 text-center font-sans px-5 py-1 rounded-full">Decline</button>
                                     </Popconfirm>
+                                    
                                 </>
                             )
                         }
-
-
-
                     </div>
                 </div>
                 <div className="border flex justify-start w-full shadow-md   rounded-xl mt-8  h-[20vh]">

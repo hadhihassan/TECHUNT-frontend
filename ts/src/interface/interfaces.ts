@@ -97,3 +97,19 @@ export interface ProposalInterface {
     } | string
     isAccept?: boolean
 }
+
+
+
+export interface ConversationDoc extends MessageDoc  {
+    participants: [];
+    messages: MessageDoc[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+export interface MessageDoc  {
+    senderId: string[];
+    receiverId: string[];
+    message: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

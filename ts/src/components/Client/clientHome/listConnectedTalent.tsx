@@ -9,6 +9,7 @@ import { FlagOutlined } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { clientRoutes, talent_routes } from '../../../routes/pathVariables';
 import type { ProposalInterface } from '../../../interface/interfaces';
+import { createConversation } from '../../../services/commonApiService';
 
 const ListConnectedFreelancers: React.FC = () => {
 
@@ -39,6 +40,12 @@ const ListConnectedFreelancers: React.FC = () => {
     const hadnleShowJobDetails = (index:number) => {
         localStorage.setItem("deatildView", JSON.stringify(connections[index].jobId))
         navigate(talent_routes.JobViewPage)
+    }
+    const handleMessage = (index: number) => {
+        createConversation(connections[index].talentId._id)
+        .then((res)=>{
+            navigate('/message')
+        })
     }
     return (
         <>
@@ -76,7 +83,7 @@ const ListConnectedFreelancers: React.FC = () => {
                             </div>
                         </div>
                         <div className='flex flex-col'>
-                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center">Message</button>
+                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center" onClick={()=>handleMessage(index)}>Message</button>
                             <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-10 py-2 font-sans font-bold rounded-full self-center" onClick={()=>hadnleShowJobDetails(index)}> Job details</button>
                             <button className="border border-red-500 text-red-500 ml-5 text-xs px-7 py-2 font-sans font-bold rounded-full self-center" onClick={()=>hadnleShowProposalDetails(index)}> Proposal details</button>
                         </div>

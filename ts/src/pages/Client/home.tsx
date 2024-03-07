@@ -25,6 +25,7 @@ import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
 import { CgProfile } from "react-icons/cg";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
+import { createConversation } from "../../services/commonApiService";
 
 const Home = () => {
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
@@ -97,7 +98,11 @@ const Home = () => {
             icon: <Message />,
             danger: true,
             onClick: () => {
-
+                console.log("this is the talent is ", connectedTalent[menuIndex]?.talentId?._id)
+                    createConversation(connectedTalent[menuIndex]?.talentId?._id)
+                    .then((res)=>{
+                        navigate('/message')
+                    })
             }
         },
     ];

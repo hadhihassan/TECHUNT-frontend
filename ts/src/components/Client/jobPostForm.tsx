@@ -15,20 +15,116 @@ import toast, { Toaster } from "react-hot-toast";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const top100Films = [
-    'The Shawshank Redemption',
-    'The Godfather',
-    'The Godfather: Part II',
-    'The Dark Knight',
-    '12 Angry Men',
-    "Schindler's List",
-    'Pulp Fiction',
+    "JavaScript",
+    "Python",
+    "Java",
+    "HTML",
+    "CSS",
+    "SQL",
+    "Node.js",
+    "React",
+    "Angular",
+    "Vue.js",
+    "MongoDB",
+    "Express.js",
+    "Docker",
+    "Kubernetes",
+    "AWS",
+    "Azure",
+    "Google Cloud Platform",
+    "TensorFlow",
+    "PyTorch",
+    "Machine Learning",
+    "Deep Learning",
+    "Artificial Intelligence",
+    "Natural Language Processing",
+    "Computer Vision",
+    "Data Science",
+    "Big Data",
+    "Hadoop",
+    "Spark",
+    "Scala",
+    "C++",
+    "C#",
+    "PHP",
+    "Ruby",
+    "Swift",
+    "Objective-C",
+    "Kotlin",
+    "Flutter",
+    "Dart",
+    "Unity",
+    "Game Development",
+    "Cybersecurity",
+    "Network Security",
+    "Penetration Testing",
+    "Blockchain",
+    "Cryptocurrency",
+    "Ethereum",
+    "Smart Contracts",
+    "Solidity",
+    "Web Development",
+    "Frontend Development",
+    "Backend Development",
+    "Full Stack Development",
+    "Responsive Web Design",
+    "RESTful APIs",
+    "GraphQL",
+    "Microservices",
+    "DevOps",
+    "Continuous Integration",
+    "Continuous Deployment",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "Jenkins",
+    "Agile Methodologies",
+    "Scrum",
+    "Kanban",
+    "Test-Driven Development",
+    "Behavior-Driven Development",
+    "Selenium",
+    "Jira",
+    "Confluence",
+    "Microsoft Office",
+    "Excel",
+    "Word",
+    "PowerPoint",
+    "Google Workspace",
+    "G Suite",
+    "Microsoft Azure DevOps",
+    "Trello",
+    "Asana",
+    "Slack",
+    "Zoom",
+    "Microsoft Teams",
+    "Communication Skills",
+    "Problem Solving",
+    "Teamwork",
+    "Time Management",
+    "Leadership",
+    "Creativity",
+    "Critical Thinking",
+    "Adaptability",
+    "Attention to Detail",
+    "Organization",
+    "Multitasking",
+    "Analytical Skills",
+    "Presentation Skills",
+    "Technical Writing"
 
 ];
 const JobPostForm = () => {
+
+    const navigate =  useNavigate()
     const success = (message: string) => {
         toast.success(message);
+        setTimeout(() => {
+            navigate(-1)
+        }, 1000);
     }
     //error toast host message
     const error = (err: string) => toast.error(err);
@@ -82,6 +178,7 @@ const JobPostForm = () => {
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
+        
     };
     const onChangeInput: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
 

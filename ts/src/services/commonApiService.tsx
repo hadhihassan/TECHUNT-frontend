@@ -28,3 +28,15 @@ export async function updateNumberVerification(role: string, id: string){
         axiosInstance.patch(`${BASE_URL}update-number-verified/`,{ role, id})
     )
 }
+export async function getAllConversations(){
+    return await axiosInstance.get(`${BASE_URL}message/get-Conversations/`)
+}
+export async function sendMessageBakend(message:string, id:string){
+    return await axiosInstance.post(`${BASE_URL}message/send/${id}/`,{message})
+}
+export async function getMessageBakend(id:string){
+    return await axiosInstance.get(`${BASE_URL}message/get-messages/${id}/`)
+}
+export async function createConversation(id:string){
+    return await axiosInstance.post(`${BASE_URL}message/create-conversation/`,{id})
+}

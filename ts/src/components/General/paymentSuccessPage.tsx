@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { updatePaymentStatus } from "../../services/talentApiService";
 import { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PaymentSuccessPage = () => {
+    const navigate = useNavigate()
     useEffect(() => {
         const proposalId:string = localStorage.getItem("paymentProposalId")
+        console.log(proposalId," this it e" )
         updatePaymentStatus("Completed", proposalId)
         .then((res:AxiosResponse)=>{
             console.log(res,"payment")
@@ -19,7 +22,7 @@ const PaymentSuccessPage = () => {
                 <h1 className="text-green-600 text-4xl font-bold mb-4">Success</h1>
                 <p className="text-gray-700 text-lg">We received your purchase request;<br />we'll be in touch shortly!</p>
                 <button className="w-auto border px-5 py-1 rounded-lg bg-green-400 text-white font-sans font-semibold" onClick={() => {
-                    history.go(-3)
+                    navigate("/talent/home/")
                 }}>Go home</button>
             </div>
         </div>

@@ -45,13 +45,14 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
 
     const handleShowProposal: (index: number) => void = (index) => {
         const proposalData = proposals.find((proposal: ProposalInterface) => proposal._id === notifications[index].metaData)
+        console.log(proposalData, "this is the going to see the view proposal")
         localStorage.setItem("proposal", JSON.stringify(proposalData))
         navigate(clientRoutes.viewProposal)
     }
     const handleProposalPaymenent: (index: number) => void = (index:number) => {
         console.log(notification[index],"thihs is the proposla")
         setproposalId(notification[index].metaData)
-        localStorage.setItem("paymentProposalId",notification[index].metaData)
+        localStorage.setItem("paymentProposalId",JSON.stringify(notification[index].metaData))
         showPaymentComfirmaMessage()
     }
     const StartPayment: () => void = async () => {

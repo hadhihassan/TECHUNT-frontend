@@ -17,7 +17,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     const navigate = useNavigate()
     const [receivedNotifications, setReceivedNotifications] = useState([]);
     const [open, setOpen] = useState(false);
-    const jobid: ProposalInterface = JSON.parse(localStorage.getItem("deatildView")) || "N/a"
+    const jobid: ProposalInterface = JSON.parse(localStorage.getItem("deatildView")) 
     const sender_id: string = jobid?._id || "ds";
     const recipient_id: string = jobid.Client_id?._id
     console.log("this is the job is", jobid)

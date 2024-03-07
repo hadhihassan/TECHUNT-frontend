@@ -1,13 +1,13 @@
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import AfterLoginHeader from '../../components/General/Home/Header/afterLoginHeader';
-import { Checkbox, CheckboxProps } from 'antd';
+import { CheckboxProps } from 'antd';
 import { Col, InputNumber, Row, Slider, Space } from 'antd';
-import { AutoComplete } from 'antd';
+import { Radio } from 'antd';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
-import { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { DownOutlined, PaperClipOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import type { MenuProps, RadioChangeEvent } from 'antd';
 import { Button, Dropdown, message } from 'antd';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { fetchAllJobPostForTalent } from '../../services/talentApiService';
@@ -17,20 +17,35 @@ import formatRelativeTime from '../../util/timeFormating';
 import { talent_routes } from '../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { findMostSuitableJobPost } from '../../util/jobSearchUtils';
+import { List, Skeleton } from 'antd';
+
+const optionsWithDisabled = [
+    { label: 'Experianced', value: 'Experianced' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Fresher', value: 'Fresher', },
+];
+const optionsWithDisabled1 = [
+    { label: 'Fixed', value: 'Fixed' },
+    { label: 'Milestone', value: 'Milestone' },
+];
 
 
 const Search = () => {
-    const [query, setQuery] = useState<string>("")
+
     const [posts, setPost] = useState<JobInterface[]>([])
     const [actualPosts, setActualPost] = useState<JobInterface[]>([])
+
+    const [loading, setLoading] = useState<boolean>(false)
+    let value3: string = ""
+    let value4: string = ""
+    const [query, setQuery] = useState<string>("")
     const [postType, setPostType] = useState<string[]>([])
     const [maxInputValue, setMaxInputValue] = useState<number>(0);
     const [inputValue, setInputValue] = useState<number>(0);
     const [max, setMax] = useState<number>(2000);
     const [allSkills, setAllskills] = useState<string[]>([])
-
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([])
     useEffect(() => {
+        setQuery(localStorage.getItem("search") || "")
         console.log("====================================")
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
@@ -45,6 +60,8 @@ const Search = () => {
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
+        localStorage.removeItem("search")
+
     }, [])
     const navigate = useNavigate()
 
@@ -52,33 +69,22 @@ const Search = () => {
         const array = e
         setInputValue(array[0]);
         setMaxInputValue(array[1])
-        searchChange(query)
-    };
-    const onChangeRadio: CheckboxProps['onChange'] = (e) => {
-        console.log(e.target, " this is the event")
-        const value = e.target.value
-        if (!postType.includes(value)) {
-            setPostType([...postType, value]);
-        } else {
-            if ("Milestone" === value) {
-                setPostType(["Fixed"]);
-            } else {
-                setPostType(["Milestone"]);
-            }
-        }
-        console.log(postType)
-        a()
-    };
-    const a = () => {
-        searchChange(query)
-    }
-    const mockVal = (str: string, repeat = 1) => ({
-        value: str.repeat(repeat)
+        findProduct()
 
-    });
-    const [options, setOptions] = useState<{ value: string }[]>([]);
-    const getPanelValue = (searchText: string) =>
-        !searchText ? [] : allSkills?.map(skill => mockVal(skill));
+    };
+ 
+    const onChange3 = ({ target: { value } }: RadioChangeEvent) => {
+        value3 = value
+        findProduct()
+    };
+    const onChange4 = ({ target: { value } }: RadioChangeEvent) => {
+        value4 = value
+        findProduct()
+    };
+   
+
+
+    
 
     const handleMenuClick: MenuProps['onClick'] = (e) => {
         message.info('Click on menu item.');
@@ -108,8 +114,16 @@ const Search = () => {
         onClick: handleMenuClick,
     };
     const onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
-        searchChange(query)
-        searchChange(e.target.value)
+        // searchChange(query)
+        const { value } = e.target;
+        setQuery(value)
+        // searchChange(value)
+        const filteredPosts = actualPosts.filter((item: JobInterface) => {
+            return item.Title.toLowerCase().includes(value.trim().toLowerCase());
+        });
+        // setPost(filteredPosts)
+        findProduct()
+
     }
     const searchChange: (value: string) => void = (value) => {
         setQuery(value);
@@ -122,7 +136,7 @@ const Search = () => {
         let typeFilteredPosts = filteredPosts;
         if (postType.length > 0) {
             typeFilteredPosts = filteredPosts.filter((item: JobInterface) => {
-                if(postType.includes(item.WorkType)){
+                if (postType.includes(item.WorkType)) {
                     return item
                 }
             });
@@ -151,22 +165,47 @@ const Search = () => {
             setPost(priceFilteredPosts);
         } else if (typeFilteredPosts.length > 0) {
             setPost(typeFilteredPosts);
-        } else if(filteredPosts.length){
+        } else if (filteredPosts.length) {
             setPost(filteredPosts);
-        }else{
-        
+        } else {
+
         }
     }
-    const handleSetSkill = (value: string) => {
-        searchChange(query)
-        setSelectedSkills(prevSkills => {
-            if (!prevSkills.includes(value)) {
-                return [...prevSkills, value];
-            }
-            return prevSkills;
-        });
-        searchChange(query)
+    const findProduct = () => {
+        setLoading(true)
+        const filteredJobPosts: JobInterface[] = posts;
+        let newResult: JobInterface[] = posts;
+
+        if (query.trim() !== "") {
+            newResult = filteredJobPosts.filter((item: JobInterface) => {
+                return item.Title.toLowerCase().includes(query.trim().toLowerCase());
+            });
+        } else {
+            newResult = posts
+        }
+
+        if (value4 !== "") {
+            newResult = newResult.filter((item: JobInterface) => {
+                return item.WorkType === value4;
+            });
+        }
+
+        if (value3 !== "") {
+            newResult = newResult.filter((item: JobInterface) => {
+                return item.Expertiselevel === value3; // Fixed value4 to value3
+            });
+        }
+
+        if (maxInputValue > inputValue) {
+            newResult = newResult.filter((item: JobInterface) => {
+                return item.Amount >= inputValue && item.Amount <= maxInputValue;
+            });
+        }
+
+        setActualPost(newResult);
+        setLoading(false)
     }
+
     return (
         <>
             <AfterLoginHeader />
@@ -180,7 +219,7 @@ const Search = () => {
                     onChange={onSearchChange}
                     value={query}
                 />
-                <button className="bg-white h-[7vh] p-4 rounded-br-xl rounded-tr-xl items-center flex">🔍</button>
+                <button onClick={findProduct} className="bg-white h-[7vh] p-4 rounded-br-xl rounded-tr-xl items-center flex">🔍</button>
             </div>
             <div className='flex justify-between mx-auto w-[80%] font-sans font-semibold text-white mt-7'>
                 {/* filter sort and pricing */}
@@ -196,19 +235,33 @@ const Search = () => {
                             <p className='m-3'>
                                 Project type
                             </p>
-                            <Checkbox onChange={onChangeRadio} className='m-3 font-normal' value='Fixed'>Fixed </Checkbox>
-                            <Checkbox onChange={onChangeRadio} className='m-3 font-normal' value="Milestone">Milestone </Checkbox>
+                            <Radio.Group
+                                className='m-3'
+                                options={optionsWithDisabled1}
+                                onChange={onChange4}
+                                value={value4}
+                                optionType="button"
+                                buttonStyle="solid"
+                                size='small'
+                            />
+                            {/* <Checkbox onChange={onChangeRadio} className='m-3 font-normal' id="filter" value='Fixed'>Fixed </Checkbox>
+                            <Checkbox onChange={onChangeRadio} className='m-3 font-normal' id="filter" value="Milestone">Milestone </Checkbox> */}
                         </div>
                         <div className='text-black '>
                             <p className='m-3'>
                                 Experiance Level
                             </p>
-                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value="Milestone">Beginner</Checkbox> <br />
-                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value='Fixed'>Medium </Checkbox> <br />
-                            <Checkbox onChange={onChangeRadio} className='m-1 font-normal' value="Milestone">Experianced</Checkbox>
+                            <Radio.Group
+                                className='m-3'
+                                options={optionsWithDisabled}
+                                onChange={onChange3}
+                                value={value3}
+                                optionType="button"
+                                buttonStyle="solid"
+                                size='small'
+                            />
                         </div>
                         <Row className='m-3'>
-
                             <Col span={24}>
                                 <Slider
                                     min={0}
@@ -216,7 +269,6 @@ const Search = () => {
                                     onChange={onChangePrice}
                                     range
                                     reverse={false} />
-
                             </Col>
                             <Col span={24} className='flex justify-between w-full'>
                                 <span className='text-black'>Max price</span>
@@ -238,9 +290,8 @@ const Search = () => {
                                     readOnly
                                 />
                             </Col>
-
                         </Row>
-                        <p className='font-semibold ml-3 text-black'>Skills </p>
+                        {/* <p className='font-semibold ml-3 text-black'>Skills </p>
                         <Space direction="vertical" className='m-3 mb-5 w-auto'>
                             <AutoComplete
                                 options={options}
@@ -253,7 +304,7 @@ const Search = () => {
                             selectedSkills?.map((skill: string, index: number) => (
                                 <><Checkbox className='ml-3 font-normal' checked key={index}>{skill}</Checkbox><br /></>
                             ))
-                        }
+                        } */}
                     </div>
                 </div>
                 {/* content */}
@@ -270,39 +321,56 @@ const Search = () => {
                         </Dropdown>
                     </div>
                     <div className='w-full xl:mt-8 md:mt-5 sm:mt1 border rounded-xl h-auto ml-2 bg-white shadow-xl mb-40'>
-                        {
-                            posts.map((post: JobInterface, index: number) => (
-                                <div className='m-5 text-black border-b' key={index} onClick={() => {
-                                    localStorage.setItem("deatildView", JSON.stringify(post))
-                                    navigate(talent_routes.JobViewPage)
-                                }}>
-                                    <p>{post.Title}</p>
-                                    <p className='text-xs text-gray-400 mt-1'>{post.WorkType} - {post.Expertiselevel} - Est. Budget: {post.Amount} - Posted {formatRelativeTime(post.createdAt)}</p>
-                                    <p className='text-sm text-gray-700 mt-1' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
-                                    <div className="mt-2 mr-5 flex mb-2 ">
-                                        <div>
-                                            <CurrencyRupeeTwoToneIcon fontSize="inherit" color="primary" />
-                                            <span className="text-gray-500 font-sans ml-1 font-normal text-sm">{post.WorkType}</span>
-                                        </div>
-                                        <div className='flex ml-2 mr-2 '>
-                                            <Stack spacing={1}>
-                                                <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
-                                            </Stack>
-                                            <p className="text-gray-500 font-sans font-normal text-xs">4/5 (12 Reviews)</p>
-                                        </div>
-                                        <div>
-                                            <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
-                                            <span className="text-gray-500 font-sans font-normal text-sm">Total Amount :  {post.Amount}  Rs</span>
+                        {loading ? (
+                            <List
+                                itemLayout="vertical"
+                                size="large"
+                                dataSource={actualPosts}
+                                renderItem={(item) => (
+                                    <List.Item
+                                    >
+                                        <Skeleton loading={loading} active avatar>
+
+                                        </Skeleton>
+                                    </List.Item>
+                                )}
+                            />
+                        ) : (
+                            actualPosts.length ? (
+                                actualPosts.map((post: JobInterface, index: number) => (
+                                    <div className='m-5 text-black border-b' key={index} onClick={() => {
+                                        localStorage.setItem("deatildView", JSON.stringify(post))
+                                        navigate(talent_routes.JobViewPage)
+                                    }}>
+                                        <p>{post.Title}</p>
+                                        <p className='text-xs text-gray-400 mt-1'>{post.WorkType} - {post.Expertiselevel} - Est. Budget: {post.Amount} - Posted {formatRelativeTime(post.createdAt)}</p>
+                                        <p className='text-sm text-gray-700 mt-1' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
+                                        <div className="mt-2 mr-5 flex mb-2 ">
+                                            <div>
+                                                <CurrencyRupeeTwoToneIcon fontSize="inherit" color="primary" />
+                                                <span className="text-gray-500 font-sans ml-1 font-normal text-sm">{post.WorkType}</span>
+                                            </div>
+                                            <div className='flex ml-2 mr-2 '>
+                                                <Stack spacing={1}>
+                                                    <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
+                                                </Stack>
+                                                <p className="text-gray-500 font-sans font-normal text-xs">4/5 (12 Reviews)</p>
+                                            </div>
+                                            <div>
+                                                <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
+                                                <span className="text-gray-500 font-sans font-normal text-sm">Total Amount :  {post.Amount}  Rs</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))
-                        }
+                                ))
+                            ) : (
+                                <p className='text-red-500'>No job post available</p>
+                            )
+                        )}
                     </div>
                 </div>
             </div>
         </>
     )
 }
-
 export default Search;

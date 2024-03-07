@@ -8,12 +8,15 @@ import { getAllProposalForClient } from '../../../services/clientApiService';
 import type { ProposalInterface } from '../../../interface/interfaces';
 import { AxiosError, AxiosResponse } from 'axios';
 import { ROOTSTORE } from '../../../redux/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../../routes/pathVariables";
+import { setConversation } from '../../../redux/Slice/conversationsSlice'
+import { createConversation } from "../../../services/commonApiService";
 
 const ListAllPropposals = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [proposals, setProposals] = useState<ProposalInterface[]>([])
@@ -30,16 +33,26 @@ const ListAllPropposals = () => {
                 console.log(err.message)
             })
     }, [])
-    const handleShowProposal = (index:number) =>{
-        localStorage.setItem("proposal",JSON.stringify(proposals[index]))
+    const handleShowProposal = (index: number) => {
+        localStorage.setItem("proposal", JSON.stringify(proposals[index]))
         navigate(clientRoutes.viewProposal)
+    }
+    const handleCreateConverstion = (index:number) => {
+        console.log(proposals[index].talentId)
+        setConversation({})
+        createConversation(proposals[index]?.talentId)
+        .then((res)=>{
+            console.log(res);
+        })
+        navigate("/message")
+
     }
     return (<>
         {
             proposals.map((proposla: ProposalInterface, index: number) => (
-                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} onClick={()=> handleShowProposal(index)} >
+                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} >
                     <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
-                    <p className='text-end text-red-500 font-sans font-semibold text-sm mr-10 hover:underline'>Work details</p>
+                    <p className='text-end text-red-500 font-sans font-semibold text-sm mr-10 hover:underline' onClick={() => handleShowProposal(index)} > details</p>
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
@@ -52,22 +65,22 @@ const ListAllPropposals = () => {
                                     <p className="text-sm text-gray-500">Total earnings <b>$0</b> on {proposla?.talentId?.Profile?.Title} </p>
                                     <div className="flex mt-2">
                                         {
-                                            proposla?.talentId?.Profile?.Skills.slice(0,showAllSkills ? proposla?.talentId?.Profile?.Skills.length : 3 ).map((skill: string, index: number) => (
+                                            proposla?.talentId?.Profile?.Skills.slice(0, showAllSkills ? proposla?.talentId?.Profile?.Skills.length : 3).map((skill: string, index: number) => (
                                                 <React.Fragment key={index}>
-                                                <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
-                                                    {skill}
-                                                </p>
-                                            </React.Fragment>
+                                                    <p className="bg-slate-100  font-sans  px-3 rounded-full text-sm border mr-2">
+                                                        {skill}
+                                                    </p>
+                                                </React.Fragment>
                                             ))
                                         }
-                                        <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer" onClick={toggleSkillsDisplay}>{ showAllSkills? "less" : "more"}</span>
+                                        <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer" onClick={toggleSkillsDisplay}>{showAllSkills ? "less" : "more"}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className='flex flex-col'>
                             <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center ">Hire him</button>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3">Message</button>
+                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={()=>handleCreateConverstion(index)}>Message</button>
                             <button className=" ml-5 font-semibold text-xs px-12 py-1  self-center mt-3 hover:underline">Reject him</button>
                         </div>
                     </div>
