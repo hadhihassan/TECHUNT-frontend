@@ -53,7 +53,6 @@ const Message = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </React.Fragment>
     )
 }

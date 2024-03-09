@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
+import Milestone from '../components/General/contract/milestone';
 
 
 const WebRouters: React.FC = () => {
@@ -41,7 +42,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-                <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
+                <Imports.Route path={"*"} element={<Milestone />} />
                 <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
                 {/*ADMIN ROUTES  */}
@@ -51,13 +52,16 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
                 </Imports.Route>
-
+                
                 {/* TALENT ROUTES */}
                 <Imports.Route path='talent' element={<Imports.Layout />}>
                     <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
                     <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
                     <Imports.Route path={Imports.talent_routes.viewClient} element={<Imports.ClientProfileView />} />
                     <Imports.Route path={Imports.talent_routes.ProfileView} element={<Imports.ClientProfileView />} />
+                </Imports.Route>
+                <Imports.Route  element={<Imports.Layout />}>
+                    <Imports.Route path={'/contacts'} element={<Imports.ContactListPage />} />
                 </Imports.Route>
 
                 {/* CLIENT ROUTES */}

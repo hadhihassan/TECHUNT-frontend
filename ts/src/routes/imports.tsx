@@ -42,26 +42,30 @@ import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
 import AdminLayout from '../components/Admin/adminLayout';
 import Loader from '../components/General/loader/loader';
+import ContactListPage from '../pages/Genaral/contactList';
+
 
 
 export {
-    ContractForm,
+    ContactListPage,
     Loader,
-    LandinHomePage,
     Route,
     Routes,
+    IsLoggedUser,
+    CheckUserType,
+    IsVerified,
+    IsNewUser,
+    AdminLayout,
     Home,
+    LandinHomePage,
     EmailVerification,
+    ContractForm,
     Path,
     admin_Routes,
     clientRoutes,
     talent_routes,
     FidnTypeUser,
     EmailVerificationPage,
-    IsLoggedUser,
-    CheckUserType,
-    IsVerified,
-    IsNewUser,
     ProfileStarMessage,
     ProfileDescription,
     ContractDetails,
@@ -78,7 +82,6 @@ export {
     JobCategories,
     UserManagementIndex,
     IndexDashBoard,
-    AdminLayout,
     Layout,
     TalentHomePage,
     JobViewPage,

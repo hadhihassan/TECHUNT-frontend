@@ -4,6 +4,9 @@ import { CONTACT_FROM } from '../components/General/contactForm';
 import { AxiosResponse } from 'axios';
 import { INITIALSTATE } from '../redux/Slice/signupSlice';
 import { axiosInstance, BASE_URL } from '../config/axios'
+import type { ContractDetailsType, MilestoneType } from '../components/Client/contract/contractInterface'
+
+
 // CLIENT / USERS API 
 export async function createContactDetails(formData: CONTACT_FROM, role: INITIALSTATE["role"]) {
     return await resolve(
@@ -54,6 +57,6 @@ export async function fetchConnectedTalent() {
 export async function getALlTalent() {
     return await axiosInstance.get(`${BASE_URL}CLIENT/get-all-talent/`)
 }
-export async function sendContract(contarct, milestone, isMilestone:boolean){
-    return await axiosInstance.get(`${BASE_URL}CLIENT/contract/send-contract/`)
+export async function sendContract({ contract, milestone, isMilestone }: { contract: ContractDetailsType, milestone: MilestoneType[], isMilestone: boolean }) {
+    return await axiosInstance.post(`${BASE_URL}CLIENT/contract/send-contract/`, { contract, milestone, isMilestone });
 }

@@ -6,10 +6,12 @@ export interface ContractDetailsType {
     amount: number;
     notes: string;
     paymentTerms: string;
+    talent:string,
+    client:string
 }
 export interface MilestoneType {
     no: number;
     description: string;
-    starting: Date | null;
-    due: Date | null;
+    startingDate: Date | null;
+    dueDate: Date | null;
 }

@@ -44,7 +44,6 @@ const ContactForm: React.FC = () => {
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const description: Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
 
-    // form data state
     const [formData, setFormData] = useState({
         photo: null,
         address: "",

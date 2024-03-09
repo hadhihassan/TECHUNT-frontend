@@ -10,12 +10,16 @@ import { useNavigate } from 'react-router-dom';
 import { clientRoutes, talent_routes } from '../../../routes/pathVariables';
 import type { ProposalInterface } from '../../../interface/interfaces';
 import { createConversation } from '../../../services/commonApiService';
+import ReusableNotification from '../../General/chat/sideBar/popupMessages';
+import { Menu, Dropdown, Button } from 'antd';
+
 
 const ListConnectedFreelancers: React.FC = () => {
 
 
     const navigate = useNavigate()
     const [connections, setConnections] = useState<ProposalInterface[]>([]);
+    const [open, setopen] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -33,11 +37,11 @@ const ListConnectedFreelancers: React.FC = () => {
     const toggleSkills = () => {
         setShowAllSkills(!showAllSkills);
     };
-    const hadnleShowProposalDetails = (index: number) => {
+    const handleShowProposalDetails = (index: number) => {
         localStorage.setItem("proposal", JSON.stringify(connections[index]))
         navigate(clientRoutes.viewProposal)
     }
-    const hadnleShowJobDetails = (index: number) => {
+    const handleShowJobDetails = (index: number) => {
         localStorage.setItem("deatildView", JSON.stringify(connections[index].jobId))
         navigate(talent_routes.JobViewPage)
     }
@@ -47,22 +51,34 @@ const ListConnectedFreelancers: React.FC = () => {
                 navigate('/message')
             })
     }
-    const handleSendContract = (index: number) => {
-        const selectConnection: ProposalInterface = connections[index] || {}
-        // if (paymentStatus == "Completed") {
+    const [showNotification, setShowNotification] = useState(false);
 
-        // } else {
-
-        // }
-
-
+    const handleClick = () => {
+        console.log('Button clicked!');
+    };
+    const DropdownMenu = ({ index }: { index: number }) => (
+        <Menu>
+            <Menu.Item key="1" danger={true} onClick={() => handleMessage(index)}>Message</Menu.Item>
+            <Menu.Item key="2" danger={true} onClick={() => handleShowJobDetails(index)}>Job details</Menu.Item>
+            <Menu.Item key="3" danger={true} onClick={() => handleShowProposalDetails(index)}>Proposal details</Menu.Item>
+            <Menu.Item key="3" danger={true} onClick={() => handlesendConntracl(index)}>Send Proposal</Menu.Item>
+        </Menu>
+    );
+    const handlesendConntracl = (index: number) => {
+        const selectTalent = connections[index]
+        if (selectTalent.paymentStatus === "Completed") {
+            localStorage.setItem("proposal", JSON.stringify(connections[index]))
+            navigate(clientRoutes.ContractSubmit)
+        } else {
+            setShowNotification(!showNotification)
+        }
     }
     return (
         <>
             {connections.map((connection: ProposalInterface, index: number) => (
-                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} onClick={() => { handleSendContract(index) }}>
-                    <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
-                    <div className="flex justify-between p-4">
+                <><div className="w-full mt-5 border rounded-xl shadow-xl h-auto " key={index}>
+                    <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh]  rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
+                    <div className="flex justify-between p-4 " >
                         <div className="flex">
                             <div>
                                 <Avatar src={IMAGE} className="w-8 h-8" />
@@ -92,12 +108,13 @@ const ListConnectedFreelancers: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex flex-col'>
-                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center" onClick={() => handleMessage(index)}>Message</button>
-                            <button className="border mb-3 border-red-500 text-red-500 ml-5 text-xs px-10 py-2 font-sans font-bold rounded-full self-center" onClick={() => hadnleShowJobDetails(index)}> Job details</button>
-                            <button className="border border-red-500 text-red-500 ml-5 text-xs px-7 py-2 font-sans font-bold rounded-full self-center" onClick={() => hadnleShowProposalDetails(index)}> Proposal details</button>
-                        </div>
+                        <Dropdown overlay={<DropdownMenu index={index} />} placement="bottomLeft" arrow>
+                            <Button className="border border-red-500 text-red-500 ml-5 text-xs px-12 py-2 font-sans font-bold rounded-full self-center">
+                                Actions
+                            </Button>
+                        </Dropdown>
                     </div>
+                    <ReusableNotification showNotification={showNotification} title={'Note'} content={'Cant start contract after freelancer pay the free'} status={'info'} />
                     <div className="ml-30 flex ml-36 mb-3">
                         <div className="flex">
                             <Stack spacing={1}>
@@ -112,6 +129,7 @@ const ListConnectedFreelancers: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                </>
             ))}
         </>
     );

@@ -35,7 +35,7 @@ export interface JobInterface extends UserProfile {
     Amount: number;
     WorkType: 'Fixed' | 'Milestone';
     isDelete: boolean;
-    createdAt:Date
+    createdAt: Date
 }
 // Proposal form Data interface 
 export interface ProposalInterface {
@@ -95,18 +95,19 @@ export interface ProposalInterface {
         isVerify?: boolean;
         isNumberVerify?: boolean;
     } | string
-    isAccept?: boolean
+    isAccept?: boolean,
+    paymentStatus: 'Pending' | 'Failed ' | 'Completed'
 }
 
 
 
-export interface ConversationDoc extends MessageDoc  {
+export interface ConversationDoc extends MessageDoc {
     participants: [];
     messages: MessageDoc[];
     createdAt: Date;
     updatedAt: Date;
 }
-export interface MessageDoc  {
+export interface MessageDoc {
     senderId: string[];
     receiverId: string[];
     message: string;
