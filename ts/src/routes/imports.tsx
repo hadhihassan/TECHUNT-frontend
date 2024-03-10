@@ -32,6 +32,7 @@ const LandinHomePage = lazy(() => import('../pages/Genaral/Home'));
 const paymentSuccessPage = lazy(() => import('../components/General/paymentSuccessPage'));
 const ClientProfileView = lazy(() => import('../pages/Client/profileView'));
 const ContractForm = lazy(() => import('../components/Client/contract/contract'));
+const Milestone = lazy(() => import('../components/General/contract/milestone'));
 
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
@@ -42,11 +43,12 @@ import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
 import AdminLayout from '../components/Admin/adminLayout';
 import Loader from '../components/General/loader/loader';
-import ContactListPage from '../pages/Genaral/contactList';
+import ContactListPage from '../pages/Genaral/contractList';
 
 
 
 export {
+    Milestone,
     ContactListPage,
     Loader,
     Route,

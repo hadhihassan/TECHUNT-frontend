@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { LeftCircleOutlined, CloseOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, InputNumber, Select, Card, Space } from 'antd';
+import { LeftCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Form, Input, InputNumber, Row, Space } from 'antd';
+import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
 import { AxiosError, AxiosResponse } from 'axios';
 import type { ContractDetailsType, MilestoneType } from './contractInterface'
-import type { ProposalInterface } from '../../../interface/interfaces';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-interface ValidationResult {
-    (rule: string[], value: string, callback: (error?: string) => void): void;
-}
-interface HandleChange {
-    (fieldName: string, value: string | Date | number, index: number): void;
-}
 const ContractForm: React.FC = () => {
     const [form] = Form.useForm();
     const [contractDetails, setContractDetails] = useState<ContractDetailsType>({
@@ -25,17 +19,19 @@ const ContractForm: React.FC = () => {
         amount: 0,
         notes: "",
         paymentTerms: "",
-        client : "",
-        talent : "",
+        client: "",
+        talent: "",
     });
     const [milestones, setMilestones] = useState<MilestoneType[]>([{
         no: 0,
+        name: "",
         description: "",
-        startingDate: null,
-        dueDate: null
+        startingDate: "",
+        dueDate: "",
+        amount: 0
     }]);
     useEffect(() => {
-        const proposal: ProposalInterface | null = JSON.parse(localStorage.getItem("proposal") || "{}");
+        const proposal = JSON.parse(localStorage.getItem("proposal") || "");
         setContractDetails(prevState => ({
             ...prevState,
             client: proposal?.Client_id,
@@ -43,24 +39,20 @@ const ContractForm: React.FC = () => {
             work: proposal?.jobId?._id,
         }));
     }, [])
-    const hasNumber: ValidationResult = (rule: string[], value: string, callback: (message?: string) => void) => {
-        const regex = /\d/;
-        if (regex.test(value)) {
-            callback('The input should not contain any numbers!');
-        } else {
-            callback();
-        }
-    };
     const handleChange = (fieldName: string, value: string, index: number) => {
         const updatedMilestones = [...milestones];
-        if (updatedMilestones[index]) {
-            if (fieldName === 'name') {
-                updatedMilestones[index].description = value || "";
-            } else if (fieldName === 'startingDate') {
-                updatedMilestones[index].startingDate = value || null;
-            } else if (fieldName === 'dueDate') {
-                updatedMilestones[index].dueDate = value || null;
+        if (!updatedMilestones[index]) {
+            updatedMilestones[index] = {
+                no: index,
+                name: "",
+                description: "",
+                startingDate: "",
+                dueDate: "",
+                amount: 0
             }
+        }
+        if (updatedMilestones[index]) {
+            updatedMilestones[index][fieldName] = value || null;
             setMilestones(updatedMilestones);
         }
     };
@@ -72,18 +64,8 @@ const ContractForm: React.FC = () => {
         console.log(contractDetails);
 
     };
-    const hasNoNote = (rule: string[], value: string, callback: (message?: string) => void) => {
-        if (!value || !value.trim()) {
-            callback();
-        } else if (value.trim().toLowerCase().includes('note')) {
-            callback('Notes are not allowed.');
-        } else {
-            callback();
-        }
-    };
+
     const handleSubmit = () => {
-        console.log(contractDetails, "==>")
-        console.log(milestones, "==>")
         sendContract({ contract: contractDetails, milestone: milestones, isMilestone: true })
             .then((res: AxiosResponse) => {
                 console.log(res, "this is response of the contract");
@@ -175,34 +157,80 @@ const ContractForm: React.FC = () => {
                         >
                             <TextArea defaultValue={contractDetails.paymentTerms} rows={4} className='border border-gray-500' />
                         </Form.Item>
-                        <Form.List name="milestones" >
+                        <Form.List name={"milestones"}>
                             {(fields, { add, remove }) => (
                                 <>
                                     {fields.map(({ key, name, ...restField }, index) => (
-                                        <Space key={key} style={{ display: 'flex', marginBottom: 8, marginLeft: 120 }} align="baseline" className='ml-10'>
+                                        <Space key={key} style={{ display: 'flex', marginBottom: 8, marginLeft: 110 }} align="baseline" className='ml-10'>
                                             <Form.Item
+                                                className='w-[100%]'
                                                 {...restField}
-                                                name={[name, 'description']}
-                                                rules={[{ required: true, message: 'Missing Description' }]}
-                                                style={{ marginRight: 8, marginBottom: 0 }}
+                                                name={[name, 'name']}
+                                                rules={[{ required: true, message: 'Missing name' }, { min: 5 }]}
+                                                style={{ marginRight: 1, marginBottom: 0 }}
                                             >
-                                                <Input placeholder="Description" onChange={(e) => handleChange('name', e.target.value, index)} />
+                                                <Input placeholder="name" onChange={(e) => handleChange('name', e.target.value, index)} />
                                             </Form.Item>
                                             <Form.Item
+                                                className='w-[100%]'
+                                                {...restField}
+                                                name={[name, 'description']}
+                                                rules={[{ required: true, message: 'Missing Description' }, { min: 50 }]}
+                                                style={{ marginRight: 1, marginBottom: 0 }}
+                                            >
+                                                <Input placeholder="Description" onChange={(e) => handleChange('description', e.target.value, index)} />
+                                            </Form.Item>
+                                            <Form.Item
+                                                className='w-[100%]'
                                                 {...restField}
                                                 name={[name, 'startingDate']}
-                                                rules={[{ required: true, message: 'Missing starting date' }]}
-                                                style={{ marginRight: 8, marginBottom: 0 }}
+                                                rules={[
+                                                    { required: true, message: 'Missing starting date' },
+                                                    {
+                                                        validator: (_, value) => {
+                                                            const today = moment();
+                                                            const startingDate = moment(value);
+                                                            if (!startingDate.isValid()) {
+                                                                return Promise.reject('Invalid date');
+                                                            }
+                                                            return Promise.resolve();
+                                                        },
+                                                    },
+                                                ]}
+                                                style={{ marginRight: 1, marginBottom: 0 }}
                                             >
                                                 <DatePicker placeholder="Starting Date" onChange={(date, dateString) => handleChange('startingDate', dateString, index)} />
                                             </Form.Item>
                                             <Form.Item
+                                                className='w-[100%]'
                                                 {...restField}
                                                 name={[name, 'dueDate']}
-                                                rules={[{ required: true, message: 'Missing due date' }]}
-                                                style={{ marginRight: 8, marginBottom: 0 }}
+                                                rules={[
+                                                    { required: true, message: 'Missing due date' },
+                                                    ({ getFieldValue }) => ({
+                                                        validator(_, value) {
+                                                            const startingDateValue = getFieldValue([name, 'startingDate']);
+                                                            const startingDate = moment(startingDateValue);
+                                                            const dueDate = moment(value);
+                                                            if (!dueDate.isValid()) {
+                                                                return Promise.reject('Invalid date');
+                                                            }
+                                                            return Promise.resolve();
+                                                        },
+                                                    }),
+                                                ]}
+                                                style={{ marginRight: 1, marginBottom: 0 }}
                                             >
                                                 <DatePicker placeholder="Due Date" onChange={(date, dateString) => handleChange('dueDate', dateString, index)} />
+                                            </Form.Item>
+                                            <Form.Item
+                                                className='w-[100%]'
+                                                {...restField}
+                                                name={[name, 'amount']}
+                                                rules={[{ required: true, message: 'Missing amount' }]}
+                                                style={{ marginRight: 1, marginBottom: 0 }}
+                                            >
+                                                <Input placeholder="Amount" onChange={(e) => handleChange('amount', e.target.value, index)} />
                                             </Form.Item>
                                             <MinusCircleOutlined onClick={() => remove(name)} />
                                         </Space>

@@ -8,12 +8,12 @@ export async function editMainProfileSection(data: {}, role: string) {
         axiosInstance.post(`${BASE_URL}${role}/edit-profile-section-1/`, data)
     )
 }
-export async function editProfileContact(data: {}, role:any) {
+export async function editProfileContact(data: {}, role:string) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}${role}/edit-profile-contact/`, data)
     )
 }
-export async function signup(data: {}, role:any) {
+export async function signup(data: {}, role:string) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}${role}${routerVariables.VerifyEmail}`, data)
     )
@@ -39,4 +39,7 @@ export async function getMessageBakend(id:string){
 }
 export async function createConversation(id:string){
     return await axiosInstance.post(`${BASE_URL}message/create-conversation/`,{id})
+}
+export async function getAllActiveContract(role:string){
+    return await axiosInstance.get(`${BASE_URL}${role}/fetch-all-active-contract/`)
 }

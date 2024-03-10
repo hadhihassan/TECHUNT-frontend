@@ -23,6 +23,9 @@ export interface CLIENTROUTES {
     Profile: string,
     viewProposal: string,
     ContractSubmit : string
+    ContactListing : string
+    SendContract:string,
+    ViewMiles:string
 }
 interface TALENT_ROUTES {
     AddSkills: string,
@@ -33,6 +36,10 @@ interface TALENT_ROUTES {
     JobViewPage: string,
     ProfileView: string
     viewClient: string
+    ContactListing : string
+    SendContract:string,
+    ViewMiles:string
+
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -64,7 +71,11 @@ export const clientRoutes: CLIENTROUTES = {
     ADD_CONTACT_DETAILS: "/client/add-contact/",
     Profile: "/client/profile/",
     viewProposal: "/client/view-proposal/",
-    ContractSubmit: "/client/contract/send/"
+    ContractSubmit: "/client/contract/send/",
+    ContactListing : '/client/contract/all/',
+    SendContract:"/client/send-contract/",
+    ViewMiles:"/client/contract/work-details/"
+
 }
 //Talent routes
 export const talent_routes: TALENT_ROUTES = {
@@ -76,6 +87,9 @@ export const talent_routes: TALENT_ROUTES = {
     JobViewPage: "/talent/job-details-view/",
     ProfileView: "/talent/talent/profile/",
     viewClient: '/talent/view-client-profile/',
+    ContactListing : '/talent/contract/all/',
+    SendContract:"/talent/send-contract/",
+    ViewMiles:"/talent/contract/work-details/"
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

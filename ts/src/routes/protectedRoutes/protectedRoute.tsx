@@ -6,7 +6,7 @@ export function IsLoggedUser() {
     const userDatas = useSelector((state: ROOTSTORE) => state.signup);
     const url = window.location.pathname;
     const endPoints = url.slice(1, 7).toUpperCase();
-    return userDatas?.role === endPoints ? <Outlet /> : <Navigate to={routerVariables[404]} />;
+    return userDatas?.role === endPoints ? <Outlet /> : <Navigate to={routerVariables.Login} />;
 }
 export function IsVerified() {
     const data = useSelector((state: ROOTSTORE) => state.signup);

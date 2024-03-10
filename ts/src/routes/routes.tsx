@@ -2,12 +2,11 @@ import React, { Suspense } from 'react';
 import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
-import Milestone from '../components/General/contract/milestone';
 
 
 const WebRouters: React.FC = () => {
     return (
-        <Suspense fallback={<Imports.Loader/>}>
+        <Suspense fallback={<Imports.Loader />}>
             <Imports.Routes>
                 {/* Logged users access only routes */}
                 <Imports.Route element={<Imports.IsLoggedUser />}>
@@ -42,7 +41,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-                <Imports.Route path={"*"} element={<Milestone />} />
+                <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
                 <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
                 {/*ADMIN ROUTES  */}
@@ -52,26 +51,32 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
                 </Imports.Route>
-                
+
                 {/* TALENT ROUTES */}
                 <Imports.Route path='talent' element={<Imports.Layout />}>
                     <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
                     <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
                     <Imports.Route path={Imports.talent_routes.viewClient} element={<Imports.ClientProfileView />} />
                     <Imports.Route path={Imports.talent_routes.ProfileView} element={<Imports.ClientProfileView />} />
+                    <Imports.Route path={Imports.talent_routes.ContactListing} element={<Imports.ContactListPage />} />
+                    <Imports.Route path={Imports.talent_routes.SendContract} element={<Imports.ContractForm />} />
+                    <Imports.Route path={Imports.talent_routes.ViewMiles} element={<Imports.Milestone />} />
                 </Imports.Route>
-                <Imports.Route  element={<Imports.Layout />}>
-                    <Imports.Route path={'/contacts'} element={<Imports.ContactListPage />} />
+                <Imports.Route element={<Imports.Layout />}>
                 </Imports.Route>
 
                 {/* CLIENT ROUTES */}
                 <Imports.Route path='client' element={<Imports.Layout />}>
+                    <Imports.Route path={Imports.clientRoutes.SendContract} element={<Imports.ContractForm />} />
+                    <Imports.Route path={Imports.clientRoutes.ContactListing} element={<Imports.ContactListPage />} />
                     <Imports.Route path={Imports.clientRoutes.viewProposal} element={<Imports.ProposalClientView />} />
                     <Imports.Route path={Imports.clientRoutes.ContractSubmit} element={<Imports.ContractForm />} />
+                    <Imports.Route path={Imports.clientRoutes.ViewMiles} element={<Imports.Milestone />} />
                 </Imports.Route>
 
                 <Imports.Route path={Imports.Path.Message} element={<Message />} />
                 <Imports.Route path={Imports.Path.Search} element={< Search />} />
+                
             </Imports.Routes>
         </Suspense>
     );
