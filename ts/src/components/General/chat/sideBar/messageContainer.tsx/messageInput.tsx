@@ -20,7 +20,7 @@ const SendMessageInput = () => {
         {
             isSelectedConversation && <form onSubmit={handleSubmit}>
                 <div
-                    className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 border shadow-xl "
+                    className="flex flex-row items-center mb-10 h-16 rounded-xl bg-white w-full px-4 border shadow-xl "
                 >
                     <div>
                         <button

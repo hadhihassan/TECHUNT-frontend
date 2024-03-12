@@ -1,9 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import type { Proposal as ProposalInterface } from '../interface/interfaces';
 import { ObjectId } from 'mongoose';
-/* eslint-disable react-refresh/only-export-components */
 
 
 export async function storeWorkBasedDataBioData(data: object) {
@@ -38,7 +38,7 @@ export async function fetchAllJobPostForTalent() {
 export async function CAllS3ServiceToStore(data: unknown) {
     return await axiosInstance.post(`${BASE_URL}TALENT/upload-attachment/`, data)
 }
-export async function uploadFileToSignedUelInS3(signedUrl: string, file: File | null, content_type: string, onProgress: (progressEvent: ProgressEvent) => void) {
+export async function uploadFileToSignedUelInS3(signedUrl: string, file: File | null, content_type: string, onProgress: () => void) {
     return await axios.put(signedUrl, file, {
         headers: {
             "Content-Type": content_type,
@@ -50,23 +50,33 @@ export async function submitProposal(formData: ProposalInterface) {
     return await axiosInstance.post(`${BASE_URL}TALENT/submit-proposal/`, formData)
 }
 export async function makePayment(id: string) {
-    return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, {id})
+    return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, { id })
 }
-export async function updatePaymentStatus(status:string, proposalId:ObjectId) {
-    return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, {status, proposalId})
+export async function updatePaymentStatus(status: string, proposalId: ObjectId) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, { status, proposalId })
 }
-export async function getAllClientForTalent(){
+export async function getAllClientForTalent() {
     return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-clients/`)
 }
-export async function getAllClientProposalsForTalent(id:string){
+export async function getAllClientProposalsForTalent(id: string) {
     return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-clients-proposal/${id}/`)
 }
-export async function getAllNewContracts(){
+export async function getAllNewContracts() {
     return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-new-contract/`)
 }
-export async function updateContractStatus(id:string, status:boolean, actualStatus:string){
-    return await axiosInstance.patch(`${BASE_URL}TALENT/update-contract-status/`,{id, status, actualStatus})
+export async function updateContractStatus(id: string, status: boolean, actualStatus: string) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/update-contract-status/`, { id, status, actualStatus })
 }
+export async function updateMilestoneStatus(id: string, status: string) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/update-milestone-status/`, { id, status })
+}
+export async function submitWork(id: string, data: { url: string, description: string }) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/contract/milestone/submit-work/`, { id, data })
+}
+export async function submitEditWork(id: string, data: { url: string, description: string }, workId:string) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/contract/milestone/edit-work/`, { id, data, workId })
+}
+
 
 
 

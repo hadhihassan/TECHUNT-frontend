@@ -13,3 +13,14 @@ function formatRelativeTime(dateString: Date) {
     }
 }
 export default formatRelativeTime
+
+
+export function formatMongoDate(mongoDate:Date) {
+    const date = new Date(mongoDate);
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+    };
+    return date.toLocaleDateString('en-US', options);
+}

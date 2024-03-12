@@ -10,9 +10,9 @@ const MessageHeader = () => {
 
     return <>
         {
-            conversationState && <div className='mb-2 flex justify-between'>
+            conversationState && <div className='mb-1 flex justify-between'>
                 <div className='flex '>
-                    <img src={`${IMG_URL}${conversationState?.Profile.profile_Dp}`} className='size-14 border rounded-full ' alt="" />
+                    <img src={`${IMG_URL}${conversationState?.Profile.profile_Dp}`} className='size-14 rounded-full  border-2 border-red-500' alt="" />
                     <p className='font-sans m-3  font-semibold text-black text-xl'>{conversationState?.First_name}</p>
                 </div>
                 <div className='flex justify-between m-3'>

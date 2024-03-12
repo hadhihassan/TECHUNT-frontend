@@ -19,6 +19,7 @@ import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
 import ClientList from '../../../components/Talent/clientListing';
 import { createConversation } from '../../../services/commonApiService';
+
 // jobPst interface
 
 export interface Project {
@@ -116,7 +117,7 @@ const HomePage: React.FC = () => {
                             {/* tyes */}
                             <div>
                                 <div className="w-full mt-10">
-                                    <div className="flex bg-white border-b justify-between border-gray-200">
+                                    <div className="flex bg-white border-b justify-evenly border-gray-200">
                                         <button
                                             onClick={() => handleTabClick(1)}
                                             className={`text-sans font-semibold ml-5 px-4 py-2 focus:outline-none ${activeTab === 1 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
@@ -129,12 +130,12 @@ const HomePage: React.FC = () => {
                                         >
                                             Best match
                                         </button>
-                                        <button
+                                        {/* <button
                                             onClick={() => handleTabClick(3)}
                                             className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 3 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                         >
                                             Saved
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </div>
                             </div>
@@ -268,7 +269,7 @@ const HomePage: React.FC = () => {
                                             <Disclosure.Panel>
                                                 <div className="border bg-white  shadow-xl w-[80%] rounded-xl h-[40vh] mt-1">
                                                     <div className="w-full border-b-2 mt-5  flex justify-between">
-                                                        <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All Job</p>
+                                                        <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All Contract</p>
                                                         <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>
                                                     </div>
                                                     <div className="flex justify-between m-5 ">
@@ -299,7 +300,9 @@ const HomePage: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="flex justify-center items-center m-5 ">
-                                                        <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
+                                                        <button 
+                                                        onClick={()=>navigate(talent_routes.ContactListing)}
+                                                        className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
                                                     </div>
                                                 </div>
                                             </Disclosure.Panel>

@@ -60,3 +60,12 @@ export async function getALlTalent() {
 export async function sendContract({ contract, milestone, isMilestone }: { contract: ContractDetailsType, milestone: MilestoneType[], isMilestone: boolean }) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/contract/send-contract/`, { contract, milestone, isMilestone });
 }
+export async function sendMilestoneApproval( id: string, approval: boolean ) {
+    return await axiosInstance.patch(`${BASE_URL}CLIENT/contract/milestone/send-approval/`, { id, approval });
+}
+export async function makePaymentToBank(talentId:string, amount:number ) {
+    return await axiosInstance.post(`${BASE_URL}CLIENT/send-money-talent/`,{talentId, amount});
+}
+export async function addWalletAmount(talentId:string, amount:number, milestoneId:boolean = true) {
+    return await axiosInstance.post(`${BASE_URL}CLIENT/wallet/add-amount/`, { talentId, amount, milestoneId })
+}

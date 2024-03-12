@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
+import CheckoutForm from '../components/General/settings/numberVerifiactions/bankDetailsForm';
 
 
 const WebRouters: React.FC = () => {
@@ -15,8 +16,8 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.clientRoutes.CLIENT_HOME} element={<Imports.Home />} />
                     <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<Imports.JobPostForm />} />
                     <Imports.Route path={Imports.clientRoutes.EDIT_JOB_POST} element={<Imports.EditjobPostForm />} />
-                    <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
                 </Imports.Route>
+                    <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
 
                 <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
                 <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
@@ -41,7 +42,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-                <Imports.Route path={"*"} element={<Imports.ErrorPage />} />
+                {/* <Imports.Route path={"*"} element={< />} /> */}
                 <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
                 {/*ADMIN ROUTES  */}

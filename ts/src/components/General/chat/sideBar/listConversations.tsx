@@ -13,10 +13,10 @@ const ListConversations = () => {
     }, [conversation]); 
 
     return (
-        <div className="flex flex-col mt-8 hover:bg-blue-50 ">
+        <div className="flex flex-col  hover:bg-red-500 rounded-t-xl">
             {conversation?.map((con, index) => (
-                <div key={index}>
-                    <Conversation conversation={con} lastIndex={index === conversation.length - 1 ? true : undefined} />
+                <div key={index} className='m-2'>
+                    <Conversation conversation={con} _lastIndex={index === conversation.length - 1 ? true : undefined} index={index} />
                     {index === conversation.length - 1 && <div ref={lastMessageRef}></div>}
                 </div>
             ))}

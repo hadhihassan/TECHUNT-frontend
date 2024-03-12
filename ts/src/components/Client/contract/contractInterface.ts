@@ -10,9 +10,12 @@ export interface ContractDetailsType {
     client: string,
     approval: boolean,
     completed: "Pending" | "Progress" | "Completed",
-    milestones:MilestoneType[]
+    milestones:MilestoneType[],
+    createdAt :string | Date
 }
 export interface MilestoneType {
+    work: any;
+    _id:string,
     approval: boolean;
     completed: string;
     no: number | null;

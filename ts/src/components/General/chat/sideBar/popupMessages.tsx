@@ -1,7 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
-import { NotificationInstance } from 'antd/es/notification/interface';
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 const Context = React.createContext({ name: 'Default' });

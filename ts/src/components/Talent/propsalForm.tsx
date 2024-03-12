@@ -103,7 +103,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     }
     const sendNotification = (id: string) => {
         try {
-            socket.emit("sendNotification", { sender_id, recipient_id, content: "this is the notificaiosn", type: "proposal", metaData: id });
+            socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });
         } catch (err) {
             console.log("e", err)
         }

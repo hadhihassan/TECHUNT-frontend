@@ -74,7 +74,7 @@ export const clientRoutes: CLIENTROUTES = {
     ContractSubmit: "/client/contract/send/",
     ContactListing : '/client/contract/all/',
     SendContract:"/client/send-contract/",
-    ViewMiles:"/client/contract/work-details/"
+    ViewMiles:"/client/contract/work-details/:success"
 
 }
 //Talent routes
