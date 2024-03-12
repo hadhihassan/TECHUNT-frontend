@@ -1,22 +1,21 @@
-import type { ContractDetailsType } from '../../Client/contract/contractInterface'
+import type { ContractDetailsType,MilestoneType } from '../../Client/contract/contractInterface'
 import { useEffect, useState } from 'react';
 import { formatMongoDate, } from '../../../util/timeFormating';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
 import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
-import { Badge } from "@material-tailwind/react";
 import Modal from '../modal';
 import { Dialog } from '@headlessui/react';
 import { PendingActions } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import type { MenuProps } from 'antd';
-import { Button, Dropdown, message, Popconfirm, } from 'antd';
+import { Dropdown, message, Popconfirm, } from 'antd';
 import { updateMilestoneStatus } from '../../../services/talentApiService';
 import { AxiosError, AxiosResponse } from 'axios';
-import { addWalletAmount, makePaymentToBank, sendMilestoneApproval } from '../../../services/clientApiService';
+import { addWalletAmount, sendMilestoneApproval } from '../../../services/clientApiService';
 import { WorkSubmitForm } from './workSubmitForm';
-import { getSubmittedWork } from '../../../services/commonApiService';
+import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
 import { useParams } from 'react-router';
 
@@ -24,7 +23,7 @@ import { useParams } from 'react-router';
 
 
 const Milestone = () => {
-    const { success }: { success: string } = useParams()
+    const { success } = useParams<Readonly<Params<string>>>()
     const { paymentToTalent, loading, error } = useStripePayment()
     const [statusKey, setStausKey] = useState()
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
@@ -36,7 +35,8 @@ const Milestone = () => {
             setContract(contractData)
         }
         if (success === "true") {
-            const payedMilestone = JSON.parse(localStorage.getItem('payedMilestone')) || ""
+            const payedMilestoneString = localStorage.getItem('payedMilestone');
+            const payedMilestone = payedMilestoneString ? JSON.parse(payedMilestoneString) : "";
             addWalletAmount(contractData?.talent?._id, payedMilestone?.amount, payedMilestone?._id)
                 .then((res: AxiosResponse) => {
                     console.log(res)
@@ -44,6 +44,14 @@ const Milestone = () => {
                     console.log(err)
                 })
         }
+        const completedMilestones = contract?.milestones.filter((milestone) => milestone.completed === "Completed")
+        if (completedMilestones?.length === contract?.milestones) {
+            contractStatusUpdate(contractData?._id, "completed", role)
+                .then((res) => {
+                    console.log(res)
+                })
+        }
+
     }, [])
     const [isOpen, setIsOpen] = useState(false)
     const [formOpen, setFormOpen] = useState(false)
@@ -57,7 +65,7 @@ const Milestone = () => {
         sendMilestoneApproval(id, true)
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
-                    message.success("successfuly updated")
+                    message.success("successfully updated")
                 } else {
                     message.error("something went wrong !!.")
                 }
@@ -67,13 +75,13 @@ const Milestone = () => {
             })
     }
     // for freelancer to submit the work 
-    const submitWork = (indes: number) => {
+    const submitWork = () => {
         setFormOpen(!formOpen)
     }
     // for client can send a request to resubmit the work
-    const requestToResubmit = (inex: number) => {
+    // const requestToResubmit = (inex: number) => {
 
-    }
+    // }
     // for client can see the progress 
     const showWorkProggress = (index: number) => {
         setSelected(index)
@@ -85,12 +93,12 @@ const Milestone = () => {
         setSelected(index)
     }
     const [confirm, setConfirm] = useState<boolean>(false)
-    const handleMenuClick: MenuProps['onClick'] = (e) => {
+    const handleMenuClick: MenuProps['onClick'] = (e:unknown) => {
         setConfirm(!confirm)
-        setStausKey(e.key)
+        setStausKey(e?.key)
     };
     const payment = async (index: number) => {
-        const milestone = contract?.milestones[index]
+        const milestone:MilestoneType = contract?.milestones[index]
         localStorage.setItem("payedMilestone", JSON.stringify(contract?.milestones[index]))
         await paymentToTalent(contract?.talent?._id, milestone?.amount)
     }
@@ -247,6 +255,14 @@ const Milestone = () => {
                     {/* s */}
                     <div className="w-full h-auto border ">
                         <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex "> contract for {contract?.work?.Title}<button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">{contract?.work?.WorkType}</button></div>
+                        {
+                            contract?.status === "completed" && <>
+                                <button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">
+                                    Contract Completed
+                                </button>
+                            </>
+                        }
+
                         <p className="mt-2 m-2  text-slate-500 flex ">Total milestone (<p className="text-red-500 font-semibold font-sans">{contract?.milestones?.length}</p>)</p>
                     </div>
                     {/* for milestone */}
@@ -281,7 +297,7 @@ const Milestone = () => {
                                                     {
                                                         (index == 0 || milestone.approval) ? (
                                                             <>{
-                                                                role === "TALENT" && !milestone.work && milestone.completed === "Completed"  &&<>
+                                                                role === "TALENT" && !milestone.work && milestone.completed === "Completed" && <>
                                                                     <button
                                                                         onClick={() => {
                                                                             submitWork(index)
@@ -371,14 +387,14 @@ const Milestone = () => {
                         }
                         <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1">Message </button>
                     </div>
-                    <div className="container mt-4 flex  flex-col ">
+                    {/* <div className="container mt-4 flex  flex-col ">
                         <p className="flex text-xs m-1 text-black font-sans ">Details for this work : <p className="ml-1 hover:underline  text-red-500 font-bold font-sans ">click me</p> </p>
                         <p className="flex text-xs m-1 text-black font-sans ">Details for contract : <p className="ml-1  hover:underline text-red-500 font-bold font-sans ">click me</p> </p>
                     </div>
                     <div className="container mt-4 flex  flex-col ">
                         <p className="text-xs m-1 text-black font-sans ">Next milestone due date : 01/02/2023 </p>
                         <p className="text-xs m-1 text-black font-sans ">Next milestone amount : 30000 </p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

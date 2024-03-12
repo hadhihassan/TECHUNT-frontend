@@ -17,7 +17,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         image: formData?.image
     })
     // setimg(formData?.image)
-    const changeData = (e: ChangeEvent<HTMLInputElement>) => {
+    const changeData = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
             const selectedImage = e.target.files[0];
             setimg(e.target.files[0])
@@ -49,7 +49,6 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         formDataToUpload.append("id", formData._id)
         editJobCategory(formDataToUpload)
             .then((res: AxiosResponse) => {
-                console.log(res)
                 if (res?.data?.data.status === 200) {
                     success(res?.data?.data?.message);
                     reCall();
@@ -60,7 +59,6 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                 }
             })
             .catch((err: AxiosError) => {
-                console.log(err);
                 error(err?.error?.response?.data?.message);
             });
     };

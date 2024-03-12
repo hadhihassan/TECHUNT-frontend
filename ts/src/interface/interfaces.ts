@@ -113,4 +113,5 @@ export interface MessageDoc {
     message: string;
     createdAt: Date;
     updatedAt: Date;
+    read:boolean    
 }
