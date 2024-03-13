@@ -33,6 +33,7 @@ const paymentSuccessPage = lazy(() => import('../components/General/paymentSucce
 const ClientProfileView = lazy(() => import('../pages/Client/profileView'));
 const ContractForm = lazy(() => import('../components/Client/contract/contract'));
 const Milestone = lazy(() => import('../components/General/contract/milestone'));
+const TransactionsPage = lazy(() => import('../pages/Genaral/transactionsPage'));
 
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
@@ -48,6 +49,7 @@ import ContactListPage from '../pages/Genaral/contractList';
 
 
 export {
+    TransactionsPage,
     Milestone,
     ContactListPage,
     Loader,

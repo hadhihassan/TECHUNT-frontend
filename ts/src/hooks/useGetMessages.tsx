@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
 import { ROOTSTORE } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getMessageBakend } from "../services/commonApiService";
@@ -16,10 +15,10 @@ const useGetMessage = () => {
         try {
             const messages = await getMessageBakend(id)
             if (messages) {
-                dispatch(setMessages(messages?.data.messages))
-                setMessage(messages?.data.messages)
+                dispatch(setMessages(messages?.data?.messages))
+                setMessage(messages?.data?.messages)
                 fetchMessages()
-                return messages?.data.messages
+                return messages?.data?.messages
             }
         } catch (error) {
             console.log(error)

@@ -4,6 +4,8 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { MessageDoc } from '../../../../../interface/interfaces';
 import { IMG_URL } from "../../../../../constant/columns";
 import DoneIcon from '@mui/icons-material/Done';
+import { DoneAll } from "@mui/icons-material";
+
 const Message = forwardRef(({ message, index }: { message: MessageDoc, index: number }, ref: React.Ref<HTMLDivElement>) => {
     const id = useSelector((state: ROOTSTORE) => state.signup.id);
     const conversation = useSelector((state: ROOTSTORE) => state.conversation);
@@ -26,7 +28,11 @@ const Message = forwardRef(({ message, index }: { message: MessageDoc, index: nu
                     className={`relative ${messageFromMe ? "mr-3 text-sm bg-indigo-100" : "ml-3 text-sm bg-white"} py-2 px-4 shadow rounded-xl `}
                 >
                     <div className="chat-bubble chat chat-start">{message.message}</div>
-                    <DoneIcon color='primary'/>
+                    {
+                        !messageFromMe && (
+                            message.read ? <DoneAll color='primary' /> : <DoneIcon color='primary' />
+                        )
+                    }
                     {/* <label className=' text-end text-xs font-sans text-gray-400'>{formatRelativeTime(message.updatedAt)}</label> */}
                 </div>
             </div>

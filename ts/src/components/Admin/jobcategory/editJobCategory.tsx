@@ -83,7 +83,6 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                             id="grid-password"
                         />
                         <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
-
                         </label>
                     </div>
                 </div>
@@ -115,7 +114,6 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                         </div>
                     )}
                 </div>
-
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
                     <div className="w-full px-3">
                         <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="imageUpload">

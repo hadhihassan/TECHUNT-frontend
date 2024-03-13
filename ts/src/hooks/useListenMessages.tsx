@@ -15,9 +15,8 @@ const useListenMessages = () => {
 
 	useEffect(() => {
 		socket?.on("newMessage", (newMessage) => {
-            console.log("socket worked and new messages",messages,newMessage);
-            
-			newMessage.shouldShake = true;
+            console.log("socket worked and new messages",messages,newMessage); 
+			// newMessage.shouldShake = true;
 			// const sound = new Audio(notificationSound);
 			// sound.play();
 			setMessages([...messages, newMessage]);

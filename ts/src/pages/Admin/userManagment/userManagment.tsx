@@ -314,11 +314,20 @@ const UserManagement: React.FC = () => {
                         </table>
                     </div>
                 </div>
-                <div>
+                <div >
                     <Drawer open={open} onClose={closeDrawer} className="p-4 flex flex-col" placeholder={undefined} size={400} >
-                        <div>
-                            <div className='flex justify-center rounded-full'>
-                                <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}`} className="w-16 h-16 rounded-full" />
+                        <div className='overflow-x-scroll'>
+                            <div className='flex justify-center mb-5 rounded-full'>
+                                <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
+                                <div className='m-2 font-sans text-gray-600 font-semibold'>
+                                    <p >{drawerData?.First_name}</p>
+                                    {
+                                        drawerData?.Profile.Title && <>
+                                            <p >{drawerData?.Profile.Title}</p>
+                                        </>
+                                    }
+
+                                </div>
                             </div>
                             <div>
                                 {

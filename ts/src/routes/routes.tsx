@@ -2,13 +2,15 @@ import React, { Suspense } from 'react';
 import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
-import CheckoutForm from '../components/General/settings/numberVerifiactions/bankDetailsForm';
-import TransactionsPage from '../pages/Genaral/transactionsPage';
+import ListAPlans from '../components/Admin/plan/listAllPlans';
 
 
 const WebRouters: React.FC = () => {
     return (
         <Suspense fallback={<Imports.Loader />}>
+
+
+
             <Imports.Routes>
                 {/* Logged users access only routes */}
                 <Imports.Route element={<Imports.IsLoggedUser />}>
@@ -18,7 +20,8 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.clientRoutes.CREATE_JOB_POST} element={<Imports.JobPostForm />} />
                     <Imports.Route path={Imports.clientRoutes.EDIT_JOB_POST} element={<Imports.EditjobPostForm />} />
                 </Imports.Route>
-                    <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
+
+                <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
 
                 <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
                 <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
@@ -43,13 +46,14 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-                <Imports.Route path={"*"} element={< TransactionsPage/>} />
+                <Imports.Route path={"*"} element={< Imports.ErrorPage />} />
                 <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
                 {/*ADMIN ROUTES  */}
                 <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
                 <Imports.Route path='admin' element={<Imports.AdminLayout />}>
                     <Imports.Route path={Imports.admin_Routes.Dashboard} element={<Imports.ProtectedRoute><Imports.IndexDashBoard /></Imports.ProtectedRoute>} />
+                    <Imports.Route path={"/admin/plan/"} element={<Imports.ProtectedRoute><ListAPlans /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
                 </Imports.Route>
@@ -63,22 +67,27 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.talent_routes.ContactListing} element={<Imports.ContactListPage />} />
                     <Imports.Route path={Imports.talent_routes.SendContract} element={<Imports.ContractForm />} />
                     <Imports.Route path={Imports.talent_routes.ViewMiles} element={<Imports.Milestone />} />
+                    <Imports.Route path={Imports.talent_routes.TransactionHistry} element={<Imports.TransactionsPage />} />
                 </Imports.Route>
+
                 <Imports.Route element={<Imports.Layout />}>
                 </Imports.Route>
 
                 {/* CLIENT ROUTES */}
                 <Imports.Route path='client' element={<Imports.Layout />}>
+                    <Imports.Route path={Imports.clientRoutes.TransactionHistry} element={<Imports.TransactionsPage />} />
                     <Imports.Route path={Imports.clientRoutes.SendContract} element={<Imports.ContractForm />} />
                     <Imports.Route path={Imports.clientRoutes.ContactListing} element={<Imports.ContactListPage />} />
                     <Imports.Route path={Imports.clientRoutes.viewProposal} element={<Imports.ProposalClientView />} />
                     <Imports.Route path={Imports.clientRoutes.ContractSubmit} element={<Imports.ContractForm />} />
                     <Imports.Route path={Imports.clientRoutes.ViewMiles} element={<Imports.Milestone />} />
                 </Imports.Route>
-
                 <Imports.Route path={Imports.Path.Message} element={<Message />} />
                 <Imports.Route path={Imports.Path.Search} element={< Search />} />
-                
+
+
+
+
             </Imports.Routes>
         </Suspense>
     );

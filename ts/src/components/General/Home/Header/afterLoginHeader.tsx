@@ -13,13 +13,16 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { MyContext } from "../../../../context/myContext";
 import { cleanAllData } from "../../../../redux/Slice/signupSlice";
 import routerVariables, { } from "../../../../routes/pathVariables";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import io from 'socket.io-client'
 import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
-import NotificaioDrawer from "../../notificaionDrawer";
+import NotificaioDrawer, { Notification } from "../../notificaionDrawer";
 import { getAllProposalForClient } from "../../../../services/clientApiService";
+import { ProposalInterface, } from "../../../../interface/interfaces";
 // eslint-disable-next-line react-refresh/only-export-components
 export const socket = io("http://localhost:3000")
+
+
 
 const AfterLoginHeader = () => {
     const dispatch: Dispatch<UnknownAction> = useDispatch()
@@ -29,8 +32,8 @@ const AfterLoginHeader = () => {
     const [IMG, setIMG] = useState<string>("")
     const [openNotificationDrawer, setopenNotificationDrawer] = useState<boolean>(false)
     const basicdata = useContext(MyContext) || ""
-    const [notifications, setNotifications] = useState<object[]>([]); // Move useContext here
-    const [proposals, setProposals] = useState<object[]>([]); // Move useContext here
+    const [notifications, setNotifications] = useState<Notification[]>([]); // Move useContext here
+    const [proposals, setProposals] = useState<ProposalInterface[]>([]); // Move useContext here
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -69,15 +72,16 @@ const AfterLoginHeader = () => {
         }
         setOpen(false);
     };
-    const handleLogout = () => { // Removed event parameter
+    const handleLogout = () => {
         localStorage.removeItem('token')
         persistor.purge();
-        basicdata.fn()
+        basicdata?.fn()
         dispatch(cleanAllData())
         navigate("/")
     }
+    const userData = useSelector((state:ROOTSTORE)=>state.signup)
     return (
-        <div>
+        <div className="sticky top-0">
             <div className=" flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
                 {/* Logo */}
                 <div className="w-full flex items-center justify-between ">
@@ -96,11 +100,11 @@ const AfterLoginHeader = () => {
                     </div>
                 </div>
                 {openNotificationDrawer &&
-                    <NotificaioDrawer proposals={proposals} notification={notifications} open={openNotificationDrawer} className="hover:cursor-pointer" />
+                    <NotificaioDrawer proposals={proposals} notification={notifications} open={openNotificationDrawer}  />
                 }
                 <div className="w-full pl-[10rem] text-white font-sana font-normal flex pt-3 sm:mt-0 justify-evenly">
                     <span className="mt-1">My Jobs</span>
-                    <span className="mr-[1px] mt-1">Transaction Details</span>
+                    <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
                     <span className="mr-[1px] mt-1">Messages</span>
                     <div className="felx pb-">
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full animate-pulse bg-gradient-to-br"></div>
@@ -138,6 +142,7 @@ const AfterLoginHeader = () => {
 
 
 export default AfterLoginHeader;
+
 // import React from "react";
 // import {
 //     Navbar,
@@ -370,7 +375,8 @@ export default AfterLoginHeader;
 //     }, []);
 
 //     return (
-//         <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6 mt-2 "  placeholder={undefined}>
+//     <div className=" w-full h-[10vh]">
+//         <Navbar className="mx-auto w p-2  lg:pl-6 bg-black  "  placeholder={undefined}>
 //             <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 //                 <Typography
 //                     as="a"
@@ -399,6 +405,7 @@ export default AfterLoginHeader;
 //                 <NavList />
 //             </MobileNav>
 //         </Navbar>
+//         </div>
 //     );
 // }
 // export default AfterLoginHeader

@@ -12,7 +12,7 @@ export type Routes = {
     Settings: string,
     Message: string
     PaymentSuccess: string,
-    Search :string
+    Search: string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -22,10 +22,11 @@ export interface CLIENTROUTES {
     ADD_CONTACT_DETAILS: string
     Profile: string,
     viewProposal: string,
-    ContractSubmit : string
-    ContactListing : string
-    SendContract:string,
-    ViewMiles:string
+    ContractSubmit: string
+    ContactListing: string
+    SendContract: string,
+    ViewMiles: string,
+    TransactionHistry: string
 }
 interface TALENT_ROUTES {
     AddSkills: string,
@@ -36,10 +37,10 @@ interface TALENT_ROUTES {
     JobViewPage: string,
     ProfileView: string
     viewClient: string
-    ContactListing : string
-    SendContract:string,
-    ViewMiles:string
-
+    ContactListing: string
+    SendContract: string,
+    ViewMiles: string,
+    TransactionHistry: string
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -59,7 +60,7 @@ const routerVariables: Routes = {
     Settings: "/settings/",
     Message: "/message/",
     PaymentSuccess: '/payment-success/:id/',
-    Search : "/search"
+    Search: "/search"
 }
 export default routerVariables;
 //Client routes
@@ -72,10 +73,10 @@ export const clientRoutes: CLIENTROUTES = {
     Profile: "/client/profile/",
     viewProposal: "/client/view-proposal/",
     ContractSubmit: "/client/contract/send/",
-    ContactListing : '/client/contract/all/',
-    SendContract:"/client/send-contract/",
-    ViewMiles:"/client/contract/work-details/:success"
-
+    ContactListing: '/client/contract/all/',
+    SendContract: "/client/send-contract/",
+    ViewMiles: "/client/contract/work-details/:success",
+    TransactionHistry: "/client/transactiion/history/"
 }
 //Talent routes
 export const talent_routes: TALENT_ROUTES = {
@@ -87,9 +88,10 @@ export const talent_routes: TALENT_ROUTES = {
     JobViewPage: "/talent/job-details-view/",
     ProfileView: "/talent/talent/profile/",
     viewClient: '/talent/view-client-profile/',
-    ContactListing : '/talent/contract/all/',
-    SendContract:"/talent/send-contract/",
-    ViewMiles:"/talent/contract/work-details/"
+    ContactListing: '/talent/contract/all/',
+    SendContract: "/talent/send-contract/",
+    ViewMiles: "/talent/contract/work-details/",
+    TransactionHistry: "/talent/transactiion/history/"
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

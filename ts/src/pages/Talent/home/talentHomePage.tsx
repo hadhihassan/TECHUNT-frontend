@@ -83,7 +83,7 @@ const HomePage: React.FC = () => {
                 </div>
             ) : (
                 <>
-                    <div className="bg-blue-600 absolute -z-10 w-full h-[50vh]" >
+                    <div className="bg-gradient-to-r from-blue-300 to-blue-500 absolute -z-10 w-full h-[50vh]" >
                     </div>
                     <div className=" sm:flex w-full">
                         {/* right side */}

@@ -8,9 +8,6 @@ const SidePanel = () => {
         localStorage.removeItem("admin");
         navigate(admin_Routes.Login);
     };
-
-
-
     return (
         <>
             <div className="relative min-h-screen md:flex" >
@@ -53,6 +50,13 @@ const SidePanel = () => {
                                         <path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                     <span className="ml-2 text-sm font-medium">User Management</span>
+                                </p>
+                                <p onClick={() => { navigate(admin_Routes.UserMangment) }}
+                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === '/admin/user-management/' ? 'bg-gray-700 text-gray-300' : ""}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                    </svg>
+                                    <span className="ml-2 text-sm font-medium">Plan Managment</span>
                                 </p>
                                 <a
                                     className="flex items-center w-full h-12 px-3 mt-2 hover:text-gray-200 hover:bg-gray-700 rounded" href="#">

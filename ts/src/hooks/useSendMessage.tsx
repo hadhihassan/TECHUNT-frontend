@@ -15,12 +15,13 @@ const useSendMessages = () => {
         try {
             const res = await sendMessageBakend(message, conversation?.participants[0]._id)
             setMessages([...conversation.messages, {message}]);
+            // console.log(res,  "is the message for the sending sending message")
+            console.log("sending message", [...conversation.messages, {message}])
         } catch (error) {
             console.log(error.message);
         } finally {
             setLoading(false);
-            console.log(conversation.messages);
-            
+            console.log(conversation);
         }
     };
     return { loading, sendMessage};

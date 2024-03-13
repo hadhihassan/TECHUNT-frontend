@@ -13,7 +13,6 @@ const useGetConversations = () => {
                 getAllConversations()
                 .then((res:AxiosResponse)=>{
                     setConversations(res.data)
-                    console.log(res.data,"hadhi hassan ")
                 }).catch((err:AxiosError) => {
                     console.log(err)
                 })

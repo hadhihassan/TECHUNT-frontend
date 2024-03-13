@@ -16,7 +16,7 @@ interface TablesProps {
 }
 
 const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
-  
+
     //sucess toast hot message
     const success = (message: string) =>
         toast.success(message);
