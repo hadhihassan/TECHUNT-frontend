@@ -89,7 +89,7 @@ const AfterLoginHeader = () => {
                     </div>
                     <div>
                         <div className="flex justify-between bg-zinc-700 rounded-xl text-white  d-[20px] w-[100%] sm:w-[300px] h-[30px]" >
-                            <input type="text" placeholder="Search..." className="flex justify-between bg-zinc-700 rounded-xl text-white  d-[20px] w-[100%] sm:w-[300px] h-[30px]" >
+                            <input type="text" placeholder="Search..." className="flex justify-between bg-zinc-700 rounded-xl text-white  d-[20px] w-[100%] sm:w-[300px] h-[30px] outline-none ml-2 mb-2" >
                             </input>
                             <SearchOutlinedIcon className="mt-1 mr-1" />
                         </div>

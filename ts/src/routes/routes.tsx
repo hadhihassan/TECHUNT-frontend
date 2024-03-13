@@ -3,6 +3,7 @@ import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
 import CheckoutForm from '../components/General/settings/numberVerifiactions/bankDetailsForm';
+import TransactionsPage from '../pages/Genaral/transactionsPage';
 
 
 const WebRouters: React.FC = () => {
@@ -42,7 +43,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />
-                {/* <Imports.Route path={"*"} element={< />} /> */}
+                <Imports.Route path={"*"} element={< TransactionsPage/>} />
                 <Imports.Route path={Imports.Path[404]} element={<Imports.ErrorPage />} />
 
                 {/*ADMIN ROUTES  */}

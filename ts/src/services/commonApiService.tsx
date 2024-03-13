@@ -55,3 +55,6 @@ export async function contractStatusUpdate(contractId: string, status: string, r
 export async function fetchCompletedContract(role:string) {
     return await axiosInstance.get(`${BASE_URL}${role}/contract/get-completed-contracts/`)
 }
+export async function getTransationHistory(role:string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/get-transaction-history/`)
+}
