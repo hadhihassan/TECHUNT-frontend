@@ -1,25 +1,27 @@
 import { Dialog, Transition } from '@headlessui/react'
-import React, { ChangeEvent, Fragment, useState } from 'react'
-import { createNewPlan } from '../../../services/adminApiService'
+import React, { ChangeEvent, Fragment, useEffect, useState } from 'react'
+import { createNewPlan, getPlan } from '../../../services/adminApiService'
 import { AxiosError, AxiosResponse } from 'axios'
 import { message } from 'antd'
 
 interface FormProps {
     isOpen: boolean,
-    closeModal: () => void
+    closeModal: () => void,
+    data: PlanInterface | null
 }
 export interface PlanInterface {
     name: string,
     description: string,
     amount: string,
-    _id:string
 }
-const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
+const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
+    console.log(data?.name)
     const [planData, setPlanData] = useState<PlanInterface>({
-        name: "",
-        description: "",
-        amount: "",
+        name: data?.name ,
+        description: data?.description ,
+        amount: data?.amount ,
     })
+    console.log(planData)
     const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setPlanData({
@@ -27,17 +29,17 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
             [name]: value
         });
     };
+    useEffect(() => {
+        setPlanData({
+            name: data?.name ,
+            description: data?.description ,
+            amount: data?.amount ,
+        })
+    }, []);
+
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
-        createNewPlan(planData)
-        .then((res:AxiosResponse)=>{
-            if(res?.data?.success){
-                message.success("New plan succssfully created .")
-            }
-            closeModal()
-        }).catch((err:AxiosError)=>{
-            message.warning("Error occurs While creating  plan  .",err)
-        })
+
     }
     return <>
         <Transition appear show={isOpen} as={Fragment}>
@@ -72,7 +74,7 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
                                             <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
                                                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                                                     <p className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                                                        CREATE NEW PLAN
+                                                        EDIT PLAN
                                                     </p><div>
                                                         <label className="block mb-2 text-sm font-medium text-gray-900">
                                                             Name
@@ -125,4 +127,4 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
         </Transition>
     </>
 }
-export default CreatePlanForm;
+export default EditPlanForm;

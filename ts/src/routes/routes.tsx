@@ -3,14 +3,13 @@ import * as Imports from './imports';
 import Message from '../pages/Genaral/message';
 import Search from '../pages/Genaral/searchPage';
 import ListAPlans from '../components/Admin/plan/listAllPlans';
+import PlanPage from '../components/General/planPage';
+
 
 
 const WebRouters: React.FC = () => {
     return (
         <Suspense fallback={<Imports.Loader />}>
-
-
-
             <Imports.Routes>
                 {/* Logged users access only routes */}
                 <Imports.Route element={<Imports.IsLoggedUser />}>
@@ -71,6 +70,7 @@ const WebRouters: React.FC = () => {
                 </Imports.Route>
 
                 <Imports.Route element={<Imports.Layout />}>
+                <Imports.Route path={"/plan"} element={< PlanPage />} />
                 </Imports.Route>
 
                 {/* CLIENT ROUTES */}

@@ -79,7 +79,7 @@ const AfterLoginHeader = () => {
         dispatch(cleanAllData())
         navigate("/")
     }
-    const userData = useSelector((state:ROOTSTORE)=>state.signup)
+    const userData = useSelector((state: ROOTSTORE) => state.signup)
     return (
         <div className="sticky top-0">
             <div className=" flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
@@ -100,18 +100,23 @@ const AfterLoginHeader = () => {
                     </div>
                 </div>
                 {openNotificationDrawer &&
-                    <NotificaioDrawer proposals={proposals} notification={notifications} open={openNotificationDrawer}  />
+                    <NotificaioDrawer proposals={proposals} notification={notifications} open={openNotificationDrawer} />
                 }
                 <div className="w-full pl-[10rem] text-white font-sana font-normal flex pt-3 sm:mt-0 justify-evenly">
-                    <span className="mt-1">My Jobs</span>
-                    <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
+                    <button
+                        className="ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 inline-flex items-center justify-center px-6   border-0 rounded-full text-sm font-medium text-white bg-gradient-to-l from-yellow-300 to-purple-600 shadow-lg hover:from-yellow-300 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                    >
+                        Subscribe
+                    </button>
+
+                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
                     <span className="mr-[1px] mt-1">Messages</span>
                     <div className="felx pb-">
-                        <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full animate-pulse bg-gradient-to-br"></div>
-                        <NotificationsNoneOutlinedIcon color="primary" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />
+                        <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
+                        <NotificationsNoneOutlinedIcon color="primary"  onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />
                     </div>
                     <IconButton ref={anchorRef} onClick={handleToggle}>
-                        <Avatar src={IMG} />
+                        <Avatar src={IMG} className="border-2 border-red-500"/>
                     </IconButton>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                         {({ TransitionProps, placement }) => (

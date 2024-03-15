@@ -6,30 +6,43 @@ import {
     Typography,
     Button,
     CardBody,
-    Chip,
     CardFooter,
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
-import CreatePlanForm from "./createPlanForm";
-import { useState } from "react";
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Action"];
-const TABLE_ROWS = [
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-        name: "John Michael",
-        email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
-        online: true,
-        date: "23/04/18",
-    },
-];
+import CreatePlanForm, { PlanInterface } from "./createPlanForm";
+import { useEffect, useState } from "react";
+import { getAllPlan } from "../../../services/adminApiService";
+import { AxiosError, AxiosResponse } from "axios";
+import EditPlanForm from "./editPlanForm";
+const TABLE_HEAD = ["No", "Name", "Description", "Amount", "Action"];
 
 export function ListAllPlans() {
+
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [editOpen, setEditOpen] = useState<boolean>(false)
+    const [plans, setPlans] = useState<PlanInterface[]>([])
+    const [editData,setEdit]= useState<PlanInterface>()
+    
+
     const close = () => setIsOpen(false)
     const open = () => setIsOpen(true)
+
+    const closeEdit = () => setEditOpen(false)
+    const openEdit = () => setEditOpen(true)
+    const hadnleOpenEdit = (index:number) => {
+        setEdit(plans[index])
+        openEdit()
+    }
+    useEffect(() => {
+        getAllPlan()
+            .then((res: AxiosResponse) => {
+                console.log(res.data.data)
+                setPlans(res?.data?.data || null)
+            }).catch((err: AxiosError) => [
+                alert(err)
+            ])
+    }, [isOpen])
     return (
         <div className=" w-[90%] h-auto m-7">
             <Card placeholder={undefined}>
@@ -37,11 +50,11 @@ export function ListAllPlans() {
                     <div className="mb-8 flex items-center justify-between gap-8">
                         <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                             <Button
-                            onClick={open} 
-                            className="flex items-center gap-3 bg-blue-500 rounded-xl ml-5 mt-5" size="sm" placeholder={undefined}>
+                                onClick={open}
+                                className="flex items-center gap-3 bg-blue-500 rounded-xl ml-5 mt-5" size="sm" placeholder={undefined}>
                                 Add Plan
                             </Button>
-                            <CreatePlanForm isOpen={isOpen} closeModal={close}/>
+                            <CreatePlanForm isOpen={isOpen} closeModal={close} id={undefined} edit={false} />
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -74,14 +87,14 @@ export function ListAllPlans() {
                             </tr>
                         </thead>
                         <tbody>
-                            {TABLE_ROWS.map(
-                                ({ name, email, job, org, online, date }, index) => {
-                                    const isLast = index === TABLE_ROWS.length - 1;
+                            {plans?.map(
+                                ({ name, description, amount, _id }, index) => {
+                                    const isLast = index === plans.length - 1;
                                     const classes = isLast
                                         ? "p-4"
                                         : "p-4 border-b border-blue-gray-50";
                                     return (
-                                        <tr key={name}>
+                                        <tr key={index}>
                                             <td className={classes}>
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex flex-col">
@@ -89,13 +102,7 @@ export function ListAllPlans() {
                                                             variant="small"
                                                             color="blue-gray"
                                                             className="font-normal" placeholder={undefined}                                                    >
-                                                            {name}
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal opacity-70" placeholder={undefined}                                                    >
-                                                            {email}
+                                                            {index + 1}
                                                         </Typography>
                                                     </div>
                                                 </div>
@@ -106,24 +113,8 @@ export function ListAllPlans() {
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal" placeholder={undefined}                                                >
-                                                        {job}
+                                                        {name}
                                                     </Typography>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal opacity-70" placeholder={undefined}                                                >
-                                                        {org}
-                                                    </Typography>
-                                                </div>
-                                            </td>
-                                            <td className={classes}>
-                                                <div className="w-max">
-                                                    <Chip
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        value={online ? "online" : "offline"}
-                                                        color={online ? "green" : "blue-gray"}
-                                                    />
                                                 </div>
                                             </td>
                                             <td className={classes}>
@@ -131,15 +122,27 @@ export function ListAllPlans() {
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal" placeholder={undefined}                                            >
-                                                    {date}
+                                                    {description}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal" placeholder={undefined}                                            >
+                                                    {amount}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
                                                 <Tooltip content="Edit User">
                                                     <IconButton variant="text" placeholder={undefined}>
-                                                        <PencilIcon className="h-4 w-4" />
+                                                        <PencilIcon
+                                                            onClick={()=>hadnleOpenEdit(index)}
+                                                            className="h-4 w-4" />
                                                     </IconButton>
                                                 </Tooltip>
+
+
                                             </td>
                                         </tr>
                                     );
@@ -162,7 +165,9 @@ export function ListAllPlans() {
                     </div>
                 </CardFooter>
             </Card>
+            <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
         </div>
+
     );
 }
 export default ListAllPlans

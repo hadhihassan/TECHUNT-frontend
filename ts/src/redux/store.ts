@@ -8,7 +8,6 @@ import { ConversationType } from './Slice/conversationsSlice'
 const persistConfig = {
   key: 'root',
   storage,
-  // Specify the key for the 'client' slice in your state
   keyPrefix: 'client',
 };
 

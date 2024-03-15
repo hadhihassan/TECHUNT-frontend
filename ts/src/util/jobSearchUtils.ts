@@ -1,7 +1,7 @@
 import { JobInterface } from "../interface/interfaces";
 
 export function findMostSuitableJobPost(jobPosts: JobInterface[], requiredSkills: string[]) {
-    let mostSuitableJobPost :JobInterface[] = []
+    const mostSuitableJobPost :JobInterface[] = []
     for (const jobPost of jobPosts) {
         const score = calculateSuitabilityScore(jobPost.Skills, requiredSkills);
         if (score > 0) {

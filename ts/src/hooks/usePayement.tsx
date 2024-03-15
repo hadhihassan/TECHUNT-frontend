@@ -37,7 +37,22 @@ const useStripePayment = () => {
             setLoading(false);
         }
     };
-    return { handlePayment, paymentToTalent, loading, error };
+    const subscriptionPayment = async (planId: string, amount: number) => {
+        try {
+            setLoading(true);
+            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
+            const session = await makePaymentToBank(planId, amount);
+            const result = await stripe?.redirectToCheckout({
+                sessionId: session.data?.data
+            });
+            localStorage.setItem("payemnt", result)
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    return { subscriptionPayment, handlePayment, paymentToTalent, loading, error };
 };
 
 export default useStripePayment;

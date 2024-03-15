@@ -3,6 +3,7 @@ import WebRouters from './routes/routes';
 import ErrorBoundary from './components/General/ErrorBoundary/errorBoundary ';
 import Loader from './components/General/loader/loader';
 import { Suspense } from 'react';
+
 window.global = window;
 function App() {
 
