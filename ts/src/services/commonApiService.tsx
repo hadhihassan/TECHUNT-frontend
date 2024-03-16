@@ -52,9 +52,18 @@ export async function addBankDetails(id: string, role: string, data: object) {
 export async function contractStatusUpdate(contractId: string, status: string, role: string) {
     return await axiosInstance.post(`${BASE_URL}${role}/contract/update-status/`, { contractId, status })
 }
-export async function fetchCompletedContract(role:string) {
+export async function fetchCompletedContract(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/contract/get-completed-contracts/`)
 }
-export async function getTransationHistory(role:string) {
+export async function getTransationHistory(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/get-transaction-history/`)
+}
+export async function getAllPlans(role: string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/plan/getAll/`)
+}
+export async function purchasePlan(role: string, planId: string) {
+    return await axiosInstance.post(`${BASE_URL}${role}/plan/purchase-plan/`, { planId })
+}
+export async function makePaymentToPlan(role:string,planId:string, amount:number ) {
+    return await axiosInstance.post(`${BASE_URL}${role}/plan/plan/purchase-payment/`,{planId, amount});
 }

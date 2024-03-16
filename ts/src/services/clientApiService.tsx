@@ -69,3 +69,5 @@ export async function makePaymentToBank(talentId:string, amount:number ) {
 export async function addWalletAmount(talentId:string, amount:number, milestoneId:boolean = true) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/wallet/add-amount/`, { talentId, amount, milestoneId })
 }
+
+

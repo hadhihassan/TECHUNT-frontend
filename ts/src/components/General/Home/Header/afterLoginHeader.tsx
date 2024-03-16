@@ -19,10 +19,14 @@ import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import NotificaioDrawer, { Notification } from "../../notificaionDrawer";
 import { getAllProposalForClient } from "../../../../services/clientApiService";
 import { ProposalInterface, } from "../../../../interface/interfaces";
+import { Button, Divider, notification, Space } from 'antd';
+import type { NotificationArgsProps } from 'antd';
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const socket = io("http://localhost:3000")
 
-
+type NotificationPlacement = NotificationArgsProps['placement'];
+const Context = React.createContext({ name: 'Default' });
 
 const AfterLoginHeader = () => {
     const dispatch: Dispatch<UnknownAction> = useDispatch()
@@ -32,8 +36,9 @@ const AfterLoginHeader = () => {
     const [IMG, setIMG] = useState<string>("")
     const [openNotificationDrawer, setopenNotificationDrawer] = useState<boolean>(false)
     const basicdata = useContext(MyContext) || ""
-    const [notifications, setNotifications] = useState<Notification[]>([]); // Move useContext here
-    const [proposals, setProposals] = useState<ProposalInterface[]>([]); // Move useContext here
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [proposals, setProposals] = useState<ProposalInterface[]>([]);
+    const [notifyData, setNotifyData] = useState()
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -49,7 +54,6 @@ const AfterLoginHeader = () => {
                     }).catch((err: AxiosError) => {
                         console.log(err.message)
                     })
-
             }
         }
         socket.emit("getNotifications", sender_id);
@@ -60,6 +64,22 @@ const AfterLoginHeader = () => {
                 }
             }
         })
+        socket.on("newPost", (notify) => {
+
+            if (userData.role === 'TALENT' && userData.premiumUser) {
+                const openNotification = (placement: NotificationPlacement) => {
+                    api.info({
+                        message: `${notify?.user?.First_name} is posted new work post `,
+                        description: <Context.Consumer>{({ name }) => ` Work is ${notify?.formData?.Title}!`}</Context.Consumer>,
+                        placement,
+                    });
+                };
+                openNotification("topRight")
+            }
+        })
+        return () => {
+            socket.off("newPost");
+        };
     }, []);
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
@@ -80,8 +100,11 @@ const AfterLoginHeader = () => {
         navigate("/")
     }
     const userData = useSelector((state: ROOTSTORE) => state.signup)
-    return (
+    const [api, contextHolder] = notification.useNotification();
+
+    return <>
         <div className="sticky top-0">
+            {contextHolder}
             <div className=" flex justify-between bg-zinc-800 flex-col bg-white-900 sm:flex-row h-[10vh] p-1      ">
                 {/* Logo */}
                 <div className="w-full flex items-center justify-between ">
@@ -104,19 +127,18 @@ const AfterLoginHeader = () => {
                 }
                 <div className="w-full pl-[10rem] text-white font-sana font-normal flex pt-3 sm:mt-0 justify-evenly">
                     <button
-                        className="ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 inline-flex items-center justify-center px-6   border-0 rounded-full text-sm font-medium text-white bg-gradient-to-l from-yellow-300 to-purple-600 shadow-lg hover:from-yellow-300 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        className="ring-offset-background transition-colors animate-pulse delay-1000 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 inline-flex items-center justify-center px-6   border-0 rounded-full text-sm font-medium text-white bg-gradient-to-l from-yellow-300 to-purple-600 shadow-lg hover:from-purple-500 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500  "
                     >
                         Subscribe
                     </button>
-
                     <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
                     <span className="mr-[1px] mt-1">Messages</span>
                     <div className="felx pb-">
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
-                        <NotificationsNoneOutlinedIcon color="primary"  onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />
+                        <NotificationsNoneOutlinedIcon color="primary" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />
                     </div>
                     <IconButton ref={anchorRef} onClick={handleToggle}>
-                        <Avatar src={IMG} className="border-2 border-red-500"/>
+                        <Avatar src={IMG} className="border-2 border-red-500" />
                     </IconButton>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                         {({ TransitionProps, placement }) => (
@@ -127,7 +149,7 @@ const AfterLoginHeader = () => {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow">
-                                            <MenuItem onClick={() => navigate(`/${basicdata.role}/profile/`)}>
+                                            <MenuItem onClick={() => navigate(`/${basicdata?.role}/profile/`)}>
                                                 <Person sx={{ mr: 1 }} /> Profile
                                             </MenuItem>
                                             <MenuItem onClick={handleLogout}><Logout sx={{ mr: 1 }} /> Logout</MenuItem>
@@ -141,7 +163,7 @@ const AfterLoginHeader = () => {
                 </div>
             </div>
         </div>
-    );
+    </>
 }
 
 

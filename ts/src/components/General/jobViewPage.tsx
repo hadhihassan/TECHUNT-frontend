@@ -11,9 +11,7 @@ const JobViewPage = () => {
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
 
     const close = () => {
-        console.log(
-            'Notification was closed. Either the close button was clicked or duration time elapsed.',
-        );
+        localStorage.removeItem("deatildView")
     };
     const [post, setPost] = useState<JobInterface | null>(null)
     const [term, setTerm] = useState<boolean>(false)

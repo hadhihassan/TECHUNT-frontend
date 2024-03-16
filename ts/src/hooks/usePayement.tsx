@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { makePayment } from '../services/talentApiService';
 import { makePaymentToBank } from '../services/clientApiService';
+import { makePaymentToPlan } from '../services/commonApiService';
 
 const useStripePayment = () => {
     console.log()
@@ -37,15 +38,16 @@ const useStripePayment = () => {
             setLoading(false);
         }
     };
-    const subscriptionPayment = async (planId: string, amount: number) => {
+    const subscriptionPayment = async (role: string, planId: string, amount: number) => {
         try {
             setLoading(true);
             const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
-            const session = await makePaymentToBank(planId, amount);
+            const session = await makePaymentToPlan(role, planId, amount);
+            localStorage.setItem("payemnt", JSON.stringify(session))
             const result = await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });
-            localStorage.setItem("payemnt", result)
+            console.log(result)
         } catch (error) {
             setError(error.message);
         } finally {

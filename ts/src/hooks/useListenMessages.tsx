@@ -11,12 +11,11 @@ import { setMessages } from "../redux/Slice/conversationsSlice";
 const useListenMessages = () => {
 	const { socket } = useSocketContext();
     const messages = useSelector((state:ROOTSTORE)=>state.conversation.messages)
-	const dispatch = useDispatch()
 
 	useEffect(() => {
 		socket?.on("newMessage", (newMessage) => {
             console.log("socket worked and new messages",messages,newMessage); 
-			// newMessage.shouldShake = true;
+			newMessage.shouldShake = true;
 			// const sound = new Audio(notificationSound);
 			// sound.play();
 			setMessages([...messages, newMessage]);

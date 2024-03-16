@@ -16,6 +16,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSocketContext } from "../../context/socketContext";
+import { useSelector } from "react-redux";
+import { ROOTSTORE } from "../../redux/store";
+import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 
 const top100Films = [
     "JavaScript",
@@ -119,7 +123,7 @@ const top100Films = [
 ];
 const JobPostForm = () => {
 
-    const navigate =  useNavigate()
+    const navigate = useNavigate()
     const success = (message: string) => {
         toast.success(message);
         setTimeout(() => {
@@ -135,6 +139,9 @@ const JobPostForm = () => {
         setSelectedOption(event.target.value);
         onChangeInput(event)
     };
+    const userData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
+    const { socket } = useSocketContext();
+
     const { register, handleSubmit, formState: { errors } } = useForm();
     interface FormData {
         Title: string;
@@ -155,12 +162,12 @@ const JobPostForm = () => {
         Amount: 0,
     });
     const onSubmit = () => {
-        console.log("post submited data will be this", formData)
         postJob(formData)
-            .then((res: AxiosResponse) => {
-                console.log(res)
+            .then((res: any) => {
                 if (res?.data?.data.success) {
                     success(res?.data?.data.message)
+                    // emiting the event for the premimum usersto notified
+                    socket.emit("newJobPost", { userData, formData })
                     setFormData({
                         Title: '',
                         Description: '',
@@ -175,10 +182,11 @@ const JobPostForm = () => {
                 } else {
                     error("Internal server error.")
                 }
+
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
-        
+
     };
     const onChangeInput: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
 

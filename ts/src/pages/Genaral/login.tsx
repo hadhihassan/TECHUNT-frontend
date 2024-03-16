@@ -4,20 +4,23 @@ import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../services/clientApiService";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify } from "../../redux/Slice/signupSlice";
+import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { useSocketContext } from "../../context/socketContext";
+
 const LoginPage: React.FC = () => {
+
     const dispatch = useDispatch()
     const navigate = useNavigate();
-   
     const [email, setUserEmail] = useState<string>("")
     const [error, setError] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    // const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
+    const { socket } = useSocketContext();
+
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
         setErrorsEmail(emailValidator(email))
@@ -32,20 +35,25 @@ const LoginPage: React.FC = () => {
                             icon: "warning"
                         });
                     } else {
-                        console.log(res, "login response");
                         if (!res?.data) {
                             setError("Email Or Password incorrect")
                         } else {
                             localStorage.setItem("token", res?.data?.data.token)
-                            console.log("he entered",res.data);
                             dispatch(setLogged(true));
                             dispatch(setVerify(true));
                             dispatch(setRole(res?.data?.data.role));
                             dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
-                            console.log(res?.data?.data?.token);
-                            console.log(JSON.parse(localStorage.getItem("clientroot") || ""))
+                            if(res?.data?.data?.data.subscription){
+                                alert("premium user")
+                                dispatch(isPremimunUser(true));
+                            }
+                            if (res?.data?.data?.data.subscription && res?.data?.data.role === "TALENT") {
+                                console.log("you expected worked")
+                                const userId: string = res?.data?.data?.data?._id
+                                socket.emit("subscribedUser", userId)
+                            }
                             if (res?.data?.data.role === "CLIENT") {
                                 navigate("/client/home/");
                             } else {
@@ -71,9 +79,6 @@ const LoginPage: React.FC = () => {
         setErrorsPassword(passwordValidator(e.target.value))
         setPassword(e.target.value)
     }
-
-
-
 
 
     return (
