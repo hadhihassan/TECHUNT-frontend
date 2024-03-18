@@ -45,21 +45,21 @@ const JobViewPage = () => {
     }
     return (
         <>
-            <div className=" flex justify-center mt-8">
-                <Card color="white" shadow={false} placeholder={undefined} className="border rounded-xl w-[70%] h-[90vh]" >
+            <div className=" flex justify-center  mt-8">
+                <Card color="white" shadow={false} placeholder={undefined} className="border shadow-xl rounded-xl w-[70%] h-auto" >
                     <div
                         onClick={() => {
                             handleclearLocal()
                             history.back()
-                        }} className="container w-full border-b-2 h-[40px] flex">
+                        }} className="container w-full   h-[40px] flex">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mt-1 ">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                         <p className="mt-1">Back</p>
                     </div>
-                    <div className=" w-[100%] flex  h-full">
+                    <div className=" w-[100%] flex  h-full border-t">
                         {/* left side  */}
-                        <div className="w-[75%] border-r-2 h-full">
+                        <div className="w-[75%]  h-full border">
                             <div className="flex justify-between m-5">
                                 <div>
                                     <p className=" font-bold">{post?.Title}</p>
@@ -77,15 +77,17 @@ const JobViewPage = () => {
                                 <p className="font-semibold m-5">Skills</p>
                                 <div className="flex mb-5 m-1">
                                     {post &&
-                                        post.Skills.map((value, key) => (
-                                            <div key={key} className="flex">
-                                                <span
-                                                    className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
-                                                        }`}
-                                                >
-                                                    {value}
-                                                </span>
-                                            </div>
+                                        post.Skills.map((value, key) => (<>
+                                                <div key={key} className="flex">
+                                                    <span
+                                                        className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
+                                                            }`}
+                                                    >
+                                                        {value}
+                                                    </span>
+                                                </div>
+                                                {key === 3 && <><br /> </>}
+                                            </>
                                         ))}
                                 </div>
                             </div>
@@ -110,21 +112,17 @@ const JobViewPage = () => {
                         <div className="sm:w-[25%]">
                             {
                                 basicData.role == "TALENT" && <>
-                                    <div className="w-full  font-sans flex flex-col">
-                                        <button onClick={openNotification} className="bg-red-500 border mt-5 rounded-full py-2 text-white font-semibold">Submit propsoal</button>
-                                        <button className="border border-black mt-2 text-black py-2 font-semibold   rounded-full">Save</button>
+                                    <div className="w-full  font-sans flex flex-col p-5">
+                                        <button onClick={openNotification} className="bg-red-500 border mt-5 rounded-full py-1 text-white font-semibold">Submit propsoal</button>
+                                        <button className="border border-black mt-2 text-black py-1 font-semibold   rounded-full">Save</button>
                                         {contextHolder}
                                     </div>
                                 </>
                             }
-                            <div className="font-sans text-xs   mt-5  border-b-2 w-full">
-                                <p className="ml-5">proposal: 10</p>
-                                <p className="ml-5 mb-5">Available proposal: 5</p>
-                            </div>
                             <div className="font-sans  mt-5  border-b-2 w-full">
                                 <p className="ml-5 text-xl font-semibold">About the client</p>
                                 <p className="ml-5 mb-1 text-xs">{post?.Client_id.City} <span className="ml-1 text-xs">{post?.Client_id.Country}</span> </p>
-                                <p className="ml-5 mb-1 text-xs">47 jobs posted</p>
+                                <p className="ml-5 mb-1 text-xs">2 jobs posted</p>
                                 <p className="ml-5 mb-1 text-xs">It's currently 4:45 PM here</p>
                                 <p className="ml-5 mb-5 text-xs">Joined {post?.Client_id?.createdAt}</p>
                             </div>

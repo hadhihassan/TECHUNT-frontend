@@ -2,18 +2,26 @@ import Avatar from "react-avatar";
 import { IconButton } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
-import { FlagOutlined } from "@mui/icons-material";
-import { useEffect, useState } from 'react';
-import { getALlTalent } from '../../../services/clientApiService';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
+import { fetchAllJobPost, getALlTalent, sendInvitation } from '../../../services/clientApiService';
 import { AxiosError, AxiosResponse } from 'axios';
 import { UserProfile } from '../../../interface/interfaces';
 import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../../routes/pathVariables";
 import { createConversation } from "../../../services/commonApiService";
+import { Dialog, Transition } from '@headlessui/react'
+import type {jobInterface} from '../editJobPostForm'
+import { message } from "antd";
 
 const ListDiscoverTalent = () => {
     const navigate = useNavigate()
     const [discoverTalent, setDiscoverTalent] = useState<UserProfile[]>([])
+    const [isOpen, setOpen] = useState<boolean>(false)
+    const [works, setWorks] = useState<jobInterface[]>([])
+    const [selectedUserId, setSelectedUserId] = useState<string>("")
+    const [workId, setWorkId] = useState<string>("")
+    
+    const closeModal = () => setOpen(!isOpen)
     useEffect(() => {
         const fetchAllTalents = () => {
             getALlTalent()
@@ -23,6 +31,11 @@ const ListDiscoverTalent = () => {
                 .catch((error: AxiosError) => {
                     console.error('Error fetching talents:', error);
                 });
+            fetchAllJobPost().then((res: AxiosResponse) => {
+                console.log(res.data?.data);
+                setWorks(res.data?.data?.data)
+                console.log(works)
+            })
         };
         fetchAllTalents();
     }, []);
@@ -31,17 +44,24 @@ const ListDiscoverTalent = () => {
     const toggleSkills = () => {
         setShowAllSkills(!showAllSkills);
     };
+
     const handleNavigateProfile = (index: number) => {
         localStorage.setItem("profileData", JSON.stringify(discoverTalent[index]))
         navigate(talent_routes.ProfileView)
     };
     const handleMessage = (index: number) => {
         createConversation(discoverTalent[index]._id)
-        .then((res)=>{
-            navigate('/message')
-        })
+            .then(() => navigate('/message'))
     }
-
+    const handleSendInvitation = () => {
+        const findJobPost = works.filter((value)=>value._id === workId)
+        sendInvitation(findJobPost, selectedUserId)
+        .then((res:AxiosResponse)=>{
+            if(res.data.success){
+                message.success("Invitation sended successfully")
+            }
+        }).catch(()=>message.error("Try again . Something went wrong ?"))
+    }
     return (<>
         {
             discoverTalent.map((talent: UserProfile, index: number) => (
@@ -78,6 +98,11 @@ const ListDiscoverTalent = () => {
                             </div>
                         </div>
                         <div className="flex flex-col mt-10">
+                            <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={()=>{
+                                closeModal()
+                                setSelectedUserId(talent._id)
+                                }}>Invite</button>
+
                             <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={() => handleMessage(index)}>Message</button>
                             <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-2 rounded-full self-center" onClick={() => handleNavigateProfile(index)}>See profile</button>
                         </div>
@@ -96,11 +121,71 @@ const ListDiscoverTalent = () => {
                         </div>
                     </div>
                 </div>
+
+
             ))
         }
+        <Transition appear show={isOpen} as={Fragment}>
+            <Dialog className="relative z-10" onClose={closeModal}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black/25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <div className="mt-2">
+                                    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+                                        <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
+                                            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                                                <p className="text-xl font-bold leading-tight tracking-tight text-gray-700 font-sans text-center md:text-2xl">
+                                                    Send invitation
+                                                </p><div>
+                                                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                                                        Select you work post
+                                                    </label>
+                                                    <select
+                                                    onChange={(e:ChangeEvent<HTMLSelectElement>)=>{
+                                                        setWorkId(e.target.value)
+                                                    }}
+                                                        name="work"
+                                                        className="outline-none bg-gray-50 border rounded-xl border-gray-300 text-gray-900 sm:text-sm  block w-full p-2.5">
+                                                        {works?.map((work: jobInterface, index: number) => (
+                                                            <option key={index} value={work?._id}>{work?.Title}</option>
+                                                        ))} 
+                                                    </select>
+                                                </div>
+                                                <button
+                                                    className="w-full bg-red-500   font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white" 
+                                                    onClick={handleSendInvitation}>
+                                                    send
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
+                    </div>
+                </div>
+            </Dialog>
+        </Transition>
     </>)
 }
-
-
-
 export default ListDiscoverTalent;

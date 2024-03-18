@@ -43,6 +43,9 @@ export async function createConversation(id: string) {
 export async function getAllActiveContract(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/fetch-all-active-contract/`)
 }
+export async function getAllCanceledContract(role: string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/fetch-all-canceled-contract/`)
+}
 export async function getSubmittedWork(id: string, role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/contract/get-submitted-work/${id}`)
 }
@@ -66,4 +69,7 @@ export async function purchasePlan(role: string, planId: string) {
 }
 export async function makePaymentToPlan(role:string,planId:string, amount:number ) {
     return await axiosInstance.post(`${BASE_URL}${role}/plan/plan/purchase-payment/`,{planId, amount});
+}
+export async function getAllCancelledContracts(role:string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/contract/get-cancelled-contract/`)
 }

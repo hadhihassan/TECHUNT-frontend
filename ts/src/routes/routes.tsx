@@ -70,7 +70,7 @@ const WebRouters: React.FC = () => {
                 </Imports.Route>
 
                 <Imports.Route element={<Imports.Layout />}>
-                <Imports.Route path={"/plan"} element={< PlanPage />} />
+                    <Imports.Route path={"/plan"} element={< PlanPage />} />
                 </Imports.Route>
 
                 {/* CLIENT ROUTES */}
@@ -82,7 +82,12 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.clientRoutes.ContractSubmit} element={<Imports.ContractForm />} />
                     <Imports.Route path={Imports.clientRoutes.ViewMiles} element={<Imports.Milestone />} />
                 </Imports.Route>
-                <Imports.Route path={Imports.Path.Message} element={<Message />} />
+
+
+
+                <Imports.Route element={<Imports.Layout />}>
+                    <Imports.Route path={Imports.Path.Message} element={<Message />} />
+                </Imports.Route>
                 <Imports.Route path={Imports.Path.Search} element={< Search />} />
 
 

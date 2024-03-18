@@ -19,7 +19,7 @@ import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import NotificaioDrawer, { Notification } from "../../notificaionDrawer";
 import { getAllProposalForClient } from "../../../../services/clientApiService";
 import { ProposalInterface, } from "../../../../interface/interfaces";
-import { Button, Divider, notification, Space } from 'antd';
+import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -38,7 +38,6 @@ const AfterLoginHeader = () => {
     const basicdata = useContext(MyContext) || ""
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [proposals, setProposals] = useState<ProposalInterface[]>([]);
-    const [notifyData, setNotifyData] = useState()
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -77,6 +76,7 @@ const AfterLoginHeader = () => {
                 openNotification("topRight")
             }
         })
+
         return () => {
             socket.off("newPost");
         };
@@ -97,6 +97,7 @@ const AfterLoginHeader = () => {
         persistor.purge();
         basicdata?.fn()
         dispatch(cleanAllData())
+        socket.emit("OfflineUser", { role: role, id: sender_id });
         navigate("/")
     }
     const userData = useSelector((state: ROOTSTORE) => state.signup)
@@ -137,7 +138,8 @@ const AfterLoginHeader = () => {
                         </>
                     }
                     <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
-                    <span className="mr-[1px] mt-1">Messages</span>
+                    <span className="mr-[1px] mt-1" onClick={()=>navigate(routerVariables.Message)}>Messages</span>
+                    <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/contract/all/`)}>My Works</span>
                     <div className="felx pb-">
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
                         <NotificationsNoneOutlinedIcon color="primary" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />

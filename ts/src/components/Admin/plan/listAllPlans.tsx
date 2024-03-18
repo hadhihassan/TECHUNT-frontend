@@ -22,7 +22,7 @@ export function ListAllPlans() {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const [plans, setPlans] = useState<PlanInterface[]>([])
-    const [editData,setEdit]= useState<PlanInterface>()
+    const [editData,setEdit]= useState<string>("")
     
 
     const close = () => setIsOpen(false)
@@ -31,7 +31,7 @@ export function ListAllPlans() {
     const closeEdit = () => setEditOpen(false)
     const openEdit = () => setEditOpen(true)
     const hadnleOpenEdit = (index:number) => {
-        setEdit(plans[index])
+        setEdit(plans[index]._id)
         openEdit()
     }
     useEffect(() => {
@@ -42,7 +42,7 @@ export function ListAllPlans() {
             }).catch((err: AxiosError) => [
                 alert(err)
             ])
-    }, [isOpen])
+    }, [isOpen, editOpen])
     return (
         <div className=" w-[90%] h-auto m-7">
             <Card placeholder={undefined}>
@@ -165,7 +165,9 @@ export function ListAllPlans() {
                     </div>
                 </CardFooter>
             </Card>
-            <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
+            {
+                editOpen &&<EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
+            }
         </div>
 
     );

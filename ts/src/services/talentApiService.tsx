@@ -64,6 +64,7 @@ export async function getAllClientProposalsForTalent(id: string) {
 export async function getAllNewContracts() {
     return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-new-contract/`)
 }
+
 export async function updateContractStatus(id: string, status: boolean, actualStatus: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/update-contract-status/`, { id, status, actualStatus })
 }
@@ -73,8 +74,14 @@ export async function updateMilestoneStatus(id: string, status: string) {
 export async function submitWork(id: string, data: { url: string, description: string }) {
     return await axiosInstance.post(`${BASE_URL}TALENT/contract/milestone/submit-work/`, { id, data })
 }
-export async function submitEditWork(id: string, data: { url: string, description: string }, workId:string) {
+export async function submitEditWork(id: string, data: { url: string, description: string }, workId: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/contract/milestone/edit-work/`, { id, data, workId })
+}
+export async function saveResume(s3Link: string) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/profile/resume-save/`, { s3Link })
+}
+export async function searchJob(searchData:{query:string,postType:string, experiance:string, maxInputValue:number, inputValue:number}) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`,{searchData})
 }
 
 

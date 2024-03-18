@@ -5,7 +5,7 @@ const dummy = () => {
     return <>
         <div className="h-[297px]  bg-red-500 flex">
             <div className="w-[70%] h-[297px] " >
-                <div className="w-[650px] h-[70px] text-white text-[43px] ml-[8%] pt-8 font-bold font-normal font-montserrat ] ">Join world’s best market place
+                <div className="w-[650px] h-[70px] text-white text-[43px] ml-[8%] pt-8 font-normal font-montserrat ] ">Join world’s best market place
                 </div>
                 <div className="text-white text-base font-medium  ml-[8%] mt-10 leading-[33px]">Find the best Talent and best works based on your skills from around the world.</div>
                 <div className="ml-[8%] mt-10 ">

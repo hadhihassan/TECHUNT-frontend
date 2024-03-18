@@ -11,12 +11,10 @@ const useSendMessages = () => {
     const conversation = useSelector((state: ROOTSTORE) => state.conversation.selectedConversations)
 
     const sendMessage = async (message: string) => {
+        setMessages([...conversation?.messages, {message}]);
         setLoading(true);
         try {
             const res = await sendMessageBakend(message, conversation?.participants[0]._id)
-            setMessages([...conversation.messages, {message}]);
-            // console.log(res,  "is the message for the sending sending message")
-            console.log("sending message", [...conversation.messages, {message}])
         } catch (error) {
             console.log(error.message);
         } finally {

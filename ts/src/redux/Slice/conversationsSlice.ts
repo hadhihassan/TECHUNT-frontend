@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-
 //Define the initial state shap
 export type ConversationType = {
     selectedConversations: unknown,
