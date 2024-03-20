@@ -2,6 +2,7 @@
 
 import axiosInstance, { BASE_URL, resolve } from "../config/axios";
 import routerVariables from '../routes/pathVariables'
+import type { BankDetailsInterface } from '../components/General/bankDetilsSection'
 export async function editMainProfileSection(data: object, role: string) {
 
     return await resolve(
@@ -67,9 +68,12 @@ export async function getAllPlans(role: string) {
 export async function purchasePlan(role: string, planId: string) {
     return await axiosInstance.post(`${BASE_URL}${role}/plan/purchase-plan/`, { planId })
 }
-export async function makePaymentToPlan(role:string,planId:string, amount:number ) {
-    return await axiosInstance.post(`${BASE_URL}${role}/plan/plan/purchase-payment/`,{planId, amount});
+export async function makePaymentToPlan(role: string, planId: string, amount: number) {
+    return await axiosInstance.post(`${BASE_URL}${role}/plan/plan/purchase-payment/`, { planId, amount });
 }
-export async function getAllCancelledContracts(role:string) {
+export async function getAllCancelledContracts(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/contract/get-cancelled-contract/`)
+}
+export async function updateBankDetails(data: BankDetailsInterface, role: string, id: string) {
+    return await axiosInstance.patch(`${BASE_URL}update-bank-details/`, { data, role, id })
 }

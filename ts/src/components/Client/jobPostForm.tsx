@@ -238,17 +238,18 @@ const JobPostForm = () => {
                                     <input
                                         name="Title"
                                         onChange={onChangeInput}
-                                        // {...register('Title', {
-                                        //     required: 'Job title is required',
-                                        //     minLength: {
-                                        //         value: 5,
-                                        //         message: 'Job title must be at least 5 characters long',
-                                        //     },
-                                        //     maxLength: {
-                                        //         value: 50,
-                                        //         message: 'Job title cannot exceed 20 characters',
-                                        //     },
-                                        // })}
+                                        {...register('Title', {
+                                            required: 'Job title is required',
+                                            minLength: {
+                                                value: 5,
+                                                message: 'Job title must be at least 5 characters long',
+                                            },
+                                            maxLength: {
+                                                value: 50,
+                                                message: 'Job title cannot exceed 20 characters',
+                                            },
+
+                                        })}
                                         type="text"
                                         className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[94%] rounded-xl p-2.5 checked:bg-emerald-500"
                                         placeholder="ex, need Web developer for figma"
@@ -272,6 +273,7 @@ const JobPostForm = () => {
                                                 ['clean']
                                             ],
                                         }}
+
                                     />
                                 </div>
                                 <p className="mt-5">Required Skills</p>
@@ -318,8 +320,12 @@ const JobPostForm = () => {
                                     <FormControl>
 
                                         <RadioGroup
+                                            {...register('TimeLine', {
+                                                required: 'TimeLine is required',
+                                            })}
                                             onChange={onChangeInput}
                                             row
+                                            aria-required
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="TimeLine"
                                         >
@@ -351,6 +357,10 @@ const JobPostForm = () => {
                                     <div className="flex items-center space-x-4">
                                         <div className="flex items-center">
                                             <input
+                                                {...register('WorkType', {
+                                                    required: 'Work type is required',
+                                                })}
+                                                required
                                                 type="radio"
                                                 id="Fixed"
                                                 name="WorkType"
@@ -393,12 +403,13 @@ const JobPostForm = () => {
                                 <div className=" mt-4">
                                     <FormControl >
                                         <OutlinedInput
+                                            required
                                             name="Amount"
                                             onChange={onChangeInput}
                                             id="outlined-adornment-amount"
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                             style={{ width: 300, height: 45 }}
-                                            
+
                                         />
                                     </FormControl>
                                 </div>

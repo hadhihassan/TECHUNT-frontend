@@ -40,10 +40,9 @@ const PlanPage = () => {
         setIsOpen(true)
     }
     const handlePurchase = async () => {
-        const data:AxiosResponse | AxiosError = await subscriptionPayment(useData?.role,plan[selected]?._id, plan[selected]?.amount)
-        if(data){
+        const data: AxiosResponse | AxiosError = await subscriptionPayment(useData?.role, plan[selected]?._id, plan[selected]?.amount)
+        if (data) {
             alert("success")
-            console.log(data)
             purchasePlan(useData?.role, plan[selected]._id)
         }
     }

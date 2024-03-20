@@ -9,7 +9,9 @@ import { getUserProfileDetails } from "../../../services/talentApiService";
 import ProfileSkills from "../../../components/General/profileSkills";
 import ProfileExperiance from "../../../components/General/profileExperiance";
 import ProfileReviews from "../../../components/General/profileReviews";
-import { AxiosError, AxiosResponse } from "axios"
+import { AxiosError } from "axios"
+import { BankDetails } from "../../../components/General/bankDetilsSection";
+
 interface UserProfile {
     Last_name: string;
     First_name: string;
@@ -32,24 +34,28 @@ interface UserProfile {
     online?: boolean;
     isVerify?: boolean;
     isNumberVerify?: boolean;
+    bankDetails: {
+        account_holder_name: string
+        account_number: number
+        account_type: string
+        bank_name: string
+        ifsc_code: number
+        _id: string
+    }
+
 }
+
 const Profile = () => {
     const [datas, setData] = useState<UserProfile>()
-    const { role } = useContext(MyContext);
-    console.log(role)
-
+    const { role }: { role: string } = useContext(MyContext) || { role: "" };
     const getUserProfile = () => {
-        console.log("get user profile");
-
         getUserProfileDetails(role)
-            .then((res: AxiosResponse) => {
-                console.log(res?.data?.data, "this is reponse for getting profile")
+            .then((res) => {
                 setData(res?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
     }
-
     useEffect(() => {
         if (role) {
             getUserProfile();
@@ -61,22 +67,31 @@ const Profile = () => {
         <AfterLoginHeader />
         <div className="bg-blue-700 absolute -z-10 w-full h-[50vh] ">
         </div>
+
         <div className="flex items-center mt-10 flex-row justify-center ">
             <ProfileTalentDetailsFirst datas={datas} onUpdate={getUserProfile} />
             <ProfileVerifications />
         </div>
+
         <div className={`flex items-center  flex-row  ${role === "CLIENT" ? "ml-[6rem]" : "justify-center"} `}>
             <ProfileContact data={datas} onUpdate={getUserProfile} />
             {
                 role === "CLIENT" ? null : <ProfileSkills data={datas} onUpdate={getUserProfile} />
             }
         </div>
+
+        <div className="flex items-center  flex-row ml-24 mb-5">
+            <BankDetails data={datas?.bankDetails} onUpdate={getUserProfile} />
+        </div>
+
         <div className="flex items-center  flex-row m-1 mb-5">
             {
                 role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
             }
         </div>
+
         <ProfileReviews />
+
         <Footer />
     </div>);
 }

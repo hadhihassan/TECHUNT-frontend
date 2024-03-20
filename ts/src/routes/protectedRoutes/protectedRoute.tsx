@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import routerVariables from "../pathVariables";
 import { ROOTSTORE } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { message } from "antd";
 export function IsLoggedUser() {
     const userDatas = useSelector((state: ROOTSTORE) => state.signup);
     const url = window.location.pathname;
@@ -10,7 +11,7 @@ export function IsLoggedUser() {
 }
 export function IsVerified() {
     const data = useSelector((state: ROOTSTORE) => state.signup);
-    return (data?.verify&&!data?.isLogged) ? <Outlet /> : <Navigate to={routerVariables.signup} />;
+    return (data?.verify && !data?.isLogged) ? <Outlet /> : <Navigate to={routerVariables.signup} />;
 }
 export function IsNewUser() {
     const verify = useSelector((state: ROOTSTORE) => state.signup.verify);
@@ -19,4 +20,12 @@ export function IsNewUser() {
 export function CheckUserType() {
     const userDatas = useSelector((state: ROOTSTORE) => state.signup);
     return userDatas?.role === "NOTHING" ? <Navigate to={routerVariables.Type} /> : <Outlet />;
+}
+export function CheckPreminumUser() {
+    const userDatas = useSelector((state: ROOTSTORE) => state.signup);
+    if (!userDatas?.premiumUser) {
+        message.info("Purchase plan then you will get add on features !")
+        return <Navigate to={`plan/`} />;
+    }
+    return <Outlet />;
 }

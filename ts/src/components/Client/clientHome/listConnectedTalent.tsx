@@ -61,7 +61,7 @@ const ListConnectedFreelancers: React.FC = () => {
             <Menu.Item key="1" danger={true} onClick={() => handleMessage(index)}>Message</Menu.Item>
             <Menu.Item key="2" danger={true} onClick={() => handleShowJobDetails(index)}>Job details</Menu.Item>
             <Menu.Item key="3" danger={true} onClick={() => handleShowProposalDetails(index)}>Proposal details</Menu.Item>
-            <Menu.Item key="3" danger={true} onClick={() => handlesendConntracl(index)}>Send Proposal</Menu.Item>
+            <Menu.Item key="3" danger={true} onClick={() => handlesendConntracl(index)}>Send contract</Menu.Item>
         </Menu>
     );
     const handlesendConntracl = (index: number) => {

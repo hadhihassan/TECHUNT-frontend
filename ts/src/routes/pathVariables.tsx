@@ -48,6 +48,7 @@ type ADMIN_ROUTES = {
     UserMangment: string,
     JobCategoryManagment: string,
     Dashboard: string
+    PlanMangment: string
 }
 const routerVariables: Routes = {
     Landing: '/',
@@ -100,5 +101,6 @@ export const admin_Routes: ADMIN_ROUTES = {
     Login: "/admin/login/",
     UserMangment: "/admin/user-management/",
     JobCategoryManagment: "/admin/job-Category-management/",
-    Dashboard: "/admin/dashboard/"
+    Dashboard: "/admin/dashboard/",
+    PlanMangment: '/admin/plan-mangment/'
 }

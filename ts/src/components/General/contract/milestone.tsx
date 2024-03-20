@@ -17,7 +17,7 @@ import { addWalletAmount, sendMilestoneApproval } from '../../../services/client
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
-import { useParams } from 'react-router';
+import { Params, useParams } from 'react-router';
 
 
 
@@ -29,24 +29,17 @@ const Milestone = () => {
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [selectMilestone, setSelected] = useState<number>(0)
+
     useEffect(() => {
         const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
         if (contractData !== "") {
             setContract(contractData)
         }
-        if (success === "true") {
-            const payedMilestoneString = localStorage.getItem('payedMilestone');
-            const payedMilestone = payedMilestoneString ? JSON.parse(payedMilestoneString) : "";
-            addWalletAmount(contractData?.talent?._id, payedMilestone?.amount, payedMilestone?._id)
-                .then((res: AxiosResponse) => {
-                    console.log(res)
-                }).catch((err) => {
-                    console.log(err)
-                })
+        return () => {
+            localStorage.removeItem("payedMilestone")
         }
+    }, [])
 
-
-    }, [contract])
     const [isOpen, setIsOpen] = useState(false)
     const [formOpen, setFormOpen] = useState(false)
     const openModal = () => setIsOpen(true)
@@ -91,15 +84,28 @@ const Milestone = () => {
         setConfirm(!confirm)
         setStausKey(e?.key)
     };
-    const payment = async (index: number): Promise<void>  => {
-        const milestone: MilestoneType | undefined = contract?.milestones[index]
-        localStorage.setItem("payedMilestone", JSON.stringify(contract?.milestones[index]))
-        await paymentToTalent(contract?.talent?._id, milestone?.amount)
-        const completedMilestones:MilestoneType[] = contract?.milestones.filter((milestone) => milestone.completed === "Completed") || []
-        if (contract && completedMilestones?.length === contract?.milestones) {
-            contractStatusUpdate(contractData?._id, "completed", role)
+    const payment = async (index: number): Promise<void> => {
+
+
+        const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
+        const milestone: MilestoneType | undefined = contract?.milestones[index];
+        localStorage.setItem("payedMilestone", JSON.stringify(milestone));
+        try {
+            await addWalletAmount(contractData?.talent?._id, milestone?.amount, milestone?._id);
+            console.log("Payment success");
+
+            await paymentToTalent(contract?.talent?._id, milestone?.amount);
+
+            const completedMilestones: MilestoneType[] = contract?.milestones.filter(milestone => milestone.completed === "Completed") || [];
+
+            if (completedMilestones.length === contract?.milestones.length) {
+                await contractStatusUpdate(contractData?._id, "completed", role);
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
         }
-    }
+        alert("Payment processed successfully");
+    };
     const items: MenuProps['items'] = [
         {
             label: 'update to On progress',
@@ -244,7 +250,7 @@ const Milestone = () => {
                 message.error("An error occurred while cancelling the contract.");
             });
     };
-    
+
     return <>
         {/* <div className="bg-blue-600 absolute -z-10 w-full h-[50vh] " >
         </div> */}
@@ -408,7 +414,7 @@ const Milestone = () => {
                 <div className="h-[100vh] w-[25%]  font-sans border">
                     <div className="container mt-4 flex  flex-col ">
                         {
-                            role ==="CLIENT" && <button
+                            role === "CLIENT" && <button
                                 onClick={handleEndContract}
                                 className=" bg-red-500 font-sans text-white rounded-xl py-1">End contract </button>
                         }

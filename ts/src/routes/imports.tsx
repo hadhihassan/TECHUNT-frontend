@@ -38,7 +38,7 @@ const TransactionsPage = lazy(() => import('../pages/Genaral/transactionsPage'))
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
 // Protected Routes
-import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser } from './protectedRoutes/protectedRoute';
+import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser, CheckPreminumUser } from './protectedRoutes/protectedRoute';
 //Admin protected routes
 import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
@@ -46,9 +46,8 @@ import AdminLayout from '../components/Admin/adminLayout';
 import Loader from '../components/General/loader/loader';
 import ContactListPage from '../pages/Genaral/contractList';
 
-
-
 export {
+    CheckPreminumUser,
     TransactionsPage,
     Milestone,
     ContactListPage,

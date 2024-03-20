@@ -52,7 +52,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path={Imports.admin_Routes.Login} element={<Imports.AdminLogin />} />
                 <Imports.Route path='admin' element={<Imports.AdminLayout />}>
                     <Imports.Route path={Imports.admin_Routes.Dashboard} element={<Imports.ProtectedRoute><Imports.IndexDashBoard /></Imports.ProtectedRoute>} />
-                    <Imports.Route path={"/admin/plan/"} element={<Imports.ProtectedRoute><ListAPlans /></Imports.ProtectedRoute>} />
+                    <Imports.Route path={Imports.admin_Routes.PlanMangment} element={<Imports.ProtectedRoute><ListAPlans /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.JobCategoryManagment} element={<Imports.ProtectedRoute><Imports.JobCategories /></Imports.ProtectedRoute>} />
                     <Imports.Route path={Imports.admin_Routes.UserMangment} element={<Imports.ProtectedRoute><Imports.UserManagementIndex /></Imports.ProtectedRoute>} />
                 </Imports.Route>
@@ -86,12 +86,11 @@ const WebRouters: React.FC = () => {
 
 
                 <Imports.Route element={<Imports.Layout />}>
-                    <Imports.Route path={Imports.Path.Message} element={<Message />} />
+                    <Imports.Route element={<Imports.CheckPreminumUser />}>
+                        <Imports.Route path={Imports.Path.Message} element={<Message />} />
+                    </Imports.Route>
                 </Imports.Route>
                 <Imports.Route path={Imports.Path.Search} element={< Search />} />
-
-
-
 
             </Imports.Routes>
         </Suspense>

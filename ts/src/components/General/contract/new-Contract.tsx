@@ -14,8 +14,12 @@ import { talent_routes } from "../../../routes/pathVariables";
 interface Contract {
     _id: string,
     talent: string;
-    client: string;
-    work: string;
+    client: {
+        First_name: string
+    }
+    work: {
+        Title: string
+    }
     terms: string;
     duration: Date[];
     amount: number;
@@ -32,7 +36,7 @@ type props = {
 }
 
 const NewContract: React.FC<props> = ({ active }) => {
-    console.log(active  )
+    console.log(active)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state?.signup?.role)
     const [show, setShow] = useState<boolean>(false)
     const [contract, setNewContract] = useState<Contract[]>([])
@@ -40,7 +44,7 @@ const NewContract: React.FC<props> = ({ active }) => {
     useEffect(() => {
         if (active === 3) {
             fetchNewContract()
-        } else if(active === 0){
+        } else if (active === 0) {
             fetchActiveContract()
         }
     }, [active])
@@ -74,6 +78,7 @@ const NewContract: React.FC<props> = ({ active }) => {
         });
     const handleNavigateFullDetail = (index: number) => {
         localStorage.setItem("contractDetails", JSON.stringify(contract[index]) || "")
+
         if (role === "CLIENT") {
             navigate(clientRoutes.ViewMiles)
         } else {
@@ -122,7 +127,6 @@ const NewContract: React.FC<props> = ({ active }) => {
                                     </Popconfirm>
                                 </>
                             }
-
                         </>
                     }
                     <div key={index} className="flex justify-center w-auto ">
@@ -133,8 +137,6 @@ const NewContract: React.FC<props> = ({ active }) => {
                     <br />
                 </>
             )) : <>
-
-
             </>
         }
     </>;

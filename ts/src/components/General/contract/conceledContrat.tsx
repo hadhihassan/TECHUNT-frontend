@@ -11,8 +11,12 @@ import { getAllCancelledContracts } from "../../../services/commonApiService";
 interface Contract {
     _id: string,
     talent: string;
-    client: string;
-    work: string;
+    client: {
+        First_name:string
+    };
+    work: {
+        Title:string
+    };
     terms: string;
     duration: Date[];
     amount: number;
@@ -34,7 +38,6 @@ const CancelledContract: React.FC = () => {
     const navigate = useNavigate()
     useEffect(() => {
         fetchCancelledContract()
-        alert("ddd")
     }, [])
     console.log("this is cancelled contract listing componenet")
     const fetchCancelledContract = () => {

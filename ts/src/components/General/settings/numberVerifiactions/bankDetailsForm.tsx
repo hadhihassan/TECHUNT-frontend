@@ -65,7 +65,7 @@ export default function CheckoutForm() {
         } else {
             setDetails({
                 ...bankDetails,
-                account_type: e 
+                account_type: e
             })
         }
         console.log(bankDetails)
@@ -73,144 +73,156 @@ export default function CheckoutForm() {
     const submit = (e: React.FormEvent) => {
         e.preventDefault()
         addBankDetails(userData.id, userData.role, bankDetails)
-        .then((res)=>{
-            alert("success")
-        }).catch((err)=>{
-            alert("error")
-            console.log(err)
-        })
+            .then((res) => {
+                alert("success")
+            }).catch((err) => {
+                alert("error")
+                console.log(err)
+            })
     }
-    return (
-        <Card className="w-full ml-32  max-w-[30rem] h-auto border" placeholder={undefined}>
-            <Typography className="m-auto mt-3" variant="h5" placeholder={undefined}>Fill you bank details</Typography>
-            <CardBody placeholder={undefined}>
-                <Tabs value={type} className="overflow-visible">
-                    <TabsBody
-                        className=""
-                        animate={{
-                            initial: {
-                                x: type === "card" ? 400 : -400,
-                            },
-                            mount: {
-                                x: 0,
-                            },
-                            unmount: {
-                                x: type === "card" ? 400 : -400,
-                            },
-                        }} placeholder={undefined}                    >
-                        <TabPanel value="card" className="p-0">
-                            <form className=" flex flex-col gap-4" onSubmit={submit}>
-                                <div className=" flex items-center gap-4">
-                                    <div className="w-full">
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="mb-1 font-medium" placeholder={undefined}                                    >
-                                            Holder Name
-                                        </Typography>
-                                        <Input
-                                            onChange={handleOnChnage}
-                                            name="account_holder_name"
-                                            placeholder="name@mail.com"
-                                            className="w-full !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                            labelProps={{
-                                                className: "before:content-none after:content-none",
-                                            }} crossOrigin={undefined} />
-                                    </div>
-                                    <div className="w-full">
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="mb-1 font-medium" placeholder={undefined}                                    >
-                                            Bank Name
-                                        </Typography>
-                                        <Input
-                                            onChange={handleOnChnage}
-                                            name="bank_name"
-                                            placeholder="name@mail.com"
-                                            className=" w-full !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                            labelProps={{
-                                                className: "before:content-none after:content-none",
-                                            }} crossOrigin={undefined} />
-                                    </div>
-                                </div>
-                                <div >
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
-                                        className="mb-1 font-medium " placeholder={undefined}                                    >
-                                        Account Number
-                                    </Typography>
+    return (<>
 
-                                    <Input
-                                        onChange={handleOnChnage}
-                                        name="account_number"
-                                        maxLength={19}
-                                        // value={formatCardNumber(cardNumber)}
-                                        // onChange={(event) => setCardNumber(event.target.value)}
-                                        placeholder="0000 0000 0000 0000"
-                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                        labelProps={{
-                                            className: "before:content-none after:content-none",
-                                        }} crossOrigin={undefined} />
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
-                                        className="mb-1 mt-2 font-medium " placeholder={undefined}                                    >
-                                        IFCS code
-                                    </Typography>
+        {
+            userData.bankVerified ? <>
+                <Card className="w-full ml-32  max-w-[30rem] h-auto border" placeholder={undefined}>
+                    
+                </Card>
+            </>
+                : <>
+                    <Card className="w-full ml-32  max-w-[30rem] h-auto border" placeholder={undefined}>
+                        <Typography className="m-auto mt-3" variant="h5" placeholder={undefined}>Fill you bank details</Typography>
+                        <CardBody placeholder={undefined}>
+                            <Tabs value={type} className="overflow-visible">
+                                <TabsBody
+                                    className=""
+                                    animate={{
+                                        initial: {
+                                            x: type === "card" ? 400 : -400,
+                                        },
+                                        mount: {
+                                            x: 0,
+                                        },
+                                        unmount: {
+                                            x: type === "card" ? 400 : -400,
+                                        },
+                                    }} placeholder={undefined}                    >
+                                    <TabPanel value="card" className="p-0">
+                                        <form className=" flex flex-col gap-4" onSubmit={submit}>
+                                            <div className=" flex items-center gap-4">
+                                                <div className="w-full">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="mb-1 font-medium" placeholder={undefined}                                    >
+                                                        Holder Name
+                                                    </Typography>
+                                                    <Input
+                                                        onChange={handleOnChnage}
+                                                        name="account_holder_name"
+                                                        placeholder="name@mail.com"
+                                                        className="w-full !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                        labelProps={{
+                                                            className: "before:content-none after:content-none",
+                                                        }} crossOrigin={undefined} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="mb-1 font-medium" placeholder={undefined}                                    >
+                                                        Bank Name
+                                                    </Typography>
+                                                    <Input
+                                                        onChange={handleOnChnage}
+                                                        name="bank_name"
+                                                        placeholder="name@mail.com"
+                                                        className=" w-full !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                        labelProps={{
+                                                            className: "before:content-none after:content-none",
+                                                        }} crossOrigin={undefined} />
+                                                </div>
+                                            </div>
+                                            <div >
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="mb-1 font-medium " placeholder={undefined}                                    >
+                                                    Account Number
+                                                </Typography>
 
-                                    <Input
-                                        onChange={handleOnChnage}
-                                        name="ifsc_code"
-                                        maxLength={19}
-                                        // value={formatCardNumber(cardNumber)}
-                                        // onChange={(event) => setCardNumber(event.target.value)}
-                                        placeholder="0000 0000 0000 0000"
-                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                        labelProps={{
-                                            className: "before:content-none after:content-none",
-                                        }} crossOrigin={undefined} />
+                                                <Input
+                                                    onChange={handleOnChnage}
+                                                    name="account_number"
+                                                    maxLength={19}
+                                                    // value={formatCardNumber(cardNumber)}
+                                                    // onChange={(event) => setCardNumber(event.target.value)}
+                                                    placeholder="0000 0000 0000 0000"
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }} crossOrigin={undefined} />
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="mb-1 mt-2 font-medium " placeholder={undefined}                                    >
+                                                    IFCS code
+                                                </Typography>
 
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
-                                        className="mb-2 font-medium" placeholder={undefined}                                            >
-                                        Bank Type
-                                    </Typography>
-                                    <Select
-                                        name="account_type"
-                                        onChange={handleOnChnage}
-                                        placeholder="USA"
-                                        className="  !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                        labelProps={{
-                                            className: "before:content-none after:content-none",
-                                        }}
-                                        menuProps={{ className: "h-48" }}
-                                    >
-                                        {bankTypes.map((name: string) => (
-                                            <Option key={name} value={name}  >
-                                                {/* <div className="flex items-center gap-x-2"> */}
-                                                {name}
-                                                {/* </div> */}
-                                            </Option>
-                                        ))}
-                                    </Select>
+                                                <Input
+                                                    onChange={handleOnChnage}
+                                                    name="ifsc_code"
+                                                    maxLength={19}
+                                                    // value={formatCardNumber(cardNumber)}
+                                                    // onChange={(event) => setCardNumber(event.target.value)}
+                                                    placeholder="0000 0000 0000 0000"
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }} crossOrigin={undefined} />
 
-                                </div>
-                                <Button size="lg" className="bg-red-500 py-3 pb" type="submit" placeholder={undefined}>Add</Button>
-                                <Typography
-                                    variant="small"
-                                    color="gray"
-                                    className=" flex items-center justify-center gap-2 font-medium opacity-60" placeholder={undefined}                                >
-                                    <LockClosedIcon className="-mt-0.1 h-4 w-4" /> Payments are
-                                    secure and encrypted
-                                </Typography>
-                            </form>
-                        </TabPanel>
-                    </TabsBody>
-                </Tabs>
-            </CardBody>
-        </Card>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="mb-2 font-medium" placeholder={undefined}                                            >
+                                                    Bank Type
+                                                </Typography>
+                                                <Select
+                                                    name="account_type"
+                                                    onChange={handleOnChnage}
+                                                    placeholder="USA"
+                                                    className="  !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    menuProps={{ className: "h-48" }}
+                                                >
+                                                    {bankTypes.map((name: string) => (
+                                                        <Option key={name} value={name}  >
+                                                            {/* <div className="flex items-center gap-x-2"> */}
+                                                            {name}
+                                                            {/* </div> */}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+
+                                            </div>
+                                            <Button size="lg" className="bg-red-500 py-3 pb" type="submit" placeholder={undefined}>Add</Button>
+                                            <Typography
+                                                variant="small"
+                                                color="gray"
+                                                className=" flex items-center justify-center gap-2 font-medium opacity-60" placeholder={undefined}                                >
+                                                <LockClosedIcon className="-mt-0.1 h-4 w-4" /> Payments are
+                                                secure and encrypted
+                                            </Typography>
+                                        </form>
+                                    </TabPanel>
+                                </TabsBody>
+                            </Tabs>
+                        </CardBody>
+                    </Card>
+                </>
+        }
+
+    </>
     );
 }

@@ -1,7 +1,14 @@
 import "./panel.css"
 import { useNavigate } from 'react-router-dom';
 import { admin_Routes } from "../../routes/pathVariables";
-import React from "react"
+import {
+    Card,
+    List,
+    ListItem,
+    ListItemPrefix,
+} from "@material-tailwind/react";
+
+
 const SidePanel = () => {
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -10,103 +17,54 @@ const SidePanel = () => {
     };
     return (
         <>
-            <div className="relative min-h-screen md:flex" >
-                <input type="checkbox" id="menu-open" className="hidden" />
-                <label htmlFor="menu-open" className="absolute right-2 bottom-2 shadow-lg rounded-full p-2 bg-gray-100 text-gray-600 md:hidden" data-dev-hint="floating action button">
-                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </label>
-                <header className="bg-gray-600 text-gray-100 flex justify-between md:hidden" data-dev-hint="mobile menu bar">
-                    <p className="block p-4 text-white font-bold whitespace-nowrap truncate">
-                        Dashboard
-                    </p>
-                    <label htmlFor="menu-open" id="mobile-menu-button" className="m-2 p-2 focus:outline-none hover:text-white hover:bg-gray-700 rounded-md">
-                        <svg id="menu-open-icon" className="h-6 w-6 transition duration-200 ease-in-out" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg id="menu-close-icon" className="h-6 w-6 transition duration-200 ease-in-out" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </label>
-                </header>
-                <aside id="sidebar" className="bg-gray-900  border rounded-md  text-gray-100 md:w-64 w-3/4 space-y-6 pt-6 px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  md:flex md:flex-col md:justify-between overflow-y-auto" data-dev-hint="sidebar; px-0 for frameless; px-2 for visually inset the navigation">
-                    <div className="flex flex-col items-center w-full h-full overflow-hidden text-gray-400 bg-gray-900 rounded">
-                        <div className="w-full px-2">
-                            <div className="flex flex-col items-center w-full mt-3 border-t border-gray-700">
-                                <p
-                                    onClick={() => {
-                                        navigate(admin_Routes.Dashboard)
-                                    }}
-                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === admin_Routes.Dashboard ? 'bg-gray-700 text-gray-300' : ""}`}>
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Dasboard</span>
-                                </p>
-                                <p onClick={() => { navigate(admin_Routes.UserMangment) }}
-                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === '/admin/user-managment/' ? 'bg-gray-700 text-gray-300' : ""}`}>
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">User Management</span>
-                                </p>
-                                <p onClick={() => { navigate(admin_Routes.UserMangment) }}
-                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === '/admin/user-management/' ? 'bg-gray-700 text-gray-300' : ""}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Plan Managment</span>
-                                </p>
-                                <a
-                                    className="flex items-center w-full h-12 px-3 mt-2 hover:text-gray-200 hover:bg-gray-700 rounded" href="#">
-                                    <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Transactions <small>invoice</small></span>
-                                </a>
-                                <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Banner</span>
-                                </a>
-                            </div>
-                            <div className="flex flex-col items-center w-full mt-2 border-t border-gray-700">
-                                <p
-                                    onClick={() => { navigate(admin_Routes.JobCategoryManagment) }}
-                                    className={`flex items-center w-full h-12 px-3 mt-2 rounded ${window.location.pathname === admin_Routes.JobCategoryManagment ? 'bg-gray-700 text-gray-300' : ""}`}>
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Job Categories</span>
-                                </p>
-                                <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Settings</span>
-                                </a>
-                                <a className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
-                                    <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                    </svg>
-                                    <span className="ml-2 text-sm font-medium">Messages</span>
-                                    <span className="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full"></span>
-                                </a>
-                            </div>
-                        </div>
-                        <p className="flex items-center justify-center w-full h-16 mt-auto bg-gray-800 hover:bg-gray-700 hover:text-gray-300" >
-                            <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <Card className="h-auto  rounded-none  font-semibold font-sans w-full max-w-[18rem] p-3 pr-8  shadow-xl shadow-blue-gray-900/5 bg-gray-900 text-white" placeholder={undefined}>
+                <List placeholder={undefined}>
+                    <ListItem placeholder={undefined} onClick={() => { navigate(admin_Routes.Dashboard) }} className={`font-semibold border-none rounded-full ${window.location.pathname === admin_Routes.Dashboard && "bg-gray-100 text-black translate-x-2 shadow-black shadow-2xl"}`}>
+                        <ListItemPrefix placeholder={undefined} >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" color="blue" className="w-4 h-4">
+                                <path d="M13.975 6.5c.028.276-.199.5-.475.5h-4a.5.5 0 0 1-.5-.5v-4c0-.276.225-.503.5-.475A5.002 5.002 0 0 1 13.974 6.5Z" />
+                                <path d="M6.5 4.025c.276-.028.5.199.5.475v4a.5.5 0 0 0 .5.5h4c.276 0 .503.225.475.5a5 5 0 1 1-5.474-5.475Z" />
                             </svg>
-                            <span className="ml-2 text-sm font-medium" onClick={handleLogout}>LogOut</span>
-                        </p>
-                    </div>
-                </aside>
-            </div>
+                        </ListItemPrefix>
+                        Dashboard
+                    </ListItem>
+                    <ListItem placeholder={undefined} onClick={() => { navigate(admin_Routes.UserMangment) }} className={`font-semibold rounded-full ${window.location.pathname === admin_Routes.UserMangment && "bg-gray-100 text-black translate-x-5 shadow-black shadow-2xl"}`}>
+                        <ListItemPrefix placeholder={undefined} >
+                            <svg xmlns="http://www.w3.org/2000/svg" color="green" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z" />
+                            </svg>
+                        </ListItemPrefix>
+                        User Mangment
+                    </ListItem>
+                    <ListItem placeholder={undefined} onClick={() => { navigate(admin_Routes.JobCategoryManagment) }} className={`font-semibold rounded-full ${window.location.pathname === admin_Routes.JobCategoryManagment && "bg-gray-100 text-black translate-x-5 shadow-black shadow-2xl"}`}>
+                        <ListItemPrefix placeholder={undefined} >
+                            <svg xmlns="http://www.w3.org/2000/svg" color="red" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M11 4V3a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1H4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1ZM9 2.5H7a.5.5 0 0 0-.5.5v1h3V3a.5.5 0 0 0-.5-.5ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clipRule="evenodd" />
+                                <path d="M3 11.83V12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-.17c-.313.11-.65.17-1 .17H4c-.35 0-.687-.06-1-.17Z" />
+                            </svg>
+                        </ListItemPrefix>
+                        Work / Job Categories
+                    </ListItem>
+                    <ListItem placeholder={undefined} onClick={() => { navigate(admin_Routes.PlanMangment) }} className={`font-semibold rounded-full ${window.location.pathname === admin_Routes.PlanMangment && "bg-gray-100 text-black translate-x-5 transform shadow-black shadow-2xl"}`}>
+                        <ListItemPrefix placeholder={undefined} >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" color="gold" className="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                            </svg>
+                        </ListItemPrefix>
+                        Plan Managment
+                    </ListItem>
+                    <ListItem placeholder={undefined} onClick={handleLogout} className="hover:bg-gray-100 hover:text-black font-semibold rounded-full">
+                        <ListItemPrefix placeholder={undefined} >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                                <path d="M11.25 2A2.75 2.75 0 0 1 14 4.75v6.5A2.75 2.75 0 0 1 11.25 14h-3a2.75 2.75 0 0 1-2.75-2.75v-.5a.75.75 0 0 1 1.5 0v.5c0 .69.56 1.25 1.25 1.25h3c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25h-3C7.56 3.5 7 4.06 7 4.75v.5a.75.75 0 0 1-1.5 0v-.5A2.75 2.75 0 0 1 8.25 2h3Z" />
+                                <path d="M7.97 6.28a.75.75 0 0 1 1.06-1.06l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H1.75a.75.75 0 0 1 0-1.5h7.19l-.97-.97Z" />
+                            </svg>
+                        </ListItemPrefix>
+                        Log Out
+                    </ListItem>
+                </List>
+            </Card>
         </>
     )
 }
-
 export default SidePanel

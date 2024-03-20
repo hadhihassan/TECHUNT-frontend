@@ -1,9 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { createNewPlan, getPlan, getPlanForEdit, updatePlan } from '../../../services/adminApiService'
-import { AxiosError, AxiosResponse } from 'axios'
+import { getPlanForEdit, updatePlan } from '../../../services/adminApiService'
 import { message } from 'antd'
-import { string } from 'yup'
 
 interface FormProps {
     isOpen: boolean,
@@ -14,6 +12,7 @@ export interface PlanInterface {
     _id: string,
     name: string,
     description: string,
+    type: string,
     amount: number,
 }
 const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
@@ -21,19 +20,19 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
         _id: "",
         name: "",
         description: "",
+        type: "",
         amount: 0,
     })
-    
+
     const fetchData = (data: string) => {
         getPlanForEdit(data)
             .then((res) => {
-                console.log(res)
-                setPlanData(res.data.data)
+                setPlanData(res?.data?.data)
             })
     }
 
 
-    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setPlanData({
             ...planData,
@@ -43,11 +42,11 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
         updatePlan(data, planData)
-        .then((res)=>{
-            if(res.data.success){
-                message.success("Successfully plan updated ")
-            }
-        }).catch(()=>message.error("Failed to update plan"))
+            .then((res) => {
+                if (res.data.success) {
+                    message.success("Successfully plan updated ")
+                }
+            }).catch(() => message.error("Failed to update plan"))
     }
     useEffect(() => {
         fetchData(data)
@@ -121,6 +120,23 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
                                                             placeholder="10000"
                                                             id="confirmPassword"
                                                             type="number" />
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <label className="block mb-2 text-sm font-medium text-gray-900">
+                                                                Type
+                                                            </label>
+                                                            <select
+                                                                name="type"
+                                                                onChange={onChange}
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 outline-none sm:text-sm rounded-lg block w-full p-2.5"
+                                                            >
+                                                                <option value="Weekly" selected={planData?.type === "Weekly"}>Weekly</option>
+                                                                <option value="Monthly" selected={planData?.type === "Monthly"}>Monthly</option>
+                                                                <option value="Yearly" selected={planData?.type === "Yearly"}>Yearly</option>
+                                                            </select>
+
+                                                        </div>
                                                     </div>
                                                     <button
                                                         className="w-full bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  focus:ring-blue-800 text-white" type="submit">

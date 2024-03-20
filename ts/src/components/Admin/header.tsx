@@ -1,45 +1,48 @@
-
-const header = () => {
+import {
+    Navbar,
+    Typography,
+} from "@material-tailwind/react";
+const AdminHeader = () => {
     return (
         <>
-            <header className="bg-gray-900 ">
-                <nav className="mx-auto flex max-w-7xl items-center justify-between p-2  lg:px-8" aria-label="Global">
-                    <div className="flex lg:flex-1 text-white">
-                        <a className="flex items-center w-full px-3 mt-3" href="#">
-                            <svg className="w-10 h-10 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
-                            </svg>
-                            <span className="ml-2 text-md font-bold">TECHUNT </span>
-                        </a>
-                    </div>
-                    <div className="flex lg:hidden">
-                        <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white">
-                            <span className="sr-only">Open main menu</span>
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div className="hidden lg:flex lg:gap-x-12">
-                        <div className="relative">
-                            <button type="button" className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-white" aria-expanded="false">
-                                Product
-                                <svg className="h-5 w-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                        <a href="#" className="text-sm font-semibold leading-6 text-white">Features</a>
-                        <a href="#" className="text-sm font-semibold leading-6 text-white">Marketplace</a>
-                        <a href="#" className="text-sm font-semibold leading-6 text-white">Company</a>
-                    </div>
-                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    </div>
-                </nav>
-            </header>
+            <Navbar
+                variant="gradient"
+                color="blue"
+                className="mx-auto w-[100%] border-b-2 bg-gray-900  from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-none" placeholder={undefined}            >
+                <div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
+                    <Typography
+                        as="a"
+                        variant="h4"
+                        className="flex items-center mr-4 ml-2 cursor-pointer py-1.5" placeholder={undefined}                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1}
+                            stroke="currentColor"
+                            className="size-10 "
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"
+                            />
+                        </svg>
+                        TECHUNT ADMIN
+                    </Typography>
+                    {/* <div className="ml-auto flex gap-1 md:mr-4"> */}
+                    {/* <IconButton variant="text" color="white" placeholder={undefined} children={undefined}> */}
+                    {/* <Cog6ToothIcon className="h-4 w-4" /> */}
+                    {/* </IconButton> */}
+                    {/* <IconButton variant="text" color="white"  placeholder={undefined} children={undefined}> */}
+                    {/* <BellIcon className="h-4 w-4" /> */}
+                    {/* </IconButton> */}
+                    {/* </div> */}
+                </div>
+            </Navbar>
         </>
     )
 }
 
 
-export default header;
+export default AdminHeader;
