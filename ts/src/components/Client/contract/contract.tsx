@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { LeftCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, Input, InputNumber, Row, Space } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, Space, message } from 'antd';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import type { ContractDetailsType, MilestoneType } from './contractInterface'
+import { useNavigate } from 'react-router-dom';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -31,6 +32,7 @@ const ContractForm: React.FC = () => {
         dueDate: "",
         amount: 0
     }]);
+    const navigate = useNavigate()
     useEffect(() => {
         const proposal = JSON.parse(localStorage.getItem("proposal") || "");
         setProposal(proposal)
@@ -72,10 +74,11 @@ const ContractForm: React.FC = () => {
         sendContract({ contract: contractDetails, milestone: milestones, isMilestone: true })
             .then((res: AxiosResponse) => {
                 console.log(res, "this is response of the contract");
-            })
-            .catch((err: AxiosError) => {
-                console.log(err);
-            });
+                message.success("Succfully contract submitted. ")
+                setTimeout(() => {
+                    history.back()
+                }, 2000)
+            }).catch(() => message.error("While sending contract got and error.!"))
     }
     return (
         <>
@@ -89,7 +92,7 @@ const ContractForm: React.FC = () => {
                         <LeftCircleOutlined />
                         Back
                     </Button>
-                    <label className='ml-[40%] font-bold underline'>Create New Contract</label>
+                    <label className='ml-[40%] font-bold underline'>Send Contract</label>
                     <Form
                         onValuesChange={handleFormChange}
                         className='m-5 items-center'
@@ -102,7 +105,13 @@ const ContractForm: React.FC = () => {
                         <Form.Item
                             label="Terms"
                             name={"terms"}
-                            rules={[{ required: true, message: 'Please enter terms!' }, { type: 'string' }]}
+                            rules={[
+                                { required: true, message: 'Please enter terms!' },
+                                { type: 'string' },
+                                { min: 200 },
+                                { max: 500 }
+
+                            ]}
                         >
                             <ReactQuill
                                 theme="snow"
@@ -123,7 +132,6 @@ const ContractForm: React.FC = () => {
                             validateFirst='parallel'
                             label="Duration"
                             name={"duration"}
-
                             rules={[{ required: true, message: 'Please select duration!' }]}
                         >
                             <RangePicker
@@ -137,6 +145,7 @@ const ContractForm: React.FC = () => {
                                 // { validator: isNumber },
                                 { required: true, message: 'Please enter amount!' },
                                 // { min: 100 },
+                                // { max: 10000000 }
                             ]}
                         >
                             <InputNumber
@@ -167,9 +176,9 @@ const ContractForm: React.FC = () => {
                                         className='w-[100%]'
                                         rules={[{ required: true, message: 'Missing name' }, { min: 5 }]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
-                                        
+
                                     >
-                                        <Input placeholder="name"  onChange={(e) => handleChange('name', e.target.value, 0)} />
+                                        <Input placeholder="name" onChange={(e) => handleChange('name', e.target.value, 0)} />
                                     </Form.Item>
                                     <Form.Item
                                         className='w-[100%]'
@@ -222,7 +231,7 @@ const ContractForm: React.FC = () => {
                                         rules={[{ required: true, message: 'Missing amount' }]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
                                     >
-                                        <Input placeholder="Amount" defaultValue={proposal?.jobId?.Amount}  onChange={(e) => handleChange('amount', e.target.value, 0)} />
+                                        <Input placeholder="Amount" defaultValue={proposal?.jobId?.Amount} onChange={(e) => handleChange('amount', e.target.value, 0)} />
                                     </Form.Item>
                                     <MinusCircleOutlined onClick={() => remove(name)} />
                                 </Space>
@@ -310,14 +319,11 @@ const ContractForm: React.FC = () => {
                                                     Add milestone
                                                 </Button>
                                             </Form.Item>
-
                                         </>
                                     )}
                                 </Form.List>
-
                             </>
                         }
-
                         <Form.Item  >
                             <Button htmlType="submit" onClick={handleSubmit}>Submit</Button>
                         </Form.Item>

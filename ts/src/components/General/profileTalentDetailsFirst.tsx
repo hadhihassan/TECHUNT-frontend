@@ -12,12 +12,8 @@ import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../util/validatorsUtils'
 import { Context as ContextInterface } from '../../context/myContext'
 import { UserProfile } from '../../interface/interfaces'
+import DisplayResume from './resumeView';
 import toast, { Toaster } from "react-hot-toast";
-
-
-
-
-
 interface ValidationsError {
     fName: string | null,
     lName: string | null,
@@ -25,6 +21,10 @@ interface ValidationsError {
     title: string | null
 }
 import { AxiosError, AxiosResponse } from 'axios'
+import { CAllS3ServiceToStore, saveResume, uploadFileToSignedUelInS3 } from '../../services/talentApiService';
+import { message } from 'antd';
+import { useSelector } from 'react-redux';
+import { ROOTSTORE } from '../../redux/store';
 
 const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
@@ -34,20 +34,22 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
     const [details, setDetails] = useState<object | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
     const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
-    const truncatedDescription: string | null = details?.Profile?.Description?.slice(0, 200); // Display only first 200 characters
+    const truncatedDescription: string | null = details?.Profile?.Description?.slice(0, 200);
     const [image, setImage] = useState<File | null>(null);
 
     const [fNameError, setfNameErro] = useState<string | null>(null);
     const [lNameError, setlNameErro] = useState<string | null>(null);
     const [titleError, setTitleError] = useState<string | null>(null);
     const [descriptionError, setDescError] = useState<string | null>(null);
-
+    const [showResume, setShow] = useState<boolean>(false)
+    const closeShowResume = () => setShow(!showResume)
     const [formData, setData] = useState({
         first_name: "",
         last_name: "",
         description: "",
         title: "",
     })
+    const userData = useSelector((state: ROOTSTORE) => state.signup)
     const validateForm = () => {
         const errors: ValidationsError = {
             fName: "",
@@ -67,7 +69,23 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
 
         return !(errors.fName || errors.lName || errors.description || errors.title);
     }
-
+    const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e?.target.files?.length === 1) {
+            const file: File = e.target.files[0];
+            const content_type: string = file.type;
+            const key: string = `test/image/${file.name}`;
+            alert(key, content_type)
+            CAllS3ServiceToStore({ key, content_type })
+                .then(async (res: AxiosResponse) => {
+                    await saveResume(res.data.fileLink)
+                    uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+                    })
+                })
+                .catch(() => message.error("Error uploading file"));
+        } else {
+            message.error("Maximum file limit is one . Selete one file")
+        }
+    };
     useEffect(() => {
         setDetails(datas);
         setData({
@@ -151,7 +169,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
     return <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
-                <img className="border border-black rounded-xl" src={IMG} alt="" />
+                <img className="border border-black rounded-xl " src={IMG} alt="" />
             </div>
             <div className="m-2 w-[18rem] mt-2">
                 <p className="font-sans font-normal text-sm">from : {details?.Country}</p>
@@ -160,6 +178,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
                 <EditCalendarRoundedIcon fontSize="inherit" />
                 <span className="font-sans font-normal text-xs ml-2">Joined {formattedDate ? formattedDate : "Joined September 1, 2013"}</span>
             </div>
+
         </div>
         <div className=" w-full ">
             <div className="flex justify-between ">
@@ -167,8 +186,32 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
                     <p className="text-2xl font-sans font-bold">{details?.First_name}</p>
                     <p className=" font-sans font-medium opacity-45">{details?.Profile?.Title}</p>
                 </div>
-                <div className="m-6">
+                <div className="m-6 flex gap-2">
+
                     <button className="w-[8rem] font-sans font-medium rounded-full h-8 border border-red-500 text-red-500 " onClick={openModal}>Edit Profle</button>
+                    {
+                        details?.resume ? <>
+                            <button
+                                onClick={closeShowResume}
+                                className="px-2 py-1 font-sans font-semibold rounded-full  border text-xs  border-red-500 text-red-500 " >Show Resume</button>
+                            <DisplayResume
+                                pdfUrl={details?.resume}
+                                open={showResume}
+                                closeModal={closeShowResume}
+                            />
+                        </> : <>
+                            {
+                                userData.role === "TALENT" && <>
+                                    <div className="flex  items-center justify-center">
+                                        <label className="flex flex-col rounded-full items-center px-2 py-1.5  border-red-500 text-red-500 font-semibold bg-white text-blue  tracking-wide uppercase border border-blue cursor-pointer text-xs   ">
+                                            <span className="text-xs font-sans font-semibold leading-normal" >Upload resume</span>
+                                            <input type='file' className="hidden" onChange={uploadFile} />
+                                        </label>
+                                    </div>
+                                </>
+                            }
+                        </>
+                    }
                 </div>
             </div>
 
@@ -258,10 +301,10 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
                         {showMore ? 'Show less' : 'Show more'}
                     </span>
                 </p>
+
             </div>
         </div>
     </div>;
-
 }
 
 

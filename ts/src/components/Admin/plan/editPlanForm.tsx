@@ -1,46 +1,56 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { createNewPlan, getPlan } from '../../../services/adminApiService'
-import { AxiosError, AxiosResponse } from 'axios'
+import { getPlanForEdit, updatePlan } from '../../../services/adminApiService'
 import { message } from 'antd'
 
 interface FormProps {
     isOpen: boolean,
     closeModal: () => void,
-    data: PlanInterface | null
+    data: string
 }
 export interface PlanInterface {
+    _id: string,
     name: string,
     description: string,
-    amount: string,
+    type: string,
+    amount: number,
 }
 const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
-    console.log(data?.name)
     const [planData, setPlanData] = useState<PlanInterface>({
-        name: data?.name ,
-        description: data?.description ,
-        amount: data?.amount ,
+        _id: "",
+        name: "",
+        description: "",
+        type: "",
+        amount: 0,
     })
-    console.log(planData)
-    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+    const fetchData = (data: string) => {
+        getPlanForEdit(data)
+            .then((res) => {
+                setPlanData(res?.data?.data)
+            })
+    }
+
+
+    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setPlanData({
             ...planData,
             [name]: value
         });
     };
-    useEffect(() => {
-        setPlanData({
-            name: data?.name ,
-            description: data?.description ,
-            amount: data?.amount ,
-        })
-    }, []);
-
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
-
+        updatePlan(data, planData)
+            .then((res) => {
+                if (res.data.success) {
+                    message.success("Successfully plan updated ")
+                }
+            }).catch(() => message.error("Failed to update plan"))
     }
+    useEffect(() => {
+        fetchData(data)
+    }, [data])
     return <>
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog className="relative z-10" onClose={closeModal}>
@@ -111,9 +121,26 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
                                                             id="confirmPassword"
                                                             type="number" />
                                                     </div>
+                                                    <div>
+                                                        <div>
+                                                            <label className="block mb-2 text-sm font-medium text-gray-900">
+                                                                Type
+                                                            </label>
+                                                            <select
+                                                                name="type"
+                                                                onChange={onChange}
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 outline-none sm:text-sm rounded-lg block w-full p-2.5"
+                                                            >
+                                                                <option value="Weekly" selected={planData?.type === "Weekly"}>Weekly</option>
+                                                                <option value="Monthly" selected={planData?.type === "Monthly"}>Monthly</option>
+                                                                <option value="Yearly" selected={planData?.type === "Yearly"}>Yearly</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
                                                     <button
                                                         className="w-full bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  focus:ring-blue-800 text-white" type="submit">
-                                                        Create plan
+                                                        Edit  plan
                                                     </button>
                                                 </div>
                                             </div>

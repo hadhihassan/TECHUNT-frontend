@@ -19,7 +19,7 @@ import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import NotificaioDrawer, { Notification } from "../../notificaionDrawer";
 import { getAllProposalForClient } from "../../../../services/clientApiService";
 import { ProposalInterface, } from "../../../../interface/interfaces";
-import { Button, Divider, notification, Space } from 'antd';
+import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -38,7 +38,6 @@ const AfterLoginHeader = () => {
     const basicdata = useContext(MyContext) || ""
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [proposals, setProposals] = useState<ProposalInterface[]>([]);
-    const [notifyData, setNotifyData] = useState()
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
@@ -77,6 +76,7 @@ const AfterLoginHeader = () => {
                 openNotification("topRight")
             }
         })
+
         return () => {
             socket.off("newPost");
         };
@@ -97,6 +97,7 @@ const AfterLoginHeader = () => {
         persistor.purge();
         basicdata?.fn()
         dispatch(cleanAllData())
+        socket.emit("OfflineUser", { role: role, id: sender_id });
         navigate("/")
     }
     const userData = useSelector((state: ROOTSTORE) => state.signup)
@@ -126,13 +127,19 @@ const AfterLoginHeader = () => {
                     <NotificaioDrawer proposals={proposals} notification={notifications} open={openNotificationDrawer} />
                 }
                 <div className="w-full pl-[10rem] text-white font-sana font-normal flex pt-3 sm:mt-0 justify-evenly">
-                    <button
-                        className="ring-offset-background transition-colors animate-pulse delay-1000 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 inline-flex items-center justify-center px-6   border-0 rounded-full text-sm font-medium text-white bg-gradient-to-l from-yellow-300 to-purple-600 shadow-lg hover:from-purple-500 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500  "
-                    >
-                        Subscribe
-                    </button>
+                    {
+                        !userData.premiumUser && <>
+                            <button
+                                onClick={() => navigate(routerVariables.plan)}
+                                className="ring-offset-background transition-colors  delay-1000 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 inline-flex items-center justify-center px-6   border-0 rounded-full text-sm font-medium text-white bg-gradient-to-l from-yellow-300 to-purple-600 shadow-lg hover:from-purple-500 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500  "
+                            >
+                                Subscribe
+                            </button>
+                        </>
+                    }
                     <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
-                    <span className="mr-[1px] mt-1">Messages</span>
+                    <span className="mr-[1px] mt-1" onClick={()=>navigate(routerVariables.Message)}>Messages</span>
+                    <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/contract/all/`)}>My Works</span>
                     <div className="felx pb-">
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
                         <NotificationsNoneOutlinedIcon color="primary" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />

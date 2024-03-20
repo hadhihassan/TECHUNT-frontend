@@ -15,23 +15,23 @@ import { useEffect, useState } from "react";
 import { getAllPlan } from "../../../services/adminApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import EditPlanForm from "./editPlanForm";
-const TABLE_HEAD = ["No", "Name", "Description", "Amount", "Action"];
+const TABLE_HEAD = ["No", "Name", "Description", "Amount", "Type", "Action"];
 
 export function ListAllPlans() {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const [plans, setPlans] = useState<PlanInterface[]>([])
-    const [editData,setEdit]= useState<PlanInterface>()
-    
+    const [editData, setEdit] = useState<string>("")
+
 
     const close = () => setIsOpen(false)
     const open = () => setIsOpen(true)
 
     const closeEdit = () => setEditOpen(false)
     const openEdit = () => setEditOpen(true)
-    const hadnleOpenEdit = (index:number) => {
-        setEdit(plans[index])
+    const hadnleOpenEdit = (index: number) => {
+        setEdit(plans[index]?._id || "")
         openEdit()
     }
     useEffect(() => {
@@ -42,7 +42,7 @@ export function ListAllPlans() {
             }).catch((err: AxiosError) => [
                 alert(err)
             ])
-    }, [isOpen])
+    }, [isOpen, editOpen])
     return (
         <div className=" w-[90%] h-auto m-7">
             <Card placeholder={undefined}>
@@ -54,7 +54,7 @@ export function ListAllPlans() {
                                 className="flex items-center gap-3 bg-blue-500 rounded-xl ml-5 mt-5" size="sm" placeholder={undefined}>
                                 Add Plan
                             </Button>
-                            <CreatePlanForm isOpen={isOpen} closeModal={close} id={undefined} edit={false} />
+                            <CreatePlanForm isOpen={isOpen} closeModal={close} />
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -88,7 +88,7 @@ export function ListAllPlans() {
                         </thead>
                         <tbody>
                             {plans?.map(
-                                ({ name, description, amount, _id }, index) => {
+                                ({ name, description, amount, type }, index) => {
                                     const isLast = index === plans.length - 1;
                                     const classes = isLast
                                         ? "p-4"
@@ -134,10 +134,18 @@ export function ListAllPlans() {
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal" placeholder={undefined}                                            >
+                                                    {type}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
                                                 <Tooltip content="Edit User">
                                                     <IconButton variant="text" placeholder={undefined}>
                                                         <PencilIcon
-                                                            onClick={()=>hadnleOpenEdit(index)}
+                                                            onClick={() => hadnleOpenEdit(index)}
                                                             className="h-4 w-4" />
                                                     </IconButton>
                                                 </Tooltip>
@@ -165,7 +173,9 @@ export function ListAllPlans() {
                     </div>
                 </CardFooter>
             </Card>
-            <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
+            {
+                editOpen && <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
+            }
         </div>
 
     );

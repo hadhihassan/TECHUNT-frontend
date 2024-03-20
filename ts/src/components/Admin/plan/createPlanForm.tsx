@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { ChangeEvent, Fragment, useState } from 'react'
 import { createNewPlan } from '../../../services/adminApiService'
-import { AxiosError, AxiosResponse } from 'axios'
+import {  AxiosResponse } from 'axios'
 import { message } from 'antd'
 
 interface FormProps {
@@ -12,15 +12,17 @@ export interface PlanInterface {
     name: string,
     description: string,
     amount: string,
-    _id:string
+    type: string,
+    _id?: string
 }
 const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
     const [planData, setPlanData] = useState<PlanInterface>({
         name: "",
         description: "",
+        type: "",
         amount: "",
     })
-    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setPlanData({
             ...planData,
@@ -30,14 +32,12 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
         createNewPlan(planData)
-        .then((res:AxiosResponse)=>{
-            if(res?.data?.success){
-                message.success("New plan succssfully created .")
-            }
-            closeModal()
-        }).catch((err:AxiosError)=>{
-            message.warning("Error occurs While creating  plan  .",err)
-        })
+            .then((res: AxiosResponse) => {
+                if (res?.data?.success) {
+                    message.success("New plan succssfully created .")
+                }
+                closeModal()
+            }).catch(() => message.warning("Error occurs While creating plan !."))
     }
     return <>
         <Transition appear show={isOpen} as={Fragment}>
@@ -108,6 +108,19 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
                                                             placeholder="10000"
                                                             id="confirmPassword"
                                                             type="number" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block mb-2 text-sm font-medium text-gray-900">
+                                                            Type
+                                                        </label>
+                                                        <select
+                                                            name="type"
+                                                            onChange={onChange}
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 outline-none sm:text-sm rounded-lg block w-full p-2.5">
+                                                            <option value="Weekly">Weekly</option>
+                                                            <option value="Mothly">Monthly</option>
+                                                            <option value="Yearly">Yearly</option>
+                                                        </select>
                                                     </div>
                                                     <button
                                                         className="w-full bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  focus:ring-blue-800 text-white" type="submit">

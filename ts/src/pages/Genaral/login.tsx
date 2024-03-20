@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../services/clientApiService";
-import { useDispatch, useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE, setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser } from "../../redux/Slice/signupSlice";
+import { useDispatch, } from "react-redux";
+import { setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser, isBankVeried } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
 import Swal from 'sweetalert2';
@@ -45,15 +45,20 @@ const LoginPage: React.FC = () => {
                             dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
-                            if(res?.data?.data?.data.subscription){
-                                alert("premium user")
+
+                            if (res?.data?.data?.data.subscription) {
                                 dispatch(isPremimunUser(true));
+                            }
+                            if (res?.data?.data?.data.bankDetails) {
+                                dispatch(isBankVeried(true));
                             }
                             if (res?.data?.data?.data.subscription && res?.data?.data.role === "TALENT") {
                                 console.log("you expected worked")
                                 const userId: string = res?.data?.data?.data?._id
                                 socket.emit("subscribedUser", userId)
                             }
+                            // for online user
+                            socket.emit("OnlineUser", { role: res?.data?.data.role, id: res?.data?.data?.data?._id })
                             if (res?.data?.data.role === "CLIENT") {
                                 navigate("/client/home/");
                             } else {

@@ -37,13 +37,13 @@ const ListAllPropposals = () => {
         localStorage.setItem("proposal", JSON.stringify(proposals[index]))
         navigate(clientRoutes.viewProposal)
     }
-    const handleCreateConverstion = (index:number) => {
+    const handleCreateConverstion = (index: number) => {
         console.log(proposals[index].talentId)
         setConversation({})
         createConversation(proposals[index]?.talentId)
-        .then((res)=>{
-            console.log(res);
-        })
+            .then((res) => {
+                console.log(res);
+            })
         navigate("/message")
 
     }
@@ -52,7 +52,6 @@ const ListAllPropposals = () => {
             proposals.map((proposla: ProposalInterface, index: number) => (
                 <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} >
                     <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
-                    <p className='text-end text-red-500 font-sans font-semibold text-sm mr-10 hover:underline' onClick={() => handleShowProposal(index)} > details</p>
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
@@ -79,9 +78,8 @@ const ListAllPropposals = () => {
                             </div>
                         </div>
                         <div className='flex flex-col'>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center ">Hire him</button>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={()=>handleCreateConverstion(index)}>Message</button>
-                            <button className=" ml-5 font-semibold text-xs px-12 py-1  self-center mt-3 hover:underline">Reject him</button>
+                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={() => handleShowProposal(index)} >   Details </button>
+                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={() => handleCreateConverstion(index)}>Message</button>
                         </div>
                     </div>
                     <div className="ml-30 flex mb-5 ml-36 h-auto">

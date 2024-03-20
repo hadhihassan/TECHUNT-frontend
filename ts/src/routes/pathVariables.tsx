@@ -13,6 +13,7 @@ export type Routes = {
     Message: string
     PaymentSuccess: string,
     Search: string
+    plan: string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -47,6 +48,7 @@ type ADMIN_ROUTES = {
     UserMangment: string,
     JobCategoryManagment: string,
     Dashboard: string
+    PlanMangment: string
 }
 const routerVariables: Routes = {
     Landing: '/',
@@ -60,7 +62,8 @@ const routerVariables: Routes = {
     Settings: "/settings/",
     Message: "/message/",
     PaymentSuccess: '/payment-success/:id/',
-    Search: "/search"
+    Search: "/search",
+    plan: "/plan"
 }
 export default routerVariables;
 //Client routes
@@ -98,5 +101,6 @@ export const admin_Routes: ADMIN_ROUTES = {
     Login: "/admin/login/",
     UserMangment: "/admin/user-management/",
     JobCategoryManagment: "/admin/job-Category-management/",
-    Dashboard: "/admin/dashboard/"
+    Dashboard: "/admin/dashboard/",
+    PlanMangment: '/admin/plan-mangment/'
 }

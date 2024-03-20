@@ -9,8 +9,6 @@ const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, o
     const [details, setdetails] = useState<any>()
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
 
-    // form validation state error message
-
     const [numberError, setNumberError] = useState<string | null>(null)
     const [cityError, setCityError] = useState<string | null>(null)
     const [pinCodeError, setPinCodeError] = useState<string | null>(null)

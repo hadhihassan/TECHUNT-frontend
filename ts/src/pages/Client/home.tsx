@@ -21,7 +21,7 @@ import { Disclosure, Transition } from '@headlessui/react'
 import type { ProposalInterface, UserProfile } from '../../interface/interfaces'
 import Avatar from '@mui/material/Avatar';
 import type { MenuProps } from 'antd';
-import { Dropdown } from 'antd';
+import { Dropdown, message } from 'antd';
 import { CgProfile } from "react-icons/cg";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { createConversation } from "../../services/commonApiService";
@@ -97,11 +97,14 @@ const Home = () => {
             icon: <Message />,
             danger: true,
             onClick: () => {
-                console.log("this is the talent is ", connectedTalent[menuIndex]?.talentId?._id)
-                    createConversation(connectedTalent[menuIndex]?.talentId?._id)
-                    .then((res)=>{
-                        navigate('/message')
-                    })
+                // if(!basicData.premiumUser){
+                //     createConversation(connectedTalent[menuIndex]?.talentId?._id)
+                //     .then((res)=>{
+                //         navigate('/message')
+                //     })
+                // }else{
+                    message.loading("dsd",3000)
+                // }
             }
         },
     ];
@@ -207,7 +210,7 @@ const Home = () => {
                         </div>
                     </div>
                     {/* talents */}
-                    <div className="w-full h-[30vh]">
+                    <div className="w-full h-auto mb-20">
                         <>
                             {
                                 tabList[activeTab - 1]

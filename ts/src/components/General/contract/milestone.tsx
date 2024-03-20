@@ -1,4 +1,4 @@
-import type { ContractDetailsType,MilestoneType } from '../../Client/contract/contractInterface'
+import type { ContractDetailsType, MilestoneType } from '../../Client/contract/contractInterface'
 import { useEffect, useState } from 'react';
 import { formatMongoDate, } from '../../../util/timeFormating';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import { addWalletAmount, sendMilestoneApproval } from '../../../services/client
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
-import { useParams } from 'react-router';
+import { Params, useParams } from 'react-router';
 
 
 
@@ -29,30 +29,17 @@ const Milestone = () => {
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [selectMilestone, setSelected] = useState<number>(0)
+
     useEffect(() => {
         const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
         if (contractData !== "") {
             setContract(contractData)
         }
-        if (success === "true") {
-            const payedMilestoneString = localStorage.getItem('payedMilestone');
-            const payedMilestone = payedMilestoneString ? JSON.parse(payedMilestoneString) : "";
-            addWalletAmount(contractData?.talent?._id, payedMilestone?.amount, payedMilestone?._id)
-                .then((res: AxiosResponse) => {
-                    console.log(res)
-                }).catch((err) => {
-                    console.log(err)
-                })
+        return () => {
+            localStorage.removeItem("payedMilestone")
         }
-        const completedMilestones = contract?.milestones.filter((milestone) => milestone.completed === "Completed")
-        if (completedMilestones?.length === contract?.milestones) {
-            contractStatusUpdate(contractData?._id, "completed", role)
-                .then((res) => {
-                    console.log(res)
-                })
-        }
-
     }, [])
+
     const [isOpen, setIsOpen] = useState(false)
     const [formOpen, setFormOpen] = useState(false)
     const openModal = () => setIsOpen(true)
@@ -93,15 +80,32 @@ const Milestone = () => {
         setSelected(index)
     }
     const [confirm, setConfirm] = useState<boolean>(false)
-    const handleMenuClick: MenuProps['onClick'] = (e:unknown) => {
+    const handleMenuClick: MenuProps['onClick'] = (e: unknown) => {
         setConfirm(!confirm)
         setStausKey(e?.key)
     };
-    const payment = async (index: number) => {
-        const milestone:MilestoneType = contract?.milestones[index]
-        localStorage.setItem("payedMilestone", JSON.stringify(contract?.milestones[index]))
-        await paymentToTalent(contract?.talent?._id, milestone?.amount)
-    }
+    const payment = async (index: number): Promise<void> => {
+
+
+        const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
+        const milestone: MilestoneType | undefined = contract?.milestones[index];
+        localStorage.setItem("payedMilestone", JSON.stringify(milestone));
+        try {
+            await addWalletAmount(contractData?.talent?._id, milestone?.amount, milestone?._id);
+            console.log("Payment success");
+
+            await paymentToTalent(contract?.talent?._id, milestone?.amount);
+
+            const completedMilestones: MilestoneType[] = contract?.milestones.filter(milestone => milestone.completed === "Completed") || [];
+
+            if (completedMilestones.length === contract?.milestones.length) {
+                await contractStatusUpdate(contractData?._id, "completed", role);
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
+        }
+        alert("Payment processed successfully");
+    };
     const items: MenuProps['items'] = [
         {
             label: 'update to On progress',
@@ -144,12 +148,10 @@ const Milestone = () => {
     const showWork = () => {
         const workId = contract?.milestones[selectMilestone]?.work
         getSubmittedWork(workId, role)
-            .then((res) => {
+            .then((res: AxiosResponse) => {
                 localStorage.setItem("work", JSON.stringify(res.data.data) || "")
                 setFormOpen(!formOpen)
-            }).catch((_err) => {
-                message.error("Something went wrong !. try again later .")
-            })
+            }).catch(() => message.error("Something went wrong !. try again later ."))
     }
     const modalElement = (
         <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  p-6 text-left align-middle shadow-xl transition-all">
@@ -227,6 +229,28 @@ const Milestone = () => {
             </div>
         </Dialog.Panel>
     )
+    const handleEndContract = () => {
+        contractStatusUpdate(contract?._id, "cancelled", role)
+            .then((res: AxiosResponse) => {
+                if (res.data.success) {
+                    message.success("Successfully contract cancelled ");
+                    if (contract) {
+                        const newUpdatedContract = { ...contract, completed: "cancelled" };
+                        setContract(newUpdatedContract);
+                        setTimeout(() => {
+                            history.back()
+                        }, 1000);
+                    }
+                } else {
+                    message.error("Failed to cancel contract: " + res.data.message);
+                }
+            })
+            .catch((error) => {
+                console.error("Error while cancelling contract:", error);
+                message.error("An error occurred while cancelling the contract.");
+            });
+    };
+
     return <>
         {/* <div className="bg-blue-600 absolute -z-10 w-full h-[50vh] " >
         </div> */}
@@ -237,7 +261,7 @@ const Milestone = () => {
                 setFormOpen()
                 localStorage.removeItem("work");
             }} id={contract?.milestones[selectMilestone]?._id} />
-        <div className=" font-sans w-[90%] h-auto mb-10 border bg-white m-auto mt-20 rounded-xl shadow-2xl">
+        <div className="mb-20  font-sans w-[90%] h-auto border bg-white m-auto mt-20 rounded-xl shadow-2xl">
             <div
                 onClick={() => {
                     history.back()
@@ -259,6 +283,13 @@ const Milestone = () => {
                             contract?.status === "completed" && <>
                                 <button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">
                                     Contract Completed
+                                </button>
+                            </>
+                        }
+                        {
+                            contract?.status === "cancelled" && <>
+                                <button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">
+                                    Contract cancelled
                                 </button>
                             </>
                         }
@@ -383,7 +414,9 @@ const Milestone = () => {
                 <div className="h-[100vh] w-[25%]  font-sans border">
                     <div className="container mt-4 flex  flex-col ">
                         {
-                            role === 'CLIENT' && <button className=" bg-red-500 font-sans text-white rounded-xl py-1">End contract </button>
+                            role === "CLIENT" && <button
+                                onClick={handleEndContract}
+                                className=" bg-red-500 font-sans text-white rounded-xl py-1">End contract </button>
                         }
                         <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1">Message </button>
                     </div>

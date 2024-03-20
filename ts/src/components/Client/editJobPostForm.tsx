@@ -115,6 +115,15 @@ const top100Films: string[] = [
     "Presentation Skills",
     "Technical Writing"
 ];
+export interface jobInterface {
+    Title: string;
+    Description: string;
+    Skills: string[];
+    TimeLine: string | 'Small' | 'Medium' | 'Large';
+    Expertiselevel: string | 'Fresher' | 'Medium' | 'Experinced';
+    WorkType: string | 'Fixed' | 'Milestone';
+    Amount: number;
+}
 const EditjobPostForm = () => {
     const { id } = useParams();
     console.log(id, "this is the params")
@@ -132,16 +141,7 @@ const EditjobPostForm = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [docId, setId] = useState<string | null>(null)
-    interface FormData {
-        Title: string;
-        Description: string;
-        Skills: string[];
-        TimeLine: string | 'Small' | 'Medium' | 'Large';
-        Expertiselevel: string | 'Fresher' | 'Medium' | 'Experinced';
-        WorkType: string | 'Fixed' | 'Milestone';
-        Amount: number;
-    }
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<jobInterface>({
         Title: '',
         Description: '',
         Skills: value,
@@ -213,7 +213,7 @@ const EditjobPostForm = () => {
                 } else {
                     error(res?.error?.response?.data?.message)
                 }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             }).catch((_err: AxiosError) => {
                 error("Internal server error.")
             })
@@ -226,7 +226,7 @@ const EditjobPostForm = () => {
                     position="top-left"
                     reverseOrder={false}
                 />
-                <div className="w-[80%] h-[165vh] m-auto mt-10 shadow-xl border rounded-xl">
+                <div className="w-[80%] h-auto mb-10  m-auto mt-10 shadow-xl border-2 rounded-xl">
                     {/* form header  */}
                     <div className="border-b-2 w-full flex " onClick={() => {
                         history.back()
@@ -238,7 +238,7 @@ const EditjobPostForm = () => {
                     </div>
                     {/* left side input  */}
                     <form >
-                        <div className="w-full h-full md:flex font-sans font-medium  sm:w-[100%] ">
+                        <div className="w-full h-auto mb-5  md:flex font-sans font-medium  sm:w-[100%] ">
                             <div className="border-r-2 md:w-[80%] sm:w-full h-full ml-10 ">
                                 <p className="mt-5">Job title</p>
                                 <div className=" mt-4">

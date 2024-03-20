@@ -29,8 +29,8 @@ const Message = forwardRef(({ message, index }: { message: MessageDoc, index: nu
                 >
                     <div className="chat-bubble chat chat-start">{message.message}</div>
                     {
-                        !messageFromMe && (
-                            message.read ? <DoneAll color='primary' /> : <DoneIcon color='primary' />
+                        message.senderId === id && (
+                            message.read ? <DoneAll color='primary' fontSize="inherit"  /> : <DoneIcon fontSize="inherit" color='primary' />
                         )
                     }
                     {/* <label className=' text-end text-xs font-sans text-gray-400'>{formatRelativeTime(message.updatedAt)}</label> */}

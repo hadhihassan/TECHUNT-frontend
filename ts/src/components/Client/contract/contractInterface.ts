@@ -14,6 +14,7 @@ export interface ContractDetailsType {
     createdAt :string | Date
 }
 export interface MilestoneType {
+    payed: boolean;
     work: any;
     _id:string,
     approval: boolean;

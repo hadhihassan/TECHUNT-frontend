@@ -14,8 +14,9 @@ import { ROOTSTORE } from "../../redux/store";
 import { ProposalInterface } from "../../interface/interfaces";
 import { getAllClientProposalsForTalent } from "../../services/talentApiService";
 import { AxiosError, AxiosResponse } from "axios";
+import DisplayResume from "../../components/General/resumeView";
 interface UserProfile {
-    _id:string
+    _id: string
     Last_name: string;
     First_name: string;
     Password: string;
@@ -47,13 +48,13 @@ const Profile = () => {
     useEffect(() => {
         const data: UserProfile = JSON.parse(localStorage.getItem("profileData") || "")
         setData(data)
-        if(basicData.role){
+        if (basicData.role) {
             getAllClientProposalsForTalent(data?._id)
-            .then((res: AxiosResponse) => {
-                setPropsal(res.data)
-            }).catch((err: AxiosError) => {
-                console.log(err)
-            })
+                .then((res: AxiosResponse) => {
+                    setPropsal(res.data)
+                }).catch((err: AxiosError) => {
+                    console.log(err)
+                })
         }
     }, [])
     const truncatedDescription: string | undefined = datas?.Profile?.Description?.slice(0, 200);
@@ -61,6 +62,8 @@ const Profile = () => {
     const toggleShowMore = () => {
         setShowMore(!showMore);
     };
+    const [showResume, setShowResume] = useState<boolean>(false)
+    const closeShowResume = () => setShowResume(!showResume)
     return (<>
         <div className="bg-blue-700 absolute -z-10 w-full h-[50vh] ">
         </div>
@@ -78,6 +81,22 @@ const Profile = () => {
                             <EditCalendarRoundedIcon fontSize="inherit" />
                             <span className="font-sans font-normal text-xs ml-2">  Joined {datas?.createdAt}</span>
                         </div>
+                        {
+                            datas?.resume ? <>
+                                <button
+                                    onClick={closeShowResume}
+                                    className="px-2 py-1 font-sans font-semibold rounded-full  border text-xs  border-red-500 text-red-500 " >Show Resume</button>
+                                <DisplayResume
+                                    pdfUrl={datas?.resume}
+                                    open={showResume}
+                                    closeModal={closeShowResume}
+                                />
+                            </> : <>
+                                <div className="flex  items-center justify-center   ">
+                                    <p className="font-semibold font-sans text-red-500">Freelancer not uploded resume</p>
+                                </div>
+                            </>
+                        }
                     </div>
                     <div className=" w-full ">
                         <div className={`flex justify-between ${basicData.role == "TALENT" ? "mb-4 " : ""}`}>
@@ -142,73 +161,83 @@ const Profile = () => {
                     </div>
                 </div >
             </div>
-            <div className={`flex items-center  flex-row  ml-[6rem]  `}>
-                <div className="w-[48rem] m-5 rounded-xl  border h-[20rem]  shadow-2xl ">
-                    <div className="flex justify-between">
-                        <p className="m-4 font-sans font-medium">Conatct Details</p>
-                    </div> <hr />
-                    <div className=" ">
-                        <div className="w-full max-w-lg m-5">
-                            <div className="flex flex-wrap -mx-3 mb-1">
-                                <div className="w-full px-3">
-                                    <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
-                                        Address
-                                    </label>
-                                    <input className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" readOnly placeholder={datas?.Address} />
+            {
+                basicData.premiumUser ?
+                    <>
+                        <div className={`flex items-center  flex-row  ml-[6rem]  `}>
+                            <div className="w-[48rem] m-5 rounded-xl  border h-[20rem]   shadow-2xl ">
+                                <div className="flex justify-between">
+                                    <p className="m-4 font-sans font-medium">Conatct Details</p>
+                                </div> <hr />
+                                <div className=" ">
+                                    <div className="w-full max-w-lg m-5">
+                                        <div className="flex flex-wrap -mx-3 mb-1">
+                                            <div className="w-full px-3">
+                                                <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
+                                                    Address
+                                                </label>
+                                                <input className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" readOnly placeholder={datas?.Address} />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-wrap -mx-3 mb-1">
+                                            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                                <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
+                                                    City Name
+                                                </label>
+                                                <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={datas?.City} />
+                                            </div>
+                                            <div className="w-full md:w-1/2 px-3">
+                                                <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
+                                                    Country Name
+                                                </label>
+                                                <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={datas?.Country} />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-wrap -mx-3 mb-1">
+                                            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                                <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
+                                                    Zip code/ Pincode                                </label>
+                                                <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={datas?.PinCode} />
+                                            </div>
+                                            <div className="w-full md:w-1/2 px-3">
+                                                <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2">
+                                                    Phone number                                </label>
+                                                <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={datas?.Number} />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex flex-wrap -mx-3 mb-1">
-                                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                    <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
-                                        City Name
-                                    </label>
-                                    <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={datas?.City} />
-                                </div>
-                                <div className="w-full md:w-1/2 px-3">
-                                    <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
-                                        Country Name
-                                    </label>
-                                    <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={datas?.Country} />
-                                </div>
-                            </div>
-                            <div className="flex flex-wrap -mx-3 mb-1">
-                                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                    <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2" >
-                                        Zip code/ Pincode                                </label>
-                                    <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border  rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder={datas?.PinCode} />
-                                </div>
-                                <div className="w-full md:w-1/2 px-3">
-                                    <label className="block  tracking-wide text-gray-900 text-xs font-bold mb-2">
-                                        Phone number                                </label>
-                                    <input readOnly className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" placeholder={datas?.Number} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {
-                    basicData.role === "CLIENT" &&
-                    <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
-                        <div className="flex justify-between">
-                            <p className="m-4 font-sans font-medium">Top Skills</p>
-                        </div>
-                        <hr />
-                        <div className="flex flex-col space-y-5 items-start m-5">
                             {
-                                datas && datas.Profile && datas.Profile.Skills && datas.Profile.Skills.length > 0 ? (
-                                    datas?.Profile?.Skills.map((value: string, key: number) => (
-                                        <span className="text-start font-semibold font-sans" key={key}>
-                                            {value}
-                                        </span>
-                                    ))
-                                ) : (
-                                    <p className="font-sans font-medium text-red-300">Add skills here</p>
-                                )
+                                basicData.role === "CLIENT" &&
+                                <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
+                                    <div className="flex justify-between">
+                                        <p className="m-4 font-sans font-medium">Top Skills</p>
+                                    </div>
+                                    <hr />
+                                    <div className="flex flex-col space-y-5 items-start m-5">
+                                        {
+                                            datas && datas.Profile && datas.Profile.Skills && datas.Profile.Skills.length > 0 ? (
+                                                datas?.Profile?.Skills.map((value: string, key: number) => (
+                                                    <span className="text-start font-semibold font-sans" key={key}>
+                                                        {value}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <p className="font-sans font-medium text-red-300">Add skills here</p>
+                                            )
+                                        }
+                                    </div>
+                                </div>
                             }
                         </div>
-                    </div>
-                }
-            </div>
+                    </>
+                    :
+                    <>
+
+                    </>
+            }
+
             <div className="flex items-center  flex-row m-1 mb-5">
             </div>
             <ProfileReviews />

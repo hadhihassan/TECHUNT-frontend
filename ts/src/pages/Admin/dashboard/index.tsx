@@ -1,4 +1,3 @@
-import CurrencyRupeeSharpIcon from '@mui/icons-material/CurrencyRupeeSharp';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import EngineeringIcon from '@mui/icons-material/Engineering';
@@ -12,19 +11,30 @@ import Chart from "react-apexcharts";
 import { useEffect, useState } from 'react';
 import { getDashBoardData } from '../../../services/adminApiService';
 import { AxiosResponse } from 'axios';
-import { map } from 'lodash';
-
-const indexDashBoard = () => {
-    const [clientData, setClientData] = useState()
-    const [talentData, setTalentData] = useState()
-    const [mostWorkignFreelancer, setmostWorkignFreelancer] = useState()
+import populateChartData from '../../../util/dashboadHelperFunctions';
+export interface overalRevenuseInterface {
+    month: string;
+    totalAmount: number;
+}
+export interface UserDataInterface {
+    month: string;
+    count: number;
+}
+export interface mostUserWorkInterface {
+    _id: string;
+    count: number;
+}
+const IndexDashBoard = () => {
+    const [clientData, setClientData] = useState<UserDataInterface[]>([])
+    const [talentData, setTalentData] = useState<UserDataInterface[]>([])
+    const [mostWorkignFreelancer, setmostWorkignFreelancer] = useState<mostUserWorkInterface[]>([])
+    const [overalRevenuse, setOveralRevenuse] = useState<overalRevenuseInterface[]>([])
     useEffect(() => {
         getDashBoardData()
             .then((res: AxiosResponse) => {
                 setClientData(res?.data.monthlyClient)
-                console.log(res?.data.monthlyClient)
                 setmostWorkignFreelancer(res?.data.mostWorkignFreelancer)
-                console.log(res?.data.mostWorkignFreelancer)
+                setOveralRevenuse(res?.data.overalRevenuse)
                 setTalentData(res?.data.monthlyTalent)
             })
     }, [])
@@ -34,7 +44,7 @@ const indexDashBoard = () => {
         series: [
             {
                 name: "Client",
-                data: clientData?.map((item) => item?.count),
+                data: clientData?.map((item: UserDataInterface) => item?.count),
             },
         ],
         options: {
@@ -72,7 +82,7 @@ const indexDashBoard = () => {
                         fontWeight: 400,
                     },
                 },
-                categories: clientData?.map((item) => item?.month),
+                categories: clientData?.map((item: UserDataInterface) => item?.month),
             },
             yaxis: {
                 labels: {
@@ -190,7 +200,7 @@ const indexDashBoard = () => {
         series: [
             {
                 name: "Sales",
-                data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+                data: populateChartData(overalRevenuse),
             },
         ],
         options: {
@@ -229,6 +239,9 @@ const indexDashBoard = () => {
                     },
                 },
                 categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
                     "Apr",
                     "May",
                     "Jun",
@@ -278,71 +291,33 @@ const indexDashBoard = () => {
                 <div className="w-full h-100vh mt-10">
                     <div className="flex items-center justify-around">
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[25vw]  rounded-2xl shadow-xl">
-                            <div className="h-[10vh] w-16 bg-black rounded-xl">
+                            <div className="h-[10vh] w-16 bg-gray-900 rounded-xl">
                                 <GroupIcon className="m-5" color="info" />
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Users</p>
                                 <p className="font-bold font-sans text-sm text-gray-600">
-                                    {(clientData?.reduce((acc: number, item: object) => acc + item.count, 0) || 0) +
-                                        (talentData?.reduce((acc: number, item: object) => acc + item.count, 0) || 0)}
+                                    {(clientData?.reduce((acc: number, item: UserDataInterface) => acc + item.count, 0) || 0) +
+                                        (talentData?.reduce((acc: number, item: UserDataInterface) => acc + item.count, 0) || 0)}
                                 </p>
                             </div>
                         </div>
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[25vw]  rounded-2xl shadow-xl">
-                            <div className="h-[10vh] w-16 bg-black rounded-xl">
+                            <div className="h-[10vh] w-16 bg-gray-900 rounded-xl">
                                 <PersonIcon className="m-5" color="info" />
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Clients</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">{clientData?.reduce((acc: number, item: object) => acc + item.count, 0)}</p>
+                                <p className="font-bold font-sans text-sm text-gray-600">{clientData?.reduce((acc: number, item: UserDataInterface) => acc + item.count, 0)}</p>
                             </div>
                         </div>
                         <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[25vw]  rounded-2xl shadow-xl">
-                            <div className="h-[10vh] w-16 bg-black rounded-xl">
+                            <div className="h-[10vh] w-16 bg-gray-900 rounded-xl">
                                 <EngineeringIcon className="m-5" color="info" />
                             </div>
                             <div className="mt-2">
                                 <p className="font-normal font-sans text-sm">Today's Talents</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">{talentData?.reduce((acc: number, item: object) => acc + item.count, 0)}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-between m-5">
-                        <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[16vw]  rounded-2xl shadow-xl">
-                            <div className="h-[7vh] w-10 bg-black rounded-xl">
-                                <GroupIcon className="m-2" color="info" />
-                            </div>
-                            <div className="mt-2">
-                                <p className="font-normal font-sans text-sm">Today's Users</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000</p>
-                            </div>
-                        </div>
-                        <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[16vw]  rounded-2xl shadow-xl">
-                            <div className="h-[7vh] w-10 bg-black rounded-xl">
-                                <GroupIcon className="m-2" color="info" />
-                            </div>
-                            <div className="mt-2">
-                                <p className="font-normal font-sans text-sm">Today's Users</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000</p>
-                            </div>
-                        </div>
-                        <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[16vw]  rounded-2xl shadow-xl">
-                            <div className="h-[7vh] w-10 bg-black rounded-xl">
-                                <PersonIcon className="m-2" color="info" />
-                            </div>
-                            <div className="mt-2">
-                                <p className="font-normal font-sans text-sm">Today's Clients</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000k</p>
-                            </div>
-                        </div>
-                        <div className="md:flex justify-around bg-white sm:h-[8vh]  md:h-[15vh] sm:w[10vw] md:w-[16vw]  rounded-2xl shadow-xl">
-                            <div className="h-[7vh] w-10 bg-black rounded-xl">
-                                <EngineeringIcon className="m-2" color="info" />
-                            </div>
-                            <div className="mt-2">
-                                <p className="font-normal font-sans text-sm">Today's Talents</p>
-                                <p className="font-bold font-sans text-sm text-gray-600">50,000k</p>
+                                <p className="font-bold font-sans text-sm text-gray-600">{talentData?.reduce((acc: number, item: UserDataInterface) => acc + item.count, 0)}</p>
                             </div>
                         </div>
                     </div>
@@ -415,7 +390,7 @@ const indexDashBoard = () => {
                             </div>
                             <div>
                                 <Typography variant="h6" color="blue-gray" placeholder={undefined}>
-                                    Monthly Revenue Chart
+                                    Yearly Revenue Chart
                                 </Typography>
                                 <Typography
                                     variant="small"
@@ -429,32 +404,27 @@ const indexDashBoard = () => {
                             <Chart {...chartConfigMonth} />
                         </CardBody>
                     </Card>
-                    <div className="ml-7 m-2 flex">
-                        <div className="w-full h-auto mb-9 rounded-xl shadow-2xl border">
-                            <div className="w-full h-[70px]">
-                                <p className="m-5 font-sans font-bold text-xl">Most Freelancer Types</p>
-                                <div className="flex justify-between text-sm font-sans m-5 font-bold">
-                                    <p className='text-end'>No</p>
-                                    <p>Title</p>
-                                    <p>count</p>
-                                </div>
-                            </div><hr />
-                            {
-                                mostWorkignFreelancer?.map((most,index) => (
-                                    <div className="flex justify-between font-sans font-semibold text-md  border-b-2">
-                                        <p className="mr-5 mt-5 text-start">{index+1}</p>
-                                        <p className="m-5">{most._id}</p>
-                                        <p className="m-5">{most.count}</p>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
+                    <table className="border-collapse w-[94%] mb-[50px] m-8 bg-white shadow-lg  ">
+                        <thead>
+                            <tr className='text-gray-800 font-sans font-semibold'>
+                                <th className="border  border-gray-500 p-2">No</th>
+                                <th className="border border-gray-500 p-2">Freelancer</th>
+                                <th className="border border-gray-500 p-2">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {mostWorkignFreelancer?.map((most:mostUserWorkInterface, index: number) => (
+                                <tr key={index} className='text-gray-800 font-sans font-semibold'>
+                                    <td className="border border-gray-500 p-2">{index + 1}</td>
+                                    <td className="border border-gray-500 p-2">{most?._id as string}</td>
+                                    <td className="border border-gray-500 p-2">{most?.count as number}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     )
 }
-
-
-export default indexDashBoard;
+export default IndexDashBoard;

@@ -219,7 +219,7 @@ const JobPostForm = () => {
                     position="top-left"
                     reverseOrder={false}
                 />
-                <div className="w-[80%] h-[165vh] m-auto mt-10 shadow-xl border rounded-xl">
+                <div className="w-[80%] h-auto mb-10  m-auto mt-10 shadow-xl border-2 rounded-xl">
                     {/* form header  */}
                     <div className="border-b-2 w-full flex " onClick={() => {
                         history.back()
@@ -231,24 +231,25 @@ const JobPostForm = () => {
                     </div>
                     {/* left side input  */}
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-full h-full md:flex font-sans font-medium  sm:w-[100%] ">
+                        <div className="w-full h-auto mb-5  md:flex font-sans font-medium  sm:w-[100%] ">
                             <div className="border-r-2 md:w-[80%] sm:w-full h-full ml-10 ">
                                 <p className="mt-5">Job title</p>
                                 <div className=" mt-4">
                                     <input
                                         name="Title"
                                         onChange={onChangeInput}
-                                        // {...register('Title', {
-                                        //     required: 'Job title is required',
-                                        //     minLength: {
-                                        //         value: 5,
-                                        //         message: 'Job title must be at least 5 characters long',
-                                        //     },
-                                        //     maxLength: {
-                                        //         value: 50,
-                                        //         message: 'Job title cannot exceed 20 characters',
-                                        //     },
-                                        // })}
+                                        {...register('Title', {
+                                            required: 'Job title is required',
+                                            minLength: {
+                                                value: 5,
+                                                message: 'Job title must be at least 5 characters long',
+                                            },
+                                            maxLength: {
+                                                value: 50,
+                                                message: 'Job title cannot exceed 20 characters',
+                                            },
+
+                                        })}
                                         type="text"
                                         className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[94%] rounded-xl p-2.5 checked:bg-emerald-500"
                                         placeholder="ex, need Web developer for figma"
@@ -272,6 +273,7 @@ const JobPostForm = () => {
                                                 ['clean']
                                             ],
                                         }}
+
                                     />
                                 </div>
                                 <p className="mt-5">Required Skills</p>
@@ -318,8 +320,12 @@ const JobPostForm = () => {
                                     <FormControl>
 
                                         <RadioGroup
+                                            {...register('TimeLine', {
+                                                required: 'TimeLine is required',
+                                            })}
                                             onChange={onChangeInput}
                                             row
+                                            aria-required
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="TimeLine"
                                         >
@@ -337,7 +343,6 @@ const JobPostForm = () => {
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="Expertiselevel"
                                             onChange={onChangeInput}
-
                                         >
                                             <FormControlLabel value="Fresher" control={<Radio />} label="Fresher" />
                                             <FormControlLabel value="Medium" control={<Radio />} label="Medium" />
@@ -352,6 +357,10 @@ const JobPostForm = () => {
                                     <div className="flex items-center space-x-4">
                                         <div className="flex items-center">
                                             <input
+                                                {...register('WorkType', {
+                                                    required: 'Work type is required',
+                                                })}
+                                                required
                                                 type="radio"
                                                 id="Fixed"
                                                 name="WorkType"
@@ -394,17 +403,19 @@ const JobPostForm = () => {
                                 <div className=" mt-4">
                                     <FormControl >
                                         <OutlinedInput
+                                            required
                                             name="Amount"
                                             onChange={onChangeInput}
                                             id="outlined-adornment-amount"
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                             style={{ width: 300, height: 45 }}
+
                                         />
                                     </FormControl>
                                 </div>
                             </div>
                             {/* right side for the  create button*/}
-                            <div className="md:w-[20%]">
+                            <div className="md:w-[20%] sm:m-5 md:m-5 m-1 xl:m-0">
                                 <button className="bg-red-500 px-5 py-2 rounded-full text-white font-sans text-sm font-semibold md:mt-10 md:ml-10">Post job now</button>
                                 <button className="border border-red-500 px-4 py-2 rounded-full font-sans text-sm font-semibold md:mt-2 md:ml-10 ">Saved as draft</button>
                             </div>

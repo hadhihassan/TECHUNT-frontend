@@ -3,18 +3,20 @@ import { updatePaymentStatus } from "../../services/talentApiService";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import mongoose from 'mongoose'
-
 const PaymentSuccessPage = () => {
     const navigate = useNavigate()
     useEffect(() => {
-        const proposalId: string = localStorage.getItem("paymentProposalId") || "" 
-        if(!proposalId == ""){
-            console.log(proposalId, " <=  this is the proposal id ")
+        const proposalId: string = localStorage.getItem("paymentProposalId") || ""
+        if (!proposalId == "" && proposalId) {
             const newId = new mongoose.Schema.Types.ObjectId(proposalId)
             updatePaymentStatus("Completed", newId)
                 .then((res: AxiosResponse) => {
                     console.log(res, "payment")
+                    localStorage.removeItem("paymentProposalId")
                 })
+        }
+        return () => {
+            localStorage.removeItem("paymentProposalId")
         }
     }, [])
     return (
@@ -32,5 +34,4 @@ const PaymentSuccessPage = () => {
         </div>
     );
 }
-
 export default PaymentSuccessPage;
