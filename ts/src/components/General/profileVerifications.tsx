@@ -8,12 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../redux/store';
 
-const profileVerifications = () => {
+const ProfileVerifications = () => {
     const numberIsVerify = useSelector((state: ROOTSTORE) => state.signup.numberVerify)
     const basicData = useContext(MyContext)
     const navigate = useNavigate()
     return (
-        <div className="w-[22rem] h-[20rem] rounded-xl shadow-xl   border bg-white">
+        <div className="w-[22rem] h-[20rem] rounded-xl shadow-xl   border bg-white  ">
             <p className="m-4 font-sans font-medium">Verifications</p>
             <hr />
             <div className="flex items-center m-8 justify-between">
@@ -41,4 +41,4 @@ const profileVerifications = () => {
 }
 
 
-export default profileVerifications;
+export default ProfileVerifications;

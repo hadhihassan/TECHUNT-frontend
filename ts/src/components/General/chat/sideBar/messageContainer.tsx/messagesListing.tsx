@@ -22,25 +22,22 @@ const MessageListing = () => {
     }, [conversation?.messages]);
 
     useEffect(() => {
-        if (lastMessageRef.current) {
-            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+       
     }, [messages]);
 
-    console.log(conversation.messages, "selected messages");
 
     return (
         <>
-            {conversation.messages && (
-                conversation?.messages?.map((message: MessageDoc, index: number) => (
-                    <Message 
-                        key={index} 
-                        message={message} 
-                        index={index} 
-                        forwardedRef={index === conversation.messages.length - 1 ? lastMessageRef : null} 
-                    />
-                ))
-            )}
+                {conversation.messages && (
+                    conversation?.messages?.map((message: MessageDoc, index: number) => (
+                        <Message
+                            key={index}
+                            message={message}
+                            index={index}
+                            isLastIndex={index === messages?.length}
+                        />
+                    ))
+                )}
         </>
     );
 }

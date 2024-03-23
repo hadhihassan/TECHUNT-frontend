@@ -1,14 +1,14 @@
 
 const footer = () => {
     return (
-        <div className="w-full h-[400px] bg-stone-900" >
+        <div className="w-full h-auto bg-stone-900" >
             <div className="p-16 h-[50px] relative">
                 <span className="text-red-500 text-3xl font-extrabold font-montserrat break-words">TECH</span>
                 <span className="text-red-500 text-3xl font-normal font-montserrat break-words">UNT</span>
             </div>
             <div>
-                <div className="flex justify-between w-[80rem] h-[235px]">
-                    <div className="bg- w-[150px] ml-16">
+                <div className=" w-auto h-auto grid grid-cols-4 gap-4">
+                    <div className="bg- w-auto ml-16  xl:col-span-1 md:col-span-2 sm:col-span-2 col-span-4">
                         <ul className="text-white text-xs font-sans leading-snug flex flex-col">
                             <li className="mb-4"><b>For clients</b></li>
                             <li className="mb-2">How to Hire</li>
@@ -22,7 +22,7 @@ const footer = () => {
                             <li className="mb-2">Hire in the USA</li>
                         </ul>
                     </div>
-                    <div className=" w-[190px] ml-16">
+                    <div className=" w-auto ml-16   ">
                         <ul className="text-white text-xs font-sans leading-snug flex flex-col">
                             <li className="mb-4 text-bold"><b>For Talent</b></li>
                             <li className="mb-2">How to Find Work</li>
@@ -31,7 +31,7 @@ const footer = () => {
                             <li className="mb-2">Find Freelance Jobs in the USA</li>
                         </ul>
                     </div>
-                    <div className=" w-[150px] ml-16">
+                    <div className=" w-auto ml-16  xl:col-span-1 md:col-span-2 sm:col-span-2 col-span-4">
                         <ul className="text-white text-xs font-sans leading-snug flex flex-col">
                             <li className="mb-4"><b>Help & Support</b></li>
                             <li className="mb-2">Success Stories</li>
@@ -42,7 +42,7 @@ const footer = () => {
                             <li className="mb-2">Affiliate Program</li>
                         </ul>
                     </div>
-                    <div className=" w-[150px] ml-16">
+                    <div className=" w-auto ml-16  xl:col-span-1 md:col-span-2 sm:col-span-2 col-span-4">
                         <ul className="text-white text-xs font-sans leading-snug flex flex-col">
                             <li className="mb-4"><b>About Us</b></li>
                             <li className="mb-2">Leadership</li>
@@ -55,12 +55,6 @@ const footer = () => {
                             <li className="mb-2">UK Modern Slavery Statement</li>
                         </ul>
                     </div>
-                    <div className=" w-[150px] ml-16">
-                        <ul className="text-white text-xs font-sans leading-snug flex flex-col">
-                            <li><b>Download our App</b></li>
-                        </ul>
-                    </div>
-
                 </div>
             </div>
         </div>

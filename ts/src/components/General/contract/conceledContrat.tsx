@@ -65,15 +65,15 @@ const CancelledContract: React.FC = () => {
                     <h1 className="font-sans font-semibold text-gray-500  text-sm">Client name: {contract?.client?.First_name}  </h1>
                     <h1 className="font-sans font-semibold text-gray-500  text-sm">Total {contract.milestones.length} Milestone  </h1>
                     <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Terms Conditions </h1>
-                    <p className="font-sans font-semibold text-gray-500  text-xs text-start" dangerouslySetInnerHTML={{ __html: contract?.terms }}></p>
+                    <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all" dangerouslySetInnerHTML={{ __html: contract?.terms }}></p>
                     {
                         show && <>
                             <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Payment Terms  </h1>
-                            <p className="font-sans font-semibold text-gray-500  text-xs text-start">{contract?.paymentTerms}</p>
+                            <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all">{contract?.paymentTerms}</p>
                             {
                                 contract.notes && <>
                                     <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Notes</h1>
-                                    <p className="font-sans font-semibold text-gray-500  text-xs text-start">{contract?.notes}</p>
+                                    <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all">{contract?.notes}</p>
                                 </>
                             }
                         </>

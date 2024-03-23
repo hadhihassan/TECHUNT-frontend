@@ -89,7 +89,7 @@ const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, o
         return !(errors.city || errors.number || errors.pinCode || errors.address || formData.Country === "");
     }
     return (
-        <div className="w-[48rem] m-5 rounded-xl  border h-[20rem]  shadow-2xl">
+        <div className="w-[48rem]  rounded-xl  border h-[20rem]  shadow-2xl col-span-2">
             <div className="flex justify-between">
                 <p className="m-4 font-sans font-medium">Conatct Details</p>
                 <button onClick={openModal} className="w-[5rem] mt-3 mr-2 font-sans font-medium rounded-full h-7 border border-red-500 text-red-500">Edit</button>

@@ -45,13 +45,11 @@ const ProfileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data
             })
     }
     return (
-        <div className="w-[48rem] ml-28 rounded-xl h-[18rem] shadow-2xl border bg-white">
+        <div className="w-auto  rounded-xl h-auto shadow-2xl border bg-white">
             <div className="flex justify-between">
                 <p className="m-4 font-sans font-medium">Work Experience</p>
                 <button onClick={openModal} className="w-[5rem] mt-3 mr-2 font-sans font-medium rounded-full h-7 border border-red-500 text-red-500">Edit</button>
             </div>
-
-
             <Modal isOpen={isOpen} onClose={closeModal}>
                 <div className="mt-6">
                     <div className="w-full">
@@ -123,8 +121,6 @@ const ProfileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data
                     </>
                 )
             }
-
-
         </div >
     )
 }

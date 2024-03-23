@@ -14,7 +14,7 @@ export interface BankDetailsInterface {
     _id: string
 }
 interface BankDetailsSection {
-    data: BankDetailsInterface,
+    data: BankDetailsInterface | undefined,
     onUpdate: () => void
 }
 export  const BankDetails: React.FC<BankDetailsSection> = ({ data, onUpdate }) => {
@@ -55,7 +55,7 @@ export  const BankDetails: React.FC<BankDetailsSection> = ({ data, onUpdate }) =
         }).catch(()=>message.error("Something went wrong "))
     }
     return <>
-        <div className="w-[48rem] m-5 rounded-xl  border h-[20rem]  shadow-2xl">
+        <div className="w-[48rem]  rounded-xl  border h-[20rem]  shadow-2xl">
             <div className="flex justify-between">
                 <p className="m-4 font-sans font-medium">Bank Details</p>
                 <button

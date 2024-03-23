@@ -6,19 +6,23 @@ import { IMG_URL } from "../../../../../constant/columns";
 import DoneIcon from '@mui/icons-material/Done';
 import { DoneAll } from "@mui/icons-material";
 
-const Message = forwardRef(({ message, index }: { message: MessageDoc, index: number }, ref: React.Ref<HTMLDivElement>) => {
-    const id = useSelector((state: ROOTSTORE) => state.signup.id);
+const Message = forwardRef(({ message, index, isLastIndex }: { message: MessageDoc, index: number, isLastIndex: boolean },) => {
+    const id: string = useSelector((state: ROOTSTORE) => state.signup.id);
     const conversation = useSelector((state: ROOTSTORE) => state.conversation);
-    const messageFromMe: boolean = id === message.senderId;
-    const messagesRef = useRef(null);
+    const messageFromMe: boolean = id === message?.senderId;
+    const lastMessageRef = useRef(null);
     useEffect(() => {
-        if (messagesRef.current) {
-            messagesRef.current.scrollTop = messagesRef?.current?.scrollHeight;
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
-    }, [conversation]);
+    }, [message]);
 
     return (
-        <div ref={messagesRef} className={` ${messageFromMe ? "col-start-6 col-end-13" : "col-start-1 col-end-8"} p-3 rounded-lg`} key={index}>
+        <div
+            className={` ${messageFromMe ? "col-start-6 col-end-13" : "col-start-1 col-end-8"} p-3 rounded-lg`}
+            key={index}
+            ref={isLastIndex ? lastMessageRef : undefined}>
+
             <div className={`flex  ${messageFromMe ? "items-center justify-start flex-row-reverse" : "flex-row items-center"}`}>
                 {
                     !messageFromMe &&
@@ -29,8 +33,8 @@ const Message = forwardRef(({ message, index }: { message: MessageDoc, index: nu
                 >
                     <div className="chat-bubble chat chat-start">{message.message}</div>
                     {
-                        message.senderId === id && (
-                            message.read ? <DoneAll color='primary' fontSize="inherit"  /> : <DoneIcon fontSize="inherit" color='primary' />
+                        message?.senderId === id && (
+                            message.read ? <DoneAll color='primary' fontSize="inherit" /> : <DoneIcon fontSize="inherit" color='primary' />
                         )
                     }
                     {/* <label className=' text-end text-xs font-sans text-gray-400'>{formatRelativeTime(message.updatedAt)}</label> */}

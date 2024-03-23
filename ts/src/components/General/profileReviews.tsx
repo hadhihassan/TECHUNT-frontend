@@ -1,8 +1,8 @@
 import IMG from '../../../src/assets/images.png';
 const profileReviews = () => {
     return (
-        <div className="flex items-center  flex-row m-1 mb-5">
-            <div className="w-[48rem] ml-28 rounded-xl h-[22rem] shadow-2xl border bg-white">
+        <div className="flex items-center  flex-row ">
+            <div className="w-[48rem]  rounded-xl h-[22rem] shadow-2xl border bg-white">
                 <div className="flex justify-between">
                     <p className="m-4 font-sans font-medium">Reviews</p>
                 </div>

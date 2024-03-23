@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchAllJobPost } from "../../../services/clientApiService";
 import { useNavigate } from "react-router-dom";
 
-const listJobPost = () => {
+const ListJobPost = () => {
     const [jobs, setJobs] = useState<any[]>([])
     const navigate = useNavigate()
     useEffect(() => {
@@ -65,4 +65,4 @@ const listJobPost = () => {
 }
 
 
-export default listJobPost;
+export default ListJobPost;

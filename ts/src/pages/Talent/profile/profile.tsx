@@ -12,7 +12,7 @@ import ProfileReviews from "../../../components/General/profileReviews";
 import { AxiosError } from "axios"
 import { BankDetails } from "../../../components/General/bankDetilsSection";
 
-interface UserProfile {
+export interface UserProfile {
     Last_name: string;
     First_name: string;
     Password: string;
@@ -41,8 +41,9 @@ interface UserProfile {
         bank_name: string
         ifsc_code: number
         _id: string
-    }
-
+    },
+    createdAt?: string
+    resume?: string
 }
 
 const Profile = () => {
@@ -63,37 +64,37 @@ const Profile = () => {
     }, [role]);
 
 
-    return (<div>
-        <AfterLoginHeader />
-        <div className="bg-blue-700 absolute -z-10 w-full h-[50vh] ">
+    return (<>
+        <div>
+            <AfterLoginHeader />
+            <div className="bg-blue-700 absolute -z-10 w-full h-[50vh] ">
+            </div>
+            <div className="flex  container justify-center mt-10 gap-10 mb-5 ">
+                <div className="grid grid-col-12 gap-10">
+                    <div className="">
+                        <ProfileTalentDetailsFirst datas={datas} onUpdate={getUserProfile} />
+                    </div>  
+                    <div className={`flex items-center  flex-row justify-center `}>
+                        <ProfileContact data={datas} onUpdate={getUserProfile} />
+                    </div>
+                    <div>
+                        <BankDetails data={datas?.bankDetails} onUpdate={getUserProfile} />
+                    </div>
+                    <ProfileReviews />
+                </div>
+                <div className="flex flex-col gap-10">
+                    <ProfileVerifications />
+                    {
+                        role === "CLIENT" ? null : <ProfileSkills data={datas} onUpdate={getUserProfile} />
+                    }
+                    {
+                        role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
+                    }
+                </div>
+            </div>
+            <Footer />
         </div>
-
-        <div className="flex items-center mt-10 flex-row justify-center ">
-            <ProfileTalentDetailsFirst datas={datas} onUpdate={getUserProfile} />
-            <ProfileVerifications />
-        </div>
-
-        <div className={`flex items-center  flex-row  ${role === "CLIENT" ? "ml-[6rem]" : "justify-center"} `}>
-            <ProfileContact data={datas} onUpdate={getUserProfile} />
-            {
-                role === "CLIENT" ? null : <ProfileSkills data={datas} onUpdate={getUserProfile} />
-            }
-        </div>
-
-        <div className="flex items-center  flex-row ml-24 mb-5">
-            <BankDetails data={datas?.bankDetails} onUpdate={getUserProfile} />
-        </div>
-
-        <div className="flex items-center  flex-row m-1 mb-5">
-            {
-                role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
-            }
-        </div>
-
-        <ProfileReviews />
-
-        <Footer />
-    </div>);
+    </>);
 }
 
 

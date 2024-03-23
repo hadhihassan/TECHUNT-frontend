@@ -34,7 +34,6 @@ const TransactionsPage: React.FC = () => {
             })
     }, [])
     return <>
-        <AfterLoginHeader />
         <div className="bg-blue-500 absolute -z-10 w-full sm:h-[10vh] md:h-[25vh] xl:h-[50vh] transition-transform duration-150" style={{ backgroundImage: image }}>
         </div>
         <div className="flex flex-col gap-10 text-white font-sans  xl:ml-20:mt-8  container m-10 mt-10">
@@ -119,7 +118,6 @@ const TransactionsPage: React.FC = () => {
             </div>
         </div>
         <ListWallectHistory />
-        <Footer />
     </>
 }
 export default TransactionsPage

@@ -79,7 +79,7 @@ export const clientRoutes: CLIENTROUTES = {
     ContactListing: '/client/contract/all/',
     SendContract: "/client/send-contract/",
     ViewMiles: "/client/contract/work-details/:success",
-    TransactionHistry: "/client/transactiion/history/"
+    TransactionHistry: "/client/transaction/history/"
 }
 //Talent routes
 export const talent_routes: TALENT_ROUTES = {
@@ -94,7 +94,7 @@ export const talent_routes: TALENT_ROUTES = {
     ContactListing: '/talent/contract/all/',
     SendContract: "/talent/send-contract/",
     ViewMiles: "/talent/contract/work-details/",
-    TransactionHistry: "/talent/transactiion/history/"
+    TransactionHistry: "/talent/transaction/history/"
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

@@ -6,7 +6,6 @@ import { INITIALSTATE } from '../redux/Slice/signupSlice';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import type { ContractDetailsType, MilestoneType } from '../components/Client/contract/contractInterface'
 
-
 // CLIENT / USERS API 
 export async function createContactDetails(formData: CONTACT_FROM, role: INITIALSTATE["role"]) {
     return await resolve(
@@ -14,7 +13,6 @@ export async function createContactDetails(formData: CONTACT_FROM, role: INITIAL
     );
 }
 export async function uploadProfilePhoto(image: FormData, role: string) {
-    console.log(image, role)
     const headers = {
         'Content-Type': 'multipart/form-data',
     };

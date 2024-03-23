@@ -20,7 +20,7 @@ const Message = () => {
 
     return (
         <React.Fragment>
-            <div className="flex  text-gray-800 mb-10 w-full h-[94vh] m-auto">
+            <div className="flex  text-gray-800 mb-10 w-full h-[83vh] m-auto ">
                 <div className="flex flex-row h-full bg-white m-5 border rounded-xl w-full overflow-hidden">
                     <div className="flex flex-col py-8 w-64 bg-white flex-shrink-0 border-r overflow-auto">
                         <div className='border-b -mb-2'>

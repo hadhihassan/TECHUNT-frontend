@@ -85,7 +85,7 @@ const WebRouters: React.FC = () => {
 
 
 
-                <Imports.Route element={<Imports.Layout />}>
+                <Imports.Route element={<Imports.Layout isMessage={true}/>}>
                     <Imports.Route element={<Imports.CheckPreminumUser />}>
                         <Imports.Route path={Imports.Path.Message} element={<Message />} />
                     </Imports.Route>

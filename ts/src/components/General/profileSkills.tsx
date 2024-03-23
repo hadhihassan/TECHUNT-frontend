@@ -5,12 +5,13 @@ import { updateSkills } from "../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 import { Combobox } from '@headlessui/react'
 import axios from "axios";
+import { UserProfile } from '../../pages/Talent/profile/profile'
 
 
 
-const profileSkills: React.FC<{ data: object, onUpdate: () => void }> = ({ data, onUpdate }) => {
+const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => void }> = ({ data, onUpdate }) => {
     const [selectedPerson, setSelectedPerson] = useState<string[] | string>("")
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState<string>('')
     const [people, setPeople] = useState<string[]>([])
     const filteredPeople =
         query === ''
@@ -23,7 +24,7 @@ const profileSkills: React.FC<{ data: object, onUpdate: () => void }> = ({ data,
     const [skills, setSkills] = useState<string[]>([]);
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
     useEffect(() => {
-        setSkills(data?.Profile?.Skills);
+        setSkills(data?.Profile?.Skills as string[]);
         console.log(data?.Profile?.Skills);
     }, [data]);
 
@@ -132,7 +133,7 @@ const profileSkills: React.FC<{ data: object, onUpdate: () => void }> = ({ data,
             <hr />
             <div className="flex flex-col space-y-5 items-start m-5">
                 {
-                    data?.Profile?.Skills.length > 0 ? (
+                    data?.Profile?.Skills?.length > 0 ? (
                         data?.Profile?.Skills.map((value: string, key: number) => (
                             <span className="text-start font-semibold font-sans" key={key}>
                                 {value}

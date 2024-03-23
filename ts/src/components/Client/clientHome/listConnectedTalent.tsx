@@ -19,7 +19,6 @@ const ListConnectedFreelancers: React.FC = () => {
 
     const navigate = useNavigate()
     const [connections, setConnections] = useState<ProposalInterface[]>([]);
-    const [open, setopen] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -46,16 +45,12 @@ const ListConnectedFreelancers: React.FC = () => {
         navigate(talent_routes.JobViewPage)
     }
     const handleMessage = (index: number) => {
-        createConversation(connections[index]?.talentId?._id)
-            .then((res: AxiosResponse) => {
+        createConversation(connections[index]?.talentId?._id as string)
+            .then(() => {
                 navigate('/message')
             })
     }
     const [showNotification, setShowNotification] = useState(false);
-
-    const handleClick = () => {
-        console.log('Button clicked!');
-    };
     const DropdownMenu = ({ index }: { index: number }) => (
         <Menu>
             <Menu.Item key="1" danger={true} onClick={() => handleMessage(index)}>Message</Menu.Item>
@@ -84,17 +79,17 @@ const ListConnectedFreelancers: React.FC = () => {
                                 <Avatar src={IMAGE} className="w-8 h-8" />
                             </div>
                             <div className="ml-4">
-                                <p className="text-md font-bold">{connection.talentId.First_name} {connection.talentId.Last_name}</p>
-                                <p className="text-sm text-gray-500">{connection.talentId.Profile.Title}</p>
+                                <p className="text-md font-bold">{connection?.talentId?.First_name } {connection?.talentId?.Last_name}</p>
+                                <p className="text-sm text-gray-500">{connection?.talentId?.Profile?.Title}</p>
                                 <div className="mt-2">
-                                    <p className="text-sm text-gray-500">Total earnings <b>$ok</b> {connection.talentId.Profile.Title}</p>
+                                    <p className="text-sm text-gray-500">Total earnings <b>$ok</b> {connection?.talentId?.Profile.Title}</p>
                                     <div className="flex mt-2">
-                                        {connection?.talentId?.Profile?.Skills.slice(0, showAllSkills ? connection.talentId.Profile.Skills.length : MAX_SKILLS_DISPLAY).map((value: string, index: number) => (
+                                        {connection?.talentId?.Profile?.Skills.slice(0, showAllSkills ? connection?.talentId?.Profile?.Skills?.length : MAX_SKILLS_DISPLAY).map((value: string, index: number) => (
                                             <p key={index} className="bg-slate-100 font-sans px-3 rounded-full text-sm border mr-2">
                                                 {value}
                                             </p>
                                         ))}
-                                        {!showAllSkills && connection.talentId.Profile.Skills.length > MAX_SKILLS_DISPLAY && (
+                                        {!showAllSkills && connection?.talentId?.Profile?.Skills?.length > MAX_SKILLS_DISPLAY && (
                                             <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer" onClick={toggleSkills}>
                                                 more
                                             </span>
@@ -125,7 +120,7 @@ const ListConnectedFreelancers: React.FC = () => {
                         <div className="border-r border-solid border-gray-500 h-5 ml-2 mr-2 "></div>
                         <div>
                             <FlagOutlined className='mr-1' />
-                            <span className="text-gray-500 font-sans font-normal text-sm">{connection.talentId.City}, {connection.talentId.Country}</span>
+                            <span className="text-gray-500 font-sans font-normal text-sm">{connection?.talentId?.City}, {connection?.talentId?.Country}</span>
                         </div>
                     </div>
                 </div>

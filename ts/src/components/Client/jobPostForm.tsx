@@ -2,7 +2,7 @@ import Header from "../General/Home/Header/afterLoginHeader";
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import React, { ChangeEvent, useState } from "react";
+import  { ChangeEvent, useState } from "react";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,12 +14,25 @@ import { postJob } from "../../services/clientApiService";
 import toast, { Toaster } from "react-hot-toast";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSocketContext } from "../../context/socketContext";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
+// import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import * as Yup from 'yup';
+
+// const PlanSchema = Yup.object().shape({
+//     Title: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Name is required'),
+//     Description: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Description is required'),
+//     Amount: Yup.number().required('Amount is required').positive('Amount must be positive'),
+//     TimeLine: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Time line is required'),
+//     Expertiselevel: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Experiance is required'),
+//     WorkType: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Work type is required'),
+//     // Skills: Yup.i().required("Skills is required").
+// });
+
 
 const top100Films = [
     "JavaScript",
@@ -136,7 +149,7 @@ const JobPostForm = () => {
     const [value, setValue] = useState<string[]>([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const handleOptionChange = (event: { target: { value: string, }; }) => {
-        setSelectedOption(event.target.value);
+        setSelectedOption(event?.target?.value);
         onChangeInput(event)
     };
     const userData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
@@ -163,10 +176,9 @@ const JobPostForm = () => {
     });
     const onSubmit = () => {
         postJob(formData)
-            .then((res: any) => {
+            .then((res) => {
                 if (res?.data?.data.success) {
                     success(res?.data?.data.message)
-                    // emiting the event for the premimum usersto notified
                     socket.emit("newJobPost", { userData, formData })
                     setFormData({
                         Title: '',
@@ -238,23 +250,11 @@ const JobPostForm = () => {
                                     <input
                                         name="Title"
                                         onChange={onChangeInput}
-                                        {...register('Title', {
-                                            required: 'Job title is required',
-                                            minLength: {
-                                                value: 5,
-                                                message: 'Job title must be at least 5 characters long',
-                                            },
-                                            maxLength: {
-                                                value: 50,
-                                                message: 'Job title cannot exceed 20 characters',
-                                            },
-
-                                        })}
                                         type="text"
                                         className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[94%] rounded-xl p-2.5 checked:bg-emerald-500"
                                         placeholder="ex, need Web developer for figma"
                                     />
-                                    {errors.Title && <p className="font-sans font-normal text-xs text-red-500 m-1">{errors.Title.message}</p>}
+                                    {/* {errors.Title && <p className="font-sans font-normal text-xs text-red-500 m-1">{errors.Title.message}</p>} */}
                                 </div>
                                 <p className="mt-5">Describe about the project</p>
                                 <div className="mt-4 w-[94%]">
@@ -282,7 +282,6 @@ const JobPostForm = () => {
                                         multiple
                                         id="fixed-tags-demo"
                                         value={value}
-
                                         onChange={(_event, newValue) => {
                                             setFormData((prevData) => ({
                                                 ...prevData,
@@ -313,16 +312,12 @@ const JobPostForm = () => {
                                         )}
                                     />
                                 </div>
-                                {errors.Skills && <p>{errors.Skills.message}</p>}
+                                {/* {errors.Skills && <p>{errors?.Skills/.message}</p>} */}
                                 <label className="text-end text-sm font-sans font-normal">maximum 15 Skills</label>
                                 <p className="mt-5">Estimate your timeline here ? </p>
                                 <div className=" mt-4">
                                     <FormControl>
-
                                         <RadioGroup
-                                            {...register('TimeLine', {
-                                                required: 'TimeLine is required',
-                                            })}
                                             onChange={onChangeInput}
                                             row
                                             aria-required
@@ -357,9 +352,6 @@ const JobPostForm = () => {
                                     <div className="flex items-center space-x-4">
                                         <div className="flex items-center">
                                             <input
-                                                {...register('WorkType', {
-                                                    required: 'Work type is required',
-                                                })}
                                                 required
                                                 type="radio"
                                                 id="Fixed"

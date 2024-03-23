@@ -6,7 +6,6 @@ import { Toaster } from "react-hot-toast";
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
-import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import ProfileReviews from "../../components/General/profileReviews";
 import { useSelector } from "react-redux";
@@ -15,6 +14,9 @@ import { ProposalInterface } from "../../interface/interfaces";
 import { getAllClientProposalsForTalent } from "../../services/talentApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import DisplayResume from "../../components/General/resumeView";
+import formatRelativeTime, { formatMongoDate } from "../../util/timeFormating";
+
+
 interface UserProfile {
     _id: string
     Last_name: string;
@@ -33,12 +35,15 @@ interface UserProfile {
     PinCode: string;
     City: string;
     Country: string;
+    bankDetails?: string;
     lastSeen?: Date;
     isBlock?: boolean;
     online?: boolean;
     isVerify?: boolean;
     isNumberVerify?: boolean;
     createdAt: Date
+    UpdatedAt:string
+    resume?: string
 }
 const Profile = () => {
 
@@ -77,9 +82,9 @@ const Profile = () => {
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>
                             {/* <AccessTimeRoundedIcon fontSize="inherit" /> */}
-                            <span className="font-sans font-normal text-xs" >It's currently 4:45 PM here</span><br />
+                            <span className="font-sans font-normal text-xs" >Last seen {formatRelativeTime(datas?.updatedAt)} </span><br />
                             <EditCalendarRoundedIcon fontSize="inherit" />
-                            <span className="font-sans font-normal text-xs ml-2">  Joined {datas?.createdAt}</span>
+                            <span className="font-sans font-normal text-xs ml-2">  Joined {formatMongoDate(datas?.createdAt)}</span>
                         </div>
                         {
                             datas?.resume ? <>
@@ -93,7 +98,7 @@ const Profile = () => {
                                 />
                             </> : <>
                                 <div className="flex  items-center justify-center   ">
-                                    <p className="font-semibold font-sans text-red-500">Freelancer not uploded resume</p>
+                                    <p className="font-semibold font-sans text-red-500">{basicData.role === "CLIENT" && "Freelancer not uploded resume"}</p>
                                 </div>
                             </>
                         }
@@ -144,7 +149,7 @@ const Profile = () => {
                     <div className="flex items-center m-8 justify-between">
                         <PaymentIcon fontSize="small" />
                         <span className="text-start  font-normal font-sans">Payment Verify</span>
-                        <span className="text-blue-600 ml-12 hover:text-red-500">Not Verified</span>
+                        <span className={`${datas?.bankDetails ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`} >{datas?.bankDetails ? "Verified" : "Not Verified"} </span>
                     </div>
                     <div className="flex items-center m-8 justify-between">
                         <LocalPhoneIcon fontSize="small" />
@@ -155,8 +160,8 @@ const Profile = () => {
                     <div className="flex items-center justify-between m-8">
                         <EmailIcon fontSize="small" />
                         <span className="font-normal font-sans">Email Verify</span>
-                        <span className={`${datas?.isVerify ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}>
-                            {datas?.isVerify ? "Verified" : "Not Verified"}
+                        <span className="text-green-500 ml-12 hover:text-red-500">
+                            Verified
                         </span>
                     </div>
                 </div >
@@ -238,9 +243,9 @@ const Profile = () => {
                     </>
             }
 
-            <div className="flex items-center  flex-row m-1 mb-5">
+            <div className="flex items-center  flex-row m-1 mb-5 ml-[7rem] ">
+                <ProfileReviews />
             </div>
-            <ProfileReviews />
         </div>
     </>
     );

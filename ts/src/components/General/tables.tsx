@@ -7,6 +7,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import toast, { Toaster } from "react-hot-toast";
 import JobCategoryForm from "../Admin/jobcategory/jobCategoryForm";
 import EditJobCategoryForm from "../../components/Admin/jobcategory/editJobCategory";
+import { AxiosResponse } from "axios";
 
 //interface for props data shap 
 interface TablesProps {
@@ -17,12 +18,8 @@ interface TablesProps {
 
 const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
 
-    //sucess toast hot message
-    const success = (message: string) =>
-        toast.success(message);
-    //error toast host message
+    const success = (message: string) => toast.success(message);
     const error = (err: string) => toast.error(err);
-    //modal chandle states
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isOpen1, setIsOpen1] = useState<boolean>(false);
     const openModal: () => void = () => {
@@ -37,7 +34,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
     const closeModal1: () => void = () => {
         setIsOpen1(false);
     };
-    //input change handlers & state
     const [formData, setFormData] = useState<JOB_CATEGORY_FORM_DATA>({
         name: "",
         description: "",
@@ -57,7 +53,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
             });
         }
     };
-    //create a api call for the save new job category
     const chandleAddNewJobCategory: () => void = () => {
         const formDataToUpload = new FormData();
         formDataToUpload.append('name', formData.name);
@@ -67,7 +62,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
             console.log(formDataToUpload)
         }
         createNewJobCategoru(formDataToUpload)
-            .then((res: any) => {
+            .then((res: AxiosResponse) => {
                 if (res?.data?.data?.success) {
                     success(res?.data?.data?.message);
                     reCall()

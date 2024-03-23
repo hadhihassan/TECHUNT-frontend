@@ -40,14 +40,14 @@ export interface JobInterface extends UserProfile {
 // Proposal form Data interface 
 export interface ProposalInterface {
     title: string
+    _id?:string
     coverLetter: string
     rate: number
     availability: Date | null
     attachments: File | null
     additionalInfo: string
     jobId?: string
-    _id?: string,
-    Client_id?: {
+    Client_id: {
         _id: string;
         Last_name: string;
         First_name: string;
@@ -70,8 +70,8 @@ export interface ProposalInterface {
         online?: boolean;
         isVerify?: boolean;
         isNumberVerify?: boolean;
-    } | string
-    talentId?: {
+    }
+    talentId: {
         _id: string;
         Last_name: string;
         First_name: string;
@@ -94,7 +94,7 @@ export interface ProposalInterface {
         online?: boolean;
         isVerify?: boolean;
         isNumberVerify?: boolean;
-    } | string
+    }
     isAccept?: boolean,
     paymentStatus: 'Pending' | 'Failed ' | 'Completed'
 }

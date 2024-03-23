@@ -1,18 +1,21 @@
 import { getAllJobCategoies } from "../../../services/adminApiService";
-import SidePanel from "../../../components/Admin/sidePanel";
 import Tables from "../../../components/General/tables";
 import { JOB_CATEGORY_COLUMN } from "../../../constant/columns";
 import React, { useEffect, useState } from 'react'
-
-const jobCategories = () => {
-    const [data, setData] = useState<any[]>([])
+interface JobInterface {
+    _id?: string;
+    name: string,
+    description: string,
+    image: File | null
+}
+const JobCategories = () => {
+    const [data, setData] = useState<JobInterface[]>([])
     useEffect(() => {
         fetchAllJobCategories()
     }, [])
     const fetchAllJobCategories = () => {
         getAllJobCategoies()
-            .then((res: any) => {
-                console.log(res?.data?.data?.data)
+            .then((res) => {
                 setData(res?.data?.data?.data)
             }).catch((err) => {
                 console.log(err)
@@ -20,7 +23,7 @@ const jobCategories = () => {
     }
     return (
         <>
-                <Tables columns={JOB_CATEGORY_COLUMN} data={data} reCall={fetchAllJobCategories} />;
+            <Tables columns={JOB_CATEGORY_COLUMN} data={data} reCall={fetchAllJobCategories} />;
         </>
     )
 };
@@ -28,4 +31,4 @@ const jobCategories = () => {
 
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default React.memo(jobCategories);
+export default React.memo(JobCategories);

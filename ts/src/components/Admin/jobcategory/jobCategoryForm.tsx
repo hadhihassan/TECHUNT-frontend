@@ -1,38 +1,102 @@
 import React, { ChangeEvent, useState } from "react"
 import { IMG_URL } from "../../../constant/columns";
-
+import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../constant/validation'
 interface JobCategoryFormProps {
     editable: boolean;
-    formData: any;
-    handleChnage: (e: ChangeEvent<HTMLInputElement>) => void;
+    formData: JobInterface;
+    handleChnage: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     OnSubmit: () => void
 }
-
+interface ValidattionInterface {
+    nameError: string,
+    descriptionError: string,
+    imageError: string,
+}
+interface JobInterface {
+    name: string,
+    description: string,
+    image: string | File | null,
+}
 const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, handleChnage, OnSubmit }) => {
     const [image, setimg] = useState<File | null>(null)
-    const [inputData, setData] = useState<{} | any>({
-        name: formData?.name,
-        description: formData?.description,
-        image: formData?.image
+    const [inputData, setData] = useState<JobInterface>({
+        name: formData?.name || "",
+        description: formData?.description || "",
+        image: formData?.image || ""
     })
-    const changeData = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
-            const selectedImage = e.target.files[0];
-            setimg(e.target.files[0])
-            setData({
-                ...inputData,
-                image: selectedImage,
-            });
-            console.log(e.target.files[0])
-        } else {
-            setData({
-                ...inputData,
-                [e.target.name]: e.target.value,
-            });
+
+    const [errors, setErrors] = useState<ValidattionInterface>({
+        nameError: "",
+        descriptionError: "",
+        imageError: "",
+    });
+
+    const changeData = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value }: { name: string, value: string } = e.target;
+        if (e.target instanceof HTMLInputElement) {
+
+            if (e.target.name === 'image' && e.target?.files && e.target?.files.length > 0) {
+                if (e.target.name === 'image' && e.target?.files && e.target?.files.length > 0) {
+                    const selectedImage = e.target.files[0];
+                    const allowedTypes = ['image/jpeg', 'image/png'];
+                    const maxSize = 5 * 1024 * 1024;
+                    if (!allowedTypes.includes(selectedImage.type)) {
+                        setErrors({ ...errors, imageError: 'Only JPEG and PNG images are allowed' });
+                        return;
+                    }
+                    if (selectedImage.size > maxSize) {
+                        setErrors({ ...errors, imageError: 'Image size exceeds 5MB' });
+                        return;
+                    }
+                    setErrors({ ...errors, imageError: "" });
+                    setimg(e.target?.files[0])
+                    setData({
+                        ...inputData,
+                        image: selectedImage,
+                    });
+                } else {
+                    setData({ ...inputData, [e.target.name]: e.target.value });
+                }
+            } else {
+                let error = ""
+                switch (name) {
+                    case 'name':
+                        if (!value.match(nameRegex)) {
+                            error = 'Name must contain only letters';
+                        } else if (value.trim().length < minLength.name || value.trim().length > maxLength.name) {
+                            error = `Name must be between ${minLength.name} and ${maxLength.name} characters`;
+                        }
+                        setErrors({ ...errors, nameError: error });
+                        break;
+                    case 'description':
+                        if (!value.match(descriptionRegex)) {
+                            error = 'Description must contain only letters';
+                        } else if (value.trim().length < minLength.description || value.trim().length > maxLength.description) {
+                            error = `Description must be between ${minLength.description} and ${maxLength.description} characters`;
+                        }
+                        setErrors({ ...errors, descriptionError: error });
+                        break;
+                    default:
+                        break;
+                }
+                setData({ ...inputData, [name]: value });
+            }
         }
         handleChnage(e)
     }
-
+    const Validate = () => {
+        if (!inputData.description && inputData.description === "") {
+            setErrors({ ...errors, descriptionError: "Description is required" });
+        } else if (!inputData.image && inputData.image === "") {
+            setErrors({ ...errors, imageError: "Image is required" });
+        } else if (!inputData.name && inputData.name === "") {
+            setErrors({ ...errors, nameError: "Name is required" });
+        } else {
+            if (errors.descriptionError === "" && errors.nameError === "" && errors.imageError === "") {
+                OnSubmit()
+            }
+        }
+    }
     return (
         <>
             <div className="w-full  ">
@@ -46,6 +110,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                             Name
                         </label>
                         <input
+                            required
                             name="name"
                             value={inputData?.name}
                             onChange={changeData}
@@ -53,7 +118,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                             id="grid-password"
                         />
                         <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
-
+                            <div className="font-sans text-xs text-red-500 fonse">{errors.nameError}</div>
                         </label>
                     </div>
                 </div>
@@ -63,6 +128,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                             Description
                         </label>
                         <textarea
+                            required
                             value={inputData?.description}
                             rows={2}
                             onChange={changeData}
@@ -70,6 +136,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                             className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />
                         <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
                         </label>
+                        <div className="font-sans text-xs text-red-500 fonse">{errors.descriptionError}</div>
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
@@ -85,7 +152,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                             <div className="w-full px-3">
                                 <img
                                     className="rounded-full h-20 w-20"
-                                    src={formData.image instanceof File ? URL.createObjectURL(formData.image) : `${IMG_URL}${formData.image}`}
+                                    src={formData?.image instanceof File ? URL.createObjectURL(formData.image) : `${IMG_URL}${formData.image}`}
                                     alt="Selected"
                                 />
                             </div>
@@ -113,11 +180,12 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                                 </svg>
                             </div>
                         </div>
+                        <div className="font-sans text-xs text-red-500 font-semibold text-center">{errors?.imageError}</div>
                     </div>
                 </div>
                 <div className="mt-10">
                     <button
-                        onClick={OnSubmit}
+                        onClick={Validate}
                         type="submit" className="block w-full rounded-md text-center px-3.5 py-2.5  text-sm font-semibold text-white shadow-sm bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add</button>
                 </div>
             </div>

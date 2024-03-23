@@ -59,19 +59,19 @@ const CompletedContract: React.FC = () => {
 
             contract?.length ? contract?.map((contract: Contract, index: number) => (
                 <><div key={index} className="m-4 w-auto h-auto border border-gray-400 rounded-lg px-3 py-3">
-                    <h1 className="font-sans font-medium text-gray-900 underline ">Contract of {contract?.work?.Title}</h1>
-                    <h1 className="font-sans font-semibold text-gray-500  text-sm">Client name: {contract?.client?.First_name}  </h1>
-                    <h1 className="font-sans font-semibold text-gray-500  text-sm">Total {contract.milestones.length} Milestone  </h1>
+                    <h1 className="font-sans font-medium text-gray-900 underline  ">Contract of {contract?.work?.Title}</h1>
+                    <h1 className="font-sans font-semibold text-gray-500  text-sm break-all ">Client name: {contract?.client?.First_name}  </h1>
+                    <h1 className="font-sans font-semibold text-gray-500  text-sm break-all ">Total {contract.milestones.length} Milestone  </h1>
                     <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Terms Conditions </h1>
-                    <p className="font-sans font-semibold text-gray-500  text-xs text-start" dangerouslySetInnerHTML={{ __html: contract?.terms }}></p>
+                    <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all" dangerouslySetInnerHTML={{ __html: contract?.terms }}></p>
                     {
                         show && <>
                             <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Payment Terms  </h1>
-                            <p className="font-sans font-semibold text-gray-500  text-xs text-start">{contract?.paymentTerms}</p>
+                            <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all">{contract?.paymentTerms}</p>
                             {
                                 contract.notes && <>
                                     <h1 className="font-sans font-semibold text-gray-900 underline  m-1">Notes</h1>
-                                    <p className="font-sans font-semibold text-gray-500  text-xs text-start">{contract?.notes}</p>
+                                    <p className="font-sans font-semibold text-gray-500  text-xs text-start break-all">{contract?.notes}</p>
                                 </>
                             }
                         </>

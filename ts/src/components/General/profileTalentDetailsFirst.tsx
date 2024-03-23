@@ -11,9 +11,10 @@ import { uploadProfilePhoto } from '../../services/clientApiService';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../util/validatorsUtils'
 import { Context as ContextInterface } from '../../context/myContext'
-import { UserProfile } from '../../interface/interfaces'
+import { UserProfile } from '../../pages/Talent/profile/profile'
 import DisplayResume from './resumeView';
 import toast, { Toaster } from "react-hot-toast";
+
 interface ValidationsError {
     fName: string | null,
     lName: string | null,
@@ -26,15 +27,15 @@ import { message } from 'antd';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../redux/store';
 
-const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => void }> = ({ datas, onUpdate }) => {
+const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
     const error = (err: string) => toast.error(err);
     const success = (message: string) => toast.success(message);
-    const basicData: ContextInterface = useContext<ContextInterface>(MyContext);
-    const [details, setDetails] = useState<object | null>(null);
+    const basicData: ContextInterface = useContext<ContextInterface>(MyContext) ;
+    const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
     const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
-    const truncatedDescription: string | null = details?.Profile?.Description?.slice(0, 200);
+    const truncatedDescription: string = details?.Profile?.Description?.slice(0, 200) || '';
     const [image, setImage] = useState<File | null>(null);
 
     const [fNameError, setfNameErro] = useState<string | null>(null);
@@ -74,7 +75,6 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
             const file: File = e.target.files[0];
             const content_type: string = file.type;
             const key: string = `test/image/${file.name}`;
-            alert(key, content_type)
             CAllS3ServiceToStore({ key, content_type })
                 .then(async (res: AxiosResponse) => {
                     await saveResume(res.data.fileLink)
@@ -87,7 +87,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
         }
     };
     useEffect(() => {
-        setDetails(datas);
+        setDetails(datas || null);
         setData({
             first_name: datas?.First_name || "add you first name",
             last_name: datas?.Last_name || "add you last  name",
@@ -123,7 +123,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
             const data = new FormData();
             data.append('image', img);
             uploadProfilePhoto(data, basicData?.role)
-                .then((_res: AxiosResponse) => {
+                .then(() => {
                     onUpdate()
                     success("Image uploaded success")
                 }).catch((error: AxiosError) => {
@@ -132,7 +132,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
         }
     }
     console.log(details)
-    const changeHandle: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
+    const changeHandle: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void = (e) => {
         validateForm()
         setData({
             ...formData,
@@ -146,7 +146,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
         if (valid) {
 
             editMainProfileSection(formData, basicData?.role)
-                .then((_res: AxiosResponse) => {
+                .then(() => {
                     onUpdate()
                     setMessage(true)
                     setTimeout(() => {
@@ -158,7 +158,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
         }
     }
 
-    const dateString = details?.createdAt;
+    const dateString = details?.createdAt || "";
     const date = new Date(dateString);
     const month = date.toLocaleString('default', { month: 'long' });
     const day = date.getDate();
@@ -166,7 +166,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile, onUpdate: () => 
 
     const formattedDate = `${month} ${day}, ${year}`;
 
-    return <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
+    return <div className="w-[48rem]  flex  rounded-xl  h-[20rem] shadow-xl  border bg-white ">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
                 <img className="border border-black rounded-xl " src={IMG} alt="" />

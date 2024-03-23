@@ -4,11 +4,16 @@ import { LinearProgressWithLabel } from '../../../components/General/linerProgre
 import EmailIcon from '@mui/icons-material/Email';
 import BannerImage from '../../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { useNavigate } from 'react-router-dom';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import { AxiosError, AxiosResponse } from 'axios';
-import { fetchAllJobPostForTalent, getAllClientForTalent } from '../../../services/talentApiService';
+import {
+    fetchAllJobPostForTalent,
+    getAllClientForTalent,
+    getUserProfileDetails,
+} from '../../../services/talentApiService';
+
 import 'quill/dist/quill.snow.css';
 import { useSelector } from 'react-redux';
 import { Disclosure, Transition } from '@headlessui/react'
@@ -17,8 +22,12 @@ import routerVariables, { talent_routes } from '../../../routes/pathVariables';
 import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
 import ClientList from '../../../components/Talent/clientListing';
+import { formatMongoDate } from '../../../util/timeFormating';
+import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts } from '../../../services/commonApiService';
+import { Tour } from 'antd';
+import type { TourProps } from 'antd';
 
-// jobPst interface
+
 
 export interface Project {
     Title: string;
@@ -38,6 +47,15 @@ const HomePage: React.FC = () => {
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const [posts, setposts] = useState<Project[] | []>([])
     const [client, setClients] = useState<object[]>([])
+    const [userData, setUserData] = useState<{ First_name: string, Last_name: string }>(
+        { First_name: "", Last_name: "" }
+    )
+    const [contractDetails, setDetails] = useState<{ activeLength: number, completedLength: number, cacelledLength: number, }>({
+        activeLength: 0,
+        completedLength: 0,
+        cacelledLength: 0
+    })
+    const [open, setOpen] = useState<boolean>(false);
     useEffect(() => {
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
@@ -50,6 +68,32 @@ const HomePage: React.FC = () => {
                 setClients(res.data)
             }).catch((err) => {
                 console.log(err)
+            })
+        getUserProfileDetails(basicData.role)
+            .then((res) => {
+                setUserData(res?.data?.data)
+            })
+        //contract
+        fetchCompletedContract(basicData.role)
+            .then((res) => {
+                setDetails({
+                    ...contractDetails,
+                    completedLength: res.data.data?.length
+                })
+            })
+        getAllActiveContract(basicData.role)
+            .then((res) => {
+                setDetails({
+                    ...contractDetails,
+                    activeLength: res.data.data?.length
+                })
+            })
+        getAllCancelledContracts(basicData.role)
+            .then((res) => {
+                setDetails({
+                    ...contractDetails,
+                    cacelledLength: res.data.data?.length
+                })
             })
     }, []);
     const [activeTab, setActiveTab] = useState<number>(1);
@@ -64,7 +108,25 @@ const HomePage: React.FC = () => {
         localStorage.setItem("search", query)
         navigate("/search")
     }
+    const ref1 = useRef(null);
 
+
+    const steps: TourProps['steps'] = [
+        {
+            title: 'Completed your Verifictions ',
+            description: '100% completion of you profile will help your get more reach.',
+            cover: (
+                <img
+                    alt="tour.png"
+                    src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
+                />
+            ),
+            target: () => ref1.current,
+        },
+    ];
+    setTimeout(() => {
+        setOpen(true)
+    }, 100000);
     return (
         <>
             <div className="bg-gradient-to-r from-blue-300 to-blue-500 absolute -z-10 w-full h-[50vh]" >
@@ -75,9 +137,9 @@ const HomePage: React.FC = () => {
                     {/* job post banners */}
                     <div className="border w-full h-[25vh] rounded-xl mt-5 shadow-xl flex justify-between bg-white">
                         <div className="m-5 mt-8" >
-                            <p className="font-sans font-normal text-xs ">Friday, January 24st</p>
+                            <p className="font-sans font-normal text-xs ">{formatMongoDate(new Date(Date.now()))}</p>
                             <p className=" font-sans font-semibold text-xl mb-1">Welcome back</p>
-                            <span className="text-red-500 mt-3 font-sans font-bold w-32 text-xl">hadhi</span>
+                            <span className="text-red-500 mt-3 font-sans font-bold w-32 text-xl">{userData.First_name} {userData.Last_name}</span>
                         </div>
                         <div className=" mr-10 md:bg-black">
                             <img src={BannerImage} alt="" className="h-[24vh]  " />
@@ -96,7 +158,6 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
                     <div className="w-full mt-5 flex justify-between text-white ">
-                        <p className="text-sans font-semibold">Works you might like</p>
                     </div>
                     {/* tyes */}
                     <div>
@@ -106,13 +167,13 @@ const HomePage: React.FC = () => {
                                     onClick={() => handleTabClick(1)}
                                     className={`text-sans font-semibold ml-5 px-4 py-2 focus:outline-none ${activeTab === 1 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Clients
+                                    Clients({client?.length})
                                 </button>
                                 <button
                                     onClick={() => handleTabClick(2)}
                                     className={`text-sans font-semibold px-4 py-2 focus:outline-none ${activeTab === 2 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Best match
+                                    Best match({posts?.length})
                                 </button>
                                 {/* <button
                                             onClick={() => handleTabClick(3)}
@@ -153,17 +214,21 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
                 {/* left side */}
-                <div className="ml-10 w-[30vw] mt-9">
+                <div className="ml-10 w-[30vw] mt-9 " ref={ref1}>
                     {/* profile progress sections */}
                     <div className="border  shadow-xl w-[80%] rounded-xl h-[35vh] bg-white">
-                        <p className="text-center font-sans font-bold text-xl mt-5">Hadhi</p>
+                        <p className="text-center font-sans font-bold text-xl mt-5">{userData.First_name} {userData.Last_name}</p>
                         <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">techunt</p>
                         <Box className="m-auto mt-2" sx={{ width: '80%' }}>
                             <span className=" font-sans font-semibold text-sm">Set up your account</span>
                             <LinearProgressWithLabel value={50} />
                         </Box>
                         <div className="flex justify-center items-center m-2">
-                            <button className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">Complete your profile</button>
+                            <button
+                                onClick={() => {
+                                    navigate(talent_routes.Profile)
+                                }}
+                                className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">Complete your profile</button>
                         </div>
                         <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center ">
                             100% completion of  you profile will help <br />
@@ -258,7 +323,7 @@ const HomePage: React.FC = () => {
                                         <div className="border bg-white  shadow-xl w-[80%] rounded-xl h-[40vh] mt-1">
                                             <div className="w-full border-b-2 mt-5  flex justify-between">
                                                 <p className="m-2 font-sans font-semibold text-xl ml-5 mb-1">All Contract</p>
-                                                <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">10</b> </p>
+                                                <p className="m-2 font-sans font-semibold text-md mb-1">Total :<b className="font-sans font-semibold text-md mb-1">{contractDetails.activeLength + contractDetails.cacelledLength + contractDetails.completedLength}</b> </p>
                                             </div>
                                             <div className="flex justify-between m-5 ">
                                                 <div className="flex">
@@ -266,7 +331,7 @@ const HomePage: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                                                     </svg>
                                                     <span className="text-start text-sm ml-2 font-semibold font-sans">Active projects </span>
-                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 02</span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: {contractDetails.activeLength}</span>
                                                 </div>
                                             </div>
                                             <div className="flex justify-between m-5 ">
@@ -275,7 +340,7 @@ const HomePage: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                                                     </svg>
                                                     <span className="text-start text-sm ml-2 font-semibold font-sans">Active projects </span>
-                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: {contractDetails.completedLength}</span>
                                                 </div>
                                             </div>
                                             <div className="flex justify-between m-5 ">
@@ -284,7 +349,7 @@ const HomePage: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                     </svg>
                                                     <span className="text-start text-sm ml-2 font-semibold font-sans">Active projects </span>
-                                                    <span className=" ml-2 hover:text-red-500 text-sm">: 09</span>
+                                                    <span className=" ml-2 hover:text-red-500 text-sm">: {contractDetails.cacelledLength}</span>
                                                 </div>
                                             </div>
                                             <div className="flex justify-center items-center m-5 ">
@@ -300,6 +365,7 @@ const HomePage: React.FC = () => {
                     </Disclosure>
                 </div>
             </div >
+            <Tour open={open} onClose={() => setOpen(false)} mask={false} type="primary" steps={steps} animated arrow zIndex={100} />
         </>
     )
 }
