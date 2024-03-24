@@ -1,15 +1,15 @@
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
 import { useDispatch, useSelector } from "react-redux";
-import { INITIALSTATE, setEmail } from "../../redux/Slice/signupSlice";
-import { ROOTSTORE } from "../../redux/store";
-import Routers, { Routes } from "../../routes/pathVariables";
+import { INITIALSTATE, setEmail } from "../../../redux/Slice/signupSlice";
+import { ROOTSTORE } from "../../../redux/store";
+import Routers, { Routes } from "../../../routes/pathVariables";
 import { useNavigate } from "react-router-dom";
-import { signup } from "../../services/commonApiService";
+import { signup } from "../../../services/commonApiService";
 import Alert from '@mui/material/Alert';
 import Swal from 'sweetalert2'
 import { useState } from "react";
-import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
+import { emailValidator, passwordValidator } from "../../../util/validatorsUtils";
 
 
 const Login = () => {

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
 import { useSelector, useDispatch } from "react-redux";
-import { INITIALSTATE, setRole } from "../../redux/Slice/signupSlice";
-import { ROOTSTORE } from "../../redux/store";
+import { INITIALSTATE, setRole } from "../../../redux/Slice/signupSlice";
+import { ROOTSTORE } from "../../../redux/store";
 import Avatar from "react-avatar";
-import { Typerole } from "../../interface/interfaces"
+import { Typerole } from "../../../interface/interfaces"
 import { useNavigate } from "react-router-dom";
-import routerVariables from '../../routes/pathVariables'
+import routerVariables from '../../../routes/pathVariables'
 
 
 

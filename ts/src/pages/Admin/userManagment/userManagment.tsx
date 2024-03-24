@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column } from 'react-table';
 import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
 import Swal from 'sweetalert2';
-import {
-    Drawer,
-    Button,
-} from "@material-tailwind/react";
+import { Dialog } from '@headlessui/react';
 
 interface Row {
     photo: string;
@@ -31,8 +30,8 @@ const UserManagement: React.FC = () => {
     }, [])
     function getData() {
         getAllUser()
-            .then((res: any) => {
-                const mappedData = res?.data?.data?.talent.map((item: any) => ({
+            .then((res) => {
+                const mappedData = res?.data?.data?.talent.map((item:any) => ({
                     fullData: item,
                     id: item?._id,
                     photo: item?.Profile?.profile_Dp || "N/A",
@@ -40,11 +39,11 @@ const UserManagement: React.FC = () => {
                     email: item?.Email,
                     status: item?.online || false,
                     job: item?.Profile?.Title || "N/A",
-                    "join date": item?.createAt || "2030-12-12",
+                    "join date": item?.createAt || "N/A",
                     action: item?.isBlock,
                     role: "TALENT",
                 }));
-                const mappedData1 = res?.data?.data?.client.map((item: any) => ({
+                const mappedData1 = res?.data?.data?.client.map((item:any) => ({
                     fullData: item,
                     id: item?._id,
                     photo: item?.Profile?.profile_Dp || "N/A",
@@ -52,7 +51,7 @@ const UserManagement: React.FC = () => {
                     email: item?.Email || "N/A",
                     job: item?.Profile?.Title || "N/A",
                     status: item?.online || false,
-                    "join date": item?.createAt || "2030-12-12",
+                    "join date": item?.createAt || "N/A",
                     action: item?.isBlock,
                     role: "CLIENT",
                 }));
@@ -154,8 +153,7 @@ const UserManagement: React.FC = () => {
         },
         {
             Header: 'More Deatils',
-            accessor: 'More Deatils',
-            Cell: ({ row }) => (
+            Cell: ({ row }:{row:any}) => (
                 <div>
                     <button className="text-blue-500" onClick={() => {
                         localStorage.setItem("drawerData", JSON.stringify(row.original.fullData));
@@ -210,7 +208,7 @@ const UserManagement: React.FC = () => {
         pageOptions,
         state,
         setGlobalFilter,
-    } = useTable<Row>(
+    } = useTable<any>(
         {
             columns,
             data: switchUser ? data1 : data,
@@ -221,13 +219,12 @@ const UserManagement: React.FC = () => {
         useSortBy,
         usePagination
     );
-    const { globalFilter, pageIndex } = state;
+    const { globalFilter, pageIndex }:{globalFilter:any, pageIndex:number} = state;
     const openDrawer = () => {
-        const drawerId: any = JSON.parse(localStorage.getItem("drawerData"))
-        console.log(drawerId, "sdfsdfsdfdsfjsahkdlj")
+        const drawerId = JSON.parse(localStorage.getItem("drawerData")) 
         const id = drawerId?._id
         getJobPosts(id)
-            .then((res: any) => {
+            .then((res) => {
                 if (res?.data) {
                     setdrawerjobPost(res?.data.data.data)
                 }
@@ -315,77 +312,89 @@ const UserManagement: React.FC = () => {
                     </div>
                 </div>
                 <div >
-                    <Drawer open={open} onClose={closeDrawer} className="p-4 flex flex-col" placeholder={undefined} size={400} >
-                        <div className='overflow-x-scroll'>
-                            <div className='flex justify-center mb-5 rounded-full'>
-                                <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
-                                <div className='m-2 font-sans text-gray-600 font-semibold'>
-                                    <p >{drawerData?.First_name}</p>
-                                    {
-                                        drawerData?.Profile.Title && <>
-                                            <p >{drawerData?.Profile.Title}</p>
-                                        </>
-                                    }
+                </div>
+            </main>
+            {
+                <Dialog open={open} onClose={closeDrawer} className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="flex items-end justify-center   min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <Dialog.Overlay className="fixed inset-0  bg-gray-500 opacity-75" />
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="inline-block align-bottom  bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                        <div className='flex justify-center mb-5 rounded-full overflow-auto'>
+                                            <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
+                                            <div className='m-2 font-sans text-gray-600 font-semibold'>
+                                                <p >{drawerData?.First_name}</p>
+                                                {
+                                                    drawerData?.Profile.Title && <>
+                                                        <p >{drawerData?.Profile.Title}</p>
+                                                    </>
+                                                }
 
-                                </div>
-                            </div>
-                            <div>
-                                {
-                                    drawerData?.Profile && drawerData.Profile.Skills && (
-                                        <>
-                                            <div className='w-full flex flex-col'>
-                                                <p className='font-sans font-medium font'>Skills</p>
-                                                {drawerData.Profile.Skills.map((value: string, index: number) => (
-                                                    <span key={index} className=' font-sans text-sm text-gray-500 spanx-1 rounded-full mt-1 px-2 ml-1'>{value}</span>
-                                                ))}
                                             </div>
-                                            <div className='w-full flex flex-col'>
-                                                <p className='font-sans font-medium font mt-2'>Experience</p>
-                                                {drawerData?.Profile?.Work_Experiance && drawerData.Profile.Work_Experiance.map((value: string, index: number) => (
-                                                    <p key={index} className=' font-sans text-sm text-gray-500 px-2 rounded-full mt-1 ml-1'>{value}</p>
-                                                ))}
-                                                {drawerData?.Profile?.Work_Experiance?.length === 0 && <p className='font-sans text-sm font-semibold text-red-500'>Fresher</p>}
+                                        </div>
+                                <div className='overflow-auto '>
+                                    <div className='overflow-auto'>
+                                        <div className="overflow-auto">
+                                            {
+                                                drawerData?.Profile && drawerData.Profile.Skills && (
+                                                    <>
+                                                        <div className='w-full flex flex-col'>
+                                                            <p className='font-sans font-medium font'>Skills</p>
+                                                            {drawerData.Profile.Skills.map((value: string, index: number) => (
+                                                                <span key={index} className=' font-sans text-sm text-gray-500 spanx-1 rounded-full mt-1 px-2 ml-1'>{value}</span>
+                                                            ))}
+                                                        </div>
+                                                        <div className='w-full flex flex-col'>
+                                                            <p className='font-sans font-medium font mt-2'>Experience</p>
+                                                            {drawerData?.Profile?.Work_Experiance && drawerData.Profile.Work_Experiance.map((value: string, index: number) => (
+                                                                <p key={index} className=' font-sans text-sm text-gray-500 px-2 rounded-full mt-1 ml-1'>{value}</p>
+                                                            ))}
+                                                            {drawerData?.Profile?.Work_Experiance?.length === 0 && <p className='font-sans text-sm font-semibold text-red-500'>Fresher</p>}
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                            <div className='flex mt-2 mb-5'>
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400 ml-2'">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                                                    </svg>
+                                                </span>
+                                                <span className='font-sans font-semibold text-xl ml-2'>Verifications</span>
                                             </div>
-                                        </>
-                                    )
-                                }
-                                <div className='flex mt-2 mb-5'>
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400 ml-2'">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                                        </svg>
-                                    </span>
-                                    <span className='font-sans font-semibold text-xl ml-2'>Verifications</span>
-                                </div>
-                                <p className='font-sans font-semibold'>Phone Number : <span className='font-sans font-normal text-gray-500'> {drawerData?.isNumberVerify ? "verified" : "Not verified"}</span></p>
-                                <p className='font-sans font-semibold'>Email : <span className='font-sans font-normal text-gray-500'> {drawerData?.isVerify ? "verified" : "Not verified"}</span></p>
-                                <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mt-2">
-                                    <span className="text-green-500 mt-2 mb-5">
-                                        <svg className="h-5" xmlns="http:www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </span>
-                                    <span className="font-sans font-semibold text-xl mt-2 mb-5">About</span>
-                                </div>
-                                <p className='font-sans font-semibold text-xl mt-2 mb-2'>Contact Details</p>
-                                <p className='font-sans font-semibold'>City : <span className='font-sans font-normal text-gray-500'>{drawerData?.City}</span></p>
-                                <p className='font-sans font-semibold'>Country : <span className='font-sans font-normal text-gray-500'>{drawerData?.Country}</span></p>
-                                <p className='font-sans font-semibold'>Number : <span className='font-sans font-normal text-gray-500'>{drawerData?.Number}</span></p>
-                                <p className='font-sans font-semibold'>Pin code : <span className='font-sans font-normal text-gray-500'>{drawerData?.PinCode}</span></p>
-                                <div className='mt-5'>
-                                    {
-                                        !drawerData?.Profile?.Skills && (
-                                            <p className='font-sans font-semibold text-xl mt-2 mb-2'>Total job posts : {drawerjobPost?.length}</p>
-                                        )
-                                    }
+                                            <p className='font-sans font-semibold'>Phone Number : <span className='font-sans font-normal text-gray-500'> {drawerData?.isNumberVerify ? "verified" : "Not verified"}</span></p>
+                                            <p className='font-sans font-semibold'>Email : <span className='font-sans font-normal text-gray-500'> {drawerData?.isVerify ? "verified" : "Not verified"}</span></p>
+                                            <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mt-2">
+                                                <span className="text-green-500 mt-2 mb-5">
+                                                    <svg className="h-5" xmlns="http:www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                    </svg>
+                                                </span>
+                                                <span className="font-sans font-semibold text-xl mt-2 mb-5">About</span>
+                                            </div>
+                                            <p className='font-sans font-semibold text-xl mt-2 mb-2'>Contact Details</p>
+                                            <p className='font-sans font-semibold'>City : <span className='font-sans font-normal text-gray-500'>{drawerData?.City}</span></p>
+                                            <p className='font-sans font-semibold'>Country : <span className='font-sans font-normal text-gray-500'>{drawerData?.Country}</span></p>
+                                            <p className='font-sans font-semibold'>Number : <span className='font-sans font-normal text-gray-500'>{drawerData?.Number}</span></p>
+                                            <p className='font-sans font-semibold'>Pin code : <span className='font-sans font-normal text-gray-500'>{drawerData?.PinCode}</span></p>
+                                            <div className='mt-5'>
+                                                {
+                                                    !drawerData?.Profile?.Skills && (
+                                                        <p className='font-sans font-semibold text-xl mt-2 mb-2'>Total job posts : {drawerjobPost?.length}</p>
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </Drawer>
-                </div>
-            </main>
+                    </div>
+                </Dialog>
+            }
         </>
     );
 };

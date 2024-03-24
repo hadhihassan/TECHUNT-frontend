@@ -169,7 +169,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                 <thead>
                                     <tr className="bg-gray-50 border-b border-gray-200 text-xs leading-4 text-gray-500 uppercase tracking-wider">
                                         {
-                                            columns.map((names: string, index: number) => (
+                                            columns?.map((names: string, index: number) => (
                                                 <th className="px-6 py-3 text-left font-medium" key={index}>
                                                     {names}
                                                 </th>
@@ -181,7 +181,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                 {/* <!-- BODY start --> */}
                                 <tbody className="bg-white">
                                     {
-                                        filteredData.map((value, index) => (
+                                        filteredData?.map((value, index) => (
                                             <tr>
                                                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                     {index + 1}

@@ -40,13 +40,13 @@ export interface JobInterface extends UserProfile {
 // Proposal form Data interface 
 export interface ProposalInterface {
     title: string
-    _id?:string
+    _id?: string
     coverLetter: string
     rate: number
     availability: Date | null
     attachments: File | null
     additionalInfo: string
-    jobId?: string
+    jobId?: string | { Title: string }
     Client_id: {
         _id: string;
         Last_name: string;
@@ -79,6 +79,7 @@ export interface ProposalInterface {
         Email: string;
         Number: string;
         Profile: {
+            Skills: any;
             profile_Dp: string;
             Description: string;
             Title: string;
@@ -113,5 +114,5 @@ export interface MessageDoc {
     message: string;
     createdAt: Date;
     updatedAt: Date;
-    read:boolean    
+    read: boolean
 }

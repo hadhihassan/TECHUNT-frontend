@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { LeftCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Input, InputNumber, Space, message } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
 import { AxiosResponse } from 'axios';
-import type { ContractDetailsType, MilestoneType } from './contractInterface'
-import { useNavigate } from 'react-router-dom';
+import type { ContractDetailsType, MilestoneType, ProposalInteface } from './contractInterface'
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
+
 const ContractForm: React.FC = () => {
-    const [form] = Form.useForm();
-    const [proposal, setProposal] = useState()
+    const [proposal, setProposal] = useState<ProposalInteface>()
     const [contractDetails, setContractDetails] = useState<ContractDetailsType>({
         terms: "",
         work: "",
@@ -24,15 +25,7 @@ const ContractForm: React.FC = () => {
         client: "",
         talent: "",
     });
-    const [milestones, setMilestones] = useState<MilestoneType[]>([{
-        no: 0,
-        name: "",
-        description: "",
-        startingDate: "",
-        dueDate: "",
-        amount: 0
-    }]);
-    const navigate = useNavigate()
+    const [milestones, setMilestones] = useState<MilestoneType[]>([]);
     useEffect(() => {
         const proposal = JSON.parse(localStorage.getItem("proposal") || "");
         setProposal(proposal)
@@ -44,7 +37,7 @@ const ContractForm: React.FC = () => {
         }));
     }, [])
     const handleChange = (fieldName: string, value: string, index: number) => {
-        const updatedMilestones = [...milestones];
+        const updatedMilestones: any[] = [...milestones];
         if (!updatedMilestones[index]) {
             updatedMilestones[index] = {
                 no: index,
@@ -56,10 +49,9 @@ const ContractForm: React.FC = () => {
             }
         }
         if (updatedMilestones[index]) {
-            updatedMilestones[index][fieldName] = value || null;
+            updatedMilestones[index][fieldName] = value;
             setMilestones(updatedMilestones);
         }
-        console.log(milestones)
     };
     const handleFormChange = (changedValues: ContractDetailsType) => {
         setContractDetails(prevState => ({
@@ -69,17 +61,40 @@ const ContractForm: React.FC = () => {
         console.log(contractDetails);
 
     };
+    const validateAmount = (_: any, value: string) => {
+        // Check if the value is a valid number
+        if (isNaN(Number(value))) {
+            return Promise.reject('Amount must be a number.');
+        }
+        // Validation passed
+        return Promise.resolve();
+    };
+    const validateText = (_, value) => {
+        const trimmedValue = value.trim(); // Trim the input
+        if (!trimmedValue) {
+            return Promise.reject('Input is required');
+        }
+        return Promise.resolve();
+    };
+    const [form] = Form.useForm();
 
     const handleSubmit = () => {
-        sendContract({ contract: contractDetails, milestone: milestones, isMilestone: true })
-            .then((res: AxiosResponse) => {
-                console.log(res, "this is response of the contract");
-                message.success("Succfully contract submitted. ")
-                setTimeout(() => {
-                    history.back()
-                }, 2000)
-            }).catch(() => message.error("While sending contract got and error.!"))
-    }
+        form
+            .validateFields()
+            .then(() => {
+                sendContract({ contract: contractDetails, milestone: milestones, isMilestone: true })
+                    .then((res: AxiosResponse) => {
+                        console.log(res, "this is response of the contract");
+                        message.success("Successfully contract submitted.")
+                        setTimeout(() => {
+                            history.back()
+                        }, 2000)
+                    }).catch(() => message.error("While sending contract got an error.!"));
+            })
+            .catch(() => {
+                message.error('Form submission failed. Please check the form for errors.');
+            });
+    };
     return (
         <>
             <div className='container m-auto flex flex-col justify-center rounded-lg items-center font-sans text-gray-700 font-semibold  '>
@@ -101,6 +116,7 @@ const ContractForm: React.FC = () => {
                         layout="horizontal"
                         style={{ maxWidth: "100%" }}
                         form={form}
+                        onFinish={handleSubmit}
                     >
                         <Form.Item
                             label="Terms"
@@ -108,9 +124,9 @@ const ContractForm: React.FC = () => {
                             rules={[
                                 { required: true, message: 'Please enter terms!' },
                                 { type: 'string' },
+                                { validator: validateText },
                                 { min: 200 },
                                 { max: 500 }
-
                             ]}
                         >
                             <ReactQuill
@@ -132,20 +148,19 @@ const ContractForm: React.FC = () => {
                             validateFirst='parallel'
                             label="Duration"
                             name={"duration"}
-                            rules={[{ required: true, message: 'Please select duration!' }]}
+                            rules={[
+                                { required: true, message: 'Please select duration.' },
+                            ]}
                         >
                             <RangePicker
-                                // defaultValue={[contractDetails.duration[0], contractDetails.duration[1]]}
                                 className='border border-gray-500' />
                         </Form.Item>
                         <Form.Item
                             label="Amount"
                             name={"amount"}
                             rules={[
-                                // { validator: isNumber },
                                 { required: true, message: 'Please enter amount!' },
-                                // { min: 100 },
-                                // { max: 10000000 }
+                                { validator: validateAmount }
                             ]}
                         >
                             <InputNumber
@@ -155,7 +170,9 @@ const ContractForm: React.FC = () => {
                         <Form.Item
                             label="Notes"
                             name={"notes"}
-                            rules={[{ required: true, message: 'Please enter notes!' }, { type: 'string' }]}
+                            rules={[{ required: true, message: 'Please enter notes!' },
+                            { validator: validateText },
+                            { type: 'string' }]}
                         >
                             <TextArea
                                 rows={4}
@@ -165,16 +182,16 @@ const ContractForm: React.FC = () => {
                         <Form.Item
                             name={"paymentTerms"}
                             label="Payment terms"
-                            rules={[{ required: true, message: 'Please enter payment terms!' }, { type: 'string' }]}
+                            rules={[{ required: true, message: 'Please enter payment terms!' }, { validator: validateText }, { type: 'string' }]}
                         >
                             <TextArea defaultValue={contractDetails.paymentTerms} rows={4} className='border border-gray-500' />
                         </Form.Item>
                         {
-                            proposal?.jobId?.WorkType === "Fixed" ? <>
+                            proposal?.jobId?.WorkType === "Fixed " ? <>
                                 <Space style={{ display: 'flex', marginBottom: 8, marginLeft: 110 }} align="baseline" className='ml-10'>
                                     <Form.Item
                                         className='w-[100%]'
-                                        rules={[{ required: true, message: 'Missing name' }, { min: 5 }]}
+                                        rules={[{ required: true, message: 'Missing name' }, { validator: validateText }, { min: 5 }]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
 
                                     >
@@ -182,7 +199,7 @@ const ContractForm: React.FC = () => {
                                     </Form.Item>
                                     <Form.Item
                                         className='w-[100%]'
-                                        rules={[{ required: true, message: 'Missing Description' }, { min: 50 }]}
+                                        rules={[{ required: true, message: 'Missing Description' }, { validator: validateText }, { min: 50 }]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
                                     >
                                         <Input placeholder="Description" onChange={(e) => handleChange('description', e.target.value, 0)} />
@@ -193,7 +210,6 @@ const ContractForm: React.FC = () => {
                                             { required: true, message: 'Missing starting date' },
                                             {
                                                 validator: (_, value) => {
-                                                    const today = moment();
                                                     const startingDate = moment(value);
                                                     if (!startingDate.isValid()) {
                                                         return Promise.reject('Invalid date');
@@ -204,16 +220,14 @@ const ContractForm: React.FC = () => {
                                         ]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
                                     >
-                                        <DatePicker placeholder="Starting Date" onChange={(date, dateString) => handleChange('startingDate', dateString, 0)} />
+                                        <DatePicker placeholder="Starting Date" onChange={(_date, dateString) => handleChange('startingDate', dateString as string, 0)} />
                                     </Form.Item>
                                     <Form.Item
                                         className='w-[100%]'
                                         rules={[
                                             { required: true, message: 'Missing due date' },
-                                            ({ getFieldValue }) => ({
+                                            () => ({
                                                 validator(_, value) {
-                                                    const startingDateValue = getFieldValue([name, 'startingDate']);
-                                                    const startingDate = moment(startingDateValue);
                                                     const dueDate = moment(value);
                                                     if (!dueDate.isValid()) {
                                                         return Promise.reject('Invalid date');
@@ -224,7 +238,7 @@ const ContractForm: React.FC = () => {
                                         ]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
                                     >
-                                        <DatePicker placeholder="Due Date" onChange={(date, dateString) => handleChange('dueDate', dateString, 0)} />
+                                        <DatePicker placeholder="Due Date" onChange={(_date, dateString) => handleChange('dueDate', dateString as string, 0)} />
                                     </Form.Item>
                                     <Form.Item
                                         className='w-[100%]'
@@ -267,7 +281,6 @@ const ContractForm: React.FC = () => {
                                                             { required: true, message: 'Missing starting date' },
                                                             {
                                                                 validator: (_, value) => {
-                                                                    const today = moment();
                                                                     const startingDate = moment(value);
                                                                     if (!startingDate.isValid()) {
                                                                         return Promise.reject('Invalid date');
@@ -278,7 +291,7 @@ const ContractForm: React.FC = () => {
                                                         ]}
                                                         style={{ marginRight: 1, marginBottom: 0 }}
                                                     >
-                                                        <DatePicker placeholder="Starting Date" onChange={(date, dateString) => handleChange('startingDate', dateString, index)} />
+                                                        <DatePicker placeholder="Starting Date" onChange={(_date, dateString) => handleChange('startingDate', dateString as string, index)} />
                                                     </Form.Item>
                                                     <Form.Item
                                                         className='w-[100%]'
@@ -286,10 +299,8 @@ const ContractForm: React.FC = () => {
                                                         name={[name, 'dueDate']}
                                                         rules={[
                                                             { required: true, message: 'Missing due date' },
-                                                            ({ getFieldValue }) => ({
+                                                            () => ({
                                                                 validator(_, value) {
-                                                                    const startingDateValue = getFieldValue([name, 'startingDate']);
-                                                                    const startingDate = moment(startingDateValue);
                                                                     const dueDate = moment(value);
                                                                     if (!dueDate.isValid()) {
                                                                         return Promise.reject('Invalid date');
@@ -300,7 +311,7 @@ const ContractForm: React.FC = () => {
                                                         ]}
                                                         style={{ marginRight: 1, marginBottom: 0 }}
                                                     >
-                                                        <DatePicker placeholder="Due Date" onChange={(date, dateString) => handleChange('dueDate', dateString, index)} />
+                                                        <DatePicker placeholder="Due Date" onChange={(_date, dateString) => handleChange('dueDate', dateString as string, index)} />
                                                     </Form.Item>
                                                     <Form.Item
                                                         className='w-[100%]'
@@ -324,8 +335,8 @@ const ContractForm: React.FC = () => {
                                 </Form.List>
                             </>
                         }
-                        <Form.Item  >
-                            <Button htmlType="submit" onClick={handleSubmit}>Submit</Button>
+                        <Form.Item  className='flex items-center justify-center '>
+                            <Button htmlType="submit" className='font-sans font-semibold border px-10' >Submit</Button>
                         </Form.Item>
                     </Form>
                 </div>

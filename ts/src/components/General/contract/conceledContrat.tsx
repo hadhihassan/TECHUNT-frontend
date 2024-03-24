@@ -39,7 +39,6 @@ const CancelledContract: React.FC = () => {
     useEffect(() => {
         fetchCancelledContract()
     }, [])
-    console.log("this is cancelled contract listing componenet")
     const fetchCancelledContract = () => {
         getAllCancelledContracts(role)
             .then((res: AxiosResponse) => {

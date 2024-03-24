@@ -4,7 +4,7 @@ import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
 import { Login } from "../../services/clientApiService";
 import { useDispatch, } from "react-redux";
-import { setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser, isBankVeried } from "../../redux/Slice/signupSlice";
+import { setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser, isBankVeried, setProgress } from "../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
 import Swal from 'sweetalert2';
@@ -45,6 +45,7 @@ const LoginPage: React.FC = () => {
                             dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
                             dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
+                            dispatch(setProgress(res?.data?.data?.progress));
 
                             if (res?.data?.data?.data.subscription) {
                                 dispatch(isPremimunUser(true));

@@ -1,6 +1,4 @@
-
 import { useSelector } from 'react-redux'
-import a from '../../../../../assets/4950287_19874-removebg-preview.png'
 import { ROOTSTORE } from '../../../../../redux/store'
 import { IMG_URL } from '../../../../../constant/columns'
 

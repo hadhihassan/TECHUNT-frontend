@@ -9,6 +9,7 @@ export type INITIALSTATE = {
     numberVerify: boolean
     premiumUser: boolean
     bankVerified: boolean
+    progress: number
 };
 
 const initialState: INITIALSTATE = {
@@ -19,7 +20,8 @@ const initialState: INITIALSTATE = {
     id: null,
     numberVerify: false,
     premiumUser: false,
-    bankVerified: false
+    bankVerified: false,
+    progress: 0
 };
 
 const Signup = createSlice({
@@ -52,6 +54,9 @@ const Signup = createSlice({
         isBankVeried: (state, action: PayloadAction<boolean>) => {
             state.bankVerified = action.payload
         },
+        setProgress: (state, action: PayloadAction<number>) => {
+            state.progress = action.payload
+        },
         cleanAllData: (state) => {
             state.email = ""
             state.verify = false
@@ -61,10 +66,20 @@ const Signup = createSlice({
             state.numberVerify = false
             state.premiumUser = false
             state.bankVerified = false
+            state.progress = 0
         },
 
     }
 })
-export const { setEmail, setVerify, setRole, setLogged, cleanAllData, setId, isNumberVerify, isPremimunUser, isBankVeried } = Signup.actions
+export const { setEmail,
+    setVerify,
+    setRole,
+    setLogged,
+    cleanAllData,
+    setId,
+    isNumberVerify,
+    isPremimunUser,
+    isBankVeried,
+    setProgress } = Signup.actions
 export default Signup.reducer
 

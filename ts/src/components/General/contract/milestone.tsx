@@ -17,7 +17,6 @@ import { addWalletAmount, sendMilestoneApproval } from '../../../services/client
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
-import { Params, useParams } from 'react-router';
 
 
 
@@ -229,7 +228,7 @@ const Milestone = () => {
                 if (res.data.success) {
                     message.success("Successfully contract cancelled ");
                     if (contract) {
-                        const newUpdatedContract = { ...contract, completed: "cancelled" };
+                        const newUpdatedContract:ContractDetailsType = { ...contract, completed: "cancelled" };
                         setContract(newUpdatedContract);
                         setTimeout(() => {
                             history.back()

@@ -1,18 +1,16 @@
-import React, { ChangeEvent, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent, useState } from 'react';
 import './adminlogin.css';
-import { login } from '../../services/adminApiService';
+import { login } from '../../../services/adminApiService';
 import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-import { admin_Routes } from '../../routes/pathVariables';
+import { admin_Routes } from '../../../routes/pathVariables';
 import * as yup from 'yup';
-
 const schema = yup.object().shape({
     userName: yup.string().matches(/^[a-zA-Z0-9]{4,}$/, 'Username must be 4 letters and only contain letters and numbers').required('Username is required'),
     password: yup.string().matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, 'Password must be 8 characters or more, containing at least one number and one special character').required('Password is required'),
 });
-
-function adminLogin() {
+function AdminLogin() {
     const [state, setState] = useState({
         password: '',
         userName: '',
@@ -28,17 +26,15 @@ function adminLogin() {
             [name]: value,
         }));
     };
-
     const handleLogin: () => void = () => {
         schema
             .validate(state, { abortEarly: false })
             .then(() => {
                 login(state)
-                    .then((res: any) => {
-                        console.log(res.data)
+                    .then((res:any) => {
                         localStorage.setItem('adminToken', res?.data?.data?.token);
                         if (!res.data) {
-                            setError(res?.error?.response?.data?.message);
+                            setError(res?.error?.response?.data?.message as string || "");
                             setTimeout(() => {
                                 setError('');
                             }, 5000);
@@ -51,9 +47,6 @@ function adminLogin() {
                             navigate(admin_Routes.UserMangment);
                         }
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
             })
             .catch((errors) => {
                 const errorMessage = errors.errors.join(', ');
@@ -63,7 +56,6 @@ function adminLogin() {
                 }, 3000);
             });
     };
-
     return (
         <>
             <div className="rootColor w-[60vw] m-auto h-[75vh] sm:h-auto border rounded-md sm:flex mt-16 justify-center items-center">
@@ -96,5 +88,4 @@ function adminLogin() {
         </>
     );
 }
-
-export default adminLogin;
+export default AdminLogin;

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
-import { setVerify } from "../../redux/Slice/signupSlice";
-import routerVariables from '../../routes/pathVariables'
-import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE } from "../../redux/Slice/signupSlice";
-import { get } from "../../config/axios";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
+import { setVerify } from "../../../redux/Slice/signupSlice";
+import routerVariables from '../../../routes/pathVariables'
+import { ROOTSTORE } from "../../../redux/store";
+import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
+import { get } from "../../../config/axios";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 const emailVerificationPage = () => {

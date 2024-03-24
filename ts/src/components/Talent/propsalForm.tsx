@@ -20,8 +20,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     const jobid: ProposalInterface = JSON.parse(localStorage.getItem("deatildView")) 
     const sender_id: string = jobid?._id || "ds";
     const recipient_id: string = jobid.Client_id?._id
-    console.log("this is the job is", jobid)
-
     useEffect(() => {
         setOpen(isOpen)
     }, [isOpen])
@@ -72,7 +70,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             const key: string = `test/image/${file.name}`;
             CAllS3ServiceToStore({ key, content_type })
                 .then((res: AxiosResponse) => {
-                    console.log(res.data.fileLink, "file respoen");
                     setData({
                         ...proposalData,
                         ["attachments"]: res.data.fileLink

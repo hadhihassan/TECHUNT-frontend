@@ -1,6 +1,6 @@
 import "./panel.css"
 import { useNavigate } from 'react-router-dom';
-import { admin_Routes } from "../../routes/pathVariables";
+import { admin_Routes } from "../../../routes/pathVariables";
 import {
     Card,
     List,

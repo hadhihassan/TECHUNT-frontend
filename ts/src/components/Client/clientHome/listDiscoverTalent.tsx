@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../../routes/pathVariables";
 import { createConversation } from "../../../services/commonApiService";
 import { Dialog, Transition } from '@headlessui/react'
-import type {jobInterface} from '../editJobPostForm'
+import type {jobInterface} from '../jobPost/editJobPostForm'
 import { message } from "antd";
 
 const ListDiscoverTalent = () => {

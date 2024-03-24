@@ -21,11 +21,12 @@ import { ROOTSTORE } from '../../../redux/store';
 import routerVariables, { talent_routes } from '../../../routes/pathVariables';
 import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
-import ClientList from '../../../components/Talent/clientListing';
+import ClientList from '../../../components/Talent/home/clientListing';
 import { formatMongoDate } from '../../../util/timeFormating';
 import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts } from '../../../services/commonApiService';
 import { Tour } from 'antd';
 import type { TourProps } from 'antd';
+import ListWorkPost from '../../../components/Talent/home/workPostListing';
 
 
 
@@ -124,9 +125,11 @@ const HomePage: React.FC = () => {
             target: () => ref1.current,
         },
     ];
-    setTimeout(() => {
-        setOpen(true)
-    }, 100000);
+    if (basicData.progress !== 100) {
+        setTimeout(() => {
+            setOpen(true)
+        }, 100000);
+    }
     return (
         <>
             <div className="bg-gradient-to-r from-blue-300 to-blue-500 absolute -z-10 w-full h-[50vh]" >
@@ -186,27 +189,7 @@ const HomePage: React.FC = () => {
                     </div>
                     {/* filter */}
                     {
-
-                        activeTab == 2 ?
-                            posts?.map((post: Project, _index: number) => (
-                                <div className="w-full mt-5" key={_index} onClick={() => handleShowJobPostDetails(_index)}>
-                                    <div className="m-3 mt-5 w-full">
-                                        <p className="font-sans font-semibold mt-1">{post.Title}</p>
-                                        <p className='font-sans text-gray-600 mt-1 text-xs font-normal'>{post.TimeLine} - {post.Expertiselevel} - Est. Budget: ${post.Amount} - Posted  8 hours ago</p>
-                                        <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
-                                    </div>
-                                    <div className='flex justify-between w-[60%] sm:ml-3'>
-                                        <p>{post?.WorkType}</p>
-                                        {/* <p ></p> */}
-                                        <Stack spacing={1}>
-                                            <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
-                                        </Stack>
-                                        <p>4/5  12 Reviews</p>
-                                        <p>Kerala, India</p>
-                                    </div>
-                                    <div className="w-full border-b-2 m-3"></div>
-                                </div>
-                            ))
+                        activeTab == 2 ?<><ListWorkPost handleShowJobPostDetails={handleShowJobPostDetails}/></>
                             : <ClientList />
                     }
                     {/* talents */}
@@ -221,19 +204,21 @@ const HomePage: React.FC = () => {
                         <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">techunt</p>
                         <Box className="m-auto mt-2" sx={{ width: '80%' }}>
                             <span className=" font-sans font-semibold text-sm">Set up your account</span>
-                            <LinearProgressWithLabel value={50} />
+                            <LinearProgressWithLabel value={basicData.progress} />
                         </Box>
                         <div className="flex justify-center items-center m-2">
                             <button
                                 onClick={() => {
                                     navigate(talent_routes.Profile)
                                 }}
-                                className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">Complete your profile</button>
+                                className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">{basicData.progress === 100 ? "Complete your profile " : "Go to profile"}</button>
                         </div>
-                        <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center ">
-                            100% completion of  you profile will help <br />
-                            your get more reach.
-                        </p>
+                        {
+                            basicData.progress === 100 && <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center ">
+                                100% completion of  you profile will help <br />
+                                your get more reach.
+                            </p>
+                        }
                     </div>
                     {/* verifications */}
                     <Disclosure>
@@ -244,7 +229,6 @@ const HomePage: React.FC = () => {
                                         Verifications
                                     </label>
                                     <ArrowUpward className={`transition-transform   transform ${open ? 'duration-1000 rotate-180' : ''}`} />
-
                                 </Disclosure.Button>
                                 <Transition
                                     enter="transition duration-100 ease-out"
@@ -300,7 +284,6 @@ const HomePage: React.FC = () => {
                             </>
                         )}
                     </Disclosure>
-
                     {/* CONTRACT DETAILS */}
                     <Disclosure>
                         {({ open }) => (

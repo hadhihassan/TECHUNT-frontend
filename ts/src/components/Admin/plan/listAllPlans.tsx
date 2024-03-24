@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { getAllPlan } from "../../../services/adminApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import EditPlanForm from "./editPlanForm";
+
 const TABLE_HEAD = ["No", "Name", "Description", "Amount", "Type", "Action"];
 
 export function ListAllPlans() {
@@ -23,7 +24,6 @@ export function ListAllPlans() {
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const [plans, setPlans] = useState<PlanInterface[]>([])
     const [editData, setEdit] = useState<string>("")
-
 
     const close = () => setIsOpen(false)
     const open = () => setIsOpen(true)
@@ -37,14 +37,13 @@ export function ListAllPlans() {
     useEffect(() => {
         getAllPlan()
             .then((res: AxiosResponse) => {
-                console.log(res.data.data)
                 setPlans(res?.data?.data || null)
-            }).catch((err: AxiosError) => [
+            }).catch((err: AxiosError) => {
                 alert(err)
-            ])
+            })
     }, [isOpen, editOpen])
     return (
-        <div className=" w-[90%] h-auto m-7">
+        <div className=" w-[90%] h-full m-7">
             <Card placeholder={undefined}>
                 <CardHeader floated={false} shadow={false} className="rounded-none" placeholder={undefined}>
                     <div className="mb-8 flex items-center justify-between gap-8">

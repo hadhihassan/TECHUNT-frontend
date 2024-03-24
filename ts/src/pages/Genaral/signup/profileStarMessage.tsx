@@ -1,10 +1,10 @@
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
 import IMG from '../../assets/3714960.jpg'
 import { useNavigate } from 'react-router-dom'
-import { clientRoutes, talent_routes, } from "../../routes/pathVariables";
+import { clientRoutes, talent_routes, } from "../../../routes/pathVariables";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
+import { ROOTSTORE } from "../../../redux/store";
 
 const ProfileStarMessage = () => {
     const navigate = useNavigate()

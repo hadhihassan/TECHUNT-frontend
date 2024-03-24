@@ -1,15 +1,15 @@
 import Avatar from "react-avatar";
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../components/General/progressBar";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
+import { ProgressBar } from "../../../components/General/progressBar";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
+import { ROOTSTORE } from "../../../redux/store";
 import Button from '@mui/material/Button'
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { talent_routes } from "../../routes/pathVariables";
+import { talent_routes } from "../../../routes/pathVariables";
 import Alert from '@mui/material/Alert';
-import { fetchAllJobCategory } from '../../services/talentApiService'
+import { fetchAllJobCategory } from '../../../services/talentApiService'
 
 
 const ProfileTitle: React.FC = () => {

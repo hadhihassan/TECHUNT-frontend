@@ -1,21 +1,21 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 // Lazy-loaded components
-const EmailVerification = lazy(() => import('../pages/Genaral/email.SignupPage'));
-const FidnTypeUser = lazy(() => import('../pages/Genaral/findTypeUser'));
-const EmailVerificationPage = lazy(() => import('../pages/Genaral/emailVerificationPage'));
-const ProfileStarMessage = lazy(() => import('../pages/Genaral/profileStarMessage'));
+const EmailVerification = lazy(() => import('../pages/Genaral/signup/email.SignupPage'));
+const FidnTypeUser = lazy(() => import('../pages/Genaral/signup/findTypeUser'));
+const EmailVerificationPage = lazy(() => import('../pages/Genaral/signup/emailVerificationPage'));
+const ProfileStarMessage = lazy(() => import('../pages/Genaral/signup/profileStarMessage'));
 const ProfileDescription = lazy(() => import('../pages/Client/profileDescription'));
 const ContractDetails = lazy(() => import('../pages/Client/contactDetails'));
 const Login = lazy(() => import('../pages/Genaral/login'));
-const ProfileTitle = lazy(() => import('../pages/Talent/profileTitle'));
-const AddSkills = lazy(() => import('../pages/Talent/addSkills'));
-const Addexperiance = lazy(() => import('../pages/Talent/addWorkExperiance'));
+const ProfileTitle = lazy(() => import('../pages/Talent/profile/profileTitle'));
+const AddSkills = lazy(() => import('../pages/Talent/profile/addSkills'));
+const Addexperiance = lazy(() => import('../pages/Talent/profile/addWorkExperiance'));
 const Profile = lazy(() => import('../pages/Talent/profile/profile'));
 const ErrorPage = lazy(() => import('../pages/Genaral/404/404ErrorPage'));
-const AdminLogin = lazy(() => import('../pages/Admin/adminLogin'));
+const AdminLogin = lazy(() => import('../pages/Admin/adminLogin/adminLogin'));
 const Settings = lazy(() => import('../pages/Genaral/settings'));
 const TalentHomePage = lazy(() => import('../pages/Talent/home/talentHomePage'));
 const ProposalClientView = lazy(() => import('../pages/Client/proposalView'));
@@ -24,10 +24,10 @@ const JobCategories = lazy(() => import('../pages/Admin/jobCategory/jobCategorie
 const UserManagementIndex = lazy(() => import('../pages/Admin/userManagment'));
 const IndexDashBoard = lazy(() => import('../pages/Admin/dashboard'));
 const Layout = lazy(() => import('../components/General/layout'));
-const SidePanel = lazy(() => import('../components/Admin/sidePanel'));
+const SidePanel = lazy(() => import('../components/Admin/layout/sidePanel'));
 const JobViewPage = lazy(() => import('../components/General/jobViewPage'));
-const EditjobPostForm = lazy(() => import('../components/Client/editJobPostForm'));
-const JobPostForm = lazy(() => import('../components/Client/jobPostForm'));
+const EditjobPostForm = lazy(() => import('../components/Client/jobPost/editJobPostForm'));
+const JobPostForm = lazy(() => import('../components/Client/jobPost/jobPostForm'));
 const LandinHomePage = lazy(() => import('../pages/Genaral/Home'));
 const paymentSuccessPage = lazy(() => import('../components/General/paymentSuccessPage'));
 const ClientProfileView = lazy(() => import('../pages/Client/profileView'));
@@ -42,7 +42,7 @@ import { IsLoggedUser, CheckUserType, IsVerified, IsNewUser, CheckPreminumUser }
 //Admin protected routes
 import ProtectedRoute from './protectedRoutes/adminProtectedRoutes';
 // admin layout 
-import AdminLayout from '../components/Admin/adminLayout';
+import AdminLayout from '../components/Admin/layout/adminLayout';
 import Loader from '../components/General/loader/loader';
 import ContactListPage from '../pages/Genaral/contractList';
 

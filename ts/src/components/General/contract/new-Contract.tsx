@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { getAllNewContracts, updateContractStatus } from "../../../services/talentApiService";
 import { AxiosError, AxiosResponse } from "axios";
@@ -36,18 +37,11 @@ type props = {
 }
 
 const NewContract: React.FC<props> = ({ active }) => {
-    console.log(active)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state?.signup?.role)
     const [show, setShow] = useState<boolean>(false)
     const [contract, setNewContract] = useState<Contract[]>([])
     const navigate = useNavigate()
-    useEffect(() => {
-        if (active === 3) {
-            fetchNewContract()
-        } else if (active === 0) {
-            fetchActiveContract()
-        }
-    }, [active])
+
 
     const fetchNewContract = () => {
         getAllNewContracts()
@@ -85,6 +79,13 @@ const NewContract: React.FC<props> = ({ active }) => {
             navigate(talent_routes.ViewMiles)
         }
     }
+    useEffect(() => {
+        if (active === 3) {
+            fetchNewContract()
+        } else if (active === 0) {
+            fetchActiveContract()
+        }
+    }, [active, handleConfirm])
     return <>
         {
 

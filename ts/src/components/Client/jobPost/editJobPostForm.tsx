@@ -1,4 +1,6 @@
-import Header from "../General/Home/Header/afterLoginHeader";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Header from "../../General/Home/Header/afterLoginHeader";
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -9,13 +11,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import { useForm } from 'react-hook-form';
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from 'react-router-dom';
-import { editJobPost, fetchAllJobPost } from "../../services/clientApiService"
+import { editJobPost, fetchAllJobPost } from "../../../services/clientApiService"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { AxiosError, AxiosResponse } from "axios";
 const top100Films: string[] = [
     "JavaScript",
     "Python",
@@ -132,14 +132,13 @@ const EditjobPostForm = () => {
     }
     const error = (err: string) => toast.error(err);
     const fixedOptions: string[] = [];
-    const [value, setValue] = React.useState([]);
+    const [value, setValue] = React.useState<string[]>([]);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const handleOptionChange: (event: ChangeEvent<HTMLSelectElement>) => void = (event: { target: { value: string, }; }) => {
+    const handleOptionChange: (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void = (event: { target: { value: string, }; }) => {
         setSelectedOption(event.target.value);
-        onChangeInput(event)
+        onChangeInput(event as ChangeEvent<HTMLInputElement>)
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
     const [docId, setId] = useState<string | null>(null)
     const [formData, setFormData] = useState<jobInterface>({
         Title: '',
@@ -150,12 +149,23 @@ const EditjobPostForm = () => {
         WorkType: '',
         Amount: 0,
     });
+    const [formDataError, setFormDataError] = useState({
+        TitleError: '',
+        SkillsError: "",
+        AmountError: "",
+    });
+    const [validationError, setValidationError] = useState('');
     const [editorHtml, setEditorHtml] = useState("");
-    console.log(editorHtml, "this is the rivh text data ",)
+
     const handleEditorChange = (html: string) => {
-        console.log(editorHtml)
         setEditorHtml(html);
-        // const { name, value } = e.target;
+        if (html.trim() === "") {
+            setValidationError('Description is required');
+        } else if (html.trim().length < 50) {
+            setValidationError('Description must be more than 50 characters.');
+        } else {
+            setValidationError('');
+        }
         setFormData((prevData) => ({
             ...prevData,
             ["Description"]: html,
@@ -163,7 +173,7 @@ const EditjobPostForm = () => {
     };
     useEffect(() => {
         fetchAllJobPost()
-            .then((res: AxiosResponse) => {
+            .then((res) => {
                 const data = res?.data?.data?.data.find((item: { _id: string | undefined; }) => item._id === id)
                 console.log(data, res?.data?.data?.data)
                 setId(data?._id)
@@ -181,43 +191,124 @@ const EditjobPostForm = () => {
                 setEditorHtml(data?.Description)
             })
     }, [])
-    const onChangeInput: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void = (e) => {
+    const onChangeInput: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-        console.log(formData)
+        if (name === "Title") {
+            if (value.trim() === "") {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["TitleError"]: "Title is required .",
+                }));
+                return
+            } else if (value.trim().length < 4) {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["TitleError"]: "Title must be 4 charactors .",
+                }));
+                return
+            } else if (value.trim().length > 30) {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["TitleError"]: "Title maximum 30 charactors allowed .",
+                }));
+                return
+            } else {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["TitleError"]: "",
+                }))
+                return
+            }
+        } else if (name === "Amount") {
+            const amount = parseInt(value)
+            if (value.trim() === "") {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["AmountError"]: "Amount is required .",
+                }));
+                return
+            } else if (amount < 0) {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["AmountError"]: "Amount must be positive number.",
+                }));
+                return
+            } else if (value.trim().length > 10) {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["AmountError"]: "Amount cannot exceed 10 characters.",
+                }));
+                return
+            } else {
+                setFormDataError((prevData) => ({
+                    ...prevData,
+                    ["AmountError"]: "",
+                }));
+                return
+            }
+        }
     };
-    // const handleChangeSkill = (_event, newValue) => {
-    //     const uniqueSkills = newValue.filter((option) => !formData.Skills.includes(option));
-    //     setValue([
-    //         ...value,
-    //         ...uniqueSkills
-    //     ]);
-    //     setFormData((prevFormData) => ({
-    //         ...prevFormData,
-    //         Skills: [
-    //             ...prevFormData.Skills,
-    //             ...uniqueSkills
-    //         ]
-    //     }));
-    // };
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault()
-        editJobPost(formData, docId)
-            .then((res: AxiosResponse) => {
-                console.log(res)
-                if (res.data) {
-                    success(res?.data?.data?.message)
-                } else {
-                    error(res?.error?.response?.data?.message)
-                }
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            }).catch((_err: AxiosError) => {
-                error("Internal server error.")
-            })
+        if (formData.Title === "") {
+            setFormDataError((prevData) => ({
+                ...prevData,
+                ["TitleError"]: "Title is required .",
+            }));
+        }
+        if (formData.Description === "") {
+            setValidationError("Description is required .")
+        }
+        if (formData.Skills.length === 0) {
+            setFormDataError((prevData) => ({
+                ...prevData,
+                ["SkillsError"]: "Skills is required .",
+            }));
+        }
+        if (formData.Amount === 0) {
+            setFormDataError((prevData) => ({
+                ...prevData,
+                ["AmountError"]: "Amount is required .",
+            }));
+        }
+        if (formDataError.AmountError === "" && formDataError.SkillsError === "" &&
+            formDataError.TitleError === "" && validationError === ""
+        ) {
+            editJobPost(formData, docId || "")
+                .then((res:any) => {
+                    if (res.data) {
+                        success(res?.data?.data?.message || "")
+                    } else {
+                        error(res?.error?.response?.data?.message  || "")
+                    }
+                }).catch(() => {
+                    error("Internal server error.")
+                })
+        }
     }
+    const handleSkillChange = (_event: any, newValue: any) => {
+        setFormData(prevData => ({
+            ...prevData,
+            ["Skills"]: newValue,
+        }));
+
+        let error = '';
+        if (newValue.length < 3 || newValue.length > 9) {
+            error = 'Skills must be between 3 and 9';
+        }
+        setValue([
+            ...fixedOptions,
+            ...newValue.filter((option: string) => fixedOptions.indexOf(option) === -1),
+        ]);
+        setFormDataError(prevError => ({
+            ...prevError,
+            SkillsError: error,
+        }));
+    };
     return (
         <>
             <Header />
@@ -246,23 +337,12 @@ const EditjobPostForm = () => {
                                         name="Title"
                                         value={formData.Title}
                                         onChange={onChangeInput}
-                                        // {...register('Title', {
-                                        //     required: 'Job title is required',
-                                        //     minLength: {
-                                        //         value: 5,
-                                        //         message: 'Job title must be at least 5 characters long',
-                                        //     },
-                                        //     maxLength: {
-                                        //         value: 50,
-                                        //         message: 'Job title cannot exceed 20 characters',
-                                        //     },
-                                        // })}
                                         type="text"
                                         className="relative bg-gray-50 ring-0 outline-none border border-neutral-500 text-neutral-900 placeholder-gray-300 text-sm  focus:ring-violet-500  focus:border-gray-300 block w-[94%] rounded-xl p-2.5 checked:bg-emerald-500"
                                         placeholder="ex, need Web devloper for figma"
                                     />
-                                    {errors.Title && <p className="font-sans font-normal text-xs text-red-500 m-1">{errors.Title.message}</p>}
                                 </div>
+                                {formDataError.TitleError && <p className="text-red-500">{formDataError.TitleError}</p>}
                                 <p className="mt-5">Describe about the project</p>
                                 <div className="mt-4 w-[94%]">
                                     <ReactQuill
@@ -281,25 +361,15 @@ const EditjobPostForm = () => {
                                             ],
                                         }}
                                     />                                </div>
+                                {validationError && <p className="text-red-500">{validationError}</p>}
                                 <p className="mt-5">Required Skills</p>
                                 <div className=" mt-4">
                                     <Autocomplete
                                         multiple
                                         id="fixed-tags-demo"
                                         value={value}
-                                        onChange={(_event, newValue) => {
-                                            setValue([
-                                                ...fixedOptions,
-                                                ...newValue.filter((option) => fixedOptions.indexOf(option) === -1),
-                                            ]);
-                                            console.log(value)
-                                            setFormData({
-                                                ...formData,
-                                                ["Skills"]: value,
-                                            });
-                                            console.log(formData.Skills)
-                                        }}
                                         options={top100Films}
+                                        onChange={handleSkillChange}
                                         getOptionLabel={(option) => option}
                                         renderTags={(tagValue, getTagProps) =>
                                             tagValue.map((option, index) => (
@@ -318,8 +388,8 @@ const EditjobPostForm = () => {
                                             <TextField {...params} placeholder="Add Skills" />
                                         )}
                                     />
+                                    {formDataError.SkillsError && <p className="text-red-500">{formDataError.SkillsError}</p>}
                                 </div>
-                                {errors.Skills && <p>{errors?.Skills?.message}</p>}
                                 <label className="text-end text-sm font-sans font-normal">maximum 15 Skills</label>
                                 <p className="mt-5">Estimate your timeline here ? </p>
                                 <div className=" mt-4">
@@ -398,6 +468,7 @@ const EditjobPostForm = () => {
                                 <div className=" mt-4">
                                     <FormControl >
                                         <OutlinedInput
+                                            type="number"
                                             value={formData.Amount}
                                             name="Amount"
                                             onChange={onChangeInput}
@@ -407,6 +478,7 @@ const EditjobPostForm = () => {
                                         />
                                     </FormControl>
                                 </div>
+                                {formDataError.AmountError && <p className="text-red-500">{formDataError.AmountError}</p>}
                             </div>
                             {/* right side for the  create button*/}
                             <div className="md:w-[20%]">
