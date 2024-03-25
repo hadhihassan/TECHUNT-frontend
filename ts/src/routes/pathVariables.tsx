@@ -14,6 +14,8 @@ export type Routes = {
     PaymentSuccess: string,
     Search: string
     plan: string
+    forgetPassowrdEmail: string
+    forgetPassowrdOtp: string
 };
 export interface CLIENTROUTES {
     EDIT_JOB_POST: string,
@@ -63,7 +65,10 @@ const routerVariables: Routes = {
     Message: "/message/",
     PaymentSuccess: '/payment-success/:id/',
     Search: "/search",
-    plan: "/plan"
+    plan: "/plan",
+    forgetPassowrdEmail: "/forget-password/email/",
+    forgetPassowrdOtp: "/forget-password/otp",
+
 }
 export default routerVariables;
 //Client routes

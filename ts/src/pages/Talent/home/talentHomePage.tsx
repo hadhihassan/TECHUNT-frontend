@@ -199,11 +199,11 @@ const HomePage: React.FC = () => {
                 {/* left side */}
                 <div className="ml-10 w-[30vw] mt-9 " ref={ref1}>
                     {/* profile progress sections */}
-                    <div className="border  shadow-xl w-[80%] rounded-xl h-[35vh] bg-white">
-                        <p className="text-center font-sans font-bold text-xl mt-5">{userData.First_name} {userData.Last_name}</p>
+                    <div className="border  shadow-xl w-[80%] rounded-xl h-auto bg-white" ref={ref1}>
+                        <p className="text-center font-sans font-bold text-xl mt-5">{userData?.First_name} {userData?.Last_name}</p>
                         <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">techunt</p>
                         <Box className="m-auto mt-2" sx={{ width: '80%' }}>
-                            <span className=" font-sans font-semibold text-sm">Set up your account</span>
+                            <span className=" font-sans font-semibold text-sm">{basicData.progress !== 100 ? "Set up your account" : "Set up completed"}</span>
                             <LinearProgressWithLabel value={basicData.progress} />
                         </Box>
                         <div className="flex justify-center items-center m-2">
@@ -211,10 +211,10 @@ const HomePage: React.FC = () => {
                                 onClick={() => {
                                     navigate(talent_routes.Profile)
                                 }}
-                                className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">{basicData.progress === 100 ? "Complete your profile " : "Go to profile"}</button>
+                                className="border text-red-500  mt-3 font-sans font-semibold text-xs w-60 border-red-500 rounded-full h-8">{basicData.progress === 100 ? "Go to profile" : "Complete your profile "}</button>
                         </div>
                         {
-                            basicData.progress === 100 && <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center ">
+                            basicData.progress !== 100 && <p className="font-sans font-thin text-xs text-slate-500 mt-2 text-center ">
                                 100% completion of  you profile will help <br />
                                 your get more reach.
                             </p>

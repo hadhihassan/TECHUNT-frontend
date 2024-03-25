@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../../routes/pathVariables";
 import { talent_routes } from "../../../routes/pathVariables";
+import EmptyJobs from "../emptyData/emptyJobs";
 
 interface Contract {
     _id: string,
@@ -85,7 +86,7 @@ const NewContract: React.FC<props> = ({ active }) => {
         } else if (active === 0) {
             fetchActiveContract()
         }
-    }, [active, handleConfirm])
+    }, [active])
     return <>
         {
 
@@ -138,6 +139,7 @@ const NewContract: React.FC<props> = ({ active }) => {
                     <br />
                 </>
             )) : <>
+                <EmptyJobs title={`No  ${active === 3 ? "New" :"Active" } Contracts`} description={`There are currently no ${active === 3 ? "New" :"Active" } contracts.`} />
             </>
         }
     </>;

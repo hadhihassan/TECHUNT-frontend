@@ -1,21 +1,22 @@
-import a from '../../assets/4950287_19874-removebg-preview.png'
-import { AudioOutlined } from '@ant-design/icons';
-import Footer from '../../components/General/Home/footer/footer';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ChatSearchBar from '../../components/General/chat/sideBar/charSearchInput';
 import { SearchProps } from 'antd/es/input';
 import ListConversations from '../../components/General/chat/sideBar/listConversations';
 import MessageHeader from '../../components/General/chat/sideBar/messageContainer.tsx/header';
 import SendMessageInput from '../../components/General/chat/sideBar/messageContainer.tsx/messageInput';
 import MessageListing from '../../components/General/chat/sideBar/messageContainer.tsx/messagesListing';
+import { cleanChatItems } from '../../redux/Slice/conversationsSlice';
+import { useDispatch } from 'react-redux';
 
+cleanChatItems
 const Message = () => {
-    <AudioOutlined
-        style={{
-            fontSize: 16,
-            color: '#1677ff',
-        }}
-    />
+    const dispatch = useDispatch()
+    useEffect(() => {
+        return () => {
+            dispatch(cleanChatItems())
+        };
+    }, [])
+
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
     return (

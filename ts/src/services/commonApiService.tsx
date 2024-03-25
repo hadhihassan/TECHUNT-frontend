@@ -62,6 +62,9 @@ export async function fetchCompletedContract(role: string) {
 export async function getTransationHistory(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/get-transaction-history/`)
 }
+export async function getWalletAmount(role: string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/get-wallet-amount/`)
+}
 export async function getAllPlans(role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/plan/getAll/`)
 }
@@ -76,4 +79,7 @@ export async function getAllCancelledContracts(role: string) {
 }
 export async function updateBankDetails(data: BankDetailsInterface, role: string, id: string) {
     return await axiosInstance.patch(`${BASE_URL}update-bank-details/`, { data, role, id })
+}
+export async function sendForgetOtp(email: string) {
+    return await axiosInstance.post(`${BASE_URL}forget-password/email/`, { email })
 }

@@ -8,7 +8,7 @@ import CompletedContract from '../../components/General/contract/completedContra
 import CancelledContract from "../../components/General/contract/conceledContrat";
 
 const ContactListPage: React.FC = () => {
-    
+
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [activeTab, setActiveTab] = useState<number>(0);
     const tabElements = [<NewContract active={activeTab} />, <CancelledContract />, <CompletedContract />, <NewContract active={activeTab} />];

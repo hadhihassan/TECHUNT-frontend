@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-//Define the initial state shap
+
 export type ConversationType = {
     selectedConversations: unknown,
     messages: []
@@ -19,8 +19,12 @@ const conversation = createSlice({
         },
         setConversation: (state, action) => {
             state.selectedConversations = action.payload
+        },
+        cleanChatItems: (state) => {
+            state.selectedConversations = []
+            state.messages = []
         }
     }
 })
-export const { setMessages, setConversation } = conversation.actions
+export const { setMessages, setConversation, cleanChatItems } = conversation.actions
 export default conversation.reducer

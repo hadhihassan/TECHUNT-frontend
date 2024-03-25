@@ -8,12 +8,14 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../../routes/pathVariables";
 import { talent_routes } from "../../../routes/pathVariables";
+import EmptyJobs from "../emptyData/emptyJobs";
+
 
 interface Contract {
     _id: string,
     talent: string;
-    client: {First_name:string};
-    work: {Title:string}
+    client: { First_name: string };
+    work: { Title: string }
     terms: string;
     duration: Date[];
     amount: number;
@@ -84,7 +86,7 @@ const CompletedContract: React.FC = () => {
                     <br />
                 </>
             )) : <>
-
+                <EmptyJobs title={"No Completed Contracts"} description={"There are currently no completed contracts."}/>
             </>
         }
     </>;

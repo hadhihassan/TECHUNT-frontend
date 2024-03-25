@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
-import { Button} from 'antd';
+import { Button } from 'antd';
 import { ROOTSTORE } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../../routes/pathVariables";
 import { talent_routes } from "../../../routes/pathVariables";
 import { getAllCancelledContracts } from "../../../services/commonApiService";
+import EmptyJobs from "../emptyData/emptyJobs";
 
 interface Contract {
     _id: string,
     talent: string;
     client: {
-        First_name:string
+        First_name: string
     };
     work: {
-        Title:string
+        Title: string
     };
     terms: string;
     duration: Date[];
@@ -33,8 +34,8 @@ interface Contract {
 
 const CancelledContract: React.FC = () => {
     const role = useSelector((state: ROOTSTORE) => state?.signup?.role)
-    const [show, setShow] = useState < boolean > (false)
-    const [contract, setNewContract] = useState < Contract[] > ([])
+    const [show, setShow] = useState<boolean>(false)
+    const [contract, setNewContract] = useState<Contract[]>([])
     const navigate = useNavigate()
     useEffect(() => {
         fetchCancelledContract()
@@ -84,7 +85,9 @@ const CancelledContract: React.FC = () => {
                 </div>
                     <br />
                 </>
-            )) : <>
+            )) : <><div>
+                <EmptyJobs title={"No Cancelled Contracts"} description={"There are currently no cancelled contracts."} />
+            </div>
             </>
         }
     </>;

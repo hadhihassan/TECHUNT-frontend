@@ -86,12 +86,11 @@ const LoginPage: React.FC = () => {
         setPassword(e.target.value)
     }
 
-
     return (
         <div>
             <Header layout={true} />
-            <div className="w-full flex justify-center items-center">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-[550px] m-10   border shadow-2xl rounded-lg">
+            <div className="w-full flex justify-center items-center ">
+                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-[550px] m-10    shadow-2xl rounded-xl border-2">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         Sign in to your account
                     </h1>
@@ -99,17 +98,17 @@ const LoginPage: React.FC = () => {
                         <div>
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
                             {Emailerrors && <p className="text-red-500 text-xs text-end">{Emailerrors}</p>}
-                            <input onChange={handleChange} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" />
+                            <input onChange={handleChange} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600  dark:placeholder-gray-400 outline-none dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" />
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
                             {PasswordErrors && <p className="text-red-500 text-xs text-end">{PasswordErrors}</p>}
-                            <input onChange={handleChangePassword} type="password" name="password" id="password" placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input onChange={handleChangePassword} type="password" name="password" id="password" placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-800 outline-none" />
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-start">
                                 <div className="flex items-center h-5">
-                                    <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
+                                    <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300  bg-gray-50 focus:ring-3 focus:ring-primary-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
                                 </div>
                                 <div className="ml-3 text-sm">
                                     <label htmlFor="remember" className="text-normal font-sans">Remember me</label>

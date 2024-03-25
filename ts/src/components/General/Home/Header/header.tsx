@@ -3,8 +3,8 @@ import Routers from "../../../../routes/pathVariables";
 import { useContext } from "react";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import io from 'socket.io-client';
-import { useSelector, useDispatch } from "react-redux";
-import { ROOTSTORE, persistor } from '../../../../redux/store'
+import { useDispatch } from "react-redux";
+import { persistor } from '../../../../redux/store'
 import { useNavigate } from "react-router-dom";
 
 import { MyContext } from "../../../../context/myContext";
@@ -18,7 +18,7 @@ type Layout = {
 
 const Header = ({ layout }: Layout) => {
   const naviagte = useNavigate()
-  const basicdata: any = useContext(MyContext); // Move useContext here
+  const basicdata: any = useContext(MyContext);
   const handleClick = () => {
     naviagte(`/${basicdata.role}/profile/`)
   }

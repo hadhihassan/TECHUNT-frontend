@@ -1,43 +1,35 @@
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../../../redux/store";
-import formatRelativeTime from "../../../../../util/timeFormating";
 import useGetMessage from "../../../../../hooks/useGetMessages";
-import { useEffect, useRef, useState } from "react";
-import { MessageDoc, ConversationDoc } from '../../../../../interface/interfaces';
+import { useEffect, useState } from "react";
+import { MessageDoc } from '../../../../../interface/interfaces';
 import Message from "./message";
 import useListenMessages from "../../../../../hooks/useListenMessages";
 
 const MessageListing = () => {
     useListenMessages();
     const conversation = useSelector((state: ROOTSTORE) => state.conversation);
-    const id = useSelector((state: ROOTSTORE) => state.signup.id);
     const [messages, setMessages] = useState<MessageDoc[]>([]);
-    const { _loading, getMessages } = useGetMessage();
-    const lastMessageRef = useRef<HTMLDivElement>(null);
+    const { loading, getMessages }: { loading: boolean, getMessages: (id: string, fetchMessages: () => void) => Promise<unknown> } = useGetMessage();
 
     useEffect(() => {
         if (conversation.selectedConversations) {
-            getMessages(conversation?.selectedConversations?._id, setMessages);
+            getMessages(conversation?.selectedConversations?._id as string || "", setMessages as () => void);
         }
     }, [conversation?.messages]);
 
-    useEffect(() => {
-       
-    }, [messages]);
-
-
     return (
-        <>
-                {conversation.messages && (
-                    conversation?.messages?.map((message: MessageDoc, index: number) => (
-                        <Message
-                            key={index}
-                            message={message}
-                            index={index}
-                            isLastIndex={index === messages?.length}
-                        />
-                    ))
-                )}
+        <>{loading}
+            {conversation.messages && (
+                conversation?.messages?.map((message: MessageDoc, index: number) => (
+                    <Message
+                        key={index}
+                        message={message}
+                        index={index}
+                        isLastIndex={index === messages?.length}
+                    />
+                ))
+            )}
         </>
     );
 }

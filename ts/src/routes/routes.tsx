@@ -22,6 +22,10 @@ const WebRouters: React.FC = () => {
 
                 <Imports.Route path={Imports.Path.Settings} element={<Imports.Settings />} />
 
+                <Imports.Route element={<Imports.LandingLayout />}>
+                    <Imports.Route path={Imports.Path.forgetPassowrdEmail} element={< Imports.ForgetPasswordEmailCard />} />
+                </Imports.Route>
+                
                 <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
                 <Imports.Route path={Imports.Path.CREATE_PROFILE_MESSAGE} element={<Imports.ProfileStarMessage />} />
                 {/* Email verified users only access routes */}
@@ -37,11 +41,15 @@ const WebRouters: React.FC = () => {
                     <Imports.Route element={<Imports.CheckUserType />}>
                         <Imports.Route path={Imports.Path.signup} element={<Imports.EmailVerification />} />
                     </Imports.Route>
+                    
                     <Imports.Route path={Imports.Path.Type} element={<Imports.FidnTypeUser />} />
                 </Imports.Route>
                 <Imports.Route path={Imports.Path.MailVerification} element={<Imports.EmailVerificationPage />} />
 
                 {/* everyone can access this route */}
+
+
+
                 <Imports.Route path={Imports.Path.Landing} element={<Imports.LandinHomePage />} />
                 <Imports.Route path={Imports.Path.PaymentSuccess} element={<Imports.paymentSuccessPage />} />
                 <Imports.Route path={Imports.Path.Login} element={<Imports.Login />} />

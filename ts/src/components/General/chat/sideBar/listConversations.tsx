@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import {  useRef } from 'react'
 import useGetConversations from '../../../../hooks/useGetConversation'
 import Conversation from './conversation'
 

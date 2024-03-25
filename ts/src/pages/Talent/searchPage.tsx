@@ -17,6 +17,7 @@ import { talent_routes } from '../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { findMostSuitableJobPost } from '../../util/jobSearchUtils';
 import { List, Skeleton } from 'antd';
+import EmptyJobs from '../../components/General/emptyData/emptyJobs';
 
 const optionsWithDisabled = [
     { label: 'Experianced', value: 'Experianced' },
@@ -303,7 +304,7 @@ const Search = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className='text-red-500'>No job post available</p>
+                                    <EmptyJobs title={'No post'} description={'There have been no posts in this section yet'}/>
                                 )
                             )}
                         </div>

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import { getTransationHistory } from "../../services/commonApiService";
+import { getTransationHistory, getWalletAmount } from "../../services/commonApiService";
 import { formatMongoDate } from "../../util/timeFormating";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
@@ -19,16 +19,24 @@ interface HistoryPropos {
     Date: Date,
     forWhat: string,
     amount: number
-    createdAt:Date
+    createdAt: Date
 }
 
 const TransactionsPage: React.FC = () => {
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     const [histories, setHistories] = useState<HistoryPropos[]>([])
+    const [walletAmount, setWalletAmount] = useState<number>(0)
+
     useEffect(() => {
         getTransationHistory(userData?.role)
             .then((res: AxiosResponse) => {
-                setHistories(res?.data?.data)
+                setHistories(res?.data?.data || 0)
+            }).catch((err: AxiosError) => {
+                console.log(err)
+            })
+        getWalletAmount(userData?.role)
+            .then((res: AxiosResponse) => {
+                setWalletAmount(res?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
@@ -44,8 +52,12 @@ const TransactionsPage: React.FC = () => {
                 }}>
                 <LeftCircleOutlined />
                 Back
-            </Button></div>
-            <div className="font-semibold text-2xl font-sans">Transaction Histories</div>
+            </Button>
+            </div>
+            <div className="flex justify-between w-[89%]">
+                <div className="font-semibold text-2xl font-sans">Transaction Histories</div>
+                <div className="font-semibold text-2xl font-sans">Total Amount : {walletAmount}</div>
+            </div>
             <div className="w-[90%] border border-gray-300 shadow-xl  flex flex-col rounded-xl h-auto bg-white">
                 <Card className="h-full w-full" placeholder={undefined}>
                     <table className="w-full min-w-max table-auto text-left">
@@ -65,7 +77,7 @@ const TransactionsPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {histories?.map((transaction:HistoryPropos, index:number) => {
+                            {histories?.map((transaction: HistoryPropos, index: number) => {
                                 const isLast = index === histories.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
                                 return (
@@ -75,7 +87,7 @@ const TransactionsPage: React.FC = () => {
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-normal text-center" placeholder={undefined}                                            >
-                                                {index+1}
+                                                {index + 1}
                                             </Typography>
                                         </td>
                                         <td className={classes}>

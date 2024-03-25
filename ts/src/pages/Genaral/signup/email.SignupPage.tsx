@@ -17,8 +17,7 @@ const Login = () => {
     const naviagte = useNavigate()
     const dispatch = useDispatch()
     const [inputvalue, setValue] = useState<string | null>("")
-    const [password, setPassword] = useState<String | null>("")
-    const [message, setMessage] = useState<boolean>(false)
+    const [password, setPassword] = useState<string | null>("")
     const [error, setError] = useState<string>("")
     const data: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup);
     const [Emailerrors, setErrorsEmail] = useState<string | null>(" ");
@@ -31,7 +30,7 @@ const Login = () => {
     const verifyEmail = async (): Promise<void> => {
         setErrorsEmail(emailValidator(inputvalue))
         setErrorsPassword(passwordValidator(password))
-        console.log(Emailerrors,PasswordErrors)
+        console.log(Emailerrors, PasswordErrors)
         if (!Emailerrors && !PasswordErrors) {
             if (inputvalue !== "") {
                 dispatch(setEmail(inputvalue));
@@ -41,12 +40,10 @@ const Login = () => {
                 const result: any = await signup({ email: inputvalue, password: password }, data.role)
                 console.log(result)
                 if (result.data) {
-                    setMessage(true);
                     setTimeout(() => {
-                        setMessage(false);
                         setError("")
                     }, 3000);
-                    const { token } = result?.data?.data
+                    const { token } = result?.data?.data as string
                     localStorage.setItem("token", token)
                     Swal.fire({
                         position: "top-end",
@@ -93,7 +90,7 @@ const Login = () => {
                                 {Emailerrors && <p className="text-red-500 text-xs text-end">{Emailerrors}</p>}
                                 <input
                                     onChange={handleChange}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
+                                    className="border rounded-xl px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="text"
                                     id="login"
                                     placeholder="Enter your email"
@@ -102,7 +99,7 @@ const Login = () => {
                                 {PasswordErrors && <p className="text-red-500 text-xs text-end">{PasswordErrors}</p>}
                                 <input
                                     onChange={handleChangePassword}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
+                                    className="border rounded-xl px-3 py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="password"
                                     id="password"
                                     placeholder="Enter your password"
@@ -115,7 +112,7 @@ const Login = () => {
                                 <div>
 
                                     <button
-                                        className="flex items-center justify-center py-2 px-20 bg-white hover:bg-gray-200 focus:ring-blue-500 focus:ring-offset-blue-200 text-gray-700 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+                                        className="flex items-center justify-center py-2 px-20 bg-white hover:bg-gray-200 focus:ring-red-500 focus:ring-offset-red-200 text-gray-700 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
                                     >  <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         x="0px"
@@ -189,7 +186,7 @@ const Login = () => {
                             <div className="mt-5">
                                 <button
                                     onClick={verifyEmail}
-                                    className="py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+                                    className="py-2 px-4 bg-red-500 hover:bg-red-600 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
                                     type="submit"
                                 >
 
@@ -198,7 +195,7 @@ const Login = () => {
                             </div>
                             <div className="flex items-center justify-between mt-4">
                                 <span onClick={handleClickBtn} className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-                                <p className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline" onClick={handleClickBtn}>or Log in</p>
+                                <p className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline" onClick={handleClickBtn}>Log in</p>
                                 <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                             </div>
                         </div>
