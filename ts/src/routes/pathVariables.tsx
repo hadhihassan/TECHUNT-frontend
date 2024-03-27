@@ -44,6 +44,7 @@ interface TALENT_ROUTES {
     SendContract: string,
     ViewMiles: string,
     TransactionHistry: string
+    InvitationJobView: string
 }
 type ADMIN_ROUTES = {
     Login: string,
@@ -67,7 +68,7 @@ const routerVariables: Routes = {
     Search: "/search",
     plan: "/plan",
     forgetPassowrdEmail: "/forget-password/email/",
-    forgetPassowrdOtp: "/forget-password/otp",
+    forgetPassowrdOtp: "/forget-password/otp/",
 
 }
 export default routerVariables;
@@ -99,7 +100,9 @@ export const talent_routes: TALENT_ROUTES = {
     ContactListing: '/talent/contract/all/',
     SendContract: "/talent/send-contract/",
     ViewMiles: "/talent/contract/work-details/",
-    TransactionHistry: "/talent/transaction/history/"
+    TransactionHistry: "/talent/transaction/history/",
+    InvitationJobView: "/talent/job-post/:id/"
+
 }
 //Admin routes
 export const admin_Routes: ADMIN_ROUTES = {

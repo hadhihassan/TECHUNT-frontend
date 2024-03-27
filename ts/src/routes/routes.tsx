@@ -24,6 +24,7 @@ const WebRouters: React.FC = () => {
 
                 <Imports.Route element={<Imports.LandingLayout />}>
                     <Imports.Route path={Imports.Path.forgetPassowrdEmail} element={< Imports.ForgetPasswordEmailCard />} />
+                    <Imports.Route path={Imports.Path.forgetPassowrdOtp} element={< Imports.ForgetPasswordOtpCard />} />
                 </Imports.Route>
                 
                 <Imports.Route path={Imports.talent_routes.AddSkills} element={<Imports.AddSkills />} />
@@ -69,6 +70,7 @@ const WebRouters: React.FC = () => {
                 <Imports.Route path='talent' element={<Imports.Layout />}>
                     <Imports.Route path={Imports.talent_routes.Home} element={<Imports.TalentHomePage />} />
                     <Imports.Route path={Imports.talent_routes.JobViewPage} element={<Imports.JobViewPage />} />
+                    <Imports.Route path={Imports.talent_routes.InvitationJobView} element={<Imports.InvitationJobView />} />
                     <Imports.Route path={Imports.talent_routes.viewClient} element={<Imports.ClientProfileView />} />
                     <Imports.Route path={Imports.talent_routes.ProfileView} element={<Imports.ClientProfileView />} />
                     <Imports.Route path={Imports.talent_routes.ContactListing} element={<Imports.ContactListPage />} />

@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dialog, Transition } from '@headlessui/react'
-import React, { ChangeEvent, Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import { createNewPlan } from '../../../services/adminApiService'
 import { message } from 'antd'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const PlanSchema = Yup.object().shape({
-    name: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Name is required'),
-    description: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Description is required'),
+    name: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Name is required'),
+    description: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Description is required'),
     amount: Yup.number().required('Amount is required').positive('Amount must be positive'),
-    type: Yup.string().transform((value, originalValue) => originalValue.trim()).required('Type is required'),
+    type: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Type is required'),
 });
 
 interface FormProps {
@@ -24,19 +25,6 @@ export interface PlanInterface {
     _id?: string
 }
 const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
-    const [planData, setPlanData] = useState<PlanInterface>({
-        name: "",
-        description: "",
-        type: "",
-        amount: "",
-    })
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setPlanData({
-            ...planData,
-            [name]: value
-        });
-    };
     const handleSubmitForm = (values: PlanInterface, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         createNewPlan(values)
             .then((res) => {

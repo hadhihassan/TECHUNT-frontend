@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
 import Swal from 'sweetalert2';
 import { useSocketContext } from "../../context/socketContext";
+import { Path } from "../../routes/imports";
+import { Socket } from 'socket.io-client';
 
 const LoginPage: React.FC = () => {
 
@@ -19,7 +21,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState<string>("")
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
-    const { socket } = useSocketContext();
+    const { socket }:{ socket:Socket } = useSocketContext()  as { socket: Socket };
 
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
@@ -114,7 +116,9 @@ const LoginPage: React.FC = () => {
                                     <label htmlFor="remember" className="text-normal font-sans">Remember me</label>
                                 </div>
                             </div>
-                            <span className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>
+                            <span
+                            onClick={()=>navigate(Path.forgetPassowrdEmail)} 
+                            className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>
                         </div>
                         <div className="flex justify-center items-center flex-col ">
                             <span className="text-sm font-medium text-center text-red-700 font-sans">{error}</span>

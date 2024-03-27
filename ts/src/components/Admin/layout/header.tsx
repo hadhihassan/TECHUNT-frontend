@@ -30,14 +30,6 @@ const AdminHeader = () => {
                         </svg>
                         TECHUNT ADMIN
                     </Typography>
-                    {/* <div className="ml-auto flex gap-1 md:mr-4"> */}
-                    {/* <IconButton variant="text" color="white" placeholder={undefined} children={undefined}> */}
-                    {/* <Cog6ToothIcon className="h-4 w-4" /> */}
-                    {/* </IconButton> */}
-                    {/* <IconButton variant="text" color="white"  placeholder={undefined} children={undefined}> */}
-                    {/* <BellIcon className="h-4 w-4" /> */}
-                    {/* </IconButton> */}
-                    {/* </div> */}
                 </div>
             </Navbar>
         </>

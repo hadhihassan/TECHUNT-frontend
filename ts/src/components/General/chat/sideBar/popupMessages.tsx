@@ -19,7 +19,7 @@ const ReusableNotification: React.FC<ReusableNotificationProps> = ({ showNotific
                 message: title,
                 description: (
                     <Context.Consumer>
-                        {({ name }) => `${content}!`}
+                        {() => `${content}!`}
                     </Context.Consumer>
                 ),
                 placement,
@@ -30,7 +30,7 @@ const ReusableNotification: React.FC<ReusableNotificationProps> = ({ showNotific
                 message: title,
                 description: (
                     <Context.Consumer>
-                        {({ name }) => `${content}!`}
+                        {() => `${content}!`}
                     </Context.Consumer>
                 ),
                 placement,

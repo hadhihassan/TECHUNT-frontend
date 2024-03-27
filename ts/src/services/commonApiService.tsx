@@ -19,7 +19,7 @@ export async function signup(data: object, role: string) {
         axiosInstance.post(`${BASE_URL}${role}${routerVariables.VerifyEmail}`, data)
     )
 }
-export async function checkValidNumber(number: string, role: string, id: number) {
+export async function checkValidNumber(number: string, role: string, id: string) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}checkValidNumber/`, { number, role, id })
     )
@@ -82,4 +82,13 @@ export async function updateBankDetails(data: BankDetailsInterface, role: string
 }
 export async function sendForgetOtp(email: string) {
     return await axiosInstance.post(`${BASE_URL}forget-password/email/`, { email })
+}
+export async function sendOtp(email: string, otp: string) {
+    return await axiosInstance.post(`${BASE_URL}forget-password/otp/send/`, { email, otp })
+}
+export async function reSendOtp(email: string) {
+    return await axiosInstance.post(`${BASE_URL}forget-password/otp/resend/`, { email })
+}
+export async function setNewPassword(password: string, email: string) {
+    return await axiosInstance.post(`${BASE_URL}forget-password/set-new-Password`, { password, email })
 }

@@ -4,7 +4,7 @@ import AfterLoginHeader from '../../components/General/Home/Header/afterLoginHea
 import { Col, InputNumber, Row, Slider, Space } from 'antd';
 import { Radio } from 'antd';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { DownOutlined, PaperClipOutlined } from '@ant-design/icons';
 import type { MenuProps, RadioChangeEvent } from 'antd';
 import { Button, Dropdown, message } from 'antd';
@@ -15,7 +15,6 @@ import { AxiosError, AxiosResponse } from 'axios';
 import formatRelativeTime from '../../util/timeFormating';
 import { talent_routes } from '../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
-import { findMostSuitableJobPost } from '../../util/jobSearchUtils';
 import { List, Skeleton } from 'antd';
 import EmptyJobs from '../../components/General/emptyData/emptyJobs';
 
@@ -266,7 +265,7 @@ const Search = () => {
                                     itemLayout="vertical"
                                     size="large"
                                     dataSource={actualPosts}
-                                    renderItem={(item) => (
+                                    renderItem={() => (
                                         <List.Item
                                         >
                                             <Skeleton loading={loading}>

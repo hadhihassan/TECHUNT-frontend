@@ -35,7 +35,7 @@ export interface JobInterface extends UserProfile {
     Amount: number;
     WorkType: 'Fixed' | 'Milestone';
     isDelete: boolean;
-    createdAt: Date
+    createdAt: Date | string
 }
 // Proposal form Data interface 
 export interface ProposalInterface {
@@ -70,7 +70,7 @@ export interface ProposalInterface {
         online?: boolean;
         isVerify?: boolean;
         isNumberVerify?: boolean;
-    }
+    } | string
     talentId: {
         _id: string;
         Last_name: string;
@@ -79,7 +79,6 @@ export interface ProposalInterface {
         Email: string;
         Number: string;
         Profile: {
-            Skills: any;
             profile_Dp: string;
             Description: string;
             Title: string;
@@ -103,14 +102,21 @@ export interface ProposalInterface {
 
 
 export interface ConversationDoc extends MessageDoc {
-    participants: [];
+    participants: [{
+        Profile: {
+            profile_Dp:string
+        }
+        _id:string,
+        First_name:string
+        online:boolean
+    }];
     messages: MessageDoc[];
     createdAt: Date;
     updatedAt: Date;
 }
 export interface MessageDoc {
-    senderId: string[];
-    receiverId: string[];
+    senderId: string;
+    receiverId: string;
     message: string;
     createdAt: Date;
     updatedAt: Date;

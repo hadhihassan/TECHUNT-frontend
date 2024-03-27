@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import  { useState } from "react";
 import './style.css'
 import PhoneInput from "react-phone-input-2"
 import 'react-phone-input-2/lib/style.css'
@@ -12,7 +14,6 @@ import { checkValidNumber, updateNumberVerification } from "../../../../services
 import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { useNavigate } from "react-router-dom"
-import { AxiosError, AxiosResponse } from "axios";
 import { isNumberVerify } from "../../../../redux/Slice/signupSlice";
 
 
@@ -29,9 +30,8 @@ const NumberVerification = () => {
     const sendOtp = async () => {
         try {
             // Ensure phone number is in E.164 format
-            checkValidNumber(phone.slice(2), basicData?.role, basicData?.id)
-                .then(async (res: AxiosResponse) => {
-                    console.log(res)
+            checkValidNumber(phone.slice(2), basicData?.role, basicData?.id || "")
+                .then(async (res:any) => {
                     if (res.error) {
                         error(res?.error?.response?.data.message || "Error occurs While processing you request ")
                     } else {
@@ -43,28 +43,24 @@ const NumberVerification = () => {
                         success("Otp sended your phone")
                         setSwitch(true)
                     }
-                }).catch((err: AxiosError) => {
+                }).catch((err) => {
                     error(err?.error?.response?.data.message || "Error occurs While processing you request ")
                 })
-        } catch (err) {
-            error(`Somthing went wrong!.${err.message}`)
+        } catch (err:{message:string}) {
+            error(`Somthing went wrong!.${err.message || "Somthing went wrong"}`)
         }
     }
     const verifyOtp = async () => {
         try {
-            const data: never = await user.confirm(otp)
+            const data = await user.confirm(otp)
             success("Your number is verified .")
-            updateNumberVerification(basicData?.role, basicData?.id)
-                .then((res: AxiosResponse) => {
-                    console.log(res)
+            updateNumberVerification(basicData?.role, basicData?.id || "")
+                .then(() => {
                     dispatch(isNumberVerify(true))
                     navigate(`/${basicData.role}/profile`)
-                }).catch((err: AxiosResponse) => {
-                    console.log(err)
                 })
-        } catch (err:AxiosError) {
-            error(`${err.message}`)
-            console.log(err)
+        } catch (err:{message:string}) {
+            error(`${err.message || "Somthing went wrong"}`)
         }
     }
 

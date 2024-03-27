@@ -56,7 +56,7 @@ const ListAllPropposals = () => {
                             </IconButton>
                             <div className="ml-4">
                                 {/* <p className="text-md font-bold">{proposla?.talentId?.First_name}{proposla?.talentId?.Last_name}</p> */}
-                                <p className="text-sm text-gray-500">{proposla?.title}, {proposla?.jobId?.Title as string || ""}</p>
+                                <p className="text-sm text-gray-500">{proposla?.title}, { (proposla?.jobId as { Title: string }).Title }</p>
                                 <div className="mt-2">
                                     <p className="text-sm text-gray-500">Total earnings <b>$0</b> on {proposla?.talentId?.Profile?.Title} </p>
                                     <div className="flex mt-2">

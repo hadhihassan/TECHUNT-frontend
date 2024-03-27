@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { ContractDetailsType, MilestoneType } from '../../Client/contract/contractInterface'
 import { useEffect, useState } from 'react';
 import { formatMongoDate, } from '../../../util/timeFormating';
@@ -16,27 +17,26 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { addWalletAmount, sendMilestoneApproval } from '../../../services/clientApiService';
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
-import useStripePayment from '../../../hooks/usePayement';
 
 
 
 
 const Milestone = () => {
     const { paymentToTalent, loading, error } = useStripePayment()
-    const [statusKey, setStausKey] = useState()
+    const [statusKey, setStausKey] = useState<number | undefined>()
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [selectMilestone, setSelected] = useState<number>(0)
 
     useEffect(() => {
-        const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
-        if (contractData !== "") {
+        const contractDetailsString = localStorage.getItem("contractDetails");
+        const contractData: ContractDetailsType = contractDetailsString ? JSON.parse(contractDetailsString) : null;
+        if (contractData) {
             setContract(contractData)
         }
-        const completedMilestones: MilestoneType[] = contract?.milestones.filter(milestone => milestone.completed === "Completed") || [];
-        console.log(completedMilestones.length, contract?.milestones.length)
-        if (completedMilestones.length === contract?.milestones.length) {
-            contractStatusUpdate(contractData?._id, "completed", role)
+        const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
+        if (completedMilestones.length as number === contract?.milestones?.length) {
+            contractStatusUpdate(contractData?._id || "", "completed", role)
         }
         return () => {
             localStorage.removeItem("payedMilestone")
@@ -51,7 +51,7 @@ const Milestone = () => {
 
     // client side for sending the spesific milestone 
     const handleSendApproval = (index: number) => {
-        const id: string = contract?.milestones[index]?._id
+        const id: string = contract?.milestones[index]?._id || ""
         sendMilestoneApproval(id, true)
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
@@ -68,10 +68,6 @@ const Milestone = () => {
     const submitWork = () => {
         setFormOpen(!formOpen)
     }
-    // for client can send a request to resubmit the work
-    // const requestToResubmit = (inex: number) => {
-
-    // }
     // for client can see the progress 
     const showWorkProggress = (index: number) => {
         setSelected(index)
@@ -83,17 +79,17 @@ const Milestone = () => {
         setSelected(index)
     }
     const [confirm, setConfirm] = useState<boolean>(false)
-    const handleMenuClick: MenuProps['onClick'] = (e: unknown) => {
+    const handleMenuClick = (e: { key: number }) => {
         setConfirm(!confirm)
         setStausKey(e?.key)
     };
     const payment = async (index: number): Promise<void> => {
-        const contractData: ContractDetailsType[] = JSON.parse(localStorage.getItem("contractDetails") || "")
-        const milestone: MilestoneType | undefined = contract?.milestones[index];
+        const contractData = JSON.parse(localStorage.getItem("contractDetails") || "")
+        const milestone = contract?.milestones[index];
         localStorage.setItem("payedMilestone", JSON.stringify(milestone));
         try {
-            await addWalletAmount(contractData?.talent?._id, milestone?.amount, milestone?._id);
-            await paymentToTalent(contract?.talent?._id, milestone?.amount);
+            await addWalletAmount(contractData?.talent?._id, milestone?.amount as number, milestone?._id as unknown as boolean);
+            await paymentToTalent(contract?.talent?._id || "", milestone?.amount as number);
         } catch (error) {
             console.error("Payment error:", error);
         }
@@ -118,14 +114,14 @@ const Milestone = () => {
         items,
         onClick: handleMenuClick,
     };
-    const updateStatus = async (key: number) => {
+    const updateStatus = async () => {
         let status: string = ""
         if (statusKey == 1) {
             status = "Progress"
         } else {
             status = "Completed"
         }
-        const id: string = contract?.milestones[selectMilestone]?._id
+        const id: string = contract?.milestones[selectMilestone]?._id as string
         try {
             const res: AxiosResponse | AxiosError = await updateMilestoneStatus(id, status);
             if (res?.data.success) {
@@ -139,7 +135,7 @@ const Milestone = () => {
         setConfirm(!confirm)
     }
     const showWork = () => {
-        const workId = contract?.milestones[selectMilestone]?.work
+        const workId: string = contract?.milestones[selectMilestone]?.work as string || ""
         getSubmittedWork(workId, role)
             .then((res: AxiosResponse) => {
                 localStorage.setItem("work", JSON.stringify(res.data.data) || "")
@@ -161,7 +157,7 @@ const Milestone = () => {
                             <PendingActions color='primary' />
                         </span>
                         <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Pending {contract?.milestones[selectMilestone].completed === "Pending" && <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Latest</span>}</h3>
-                        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Updated on {formatMongoDate(contract?.milestones[selectMilestone]?.createdAt)}</time>
+                        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Updated on {formatMongoDate(contract?.milestones[selectMilestone]?.createdAt as Date || "")}</time>
                         <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Your project is currently in the pending stage. </p>
                     </li>
                     {
@@ -223,13 +219,13 @@ const Milestone = () => {
         </Dialog.Panel>
     )
     const handleEndContract = () => {
-        contractStatusUpdate(contract?._id, "cancelled", role)
+        contractStatusUpdate(contract?._id || "", "cancelled", role)
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
                     message.success("Successfully contract cancelled ");
                     if (contract) {
-                        const newUpdatedContract:ContractDetailsType = { ...contract, completed: "cancelled" };
-                        setContract(newUpdatedContract);
+                        // const newUpdatedContract: ContractDetailsType = { ...contract, completed, "cancelled" };
+                        // setContract(newUpdatedContract);
                         setTimeout(() => {
                             history.back()
                         }, 1000);
@@ -251,9 +247,9 @@ const Milestone = () => {
             setContract={setContract}
             open={formOpen}
             closeModal={() => {
-                setFormOpen()
+                setFormOpen(false)
                 localStorage.removeItem("work");
-            }} id={contract?.milestones[selectMilestone]?._id} />
+            }} id={contract?.milestones[selectMilestone]?._id as string} />
         <div className="mb-20  font-sans w-[90%] h-auto border bg-white m-auto mt-20 rounded-xl shadow-2xl">
             <div
                 onClick={() => {
@@ -271,7 +267,7 @@ const Milestone = () => {
                 <div className="h-auto w-[75%] border">
                     {/* s */}
                     <div className="w-full h-auto border ">
-                        <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex "> contract for {contract?.work?.Title}<button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">{contract?.work?.WorkType}</button></div>
+                        <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex "> contract for {contract?.work?.Title || ""}<button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">{contract?.work?.WorkType || ""}</button></div>
                         {
                             contract?.status === "completed" && <>
                                 <button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">
@@ -310,7 +306,7 @@ const Milestone = () => {
 
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{milestone?.name}</p>
 
-                                                        <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate)}</p>
+                                                        <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate as unknown as Date)}</p>
                                                         {
                                                             milestone.work && <>
                                                                 <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Submitted</span>
@@ -325,7 +321,7 @@ const Milestone = () => {
                                                                     role === "TALENT" && !milestone.work && milestone.completed === "Completed" && <>
                                                                         <button
                                                                             onClick={() => {
-                                                                                submitWork(index)
+                                                                                submitWork()
                                                                             }}
                                                                             type="button"
                                                                             className="inline-block px-4 py-1.5 bg-red-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" data-mdb-ripple="true">

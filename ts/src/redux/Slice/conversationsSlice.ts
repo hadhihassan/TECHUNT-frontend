@@ -1,7 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export type ConversationType = {
-    selectedConversations: unknown,
+    selectedConversations: {
+        _id: string;
+        participants: [{
+
+            _id: string
+        },
+            {
+                Profile: {
+                    profile_Dp: string
+                }
+            }]
+    } | null,
     messages: []
 };
 
@@ -21,7 +32,7 @@ const conversation = createSlice({
             state.selectedConversations = action.payload
         },
         cleanChatItems: (state) => {
-            state.selectedConversations = []
+            state.selectedConversations = null
             state.messages = []
         }
     }

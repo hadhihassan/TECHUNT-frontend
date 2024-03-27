@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { LeftCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Input, InputNumber, Space, message } from 'antd';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
 import { AxiosResponse } from 'axios';
 import type { ContractDetailsType, MilestoneType, ProposalInteface } from './contractInterface'
+import { remove } from 'lodash';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -69,7 +70,7 @@ const ContractForm: React.FC = () => {
         // Validation passed
         return Promise.resolve();
     };
-    const validateText = (_, value) => {
+    const validateText = (_: any, value: string) => {
         const trimmedValue = value.trim(); // Trim the input
         if (!trimmedValue) {
             return Promise.reject('Input is required');
@@ -247,7 +248,7 @@ const ContractForm: React.FC = () => {
                                     >
                                         <Input placeholder="Amount" defaultValue={proposal?.jobId?.Amount} onChange={(e) => handleChange('amount', e.target.value, 0)} />
                                     </Form.Item>
-                                    <MinusCircleOutlined onClick={() => remove(name)} />
+                                    <MinusCircleOutlined />
                                 </Space>
                             </> : <>
                                 <Form.List name={"milestones"}>
@@ -335,7 +336,7 @@ const ContractForm: React.FC = () => {
                                 </Form.List>
                             </>
                         }
-                        <Form.Item  className='flex items-center justify-center '>
+                        <Form.Item className='flex items-center justify-center '>
                             <Button htmlType="submit" className='font-sans font-semibold border px-10' >Submit</Button>
                         </Form.Item>
                     </Form>

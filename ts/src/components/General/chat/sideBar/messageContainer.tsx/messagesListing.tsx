@@ -9,7 +9,8 @@ import useListenMessages from "../../../../../hooks/useListenMessages";
 const MessageListing = () => {
     useListenMessages();
     const conversation = useSelector((state: ROOTSTORE) => state.conversation);
-    const [messages, setMessages] = useState<MessageDoc[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_messages, setMessages] = useState<MessageDoc[]>([]);
     const { loading, getMessages }: { loading: boolean, getMessages: (id: string, fetchMessages: () => void) => Promise<unknown> } = useGetMessage();
 
     useEffect(() => {
@@ -26,7 +27,6 @@ const MessageListing = () => {
                         key={index}
                         message={message}
                         index={index}
-                        isLastIndex={index === messages?.length}
                     />
                 ))
             )}

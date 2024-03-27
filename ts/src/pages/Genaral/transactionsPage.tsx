@@ -1,5 +1,4 @@
-import AfterLoginHeader from "../../components/General/Home/Header/afterLoginHeader";
-import Footer from "../../components/General/Home/footer/footer";
+
 import ListWallectHistory from "../../components/General/transaction/listWallectHistory";
 import image from '../../assets/3714960.jpg'
 import { Card, Typography } from "@material-tailwind/react";

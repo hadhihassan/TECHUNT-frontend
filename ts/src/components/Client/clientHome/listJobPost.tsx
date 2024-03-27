@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
 import { fetchAllJobPost } from "../../../services/clientApiService";
 import { useNavigate } from "react-router-dom";
+import type { JobInterface} from '../../../interface/interfaces'
 
 const ListJobPost = () => {
-    const [jobs, setJobs] = useState<any[]>([])
+    const [jobs, setJobs] = useState<JobInterface[]>([])
     const navigate = useNavigate()
     useEffect(() => {
-
         fetchAllJobPost()
-            .then((res: any) => {
-                console.log(res?.data?.data?.data)
+            .then((res) => {
                 setJobs(res?.data?.data?.data)
-            }).catch((err: any) => {
-                console.log(err)
             })
     }, [])
     return (
         <>
             {jobs &&
-                jobs.map((job: any, index: number) => (
+                jobs.map((job: JobInterface, index: number) => (
                     <>
                         <div key={index} className="w-full mt-5 border rounded-xl shadow-xl h-[39vh]">
                             <div className="border-b-2 flex justify-between w-full h-[50px]">
@@ -31,7 +28,7 @@ const ListJobPost = () => {
                                 <div>
                                     <p className="m-3 font-sans font-semibold text-sm">{job?.Title}</p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500">{job?.WorkType} - {job?.Expertiselevel}</p>
-                                    <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Est. Budget:</b> {job?.Amount} created at  - {job?.createdAt}</p>
+                                    <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Est. Budget:</b> {job?.Amount} created at  - {job?.createdAt as string}</p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"> <b>Expertise level:</b> {job?.Expertiselevel} </p>
                                     <p className="ml-3 mt-1 font-sans font-normal text-xs text-gray-500"><b>Time Line:</b> {job?.TimeLine} </p>
                                     <div className="flex ml-2 mt-4">

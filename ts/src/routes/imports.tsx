@@ -34,8 +34,10 @@ const ClientProfileView = lazy(() => import('../pages/Client/profileView'));
 const ContractForm = lazy(() => import('../components/Client/contract/contract'));
 const Milestone = lazy(() => import('../components/General/contract/milestone'));
 const TransactionsPage = lazy(() => import('../pages/Genaral/transactionsPage'));
-const ForgetPasswordEmailCard = lazy(()=> import('../components/General/forgetPassword/emailCard'));
-const LandingLayout = lazy(()=> import('../components/General/landing-layout/landing-layout'));
+const ForgetPasswordEmailCard = lazy(() => import('../components/General/forgetPassword/emailCard'));
+const LandingLayout = lazy(() => import('../components/General/landing-layout/landing-layout'));
+const ForgetPasswordOtpCard = lazy(() => import('../components/General/forgetPassword/forGetOtpCard'));
+const InvitationJobView = lazy(() => import('../components/General/invitationJobView'));
 
 // Path Variables
 import Path, { admin_Routes, clientRoutes, talent_routes } from './pathVariables';
@@ -49,6 +51,8 @@ import Loader from '../components/General/loader/loader';
 import ContactListPage from '../pages/Genaral/contractList';
 
 export {
+    InvitationJobView,
+    ForgetPasswordOtpCard,
     LandingLayout,
     ForgetPasswordEmailCard,
     CheckPreminumUser,

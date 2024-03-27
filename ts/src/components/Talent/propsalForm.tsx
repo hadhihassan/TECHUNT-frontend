@@ -10,16 +10,17 @@ import { useNavigate } from 'react-router-dom';
 
 interface ProposalFormProps {
     isOpen: boolean;
-    forClose:()=>void
+    forClose: (b:boolean) => void
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     const navigate = useNavigate()
     const [receivedNotifications, setReceivedNotifications] = useState([]);
     const [open, setOpen] = useState(false);
-    const jobid: ProposalInterface = JSON.parse(localStorage.getItem("deatildView")) 
+    const jobidRaw = localStorage.getItem("deatildView");
+    const jobid: ProposalInterface | null = jobidRaw ? JSON.parse(jobidRaw) : null;
     const sender_id: string = jobid?._id || "ds";
-    const recipient_id: string = jobid.Client_id?._id
+    const recipient_id: string = jobid?.Client_id?._id
     useEffect(() => {
         setOpen(isOpen)
     }, [isOpen])
@@ -39,7 +40,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     })
     const handleFormChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void = (e) => {
         const { name, value } = e.target;
-        console.log(name, value)
         setData({
             ...proposalData,
             [name]: value
@@ -54,7 +54,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         });
     };
     //sucess toast hot message
-    const success = (message: string) =>{
+    const success = (message: string) => {
 
         toast.success(message);
         setTimeout(() => {
@@ -74,7 +74,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                         ...proposalData,
                         ["attachments"]: res.data.fileLink
                     });
-                    console.log(proposalData, "file respoen");
                     uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
                     })
                 })
@@ -89,21 +88,15 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         if (e.coverLetter) {
             submitProposal(proposalData)
                 .then((res: AxiosResponse) => {
-                    console.log(res)
                     success(res.data.message)
                     sendNotification(res.data.data._id)
-                }).catch((err: AxiosError) => {
-                    console.log(err)
+                }).catch(() => {
                     error("Error uploading file")
                 })
         }
     }
     const sendNotification = (id: string) => {
-        try {
-            socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });
-        } catch (err) {
-            console.log("e", err)
-        }
+            socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });        
     }
     useEffect(() => {
         socket.on("receiveNotification", (data) => {
@@ -114,7 +107,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             setReceivedNotifications(notifications)
             console.log(notifications)
         })
-        console.log(receivedNotifications, "notif")
         return () => {
             socket.off('receiveNotification');
             socket.off('receiveNotifications');

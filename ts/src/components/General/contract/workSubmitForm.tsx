@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ChangeEvent, useEffect, useState } from "react";
 import {
     Button,
@@ -13,8 +14,9 @@ import { message } from "antd";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { AxiosError, AxiosResponse } from "axios";
+import { ContractDetailsType } from "../../Client/contract/contractInterface";
 
-export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContract: React.Dispatch<React.SetStateAction<boolean>>, open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
+export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContract: React.Dispatch<React.SetStateAction<ContractDetailsType | null>>, open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
 
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [isEdit, setisEdit] = useState<boolean>(false);
@@ -24,7 +26,8 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
     const [urlError, setUrlError] = useState<string>('');
     const [descriptionError, setDescriptionError] = useState<string>('');
     useEffect(() => {
-        const workData = JSON.parse(localStorage.getItem("work"))
+        const workItem = localStorage.getItem("work")
+        const workData = JSON.parse(workItem ? workItem : "{}")
         if (workData) {
             setshowSubmitBtn(false)
             setisEdit(true)
@@ -56,7 +59,7 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                 });
         }
     };
-    const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.value;
         setDescription(value);
         if (value.length < 10 || value.length > 100) {
@@ -83,8 +86,8 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
             })
     };
     const handleSubmitEdit = () => {
-        const workData = JSON.parse(localStorage.getItem("work"))
-        console.log(isEdit)
+        const workItem = localStorage.getItem("work")
+        const workData = JSON.parse(workItem ? workItem : "{}")
         submitEditWork(id, { url, description }, workData._id)
             .then((res) => {
                 console.log(res)

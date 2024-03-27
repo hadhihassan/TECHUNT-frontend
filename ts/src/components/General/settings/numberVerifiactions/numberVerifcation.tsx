@@ -8,6 +8,4 @@ const NumberVerifcation = () => {
     )
 }
 
-
-
 export default NumberVerifcation;
