@@ -1,11 +1,11 @@
 import Avatar from "react-avatar";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../components/General/progressBar";
+import { ProgressBar } from "../../components/General/ui/progressBar";
 import { clientRoutes } from "../../routes/pathVariables";
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
-import ContactForm from "../../components/General/contactForm";
+import ContactForm from "../../components/General/ui/contactForm";
 
 
 const ContractDetails = () => {

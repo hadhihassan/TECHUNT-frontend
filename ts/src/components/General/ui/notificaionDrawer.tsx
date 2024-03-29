@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { clientRoutes } from '../../routes/pathVariables';
+import { clientRoutes } from '../../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ROOTSTORE } from '../../redux/store';
-import type { ProposalInterface } from '../../interface/interfaces'
+import { ROOTSTORE } from '../../../redux/store';
+import type { ProposalInterface } from '../../../interface/interfaces'
 import { Drawer } from 'antd';
 import toast, { Toaster } from 'react-hot-toast';
-import formatRelativeTime from '../../util/timeFormating';
-import { makePayment } from '../../services/talentApiService';
-import useStripePayment from '../../hooks/usePayement';
+import formatRelativeTime from '../../../util/timeFormating';
+import { makePayment } from '../../../services/talentApiService';
+import useStripePayment from '../../../hooks/usePayement';
 
 export interface Notification {
     recipient_id: string;

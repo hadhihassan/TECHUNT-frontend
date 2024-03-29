@@ -1,11 +1,11 @@
 import { LeftCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React, { useState } from "react";
-import NewContract from "../../components/General/contract/new-Contract";
+import NewContract from "../../../components/General/contract/new-Contract";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
-import CompletedContract from '../../components/General/contract/completedContracts'
-import CancelledContract from "../../components/General/contract/conceledContrat";
+import { ROOTSTORE } from "../../../redux/store";
+import CompletedContract from '../../../components/General/contract/completedContracts'
+import CancelledContract from "../../../components/General/contract/conceledContrat";
 
 const ContactListPage: React.FC = () => {
 

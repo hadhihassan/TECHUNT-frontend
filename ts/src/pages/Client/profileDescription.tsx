@@ -2,11 +2,11 @@ import React from "react";
 import Avatar from "react-avatar";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../components/General/progressBar";
+import { ProgressBar } from "../../components/General/ui/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from '../../redux/store'
 import { useDispatch } from "react-redux";
-import { setDescription } from "../../redux/Slice/Client/clientSlice";
+import { setDescription } from "../../redux/Slice/clientSlice";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../routes/pathVariables";

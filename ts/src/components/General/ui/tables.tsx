@@ -1,15 +1,13 @@
 import React, { useState, ChangeEvent } from "react"
-import Modal from "./profileEditModal";
-import { IMG_URL, JOB_CATEGORY_FORM_DATA } from '../../constant/columns'
-import { createNewJobCategoru, editJobCategory, softDeleteJobCategory } from "../../services/adminApiService";
+import Modal from "../profile/profileEditModal";
+import { IMG_URL, JOB_CATEGORY_FORM_DATA } from '../../../constant/columns'
+import { createNewJobCategoru, softDeleteJobCategory } from "../../../services/adminApiService";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import toast, { Toaster } from "react-hot-toast";
-import JobCategoryForm from "../Admin/jobcategory/jobCategoryForm";
-import EditJobCategoryForm from "../../components/Admin/jobcategory/editJobCategory";
-import { AxiosResponse } from "axios";
+import JobCategoryForm from "../../Admin/jobcategory/jobCategoryForm";
+import EditJobCategoryForm from "../../Admin/jobcategory/editJobCategory";
 
-//interface for props data shap 
 interface TablesProps {
     data: object[];
     columns: string[];
@@ -62,7 +60,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
             console.log(formDataToUpload)
         }
         createNewJobCategoru(formDataToUpload)
-            .then((res: AxiosResponse) => {
+            .then((res) => {
                 if (res?.data?.data?.success) {
                     success(res?.data?.data?.message);
                     reCall()
@@ -88,13 +86,13 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
     };
 
     const filteredData = data.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item?.name?.toLowerCase().includes(searchQuery.toLowerCase()) 
     );
     const changeState: (_id: string, status: boolean) => void = (_id, status) => {
         const state = !status
         softDeleteJobCategory(state, _id)
-            .then((res: any) => {
-                if (res.data.status === 200) {
+            .then((res) => {
+                if (res?.data?.status  === 200) {
                     success(res?.data?.data?.message);
                     reCall()
                 } else if (res?.error) {
@@ -102,11 +100,11 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                 } else {
                     error(res?.error?.response?.data?.message || 'An error occurred while processing your request.');
                 }
-            }).catch((err: any) => {
+            }).catch((err) => {
                 error(err?.error?.response?.data?.message || 'An error occurred while processing your request.');
             })
     }
-    const [editData, setEditData] = useState<{} | any | null>(null)
+    const [editData, setEditData] = useState(null)
     const editCategory = (index: number) => {
         setEditData(data[index])
         setFormData({
@@ -116,30 +114,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         })
         openModal1()
     }
-    const chandleEditJobCategory = () => {
-        const formDataToUpload = new FormData();
-        formDataToUpload.append('name', formData.name);
-        formDataToUpload.append('description', formData.description);
-        if (formData.image) {
-            formDataToUpload.append('image', formData.image);
-        }
-        editJobCategory(formDataToUpload, editData?._id)
-            .then((res: any) => {
-                if (res?.data?.data.status === 200) {
-                    success(res?.data?.data?.message);
-                    reCall();
-                } else if (res?.error?.response?.data.message) {
-                    error(res.error.response.data.message);
-                } else {
-                    error(res?.error?.response?.data?.message);
-                }
-            })
-            .catch((err: any) => {
-                console.log(err);
-                error(err?.error?.response?.data?.message);
-            });
-    };
-
 
     return <>
         <div className="w-full h-screen bg-gray-100">
@@ -239,7 +213,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         <Modal isOpen={isOpen} onClose={closeModal}>
             <JobCategoryForm
                 editable={false}
-                formData={undefined}
+                formData={{}}
                 handleChnage={handleChange}
                 OnSubmit={chandleAddNewJobCategory} />
         </Modal>

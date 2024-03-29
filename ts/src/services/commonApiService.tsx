@@ -2,7 +2,7 @@
 
 import axiosInstance, { BASE_URL, resolve } from "../config/axios";
 import routerVariables from '../routes/pathVariables'
-import type { BankDetailsInterface } from '../components/General/bankDetilsSection'
+import type { BankDetailsInterface } from '../components/General/viewsPages/bankDetilsSection'
 export async function editMainProfileSection(data: object, role: string) {
 
     return await resolve(

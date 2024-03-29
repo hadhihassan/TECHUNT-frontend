@@ -1,16 +1,16 @@
 import Footer from "../../../components/General/Home/footer/footer";
 import AfterLoginHeader from "../../../components/General/Home/Header/afterLoginHeader";
-import ProfileTalentDetailsFirst from "../../../components/General/profileTalentDetailsFirst";
-import ProfileVerifications from "../../../components/General/profileVerifications";
-import ProfileContact from "../../../components/General/profileConatct";
+import ProfileTalentDetailsFirst from "../../../components/General/profile/profileTalentDetailsFirst";
+import ProfileVerifications from "../../../components/General/profile/profileVerifications";
+import ProfileContact from "../../../components/General/profile/profileConatct";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../../context/myContext";
 import { getUserProfileDetails } from "../../../services/talentApiService";
-import ProfileSkills from "../../../components/General/profileSkills";
-import ProfileExperiance from "../../../components/General/profileExperiance";
-import ProfileReviews from "../../../components/General/profileReviews";
+import ProfileSkills from "../../../components/General/profile/profileSkills";
+import ProfileExperiance from "../../../components/General/profile/profileExperiance";
+import ProfileReviews from "../../../components/General/profile/profileReviews";
 import { AxiosError } from "axios"
-import { BankDetails } from "../../../components/General/bankDetilsSection";
+import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
 
 export interface UserProfile {
     Last_name: string;

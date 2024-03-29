@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
 import * as Imports from './imports';
-import Message from '../pages/Genaral/message';
-import Search from '../pages/Talent/otherPages/searchPage';
-import ListAPlans from '../components/Admin/plan/listAllPlans';
-import PlanPage from '../components/General/planPage';
+import Message from '../../pages/Genaral/chat/message';
+import Search from '../../pages/Talent/otherPages/searchPage';
+import ListAPlans from '../../components/Admin/plan/listAllPlans';
+import PlanPage from '../../components/General/viewsPages/planPage';
 
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import Header from "../../components/General/Home/Header/afterLoginHeader";
 import Box from '@mui/material/Box';
-import { LinearProgressWithLabel } from "../../components/General/linerProgressBar";
+import { LinearProgressWithLabel } from "../../components/General/ui/linerProgressBar";
 import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from "react-router-dom";
 import routerVariables, { clientRoutes, talent_routes } from "../../routes/pathVariables";

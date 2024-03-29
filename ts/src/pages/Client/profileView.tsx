@@ -7,13 +7,13 @@ import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
-import ProfileReviews from "../../components/General/profileReviews";
+import ProfileReviews from "../../components/General/profile/profileReviews";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { ProposalInterface } from "../../interface/interfaces";
 import { getAllClientProposalsForTalent } from "../../services/talentApiService";
 import { AxiosError, AxiosResponse } from "axios";
-import DisplayResume from "../../components/General/resumeView";
+import DisplayResume from "../../components/General/viewsPages/resumeView";
 import formatRelativeTime, { formatMongoDate } from "../../util/timeFormating";
 
 

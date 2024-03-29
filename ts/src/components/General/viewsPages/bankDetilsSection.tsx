@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Modal from "./profileEditModal";
-import { updateBankDetails } from "../../services/commonApiService";
+import Modal from "../profile/profileEditModal";
+import { updateBankDetails } from "../../../services/commonApiService";
 import { message } from "antd";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
+import { ROOTSTORE } from "../../../redux/store";
 
 export interface BankDetailsInterface {
     account_holder_name: string

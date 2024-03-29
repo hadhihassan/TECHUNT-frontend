@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { createContactDetails, uploadProfilePhoto } from "../../services/clientApiService";
+import { createContactDetails, uploadProfilePhoto } from "../../../services/clientApiService";
 import { useSelector } from "react-redux";
-import { INITIALSTATE } from "../../redux/Slice/signupSlice";
-import { ROOTSTORE } from "../../redux/store";
+import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
+import { ROOTSTORE } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
-import routerVariables from "../../routes/pathVariables";
-import { Client_INITIALSTATE } from "../../redux/Slice/Client/clientSlice";
+import routerVariables from "../../../routes/pathVariables";
+import { Client_INITIALSTATE } from "../../../redux/Slice/clientSlice";
 import Select from 'react-select'
-import axios, { AxiosError, AxiosResponse } from "axios"
-import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validatorsUtils'
+import axios, { AxiosError } from "axios"
+import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../util/validatorsUtils'
 import toast, { Toaster } from "react-hot-toast";
 
 // interface for the form data shap
@@ -28,7 +29,7 @@ const ContactForm: React.FC = () => {
     const error = (err: string) => toast.error(err);
 
     const naviagte = useNavigate()
-    const [image, setImage] = useState<any>(null)
+    const [image, setImage] = useState<File | null>(null)
     const [countries, setCountries] = useState([]);
 
     // form validation state error message
@@ -67,7 +68,7 @@ const ContactForm: React.FC = () => {
         };
         fetchCountries();
     }, []);
-    ;
+    
     const handleInputChnage = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -98,15 +99,14 @@ const ContactForm: React.FC = () => {
         setPinCodeError(errors.pinCode);
         setAddressError(errors.address);
 
-        return !(errors.city || errors.number || errors.pinCode || errors.address || formData.Country === "" || !image);
+        return !(errors.city || errors.number || errors.pinCode || errors.address || formData.country === "" || !image);
     };
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         const valid = validateForm()
         if (valid) {
             createContactDetails(formData, role)
-                .then((res: any) => {
-                    console.log("response =>", res);
+                .then(() => {
                     naviagte(routerVariables.Login)
                 }).catch((e: AxiosError) => {
                     console.log(e.message)
@@ -115,9 +115,9 @@ const ContactForm: React.FC = () => {
     }
     const handlePhotoChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.files && e.target.files.length > 0) {
-            let img: any = e.target.files[0];
+            const img:File = e.target.files[0];
             if (img) {
-                if (img.size > 5242880) { // Max file size: 5MB (in bytes)
+                if (img.size > 5242880) { 
                     error('File size exceeds the limit (5MB)');
                     return;
                 }
@@ -131,24 +131,17 @@ const ContactForm: React.FC = () => {
             const data = new FormData();
             data.append('image', img);
             uploadProfilePhoto(data, role)
-                .then((res: any) => {
-                    console.log(res);
-                }).catch((error: any) => {
-                    console.log(error)
-                })
         }
     }
 
-    const [selectedCountry, setSelectedCountry] = useState<any>('');
     const handleCountryChange = (selectedOption: React.SetStateAction<null>) => {
-        console.log('Selected country:', selectedOption);
         setCountryError("")
         setFormData({
             ...formData,
             ["country"]: selectedOption?.value,
         });
     };
-    // };
+
 
     return (
         <form onSubmit={handleFormSubmit} className="mx-auto mt-4 max-w-xl sm:mt-20" encType="multipart/form-data">
@@ -224,7 +217,7 @@ const ContactForm: React.FC = () => {
                         <div className="mt-2.5">
                             <div className="mt-2.5">
                                 <Select
-                                    options={countries.map((country: any) => ({ value: country.name.common, label: country.name.common }))}
+                                    options={countries.map((country:{name:{common:string}}) => ({ value: country?.name?.common, label: country?.name?.common }))}
                                     onChange={handleCountryChange}
                                 />
                             </div>

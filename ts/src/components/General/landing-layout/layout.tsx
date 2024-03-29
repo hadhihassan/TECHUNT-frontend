@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
-import AfterLoginHeader from "./Home/Header/afterLoginHeader";
-import Footer from "./Home/footer/footer";
+import AfterLoginHeader from "../Home/Header/afterLoginHeader";
+import Footer from "../Home/footer/footer";
 
 function Layout({ isMessage }: { isMessage?: boolean }) {
     return (

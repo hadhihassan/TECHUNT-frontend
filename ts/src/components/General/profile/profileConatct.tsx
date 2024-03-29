@@ -1,12 +1,27 @@
 import { ChangeEvent, useContext, useEffect, useState } from "react";
-import Modal from "./profileEditModal";
-import { editProfileContact } from "../../services/commonApiService";
-import { MyContext } from "../../context/myContext";
+import { editProfileContact } from "../../../services/commonApiService";
+import { MyContext } from "../../../context/myContext";
 import Alert from '@mui/material/Alert';
-import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../util/validatorsUtils'
+import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../util/validatorsUtils'
+import Modal from "./profileEditModal";
 
-const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, onUpdate }) => {
-    const [details, setdetails] = useState<any>()
+interface UserContact {
+    Address: string,
+    City: string,
+    Country: string,
+    PinCode: string,
+    Number: string
+}
+interface UserContactErrorInterface {
+    address: string,
+    city: string,
+    country: string,
+    pinCode: string,
+    number: string
+}
+
+const ProfileConatct: React.FC<{ data: UserContact, onUpdate: () => void }> = ({ data, onUpdate }) => {
+    const [details, setdetails] = useState<UserContact | undefined>()
     const [success_Message, setSuccess_Message] = useState<boolean>(false)
 
     const [numberError, setNumberError] = useState<string | null>(null)
@@ -35,17 +50,17 @@ const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, o
             });
         }
     }, [data])
-    const basicData: any = useContext(MyContext);
+    const basicData: { role: string }  = useContext(MyContext) || {role : ""};
     const [isOpen, setIsOpen] = useState(false);
 
     const openModal: () => void = () => {
         setIsOpen(true);
     };
     const handleSubmit: () => void = () => {
-        const valid = validateForm() 
+        const valid = validateForm()
         if (valid) {
             console.log(valid)
-            editProfileContact(formData, basicData.role)
+            editProfileContact(formData, basicData?.role)
                 .then((res) => {
                     console.log(res);
                     onUpdate()
@@ -71,11 +86,17 @@ const ProfileConatct: React.FC<{ data: any, onUpdate: () => void }> = ({ data, o
     };
 
     const validateForm = () => {
-        const errors: any = {};
-        errors.city = nameValidator(formData.City, "City");
-        errors.number = numberValidator(formData.Number);
-        errors.pinCode = pincodeValidator(formData.PinCode);
-        errors.address = addressValidator(formData.Address);
+        const errors: UserContactErrorInterface = {
+            address: "",
+            city: "",
+            country: "",
+            pinCode: "",
+            number: ""
+        };
+        errors.city = nameValidator(formData.City, "City") || "";
+        errors.number = numberValidator(formData.Number) || "";
+        errors.pinCode = pincodeValidator(formData.PinCode) || "";
+        errors.address = addressValidator(formData.Address) || "";
         if (formData.Country === "") {
             setCountryError("Country is required");
         } else {

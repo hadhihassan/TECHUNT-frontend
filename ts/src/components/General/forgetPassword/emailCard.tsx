@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigate } from "react-router-dom";
-import { Path } from "../../../routes/imports";
+import { Path } from "../../../routes/route/imports";
 import { sendForgetOtp } from "../../../services/commonApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import { message } from "antd";

@@ -10,6 +10,7 @@ import {
     TabPanel
 } from "@material-tailwind/react";
 import { getAllJobCategoies, getAllUser } from '../../../../services/adminApiService';
+import { IMG_URL } from '../../../../constant/columns';
 
 
 
@@ -17,45 +18,50 @@ const WorkCategory = () => {
     const [tabsHeader, setTabsHeader] = useState<object[]>([]);
     const [user, setUser] = useState<object[]>([]);
     useEffect(() => {
-        getAllJobCategoies()
+        // getAllJobCategoies()
+        //     .then((res) => {
+        //         console.log(res)
+        //         setTabsHeader(res?.data?.data?.data)
+        //     }).catch((err) => console.log(err))
+        getAllUser()
             .then((res) => {
-                console.log(res)
-                setTabsHeader(res?.data?.data?.data)
-            }).catch((err) => console.log(err))
-            getAllUser()
-            .then((res) => {
-                console.log(res)
+                let array = [];
+                for (let i = 0; i < res?.data?.data?.talent.length; i++) {
+                    const value = res?.data?.data?.talent[i]
+                    array.push({ image: `${IMG_URL}${value?.Profile?.profile_Dp}`, title: value?.Profile?.Title, description: value?.Profile?.Description, clickEvent: "sliderClick" })
+                }
+                console.log(array)
                 setUser(res?.data?.data?.talent)
             }).catch((err) => console.log(err))
     }, [])
     const [activeTab, setActiveTab] = useState("html");
-    // const slides = [
-    //     {
-    //         image: "https://picsum.photos/600/500",
-    //         title: "TDevelopment & IT",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    //     {
-    //         image: "https://picsum.photos/600/500",
-    //         title: "TDevelopment & IT",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    //     {
-    //         image: "https://picsum.photos/700/600",
-    //         title: "This is a third title",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    // ];
+    const slides = [
+        {
+            image: "https://picsum.photos/600/500",
+            title: "TDevelopment & IT",
+            description: "User experience designers",
+            clickEvent: "sliderClick"
+        },
+        {
+            image: "https://picsum.photos/600/500",
+            title: "TDevelopment & IT",
+            description: "User experience designers",
+            clickEvent: "sliderClick"
+        },
+        {
+            image: "https://picsum.photos/700/600",
+            title: "This is a third title",
+            description: "User experience designers",
+            clickEvent: "sliderClick"
+        },
+    ];
     return (
         <div className="m-auto  w-[60%] h-auto">
             <div className="mt-5">
                 <div className="m-auto mt-3 w-full h-auto ">
                     <h1 className=" font-montserrat  text-center font-bold sm:text-xl md:text-xl text-xl xl:text-3xl">Top Work Categories</h1>
                     <div className="mt-20">
-                        <Tabs indicatorColor="secondary" >
+                        {/* <Tabs indicatorColor="secondary" >
                             <TabsHeader
                                 className="rounded-none border-b border-gray-500 bg-transparent p-0"
                                 indicatorProps={{
@@ -66,7 +72,7 @@ const WorkCategory = () => {
                                         key={name}
                                         value={name}
                                         onClick={() => setActiveTab(name)}
-                                        className={`${activeTab === name ? "text-red-500 xl:font-semibold " : " font-sans xl:font-semibold   " } sm:text:xs md:text:xs xl:text-xl text-xs  `} placeholder={undefined}                                    >
+                                        className={`${activeTab === name ? "text-red-500 xl:font-semibold " : " font-sans xl:font-semibold   "} sm:text:xs md:text:xs xl:text-xl text-xs  `} placeholder={undefined}                                    >
                                         {name}
                                     </Tab>
                                 ))}
@@ -83,9 +89,9 @@ const WorkCategory = () => {
                                     </p>
                                 </div>
                             </TabsBody>
-                        </Tabs>
+                        </Tabs> */}
                         <div className='m-10 w-full'>
-                            <ReactCardSlider slides={user} />
+                            <ReactCardSlider slides={user !== null && user ? user : slides} />
                         </div>
                     </div>
                     <div>

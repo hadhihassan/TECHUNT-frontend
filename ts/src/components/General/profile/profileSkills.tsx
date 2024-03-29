@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "./profileEditModal";
-import { updateSkills } from "../../services/talentApiService";
+import { updateSkills } from "../../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 import { Combobox } from '@headlessui/react'
 import axios from "axios";
-import { UserProfile } from '../../pages/Talent/profile/profile'
+import { UserProfile } from '../../../pages/Talent/profile/profile'
 
 
 

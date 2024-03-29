@@ -5,7 +5,7 @@ import { formatMongoDate, } from '../../../util/timeFormating';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
 import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
-import Modal from '../modal';
+import Modal from '../ui/modal';
 import { Dialog } from '@headlessui/react';
 import { PendingActions } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';

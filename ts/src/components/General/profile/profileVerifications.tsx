@@ -2,11 +2,11 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import { useContext } from 'react';
-import { MyContext } from '../../context/myContext';
-import routerVariables from '../../routes/pathVariables';
+import { MyContext } from '../../../context/myContext';
+import routerVariables from '../../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ROOTSTORE } from '../../redux/store';
+import { ROOTSTORE } from '../../../redux/store';
 
 const ProfileVerifications = () => {
     const numberIsVerify = useSelector((state: ROOTSTORE) => state.signup.numberVerify)

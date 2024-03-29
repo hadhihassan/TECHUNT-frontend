@@ -16,7 +16,7 @@ import routerVariables, { } from "../../../../routes/pathVariables";
 import { AxiosError, AxiosResponse } from "axios";
 import io from 'socket.io-client'
 import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
-import NotificaioDrawer, { Notification } from "../../notificaionDrawer";
+import NotificaioDrawer, { Notification } from "../../ui/notificaionDrawer";
 import { getAllProposalForClient } from "../../../../services/clientApiService";
 import { ProposalInterface, } from "../../../../interface/interfaces";
 import { notification } from 'antd';

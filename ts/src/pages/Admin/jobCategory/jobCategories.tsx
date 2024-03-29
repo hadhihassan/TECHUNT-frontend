@@ -1,5 +1,5 @@
 import { getAllJobCategoies } from "../../../services/adminApiService";
-import Tables from "../../../components/General/tables";
+import Tables from "../../../components/General/ui/tables";
 import { JOB_CATEGORY_COLUMN } from "../../../constant/columns";
 import React, { useEffect, useState } from 'react'
 interface JobInterface {

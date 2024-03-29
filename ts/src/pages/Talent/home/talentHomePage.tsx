@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Box from '@mui/material/Box';
-import { LinearProgressWithLabel } from '../../../components/General/linerProgressBar';
+import { LinearProgressWithLabel } from '../../../components/General/ui/linerProgressBar';
 import EmailIcon from '@mui/icons-material/Email';
 import BannerImage from '../../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { useNavigate } from 'react-router-dom';

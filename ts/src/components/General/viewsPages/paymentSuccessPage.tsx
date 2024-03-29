@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { updatePaymentStatus } from "../../services/talentApiService";
+import { updatePaymentStatus } from "../../../services/talentApiService";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import mongoose from 'mongoose'

@@ -1,23 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import Header from "../../components/General/Home/Header/header";
-import Footer from "../../components/General/Home/footer/footer";
-import { Login } from "../../services/clientApiService";
+import Header from "../../../components/General/Home/Header/header";
+import Footer from "../../../components/General/Home/footer/footer";
+import { Login } from "../../../services/clientApiService";
 import { useDispatch, } from "react-redux";
-import { setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser, isBankVeried, setProgress } from "../../redux/Slice/signupSlice";
+import { setEmail, setVerify, setRole, setLogged, setId, isNumberVerify, isPremimunUser, isBankVeried, setProgress } from "../../../redux/Slice/signupSlice";
 import { useNavigate } from "react-router-dom";
-import { emailValidator, passwordValidator } from "../../util/validatorsUtils";
+import { emailValidator, passwordValidator } from "../../../util/validatorsUtils";
 import Swal from 'sweetalert2';
-import { useSocketContext } from "../../context/socketContext";
-import { Path } from "../../routes/imports";
+import { useSocketContext } from "../../../context/socketContext";
+import { Path } from "../../../routes/route/imports";
 import { Socket } from 'socket.io-client';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-
-const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-});
 
 const LoginPage: React.FC = () => {
 
@@ -94,16 +87,6 @@ const LoginPage: React.FC = () => {
         setErrorsPassword(passwordValidator(e.target.value))
         setPassword(e.target.value)
     }
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            handleEmailSubmit(values);
-        },
-    });
     return (
         <div>
             <Header layout={true} />

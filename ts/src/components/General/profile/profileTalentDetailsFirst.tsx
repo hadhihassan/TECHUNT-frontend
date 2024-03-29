@@ -5,14 +5,14 @@ import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
-import { editMainProfileSection } from '../../services/commonApiService';
-import { MyContext } from '../../context/myContext';
-import { uploadProfilePhoto } from '../../services/clientApiService';
+import { editMainProfileSection } from '../../../services/commonApiService';
+import { MyContext } from '../../../context/myContext';
+import { uploadProfilePhoto } from '../../../services/clientApiService';
 import Alert from '@mui/material/Alert';
-import { nameValidator, descriptionValidator } from '../../util/validatorsUtils'
-import { Context as ContextInterface } from '../../context/myContext'
-import { UserProfile } from '../../pages/Talent/profile/profile'
-import DisplayResume from './resumeView';
+import { nameValidator, descriptionValidator } from '../../../util/validatorsUtils'
+import { Context as ContextInterface } from '../../../context/myContext'
+import { UserProfile } from '../../../pages/Talent/profile/profile'
+import DisplayResume from '../viewsPages/resumeView';
 import toast, { Toaster } from "react-hot-toast";
 
 interface ValidationsError {
@@ -22,10 +22,10 @@ interface ValidationsError {
     title: string | null
 }
 import { AxiosError, AxiosResponse } from 'axios'
-import { CAllS3ServiceToStore, saveResume, uploadFileToSignedUelInS3 } from '../../services/talentApiService';
+import { CAllS3ServiceToStore, saveResume, uploadFileToSignedUelInS3 } from '../../../services/talentApiService';
 import { message } from 'antd';
 import { useSelector } from 'react-redux';
-import { ROOTSTORE } from '../../redux/store';
+import { ROOTSTORE } from '../../../redux/store';
 
 const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 

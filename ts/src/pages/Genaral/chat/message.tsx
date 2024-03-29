@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import ChatSearchBar from '../../components/General/chat/sideBar/charSearchInput';
+import ChatSearchBar from '../../../components/General/chat/sideBar/charSearchInput';
 import { SearchProps } from 'antd/es/input';
-import ListConversations from '../../components/General/chat/sideBar/listConversations';
-import MessageHeader from '../../components/General/chat/sideBar/messageContainer.tsx/header';
-import SendMessageInput from '../../components/General/chat/sideBar/messageContainer.tsx/messageInput';
-import MessageListing from '../../components/General/chat/sideBar/messageContainer.tsx/messagesListing';
-import { cleanChatItems } from '../../redux/Slice/conversationsSlice';
+import ListConversations from '../../../components/General/chat/sideBar/listConversations';
+import MessageHeader from '../../../components/General/chat/sideBar/messageContainer.tsx/header';
+import SendMessageInput from '../../../components/General/chat/sideBar/messageContainer.tsx/messageInput';
+import MessageListing from '../../../components/General/chat/sideBar/messageContainer.tsx/messagesListing';
+import { cleanChatItems } from '../../../redux/Slice/conversationsSlice';
 import { useDispatch } from 'react-redux';
 
 cleanChatItems

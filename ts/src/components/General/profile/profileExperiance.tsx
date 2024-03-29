@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./profileEditModal";
-import { updateExperiance } from "../../services/talentApiService";
+import { updateExperiance } from "../../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 
 

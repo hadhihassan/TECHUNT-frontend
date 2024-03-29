@@ -58,7 +58,7 @@ export async function getPlan(id:string | undefined) {
 export async function getPlanForEdit(id:string ) {
     return await axiosInstance.get(`${BASE_URL}admin/plan/edit-plan/${id}/`)
 }
-export async function updatePlan(id:string , data) {
+export async function updatePlan(id:string , data: PlanInterface) {
     return await axiosInstance.put(`${BASE_URL}admin/plan/update/`,{id , data})
 }
 

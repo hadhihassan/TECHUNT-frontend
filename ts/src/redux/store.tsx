@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import Signup, { INITIALSTATE } from './Slice/signupSlice';
-import ClientReducer, { Client_INITIALSTATE } from './Slice/Client/clientSlice'
+import ClientReducer, { Client_INITIALSTATE } from './Slice/clientSlice'
 import conversationsSlice from "./Slice/conversationsSlice";
 import { ConversationType } from './Slice/conversationsSlice'
 const persistConfig = {

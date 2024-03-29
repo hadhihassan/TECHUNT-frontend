@@ -4,7 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import 'react-pdf/dist/Page/TextLayer.css';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { ROOTSTORE } from '../../redux/store';
+import { ROOTSTORE } from '../../../redux/store';
 interface DisplayPdfProps {
     pdfUrl: string;
     open: boolean

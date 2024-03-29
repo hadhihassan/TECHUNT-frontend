@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { resolve } from '../config/axios';
-import { CONTACT_FROM } from '../components/General/contactForm';
+import { CONTACT_FROM } from '../components/General/ui/contactForm';
 import { AxiosResponse } from 'axios';
 import { INITIALSTATE } from '../redux/Slice/signupSlice';
 import { axiosInstance, BASE_URL } from '../config/axios'

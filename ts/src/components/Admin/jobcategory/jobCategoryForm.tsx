@@ -4,7 +4,7 @@ import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../cons
 interface JobCategoryFormProps {
     editable: boolean;
     formData: JobInterface;
-    handleChnage: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    handleChnage: (e: ChangeEvent<HTMLInputElement>) => void;
     OnSubmit: () => void
 }
 interface ValidattionInterface {

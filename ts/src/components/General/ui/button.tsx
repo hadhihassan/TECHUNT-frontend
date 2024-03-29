@@ -5,10 +5,10 @@ interface ButtonProps {
     bgColor: string;
     text: string;
     width: string;
-     textColor: string;
+    textColor?: string;
 }
 
-const ButtonMain: React.FC<ButtonProps> = ({ onClick, bgColor, text, width, textColor}) => {
+const ButtonMain: React.FC<ButtonProps> = ({ onClick, bgColor, text, width }) => {
     return (
         <button className={`bg-${bgColor} w-${width}`} onClick={onClick}>
             {text}

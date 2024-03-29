@@ -1,4 +1,6 @@
-const Modal = ({ isOpen, onClose, children }:any) => {
+import React from "react";
+
+const Modal = ({ isOpen, onClose, children }: { isOpen: boolean, onClose: () => void }) => {
     if (!isOpen) return null;
 
     return (

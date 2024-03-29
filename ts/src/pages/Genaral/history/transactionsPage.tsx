@@ -5,12 +5,12 @@ import { Card, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
-import { getTransationHistory, getWalletAmount } from "../../services/commonApiService";
-import { formatMongoDate } from "../../util/timeFormating";
+import { ROOTSTORE } from "../../../redux/store";
+import { getTransationHistory, getWalletAmount } from "../../../services/commonApiService";
+import { formatMongoDate } from "../../../util/timeFormating";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { TABLE_HEAD } from "../../constant/columns";
+import { TABLE_HEAD } from "../../../constant/columns";
 
 interface HistoryPropos {
     from: string,

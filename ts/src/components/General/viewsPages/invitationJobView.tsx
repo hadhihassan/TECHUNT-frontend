@@ -1,22 +1,26 @@
 import { Card } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { JobInterface } from '../../interface/interfaces'
+import { JobInterface } from '../../../interface/interfaces'
 import { Button, notification, Space } from 'antd';
-import ProposalForm from "../Talent/propsalForm";
+import ProposalForm from "../../Talent/propsalForm";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
+import { ROOTSTORE } from "../../../redux/store";
+import { useParams } from "react-router-dom";
+import { fetchAllJobPostForTalent } from "../../../services/talentApiService";
 
-const JobViewPage = () => {
-
+const InvitationJobView = () => {
+    const { id }: { id: string } = useParams()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
-
     const close = () => {
         localStorage.removeItem("deatildView")
     };
     const [post, setPost] = useState<JobInterface | null>(null)
     const [term, setTerm] = useState<boolean>(false)
     useEffect(() => {
-        setPost(JSON.parse(localStorage.getItem("deatildView")));
+        fetchAllJobPostForTalent()
+        .then((res)=>{
+            setPost(res?.data?.data?.filter((value:JobInterface) => value?._id === id)[0])
+        })
     }, [])
     const [api, contextHolder] = notification.useNotification();
     const openNotification = () => {
@@ -70,7 +74,7 @@ const JobViewPage = () => {
                                 </div>
                             </div>
                             <div className="m-5 font-semibold text-sm">
-                                <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post?.Description }}></p>
+                                <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post?.Description as string }}></p>
                             </div>
                             <div className="border-b-2"></div>
                             <div>
@@ -78,16 +82,16 @@ const JobViewPage = () => {
                                 <div className="flex mb-5 m-1">
                                     {post &&
                                         post.Skills.map((value, key) => (<>
-                                                <div key={key} className="flex">
-                                                    <span
-                                                        className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
-                                                            }`}
-                                                    >
-                                                        {value}
-                                                    </span>
-                                                </div>
-                                                {key === 3 && <><br /> </>}
-                                            </>
+                                            <div key={key} className="flex">
+                                                <span
+                                                    className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value?.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
+                                                        }`}
+                                                >
+                                                    {value}
+                                                </span>
+                                            </div>
+                                            {key === 3 && <><br /> </>}
+                                        </>
                                         ))}
                                 </div>
                             </div>
@@ -121,7 +125,7 @@ const JobViewPage = () => {
                             }
                             <div className="font-sans  mt-5  border-b-2 w-full">
                                 <p className="ml-5 text-xl font-semibold">About the client</p>
-                                <p className="ml-5 mb-1 text-xs">{post?.Client_id.City} <span className="ml-1 text-xs">{post?.Client_id.Country}</span> </p>
+                                <p className="ml-5 mb-1 text-xs">{post?.Client_id?.City} <span className="ml-1 text-xs">{post?.Client_id?.Country}</span> </p>
                                 <p className="ml-5 mb-1 text-xs">2 jobs posted</p>
                                 <p className="ml-5 mb-1 text-xs">It's currently 4:45 PM here</p>
                                 <p className="ml-5 mb-5 text-xs">Joined {post?.Client_id?.createdAt}</p>
@@ -137,4 +141,4 @@ const JobViewPage = () => {
         </>
     );
 }
-export default JobViewPage;
+export default InvitationJobView;

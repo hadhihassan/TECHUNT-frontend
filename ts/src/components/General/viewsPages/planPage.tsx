@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { getAllPlans, purchasePlan } from "../../services/commonApiService";
+import { getAllPlans, purchasePlan } from "../../../services/commonApiService";
 import { useSelector } from "react-redux";
-import { ROOTSTORE } from "../../redux/store";
-import { INITIALSTATE } from "../../redux/Slice/signupSlice";
+import { ROOTSTORE } from "../../../redux/store";
+import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { AxiosError, AxiosResponse } from "axios";
 import { message } from "antd";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import useStripePayment from "../../hooks/usePayement";
-import { useSocketContext } from "../../context/socketContext";
+import useStripePayment from "../../../hooks/usePayement";
+import { useSocketContext } from "../../../context/socketContext";
 
 interface PlanInterface {
     name: string,
