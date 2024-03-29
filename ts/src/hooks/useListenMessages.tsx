@@ -1,27 +1,26 @@
 import { useEffect } from "react";
 
 import { useSocketContext } from "../context/socketContext";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../redux/store";
 import { setMessages } from "../redux/Slice/conversationsSlice";
+import { Socket } from "socket.io-client";
 
 
 // import notificationSound from "../assets/sounds/notification.mp3";
 
 const useListenMessages = () => {
-	const { socket } = useSocketContext();
-    const messages = useSelector((state:ROOTSTORE)=>state.conversation.messages)
+	const { socket }: { socket: Socket } = useSocketContext() as { socket: Socket };
+	const messages = useSelector((state: ROOTSTORE) => state.conversation.messages)
 
 	useEffect(() => {
-		socket?.on("newMessage", (newMessage) => {
-            console.log("socket worked and new messages",messages,newMessage); 
+		socket?.on("newMessage", (newMessage: { shouldShake: boolean; }) => {
 			newMessage.shouldShake = true;
 			// const sound = new Audio(notificationSound);
 			// sound.play();
 			setMessages([...messages, newMessage]);
 		});
-
 		return () => socket?.off("newMessage");
-	}, [messages]);
+	}, [messages, socket]);
 };
 export default useListenMessages;

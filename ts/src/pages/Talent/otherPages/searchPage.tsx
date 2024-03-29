@@ -1,6 +1,6 @@
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
-import AfterLoginHeader from '../../components/General/Home/Header/afterLoginHeader';
+import AfterLoginHeader from '../../../components/General/Home/Header/afterLoginHeader';
 import { Col, InputNumber, Row, Slider, Space } from 'antd';
 import { Radio } from 'antd';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
@@ -9,14 +9,14 @@ import { DownOutlined, PaperClipOutlined } from '@ant-design/icons';
 import type { MenuProps, RadioChangeEvent } from 'antd';
 import { Button, Dropdown, message } from 'antd';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { fetchAllJobPostForTalent, searchJob } from '../../services/talentApiService';
-import type { JobInterface } from '../../interface/interfaces'
+import { fetchAllJobPostForTalent, searchJob } from '../../../services/talentApiService';
+import type { JobInterface } from '../../../interface/interfaces'
 import { AxiosError, AxiosResponse } from 'axios';
-import formatRelativeTime from '../../util/timeFormating';
-import { talent_routes } from '../../routes/pathVariables';
+import formatRelativeTime from '../../../util/timeFormating';
+import { talent_routes } from '../../../routes/pathVariables';
 import { useNavigate } from 'react-router-dom';
 import { List, Skeleton } from 'antd';
-import EmptyJobs from '../../components/General/emptyData/emptyJobs';
+import EmptyJobs from '../../../components/General/emptyData/emptyJobs';
 
 const optionsWithDisabled = [
     { label: 'Experianced', value: 'Experianced' },
@@ -31,7 +31,7 @@ const optionsWithDisabled1 = [
 
 const Search = () => {
 
-    const [posts, setPost] = useState<JobInterface[]>([])
+    // const [posts, setPost] = useState<JobInterface[]>([])
     const [actualPosts, setActualPost] = useState<JobInterface[]>([])
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -43,19 +43,20 @@ const Search = () => {
     const [maxInputValue, setMaxInputValue] = useState<number>(0);
     const [inputValue, setInputValue] = useState<number>(0);
     const [max, setMax] = useState<number>(2000);
-    const [allSkills, setAllskills] = useState<string[]>([])
+    // const [allSkills, setAllskills] = useState<string[]>([])
     useEffect(() => {
         setQuery(localStorage.getItem("search") || "")
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
-                setPost(res.data.data)
+                // setPost(res.data.data)
                 setActualPost(res.data.data)
-                const maxValue: number = Math.max(...res?.data?.data?.map(obj => obj.Amount));
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                const maxValue: number = Math.max(...res?.data?.data?.map((obj: { Amount: number; }) => obj.Amount));
                 setMax(maxValue)
                 setMaxInputValue(maxValue)
-                const allSkills = res?.data?.data?.flatMap(obj => obj.Skills);
-                const uniqueSkills: string[] = Array.from(new Set(allSkills));
-                setAllskills(uniqueSkills)
+                // const allSkills = res?.data?.data?.flatMap(obj => obj.Skills);
+                // const uniqueSkills: string[] = Array.from(new Set(allSkills));
+                // setAllskills(uniqueSkills)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
@@ -64,7 +65,7 @@ const Search = () => {
     }, [])
     const navigate = useNavigate()
 
-    const onChangePrice = (e: string[]) => {
+    const onChangePrice = (e: number[]) => {
         const array = e
         setInputValue(array[0]);
         setMaxInputValue(array[1])
@@ -120,7 +121,6 @@ const Search = () => {
         searchJob({ query, postType, experiance, maxInputValue, inputValue })
             .then((res) => {
                 if (res.data) {
-                    setPost(res.data.data)
                     setActualPost(res.data.data)
                 }
                 setLoading(false)
@@ -141,7 +141,6 @@ const Search = () => {
                 searchJob({ query, postType, experiance, maxInputValue, inputValue })
                     .then((res) => {
                         if (res.data) {
-                            setPost(res.data.data)
                             setActualPost(res.data.data)
                         }
                         setLoading(false)
@@ -282,7 +281,7 @@ const Search = () => {
                                             navigate(talent_routes.JobViewPage)
                                         }}>
                                             <p>{post.Title}</p>
-                                            <p className='text-xs text-gray-400 mt-1'>{post.WorkType} - {post.Expertiselevel} - Est. Budget: {post.Amount} - Posted {formatRelativeTime(post.createdAt)}</p>
+                                            <p className='text-xs text-gray-400 mt-1'>{post.WorkType} - {post.Expertiselevel} - Est. Budget: {post.Amount} - Posted {formatRelativeTime(post.createdAt as Date || "")}</p>
                                             <p className='text-sm text-gray-700 mt-1' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
                                             <div className="mt-2 mr-5 flex mb-2 ">
                                                 <div>

@@ -11,6 +11,13 @@ import Swal from 'sweetalert2';
 import { useSocketContext } from "../../context/socketContext";
 import { Path } from "../../routes/imports";
 import { Socket } from 'socket.io-client';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+});
 
 const LoginPage: React.FC = () => {
 
@@ -21,7 +28,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState<string>("")
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
-    const { socket }:{ socket:Socket } = useSocketContext()  as { socket: Socket };
+    const { socket }: { socket: Socket } = useSocketContext() as { socket: Socket };
 
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
@@ -87,7 +94,16 @@ const LoginPage: React.FC = () => {
         setErrorsPassword(passwordValidator(e.target.value))
         setPassword(e.target.value)
     }
-
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            handleEmailSubmit(values);
+        },
+    });
     return (
         <div>
             <Header layout={true} />
@@ -117,8 +133,8 @@ const LoginPage: React.FC = () => {
                                 </div>
                             </div>
                             <span
-                            onClick={()=>navigate(Path.forgetPassowrdEmail)} 
-                            className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>
+                                onClick={() => navigate(Path.forgetPassowrdEmail)}
+                                className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>
                         </div>
                         <div className="flex justify-center items-center flex-col ">
                             <span className="text-sm font-medium text-center text-red-700 font-sans">{error}</span>

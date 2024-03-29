@@ -17,7 +17,7 @@ const MessageListing = () => {
         if (conversation.selectedConversations) {
             getMessages(conversation?.selectedConversations?._id as string || "", setMessages as () => void);
         }
-    }, [conversation?.messages]);
+    }, []);
 
     return (
         <>{loading}

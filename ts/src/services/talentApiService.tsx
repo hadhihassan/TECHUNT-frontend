@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
-import type { Proposal as ProposalInterface } from '../interface/interfaces';
+import type {  ProposalInterface } from '../interface/interfaces';
 import { ObjectId } from 'mongoose';
 
 
