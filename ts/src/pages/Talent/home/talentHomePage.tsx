@@ -176,14 +176,8 @@ const HomePage: React.FC = () => {
                                     onClick={() => handleTabClick(2)}
                                     className={`text-sans font-semibold px-4 py-2 focus:outline-none ${activeTab === 2 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Best match({posts?.length})
+                                    Works({posts?.length})
                                 </button>
-                                {/* <button
-                                            onClick={() => handleTabClick(3)}
-                                            className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 3 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
-                                        >
-                                            Saved
-                                        </button> */}
                             </div>
                         </div>
                     </div>

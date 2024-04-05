@@ -19,6 +19,7 @@ const store = configureStore({
     client: persistedClient,
     conversation: conversationsSlice
   },
+  
 });
 
 export const persistor = persistStore(store)

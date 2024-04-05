@@ -1,4 +1,4 @@
-import IMG from '../../../src/assets/images.png';
+import IMG from '../../../assets/istockphoto-1283536918-1024x1024.jpg';
 const profileReviews = () => {
     return (
         <div className="flex items-center  flex-row ">

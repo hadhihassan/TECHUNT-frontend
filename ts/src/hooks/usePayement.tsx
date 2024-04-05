@@ -16,7 +16,9 @@ const useStripePayment = () => {
             const result = await stripe?.redirectToCheckout({
                 sessionId: session.data.id
             });
-            localStorage.setItem("payemnt", result)
+            if (result) {
+                localStorage.setItem("payemnt", result)
+            }
         } catch (error) {
             setError(error.message);
         } finally {
@@ -31,8 +33,10 @@ const useStripePayment = () => {
             const result = await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });
-            localStorage.setItem("payemnt", result)
-        } catch (error) {
+            if(result){
+                localStorage.setItem("payemnt", result)
+            }
+        } catch (error: { message: string }) {
             setError(error.message);
         } finally {
             setLoading(false);

@@ -1,3 +1,4 @@
+
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../../../redux/store";
 import useGetMessage from "../../../../../hooks/useGetMessages";
@@ -17,16 +18,16 @@ const MessageListing = () => {
         if (conversation.selectedConversations) {
             getMessages(conversation?.selectedConversations?._id as string || "", setMessages as () => void);
         }
-    }, []);
+    }, [conversation.selectedConversations]);
 
     return (
         <>{loading}
             {conversation.messages && (
                 conversation?.messages?.map((message: MessageDoc, index: number) => (
-                    <Message
-                        key={index}
-                        message={message}
-                        index={index}
+                    <Message 
+                        key={index} 
+                        message={message} 
+                        index={index} 
                     />
                 ))
             )}

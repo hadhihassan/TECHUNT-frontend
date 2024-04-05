@@ -96,9 +96,9 @@ const WebRouters: React.FC = () => {
 
 
                 <Imports.Route element={<Imports.Layout isMessage={true}/>}>
-                    <Imports.Route element={<Imports.CheckPreminumUser />}>
+                    {/* <Imports.Route element={<Imports.CheckPreminumUser />}> */}
                         <Imports.Route path={Imports.Path.Message} element={<Message />} />
-                    </Imports.Route>
+                    {/* </Imports.Route> */}
                 </Imports.Route>
                 <Imports.Route path={Imports.Path.Search} element={< Search />} />
 

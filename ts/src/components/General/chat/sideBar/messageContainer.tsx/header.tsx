@@ -1,26 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useSelector } from 'react-redux'
 import { ROOTSTORE } from '../../../../../redux/store'
 import { IMG_URL } from '../../../../../constant/columns'
 
+
 const MessageHeader = () => {
-    const conversation = useSelector((state: ROOTSTORE) => state?.conversation.selectedConversations) as unknown as Participant
-    interface Participant {
-        participants: any
-        Profile: {
-            profile_Dp: string;
-        };
-        First_name: string;
-    }
-    
-    interface Conversation {
-        participants: Participant[];
-        Profile: {
-            profile_Dp: string;
-        };
-        First_name: string;
-    }
-    const conversationState = conversation?.participants[0] as Conversation;
+    const conversationState = useSelector((state: ROOTSTORE) => state?.conversation?.selectedConversations?.participants[0])
 
     return <>
         {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AfterLoginHeader from "../../../components/General/Home/Header/afterLoginHeader";
 import Footer from "../../../components/General/Home/footer/footer";
-import { ArrowBack, Email, NumbersSharp, Password } from "@mui/icons-material";
+import { ArrowBack, Email, NumbersSharp, Password ,CommentBankOutlined} from "@mui/icons-material";
 import NumberVerifcation from "../../../components/General/settings/numberVerifiactions/numberVerifcation";
 import CheckoutForm from "../../../components/General/settings/numberVerifiactions/bankDetailsForm";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ const Settings: React.FC = () => {
             <AfterLoginHeader />
             <div className="w-full h-auto flex mb-20">
                 <div className="flex flex-col justify-between flex-1 m-16 border-r-2 w-auto">
-                    <nav className="-mx-3 space-y-6 ">
+                    <nav className="-mx-3 space-y-6 w-auto">
                         <div className="space-y-4 "
                             onClick={() => history.back()}>
                             <ArrowBack />
@@ -25,16 +25,16 @@ const Settings: React.FC = () => {
                         </div>
                         {
                             !userData.bankVerified && <>
-                                <div className=" ">
+                                <div className="w-auto">
                                     <label className=" text-2xl font-sans font-bold">Billing</label>
                                     <a
                                         className="flex items-center px-3 py-2 dark:text-gray-400 text-black transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
-                                        <NumbersSharp />
+                                        <CommentBankOutlined />
                                         <span
                                             onClick={() => setTab(1)}
 
                                             className="mx-2 text-sm font-medium">
-                                            Add Payment Method</span>
+                                            Add Bank Details</span>
                                     </a>
                                 </div>
                             </>

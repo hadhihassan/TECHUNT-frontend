@@ -83,8 +83,3 @@ export async function saveResume(s3Link: string) {
 export async function searchJob(searchData:{query:string,postType:string, experiance:string, maxInputValue:number, inputValue:number}) {
     return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`,{searchData})
 }
-
-
-
-
-

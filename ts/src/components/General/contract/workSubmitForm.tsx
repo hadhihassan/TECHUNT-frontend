@@ -69,11 +69,10 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
         }
     };
     const handleSubmit = () => {
-
         submitWork(id, { url, description })
             .then((res) => {
                 console.log(res)
-                if (res.data.success) {
+                if (res.data) {
                     message.success("successfully work submitted")
                     // setContract(())
                 } else {
@@ -157,7 +156,7 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                             Description
                         </Typography>
                         <Textarea
-                            readOnly={!showBtn ? true : false}
+                            // readOnly={!showBtn ? true : false}
                             value={description}
                             onChange={handleDescriptionChange}
                         />
@@ -166,7 +165,7 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                     <CardFooter className="pt-0" placeholder={undefined}>
                         {
                             role === "TALENT" && <>
-                                {
+                                {/* {
                                     showBtn ? <>
                                         <Button color="red" fullWidth onClick={isEdit ? handleSubmitEdit : handleSubmit} placeholder={undefined}>
                                             Submit{showBtn}
@@ -176,8 +175,12 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                                             Edit
                                         </Button>
                                     </>
-                                }
+                                } */}
+                                <Button color="red" fullWidth onClick={ handleSubmit} placeholder={undefined}>
+                                    Submit{showBtn}
+                                </Button>
                             </>
+
                         }
                     </CardFooter>
                 </Card>

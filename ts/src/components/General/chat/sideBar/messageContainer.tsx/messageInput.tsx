@@ -25,24 +25,6 @@ const SendMessageInput = () => {
                     className="flex flex-row items-center mb-10 h-16 rounded-xl bg-white w-full px-4 border shadow-xl "
                 >
                     <div>
-                        {/* <button
-                            className="flex items-center justify-center text-gray-400 hover:text-gray-600"
-                        >
-                            <svg
-                                className="w-5 h-5 shadow-xl text-red-500"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                                ></path>
-                            </svg>
-                        </button> */}
                     </div>
                     <div className="flex-grow ml-4 ">
                         <div className="relative w-full">
@@ -77,7 +59,7 @@ const SendMessageInput = () => {
                             className=" flex items-center justify-center bg-red-500 hover:bg-red-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
                         >
                             <span >Send</span>
-                            {
+                            {/* {
                                 
                                 loading ? <div className=" m-1">
                                     <svg aria-hidden="true" className="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,14 +82,12 @@ const SendMessageInput = () => {
                                         ></path>
                                     </svg>
                                 </span>
-                            }
-
+                            } */}
                         </button>
                     </div>
                 </div>
             </form>
         }
-
     </>
 }
 

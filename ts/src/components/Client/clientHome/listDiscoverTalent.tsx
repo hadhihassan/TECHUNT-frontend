@@ -54,7 +54,8 @@ const ListDiscoverTalent = () => {
             .then(() => navigate('/message'))
     }
     const handleSendInvitation = () => {
-        const findJobPost = works.filter((value)=>value._id === workId)
+        console.log(workId, " this is the selected workrid")
+        const findJobPost = works.filter((value)=>value?._id === workId)
         sendInvitation(findJobPost, selectedUserId)
         .then((res:AxiosResponse)=>{
             if(res.data.success){
@@ -73,17 +74,17 @@ const ListDiscoverTalent = () => {
                                 <Avatar src={`http://localhost:3000/images/${talent.Profile.profile_Dp}`} className="w-8 h-8" />
                             </IconButton>
                             <div className="ml-4">
-                                <p className="text-md font-bold">{talent.First_name}{talent.Last_name}</p>
-                                <p className="text-sm text-gray-500">{talent.Profile.Title}</p>
+                                <p className="text-md font-bold">{talent?.First_name}{talent?.Last_name}</p>
+                                <p className="text-sm text-gray-500">{talent?.Profile.Title}</p>
                                 <div className="mt-2">
-                                    <p className="text-sm text-gray-500">Total earnings <b>$0k</b> on {talent.Profile.Title}</p>
+                                    <p className="text-sm text-gray-500">Total earnings <b>$0k</b> on {talent?.Profile.Title}</p>
                                     <div className="flex mt-2">
-                                        {talent.Profile.Skills.slice(0, showAllSkills ? talent.Profile.Skills.length : MAX_SKILLS_DISPLAY).map((value: string, index: number) => (
+                                        {talent?.Profile?.Skills.slice(0, showAllSkills ? talent?.Profile?.Skills?.length : MAX_SKILLS_DISPLAY).map((value: string, index: number) => (
                                             <p key={index} className="bg-slate-100 font-sans px-3 rounded-full text-sm border mr-2">
                                                 {value}
                                             </p>
                                         ))}
-                                        {!showAllSkills && talent.Profile.Skills.length > MAX_SKILLS_DISPLAY && (
+                                        {!showAllSkills && talent?.Profile?.Skills?.length > MAX_SKILLS_DISPLAY && (
                                             <span className="text-sm font-semibold text-red-500 ml-2 self-center cursor-pointer" onClick={toggleSkills}>
                                                 more
                                             </span>
@@ -161,7 +162,7 @@ const ListDiscoverTalent = () => {
                                                         Select you work post
                                                     </label>
                                                     <select
-                                                    onChange={(e:ChangeEvent<HTMLSelectElement>)=>{
+                                                    onClick={(e:ChangeEvent<HTMLSelectElement>)=>{
                                                         setWorkId(e.target.value)
                                                     }}
                                                         name="work"

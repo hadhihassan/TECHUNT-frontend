@@ -10,20 +10,18 @@ const useGetMessage = () => {
  
     const [newMessage, setMessage] = useState()
 
-    const getMessages = async (id: string, fetchMessages: () => void) => {
+    const getMessages = async (id: string) => {
         setLoading(true);
         try {
             const messages = await getMessageBakend(id)
             if (messages) {
                 dispatch(setMessages(messages?.data?.messages))
                 setMessage(messages?.data?.messages)
-                fetchMessages()
-                console.log(messages?.data?.messages)
                 return messages?.data?.messages
             }
-        } catch (error) {
-            console.log(error)
-        } finally {
+        } catch(err){
+            console.log(err)
+        }finally {
             setLoading(false)
         }
     }

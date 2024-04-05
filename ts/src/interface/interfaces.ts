@@ -24,6 +24,7 @@ export interface UserProfile {
     online?: boolean;
     isVerify?: boolean;
     isNumberVerify?: boolean;
+    createdAt?:string | Date;
 }
 export interface JobInterface extends UserProfile {
     Title: string;

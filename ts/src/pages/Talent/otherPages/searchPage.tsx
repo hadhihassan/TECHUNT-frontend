@@ -1,14 +1,12 @@
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import AfterLoginHeader from '../../../components/General/Home/Header/afterLoginHeader';
-import { Col, InputNumber, Row, Slider, Space } from 'antd';
+import { Col, InputNumber, Row, Slider } from 'antd';
 import { Radio } from 'antd';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { DownOutlined, PaperClipOutlined } from '@ant-design/icons';
-import type { MenuProps, RadioChangeEvent } from 'antd';
-import { Button, Dropdown, message } from 'antd';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import type { RadioChangeEvent } from 'antd';
+import { message } from 'antd';
 import { fetchAllJobPostForTalent, searchJob } from '../../../services/talentApiService';
 import type { JobInterface } from '../../../interface/interfaces'
 import { AxiosError, AxiosResponse } from 'axios';
@@ -85,33 +83,6 @@ const Search = () => {
         search()
 
     };
-    const handleMenuClick: MenuProps['onClick'] = () => {
-        message.info('Click on menu item.');
-    };
-    const items: MenuProps['items'] = [
-        {
-            label: 'Latest',
-            key: '1',
-            icon: <PaperClipOutlined />,
-            danger: true,
-        },
-        {
-            label: 'min to low ',
-            key: '2',
-            icon: < CurrencyRupeeIcon />,
-            danger: true,
-        },
-        {
-            label: 'low to min',
-            key: '3',
-            icon: < CurrencyRupeeIcon />,
-            danger: true,
-        },
-    ];
-    const menuProps = {
-        items,
-        onClick: handleMenuClick,
-    };
     const onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         const { value } = e.target;
         setQuery(value)
@@ -129,26 +100,32 @@ const Search = () => {
                 setLoading(false)
             })
     }
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage: number = 5;
+    const indexOfLastPost: number = currentPage * itemsPerPage;
+    const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
+    const currentCients = actualPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (
         <>
             <AfterLoginHeader />
             <div className="bg-blue-500 absolute -z-10 w-full sm:h-[10vh] md:h-[25vh] xl:h-[50vh] transition-transform duration-150">
             </div>
-
-            <form onSubmit={async (e) => {
-                setLoading(true)
-                e.preventDefault()
-                searchJob({ query, postType, experiance, maxInputValue, inputValue })
-                    .then((res) => {
-                        if (res.data) {
-                            setActualPost(res.data.data)
-                        }
-                        setLoading(false)
-                    }).catch(() => message.error("Somthing went wrong !"))
-                    .finally(() => {
-                        setLoading(false)
-                    })
-            }}>
+            <form
+                onSubmit={async (e) => {
+                    setLoading(true)
+                    e.preventDefault()
+                    searchJob({ query, postType, experiance, maxInputValue, inputValue })
+                        .then((res) => {
+                            if (res.data) {
+                                setActualPost(res.data.data)
+                            }
+                            setLoading(false)
+                        }).catch(() => message.error("Somthing went wrong !"))
+                        .finally(() => {
+                            setLoading(false)
+                        })
+                }}>
                 <div className=" flex mx-auto pt-10 pl-3 w-[82%] font-sans font-semibold text-gray-600">
                     <input
                         type="text"
@@ -247,7 +224,7 @@ const Search = () => {
                     </div>
                     {/* content */}
                     <div className='w-[80%]'>
-                        <div className='flex justify-between'>
+                        {/* <div className='flex justify-between'>
                             <label>Top results <span className="font-normal text-xs">Showing 1-20 of 3291 results</span> </label>
                             <Dropdown menu={menuProps}>
                                 <Button className='text-white font-sans font-semibold rounded-xl'>
@@ -257,8 +234,8 @@ const Search = () => {
                                     </Space>
                                 </Button>
                             </Dropdown>
-                        </div>
-                        <div className='w-full xl:mt-8 md:mt-5 sm:mt1 border rounded-xl h-auto ml-2 bg-white shadow-xl mb-40'>
+                        </div> */}
+                        <div className='w-full xl:mt-16 md:mt-5 sm:mt1 border rounded-xl h-auto ml-2 bg-white shadow-xl mb-40'>
                             {loading ? (
                                 <List
                                     itemLayout="vertical"
@@ -273,10 +250,9 @@ const Search = () => {
                                     )}
                                 />
                             ) : (
-
-                                actualPosts.length ? (
-                                    actualPosts.map((post: JobInterface, index: number) => (
-                                        <div className='m-5 text-black border-b' key={index} onClick={() => {
+                                currentCients.length ? (
+                                    currentCients.map((post: JobInterface, index: number) => (
+                                        <div className='m-5 text-black border-b ' key={index} onClick={() => {
                                             localStorage.setItem("deatildView", JSON.stringify(post))
                                             navigate(talent_routes.JobViewPage)
                                         }}>
@@ -301,10 +277,40 @@ const Search = () => {
                                             </div>
                                         </div>
                                     ))
+
                                 ) : (
-                                    <EmptyJobs title={'No post'} description={'There have been no posts in this section yet'}/>
+                                    <EmptyJobs title={'No post'} description={'There have been no posts in this section yet'} />
                                 )
                             )}
+                            <div className="flex items-center gap-4 justify-center m-10">
+                                <button
+                                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                    type="button"
+                                    onClick={() => paginate(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                >
+                                    Previous
+                                </button>
+                                {Array.from({ length: Math.ceil(actualPosts.length / itemsPerPage) }, (_, index) => (
+                                    <button
+                                        className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${currentPage === index + 1 ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
+                                        type="button"
+                                        onClick={() => paginate(index + 1)}
+                                    >
+                                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                            {index + 1}
+                                        </span>
+                                    </button>
+                                ))}
+                                <button
+                                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                    type="button"
+                                    onClick={() => paginate(currentPage + 1)}
+                                    disabled={currentPage === Math.ceil(actualPosts.length / itemsPerPage)}
+                                >
+                                    Next
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div >

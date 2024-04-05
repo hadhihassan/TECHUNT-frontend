@@ -7,15 +7,17 @@ import { AxiosError, AxiosResponse } from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from '../General/Home/Header/afterLoginHeader';
 import { useNavigate } from 'react-router-dom';
+import { Rule } from 'antd/lib/form';
+import { validatePositiveNumber } from '../../util/validatorsUtils';
 
 interface ProposalFormProps {
     isOpen: boolean;
-    forClose: (b:boolean) => void
+    forClose: (b: boolean) => void
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     const navigate = useNavigate()
-    const [receivedNotifications, setReceivedNotifications] = useState([]);
+    const [receivedNotifications, setReceivedNotifications] = useState<string[]>([]);
     const [open, setOpen] = useState(false);
     const jobidRaw = localStorage.getItem("deatildView");
     const jobid: ProposalInterface | null = jobidRaw ? JSON.parse(jobidRaw) : null;
@@ -53,7 +55,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             ["jobId"]: jobid?._id
         });
     };
-    //sucess toast hot message
+    //success toast hot message
     const success = (message: string) => {
 
         toast.success(message);
@@ -96,7 +98,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         }
     }
     const sendNotification = (id: string) => {
-            socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });        
+        socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });
     }
     useEffect(() => {
         socket.on("receiveNotification", (data) => {
@@ -112,6 +114,16 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             socket.off('receiveNotifications');
         }
     }, [sender_id])
+
+    const validateDate = (rule: Rule, value: string | undefined, callback: (error?: string) => void) => {
+        const currentDate = new Date();
+        const selectedDate = value ? new Date(value) : null;
+        if (!value || (selectedDate && selectedDate > currentDate)) {
+            callback();
+        } else {
+            callback('Selected date must be after the current date.');
+        }
+    };
     return (
         <>
             <Toaster
@@ -142,9 +154,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                 name="title"
                                 label="Title"
                                 rules={[
-                                    { required: true, message: 'Please enter the titel' },
+                                    { required: true, message: 'Please enter the title' },
                                     { type: 'string', message: "Title must be letters" },
-                                    { min: 4, message: "Minmum 4 letters required" },
+                                    { min: 4, message: "Minium 4 letters required" },
                                     { max: 50, message: "Maximum 50 letters allowed" },
                                 ]}
                             >
@@ -173,7 +185,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                         message: "Maximum 200 charactors is allowed"
                                     }, {
                                         type: 'string',
-                                        message: "Conver letter must be letters"
+                                        message: "Cover letter must be letters"
                                     }
                                 ]}
                             >
@@ -187,12 +199,12 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
-                                label="Additional Informations"
+                                label="Additional Information"
                                 name="additionalInfo"
                                 rules={[
                                     {
                                         type: 'string',
-                                        message: "Conver letter must be letters"
+                                        message: "Cover letter must be letters"
                                     }
                                 ]}
                             >
@@ -209,9 +221,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                 name="availability"
                                 label="availability"
                                 rules={[
-                                    { required: true, message: 'Please choose the dateTime' },
-                                    { type: 'date', message: "Pick the valid date." },
-
+                                    { required: true, message: 'Please choose the date and time.' },
+                                    { type: 'object', message: 'Please select a valid date.' },
+                                    { validator: validateDate }
                                 ]}
                             >
                                 <DatePicker
@@ -226,8 +238,10 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                             <Form.Item
                                 name="rate"
                                 label="Additional Rate"
-                                rules={[{ required: true, message: 'Please enter rate' }
-                                ]}
+                                rules={[{
+                                    validator: (rule, value, callback) => validatePositiveNumber(rule, value, callback),
+                                    message: 'Please enter a positive number.'
+                                }]}
                             >
                                 <Input
                                     name="rate"

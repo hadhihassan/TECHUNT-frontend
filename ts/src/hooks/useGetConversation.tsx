@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllConversations } from "../services/commonApiService";
-import { AxiosError, AxiosResponse } from "axios";
+import {  AxiosResponse } from "axios";
 
 const useGetConversations = () => {
     const [loading, setLoading] = useState(false);
@@ -11,13 +11,9 @@ const useGetConversations = () => {
             setLoading(true);
             try {
                 getAllConversations()
-                .then((res:AxiosResponse)=>{
-                    setConversations(res.data)
-                }).catch((err:AxiosError) => {
-                    console.log(err)
-                })
-            } catch (error) {
-                console.log(error);
+                    .then((res: AxiosResponse) => {
+                        setConversations(res.data)
+                    })
             } finally {
                 setLoading(false)
             }

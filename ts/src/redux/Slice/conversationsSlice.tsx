@@ -32,7 +32,6 @@ const conversation = createSlice({
             state.selectedConversations = action.payload
         },
         cleanChatItems: (state) => {
-            alert("clean aup working ")
             state.selectedConversations = null
             state.messages = []
         }

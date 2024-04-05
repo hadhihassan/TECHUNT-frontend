@@ -7,12 +7,14 @@ import SendMessageInput from '../../../components/General/chat/sideBar/messageCo
 import MessageListing from '../../../components/General/chat/sideBar/messageContainer.tsx/messagesListing';
 import { cleanChatItems } from '../../../redux/Slice/conversationsSlice';
 import { useDispatch } from 'react-redux';
+import { setUserOfflineInConversation } from '../../../services/commonApiService';
 
 cleanChatItems
 const Message = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         return () => {
+            setUserOfflineInConversation()
             dispatch(cleanChatItems())
         };
     }, [])

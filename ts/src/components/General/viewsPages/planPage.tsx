@@ -4,11 +4,9 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { AxiosError, AxiosResponse } from "axios";
-import { message } from "antd";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import useStripePayment from "../../../hooks/usePayement";
-import { useSocketContext } from "../../../context/socketContext";
 
 interface PlanInterface {
     name: string,
@@ -42,7 +40,6 @@ const PlanPage = () => {
     const handlePurchase = async () => {
         const data: AxiosResponse | AxiosError = await subscriptionPayment(useData?.role, plan[selected]?._id, plan[selected]?.amount)
         if (data) {
-            alert("success")
             purchasePlan(useData?.role, plan[selected]._id)
         }
     }

@@ -1,5 +1,3 @@
-
-
 import axiosInstance, { BASE_URL, resolve } from "../config/axios";
 import routerVariables from '../routes/pathVariables'
 import type { BankDetailsInterface } from '../components/General/viewsPages/bankDetilsSection'
@@ -91,4 +89,7 @@ export async function reSendOtp(email: string) {
 }
 export async function setNewPassword(password: string, email: string) {
     return await axiosInstance.post(`${BASE_URL}forget-password/set-new-Password`, { password, email })
+}
+export async function setUserOfflineInConversation() {
+    return await axiosInstance.patch(`${BASE_URL}message/set-user-is-offline/`)
 }

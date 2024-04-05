@@ -126,7 +126,7 @@ const ProposalClientView = () => {
                         }
                     </div>
                 </div>
-                <div className="border flex justify-start w-full shadow-md   rounded-xl mt-8  h-[20vh]">
+                <div className="border flex justify-start w-full shadow-md   rounded-xl mt-8  h-auto">
                     <div className=" m-5 h-auto w-[100px] border">
                         <Avatar src={image} />
                     </div>

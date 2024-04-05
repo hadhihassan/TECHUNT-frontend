@@ -17,6 +17,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { addWalletAmount, sendMilestoneApproval } from '../../../services/clientApiService';
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
+import useStripePayment from '../../../hooks/usePayement';
 
 
 
@@ -93,7 +94,7 @@ const Milestone = () => {
         } catch (error) {
             console.error("Payment error:", error);
         }
-        alert("Payment processed successfully");
+
     };
     const items: MenuProps['items'] = [
         {

@@ -1,6 +1,4 @@
-
-import ListWallectHistory from "../../components/General/transaction/listWallectHistory";
-import image from '../../assets/3714960.jpg'
+import image from '../../../assets/3714960.jpg'
 import { Card, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
@@ -33,12 +31,15 @@ const TransactionsPage: React.FC = () => {
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
-        getWalletAmount(userData?.role)
-            .then((res: AxiosResponse) => {
-                setWalletAmount(res?.data?.data)
-            }).catch((err: AxiosError) => {
-                console.log(err)
-            })
+        if (userData.role === "TALENT") {
+            // getWalletAmount(userData?.role)
+            //     .then((res: AxiosResponse) => {
+            //         setWalletAmount(res?.data?.data)
+            //     }).catch((err: AxiosError) => {
+            //         console.log(err)
+            //     })
+            console.log(histories)
+        }
     }, [])
     return <>
         <div className="bg-blue-500 absolute -z-10 w-full sm:h-[10vh] md:h-[25vh] xl:h-[50vh] transition-transform duration-150" style={{ backgroundImage: image }}>
@@ -55,7 +56,12 @@ const TransactionsPage: React.FC = () => {
             </div>
             <div className="flex justify-between w-[89%]">
                 <div className="font-semibold text-2xl font-sans">Transaction Histories</div>
-                <div className="font-semibold text-2xl font-sans">Total Amount : {walletAmount}</div>
+                {
+                    userData.role === "TALENT" && <div className="font-semibold text-2xl font-sans">Total Amount : {  histories
+                        .filter(history => history.amount && history.forWhat === "Contract")
+                        .reduce((total, history) => total + history.amount, 0) || 0
+                    }</div>
+                }
             </div>
             <div className="w-[90%] border border-gray-300 shadow-xl  flex flex-col rounded-xl h-auto bg-white">
                 <Card className="h-full w-full" placeholder={undefined}>
@@ -128,7 +134,6 @@ const TransactionsPage: React.FC = () => {
                 </Card>
             </div>
         </div>
-        <ListWallectHistory />
     </>
 }
 export default TransactionsPage

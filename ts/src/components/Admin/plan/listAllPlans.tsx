@@ -13,7 +13,7 @@ import {
 import CreatePlanForm, { PlanInterface } from "./createPlanForm";
 import { useEffect, useState } from "react";
 import { getAllPlan } from "../../../services/adminApiService";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import EditPlanForm from "./editPlanForm";
 
 const TABLE_HEAD = ["No", "Name", "Description", "Amount", "Type", "Action"];
@@ -38,12 +38,10 @@ export function ListAllPlans() {
         getAllPlan()
             .then((res: AxiosResponse) => {
                 setPlans(res?.data?.data || null)
-            }).catch((err: AxiosError) => {
-                alert(err)
             })
     }, [isOpen, editOpen])
     return (
-        <div className=" w-[90%] h-full m-7">
+        <div className=" w-[90%] h-screen m-7">
             <Card placeholder={undefined}>
                 <CardHeader floated={false} shadow={false} className="rounded-none" placeholder={undefined}>
                     <div className="mb-8 flex items-center justify-between gap-8">

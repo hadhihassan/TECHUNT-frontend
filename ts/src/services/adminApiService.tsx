@@ -17,7 +17,6 @@ export async function blockUser(data: unknown) {
         axiosInstance.post(`${BASE_URL}admin/block-user/`, data)
     )
 }
-
 export async function createNewJobCategoru(data: unknown) {
     return await resolve(
         axiosInstance.post(`${BASE_URL}admin/add-new-job-category/`, data)

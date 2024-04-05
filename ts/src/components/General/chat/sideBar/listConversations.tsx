@@ -5,7 +5,7 @@ import NormalSkeleton from '../../emptyData/normalSkeleton'
 const ListConversations = () => {
     const { loading, conversation } = useGetConversations()
     return (
-        <div className="flex flex-col  hover:bg-red-500 rounded-t-xl bg-gray-100 ">
+        <div className="flex flex-col  hover:bg-red-500 rounded-t-xl bg-gray-400 ">
             {
                 loading ? <>
                     <NormalSkeleton />

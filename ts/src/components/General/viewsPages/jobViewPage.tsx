@@ -5,6 +5,8 @@ import { Button, notification, Space } from 'antd';
 import ProposalForm from "../../Talent/propsalForm";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
+import moment from "moment";
+import { INDIAN_RUPEE } from "../../../constant/columns";
 
 const JobViewPage = () => {
 
@@ -16,7 +18,7 @@ const JobViewPage = () => {
     const [post, setPost] = useState<JobInterface | null>(null)
     const [term, setTerm] = useState<boolean>(false)
     useEffect(() => {
-        setPost(JSON.parse(localStorage.getItem("deatildView")));
+        setPost(JSON.parse(localStorage.getItem("deatildView") ?? '{}'));
     }, [])
     const [api, contextHolder] = notification.useNotification();
     const openNotification = () => {
@@ -45,7 +47,7 @@ const JobViewPage = () => {
     }
     return (
         <>
-            <div className=" flex justify-center  mt-8">
+            <div className=" flex justify-center  mt-8 mb-10">
                 <Card color="white" shadow={false} placeholder={undefined} className="border shadow-xl rounded-xl w-[70%] h-auto" >
                     <div
                         onClick={() => {
@@ -63,14 +65,14 @@ const JobViewPage = () => {
                             <div className="flex justify-between m-5">
                                 <div>
                                     <p className=" font-bold">{post?.Title}</p>
-                                    <p className="mt-2 text-sm text-gray-600">{post?.createdAt}Posted 3 hours ago</p>
+                                    <p className="mt-2 text-sm text-gray-600">Posted {moment(post?.createdAt).format('MMMM Do YYYY')}</p>
                                 </div>
                                 <div>
-                                    <p> <b>${post?.Amount} USD</b>    <span className="text-red-500 font-semibold">{post?.WorkType}</span></p>
+                                    <p> <b>{INDIAN_RUPEE}{post?.Amount} </b>    <span className="text-red-500 font-semibold">{post?.WorkType}</span></p>
                                 </div>
                             </div>
                             <div className="m-5 font-semibold text-sm">
-                                <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post?.Description }}></p>
+                                <p className='font-sans text-gray-700 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post?.Description || "" }}></p>
                             </div>
                             <div className="border-b-2"></div>
                             <div>
@@ -78,16 +80,16 @@ const JobViewPage = () => {
                                 <div className="flex mb-5 m-1">
                                     {post &&
                                         post.Skills.map((value, key) => (<>
-                                                <div key={key} className="flex">
-                                                    <span
-                                                        className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
-                                                            }`}
-                                                    >
-                                                        {value}
-                                                    </span>
-                                                </div>
-                                                {key === 3 && <><br /> </>}
-                                            </>
+                                            <div key={key} className="flex">
+                                                <span
+                                                    className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
+                                                        }`}
+                                                >
+                                                    {value}
+                                                </span>
+                                            </div>
+                                            {key === 3 && <><br /> </>}
+                                        </>
                                         ))}
                                 </div>
                             </div>
@@ -106,7 +108,7 @@ const JobViewPage = () => {
                                     <p className="m-5 text-center text-sm font-semibold">{post?.WorkType}</p>
                                 </div>
                             </div>
-                            <div className='border-b-2'></div>
+                            {/* <div className='border-b-2'></div> */}
                         </div>
                         {/* right side */}
                         <div className="sm:w-[25%]">
@@ -119,12 +121,16 @@ const JobViewPage = () => {
                                     </div>
                                 </>
                             }
-                            <div className="font-sans  mt-5  border-b-2 w-full">
+                            <div className="font-sans  mt-5   w-full">
                                 <p className="ml-5 text-xl font-semibold">About the client</p>
-                                <p className="ml-5 mb-1 text-xs">{post?.Client_id.City} <span className="ml-1 text-xs">{post?.Client_id.Country}</span> </p>
-                                <p className="ml-5 mb-1 text-xs">2 jobs posted</p>
-                                <p className="ml-5 mb-1 text-xs">It's currently 4:45 PM here</p>
-                                <p className="ml-5 mb-5 text-xs">Joined {post?.Client_id?.createdAt}</p>
+                                {post && typeof post.Client_id !== 'string' && (
+                                    <p className="ml-5 mb-1 text-xs">{post.Client_id.City} <span className="ml-1 text-xs">{post.Client_id.Country}</span> </p>
+                                )}
+                                {
+                                    post && typeof post.Client_id !== 'string' && (
+                                        <p className="ml-5 mb-5 text-xs">Joined at {moment(post?.Client_id?.createdAt).format('MMMM Do YYYY')}</p>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>

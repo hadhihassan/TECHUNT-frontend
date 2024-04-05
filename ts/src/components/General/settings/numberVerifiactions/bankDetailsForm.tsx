@@ -20,6 +20,7 @@ import { addBankDetails } from "../../../../services/commonApiService";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../../redux/store";
 import { INITIALSTATE } from "../../../../redux/Slice/signupSlice";
+import { message } from "antd";
 
 
 export default function CheckoutForm() {
@@ -32,7 +33,7 @@ export default function CheckoutForm() {
         account_type: "",
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleOnChnage = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | any>) => {
+    const handleOnChnage = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | any >) => {
         if (e.target) {
             const { name, value } = e.target;
             setDetails({
@@ -50,12 +51,11 @@ export default function CheckoutForm() {
     const submit = (e: React.FormEvent) => {
         e.preventDefault()
         addBankDetails(userData.id as string || "", userData.role, bankDetails)
-            .then(() => {
-                alert("success")
-            }).catch((err) => {
-                alert("error")
-                console.log(err)
-            })
+        .then(()=>{
+            message.success("Bank details added .")
+        }).catch(()=>{
+            message.success("Somthign went wrong !. try agin .")
+        })
     }
     return (<>
 
