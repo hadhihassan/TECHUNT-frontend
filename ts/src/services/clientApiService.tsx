@@ -67,7 +67,7 @@ export async function makePaymentToBank(talentId: string, amount: number) {
 export async function addWalletAmount(talentId: string, amount: number, milestoneId: boolean = true) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/wallet/add-amount/`, { talentId, amount, milestoneId })
 }
-export async function sendInvitation(WorkId: string, talentId: string) {
+export async function sendInvitation(WorkId: object, talentId: string) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/send-Invitation/`, { WorkId, talentId })
 }
 

@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { talent_routes } from "../../../routes/pathVariables";
 import { createConversation } from "../../../services/commonApiService";
 import { Dialog, Transition } from '@headlessui/react'
-import type {jobInterface} from '../jobPost/editJobPostForm'
+import type { jobInterface } from '../jobPost/editJobPostForm'
 import { message } from "antd";
 
 const ListDiscoverTalent = () => {
@@ -20,7 +20,7 @@ const ListDiscoverTalent = () => {
     const [works, setWorks] = useState<jobInterface[]>([])
     const [selectedUserId, setSelectedUserId] = useState<string>("")
     const [workId, setWorkId] = useState<string>("")
-    
+
     const closeModal = () => setOpen(!isOpen)
     useEffect(() => {
         const fetchAllTalents = () => {
@@ -31,11 +31,11 @@ const ListDiscoverTalent = () => {
                 .catch((error: AxiosError) => {
                     console.error('Error fetching talents:', error);
                 });
-            fetchAllJobPost().then((res: AxiosResponse) => {
-                console.log(res.data?.data);
-                setWorks(res.data?.data?.data)
-                console.log(works)
-            })
+            fetchAllJobPost()
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .then((res: any) => {
+                    setWorks(res?.data?.data?.data)
+                })
         };
         fetchAllTalents();
     }, []);
@@ -55,17 +55,24 @@ const ListDiscoverTalent = () => {
     }
     const handleSendInvitation = () => {
         console.log(workId, " this is the selected workrid")
-        const findJobPost = works.filter((value)=>value?._id === workId)
+        const findJobPost = works.filter((value) => value?._id === workId)
         sendInvitation(findJobPost, selectedUserId)
-        .then((res:AxiosResponse)=>{
-            if(res.data.success){
-                message.success("Invitation sended successfully")
-            }
-        }).catch(()=>message.error("Try again . Something went wrong ?"))
+            .then((res: AxiosResponse) => {
+                if (res.data.success) {
+                    message.success("Invitation sended successfully")
+                }
+            }).catch(() => message.error("Try again . Something went wrong ?"))
     }
+    //pagination logic
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage: number = 5;
+    const indexOfLastPost: number = currentPage * itemsPerPage;
+    const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
+    const pagnationTalens = discoverTalent.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (<>
         {
-            discoverTalent.map((talent: UserProfile, index: number) => (
+            pagnationTalens?.map((talent: UserProfile, index: number) => (
                 <div className="w-full mt-5 border rounded-xl shadow-xl h-auto mb-5" key={index}>
                     {/* <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button> */}
                     <div className="flex justify-between p-4">
@@ -99,10 +106,10 @@ const ListDiscoverTalent = () => {
                             </div>
                         </div>
                         <div className="flex flex-col mt-10">
-                            <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={()=>{
+                            <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={() => {
                                 closeModal()
                                 setSelectedUserId(talent._id)
-                                }}>Invite</button>
+                            }}>Invite</button>
 
                             <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={() => handleMessage(index)}>Message</button>
                             <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-2 rounded-full self-center" onClick={() => handleNavigateProfile(index)}>See profile</button>
@@ -162,18 +169,16 @@ const ListDiscoverTalent = () => {
                                                         Select you work post
                                                     </label>
                                                     <select
-                                                    onClick={(e:ChangeEvent<HTMLSelectElement>)=>{
-                                                        setWorkId(e.target.value)
-                                                    }}
+                                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setWorkId(e.target.value)}
                                                         name="work"
                                                         className="outline-none bg-gray-50 border rounded-xl border-gray-300 text-gray-900 sm:text-sm  block w-full p-2.5">
                                                         {works?.map((work: jobInterface, index: number) => (
                                                             <option key={index} value={work?._id}>{work?.Title}</option>
-                                                        ))} 
+                                                        ))}
                                                     </select>
                                                 </div>
                                                 <button
-                                                    className="w-full bg-red-500   font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white" 
+                                                    className="w-full bg-red-500   font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                                                     onClick={handleSendInvitation}>
                                                     send
                                                 </button>
@@ -187,6 +192,35 @@ const ListDiscoverTalent = () => {
                 </div>
             </Dialog>
         </Transition>
+        <div className="flex items-center gap-4 justify-center m-10">
+            <button
+                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                Previous
+            </button>
+            {Array.from({ length: Math.ceil(discoverTalent.length / itemsPerPage) }, (_, index) => (
+                <button
+                    className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${currentPage === index + 1 ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
+                    type="button"
+                    onClick={() => paginate(index + 1)}
+                >
+                    <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                        {index + 1}
+                    </span>
+                </button>
+            ))}
+            <button
+                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === Math.ceil(discoverTalent.length / itemsPerPage)}
+            >
+                Next
+            </button>
+        </div>
     </>)
 }
 export default ListDiscoverTalent;

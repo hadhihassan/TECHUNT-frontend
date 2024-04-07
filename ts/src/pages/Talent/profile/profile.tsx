@@ -11,6 +11,7 @@ import ProfileExperiance from "../../../components/General/profile/profileExperi
 import ProfileReviews from "../../../components/General/profile/profileReviews";
 import { AxiosError } from "axios"
 import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
+import EducationForm from "../../../components/General/profile/profileEducations";
 
 export interface UserProfile {
     Last_name: string;
@@ -73,7 +74,17 @@ const Profile = () => {
                 <div className="grid grid-col-12 gap-10">
                     <div className="">
                         <ProfileTalentDetailsFirst datas={datas} onUpdate={getUserProfile} />
-                    </div>  
+                    </div>
+                    <div className="flex items-center  flex-row justify-center">
+                        
+                        <EducationForm />
+                        <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
+                            <p className="text-lg">Which university or school did you attend</p>
+                            <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
+                            <button className="p-2 mt-2 text-sm rounded-xl  border border-red-500">Add education</button>
+                        </div>
+                    </div>
+
                     <div className={`flex items-center  flex-row justify-center `}>
                         <ProfileContact data={datas} onUpdate={getUserProfile} />
                     </div>
@@ -93,7 +104,7 @@ const Profile = () => {
                 </div>
             </div>
             <Footer />
-        </div>
+        </div >
     </>);
 }
 

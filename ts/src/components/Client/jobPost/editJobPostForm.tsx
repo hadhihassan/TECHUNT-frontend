@@ -117,6 +117,7 @@ const top100Films: string[] = [
     "Technical Writing"
 ];
 export interface jobInterface {
+    _id?: string;
     Title: string;
     Description: string;
     Skills: string[];

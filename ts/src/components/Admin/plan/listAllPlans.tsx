@@ -6,7 +6,6 @@ import {
     Typography,
     Button,
     CardBody,
-    CardFooter,
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
@@ -40,33 +39,39 @@ export function ListAllPlans() {
                 setPlans(res?.data?.data || null)
             })
     }, [isOpen, editOpen])
+    // paginaion logic
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage: number = 5;
+    const indexOfLastPost: number = currentPage * itemsPerPage;
+    const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
+    const slicesPlans = plans.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (
         <div className=" w-[90%] h-screen m-7">
             <Card placeholder={undefined}>
-                <CardHeader floated={false} shadow={false} className="rounded-none" placeholder={undefined}>
-                    <div className="mb-8 flex items-center justify-between gap-8">
+                <CardHeader floated={false} shadow={false} className="rounded-none flex justify-between items-center" placeholder={undefined}>
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
+                        <div className="w-full md:w-72 ">
+                            <Input
+                                placeholder="Search"
+                                className=" appearance-none border-2 border-gray-200 rounded w-full ml-5 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                                crossOrigin={undefined} />
+                        </div>
+                    </div>
+                    <div className="mb-8 flex items-center justify-between gap-8 mr-5">
                         <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                             <Button
                                 onClick={open}
-                                className="flex items-center gap-3 bg-blue-500 rounded-xl ml-5 mt-5" size="sm" placeholder={undefined}>
+                                className="flex items-center gap-3 px-5 py-3  bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline rounded-xl ml-5 mt-5" size="sm" placeholder={undefined}>
                                 Add Plan
                             </Button>
                             <CreatePlanForm isOpen={isOpen} closeModal={close} />
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        <div className="w-full md:w-72">
-                            <Input
-                                placeholder="Search"
-                                className="rounded-2xl border-gray-600 ml-5"
-                                label="Search"
-                                crossOrigin={undefined} />
-                        </div>
-                    </div>
                 </CardHeader>
                 <CardBody className=" px-0" placeholder={undefined}>
                     <table className="mt-4 w-full min-w-max table-auto text-left">
-                        <thead>
+                        <thead className="bg-gray-300">
                             <tr>
                                 {TABLE_HEAD.map((head) => (
                                     <th
@@ -84,7 +89,7 @@ export function ListAllPlans() {
                             </tr>
                         </thead>
                         <tbody>
-                            {plans?.map(
+                            {slicesPlans?.map(
                                 ({ name, description, amount, type }, index) => {
                                     const isLast = index === plans.length - 1;
                                     const classes = isLast
@@ -156,23 +161,40 @@ export function ListAllPlans() {
                         </tbody>
                     </table>
                 </CardBody>
-                <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4" placeholder={undefined}>
-                    <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined}>
-                        Page 1 of 10
-                    </Typography>
-                    <div className="flex gap-2">
-                        <Button variant="outlined" size="sm" placeholder={undefined}>
-                            Previous
-                        </Button>
-                        <Button variant="outlined" size="sm" placeholder={undefined}>
-                            Next
-                        </Button>
-                    </div>
-                </CardFooter>
+
             </Card>
             {
                 editOpen && <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
             }
+                    <div className="flex items-end gap-4 justify-end m-10">
+                        <button
+                            className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button"
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                        {Array.from({ length: Math.ceil(plans.length / itemsPerPage) }, (_, index) => (
+                            <button
+                                className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${currentPage === index + 1 ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
+                                type="button"
+                                onClick={() => paginate(index + 1)}
+                            >
+                                <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                    {index + 1}
+                                </span>
+                            </button>
+                        ))}
+                        <button
+                            className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button"
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === Math.ceil(plans.length / itemsPerPage)}
+                        >
+                            Next
+                        </button>
+                    </div>
         </div>
 
     );

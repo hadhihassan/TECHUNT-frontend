@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Modal from "./profileEditModal";
 import { updateExperiance } from "../../../services/talentApiService";

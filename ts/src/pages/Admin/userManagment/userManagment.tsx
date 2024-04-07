@@ -125,11 +125,11 @@ const UserManagement: React.FC = () => {
             Cell: ({ row }) => (
                 <div>
                     <button
-                        className={`group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br ${row.original.action ? 'from-red-500 to-red-700' : 'from-green-500 to-green-700'} group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800`}
+                        className={`group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br ${row.original.action ? 'from-red-500 to-red-700' : 'from-green-500 to-green-700'} group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 outline-none  focus:ring-purple-200 dark:focus:ring-purple-800`}
                         onClick={() => handleActionClick(row.original.email, row.original.role, row.original.action)}
                     >
                         <span
-                            className="relative px-3 py-1 transition-all ease-in duration-200 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                            className="relative px-3 py-1  transition-all ease-in duration-200 bg-white dark:bg-gray-900  group-hover:bg-opacity-0"
                         >
                             {row.original.action ? "Unblock" : "Block"}
                         </span>
@@ -246,7 +246,7 @@ const UserManagement: React.FC = () => {
                                     id="search"
                                     value={globalFilter || ''}
                                     onChange={e => setGlobalFilter(e.target.value)}
-                                    className="bg-zinc-200 text-zinc-600 font-mono ring-1 ring-zinc-400 focus:ring-2 focus:ring-rose-400 outline-none duration-300 placeholder:text-zinc-600 placeholder:opacity-50 rounded-full px-4 py-1 shadow-md focus:shadow-lg focus:shadow-rose-400"
+                                    className="rounded-xl appearance-none border-2 border-gray-200 w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                                     autoComplete="off"
                                     placeholder="Search..."
                                     name="text"
@@ -254,18 +254,18 @@ const UserManagement: React.FC = () => {
                                 />
                             </div>
                             <div>
-                                <button className='bg-blue-500 text-white px-4 py-2 mr-2 rounded-md hover:bg-blue-600' onClick={() => setSwitch(!switchUser)}>
+                                <button className=' text-white px-4 py-2 mr-5 rounded-xl bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline' onClick={() => setSwitch(!switchUser)}>
                                     {switchUser ? 'Show Talent' : 'Show Client'}
                                 </button>
-                                <button className='bg-[#292929] border-2 border-[#3e3e3e] rounded-lg text-white px-1 py-1 text-base hover:border-[#fff] cursor-pointer transition' onClick={() => previousPage()} disabled={!canPreviousPage}>
+                                <button className='text-black border-2  rounded-xl outline-none px-1 py-1 text-base hover:border-[#fff] cursor-pointer transition' onClick={() => previousPage()} disabled={!canPreviousPage}>
                                     Previous
                                 </button>
-                                <span >
+                                <span className="ml-2 mr-2">
                                     <strong>
                                         {pageIndex + 1} of {pageOptions.length}
                                     </strong>{' '}
                                 </span>
-                                <button className='bg-[#292929] border-2 border-[#3e3e3e] rounded-lg text-white px-3 py-1 text-base hover:border-[#fff] cursor-pointer transition' onClick={() => nextPage()} disabled={!canNextPage}>
+                                <button className='text-black border-2  rounded-xl outline-none px-3 py-1 text-base hover:border-[#fff] cursor-pointer transition' onClick={() => nextPage()} disabled={!canNextPage}>
                                     Next
                                 </button>
                             </div>
