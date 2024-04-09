@@ -72,12 +72,10 @@ const NewContract: React.FC<props> = ({ active }) => {
             console.log(err);
         });
     const handleNavigateFullDetail = (index: number) => {
-        localStorage.setItem("contractDetails", JSON.stringify(contract[index]) || "")
-
         if (role === "CLIENT") {
-            navigate(clientRoutes.ViewMiles)
+            navigate(`${clientRoutes.ViewMiles}${contract[index]._id}`)
         } else {
-            navigate(talent_routes.ViewMiles)
+            navigate(`${talent_routes.ViewMiles}${contract[index]._id}`)
         }
     }
     useEffect(() => {

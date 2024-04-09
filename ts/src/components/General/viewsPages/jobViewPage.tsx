@@ -36,7 +36,7 @@ const JobViewPage = () => {
         api.open({
             message: 'Payment Required',
             description:
-                'Please note that if the client accepts this proposal, a fee of 5000 rupees will be charged.Otherwise, no charge will apply.',
+                'Please note that if the client accepts this proposal, a fee of 500 rupees will be charged.Otherwise, no charge will apply.',
             btn,
             key,
             onClose: close,
@@ -79,7 +79,7 @@ const JobViewPage = () => {
                                 <p className="font-semibold m-5">Skills</p>
                                 <div className="flex mb-5 m-1">
                                     {post &&
-                                        post.Skills.map((value, key) => (<>
+                                        post?.Skills?.map((value, key) => (<>
                                             <div key={key} className="flex">
                                                 <span
                                                     className={`bg-red-500 text-white rounded-xl text-center text-sm border  ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
@@ -116,21 +116,12 @@ const JobViewPage = () => {
                                 basicData.role == "TALENT" && <>
                                     <div className="w-full  font-sans flex flex-col p-5">
                                         <button onClick={openNotification} className="bg-red-500 border mt-5 rounded-full py-1 text-white font-semibold">Submit propsoal</button>
-                                        <button className="border border-black mt-2 text-black py-1 font-semibold   rounded-full">Save</button>
                                         {contextHolder}
                                     </div>
                                 </>
                             }
-                            <div className="font-sans  mt-5   w-full">
-                                <p className="ml-5 text-xl font-semibold">About the client</p>
-                                {post && typeof post.Client_id !== 'string' && (
-                                    <p className="ml-5 mb-1 text-xs">{post.Client_id.City} <span className="ml-1 text-xs">{post.Client_id.Country}</span> </p>
-                                )}
-                                {
-                                    post && typeof post.Client_id !== 'string' && (
-                                        <p className="ml-5 mb-5 text-xs">Joined at {moment(post?.Client_id?.createdAt).format('MMMM Do YYYY')}</p>
-                                    )
-                                }
+                            <div className="font-sans w-full">
+                                {/* <p className="ml-5 text-sm  font-semibold hover:underline hover:text-blue-500 hover:cursor-pointer">show client profile</p> */}
                             </div>
                         </div>
                     </div>

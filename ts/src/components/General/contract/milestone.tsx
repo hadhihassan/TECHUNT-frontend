@@ -16,9 +16,9 @@ import { updateMilestoneStatus } from '../../../services/talentApiService';
 import { AxiosError, AxiosResponse } from 'axios';
 import { addWalletAmount, sendMilestoneApproval } from '../../../services/clientApiService';
 import { WorkSubmitForm } from './workSubmitForm';
-import { contractStatusUpdate, getSubmittedWork } from '../../../services/commonApiService';
+import { contractStatusUpdate, getContract, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
-
+import { useParams } from 'react-router-dom';
 
 
 
@@ -28,13 +28,16 @@ const Milestone = () => {
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [selectMilestone, setSelected] = useState<number>(0)
+    const { id } = useParams();
 
+    const fetch = () => {
+        getContract(role, id?.slice(3) || "")
+            .then((res: AxiosResponse) => {
+                setContract(res.data.data)
+            })
+    }
     useEffect(() => {
-        const contractDetailsString = localStorage.getItem("contractDetails");
-        const contractData: ContractDetailsType = contractDetailsString ? JSON.parse(contractDetailsString) : null;
-        if (contractData) {
-            setContract(contractData)
-        }
+        fetch()
         const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
         if (completedMilestones.length as number === contract?.milestones?.length) {
             contractStatusUpdate(contractData?._id || "", "completed", role)
@@ -55,6 +58,7 @@ const Milestone = () => {
         const id: string = contract?.milestones[index]?._id || ""
         sendMilestoneApproval(id, true)
             .then((res: AxiosResponse) => {
+                fetch()
                 if (res.data.success) {
                     message.success("successfully updated")
                 } else {
@@ -67,34 +71,37 @@ const Milestone = () => {
     }
     // for freelancer to submit the work 
     const submitWork = () => {
+        fetch()
         setFormOpen(!formOpen)
     }
     // for client can see the progress 
     const showWorkProggress = (index: number) => {
+        fetch()
         setSelected(index)
         openModal()
     }
     // for freelancer can update the working progress 
     const updateWorkProggress = (index: number) => {
+        fetch()
         openModal()
         setSelected(index)
     }
     const [confirm, setConfirm] = useState<boolean>(false)
     const handleMenuClick = (e: { key: number }) => {
+        fetch()
         setConfirm(!confirm)
         setStausKey(e?.key)
     };
     const payment = async (index: number): Promise<void> => {
-        const contractData = JSON.parse(localStorage.getItem("contractDetails") || "")
         const milestone = contract?.milestones[index];
         localStorage.setItem("payedMilestone", JSON.stringify(milestone));
         try {
-            await addWalletAmount(contractData?.talent?._id, milestone?.amount as number, milestone?._id as unknown as boolean);
-            await paymentToTalent(contract?.talent?._id || "", milestone?.amount as number);
+            await addWalletAmount(contract?.talent?._id, milestone?.amount as number, milestone?._id as unknown as boolean);
+            await paymentToTalent(contract?.talent?._id , milestone?.amount as number);
         } catch (error) {
             console.error("Payment error:", error);
         }
-
+        fetch()
     };
     const items: MenuProps['items'] = [
         {
@@ -134,6 +141,7 @@ const Milestone = () => {
             console.log(err);
         }
         setConfirm(!confirm)
+        fetch()
     }
     const showWork = () => {
         const workId: string = contract?.milestones[selectMilestone]?.work as string || ""
@@ -142,6 +150,7 @@ const Milestone = () => {
                 localStorage.setItem("work", JSON.stringify(res.data.data) || "")
                 setFormOpen(!formOpen)
             }).catch(() => message.error("Something went wrong !. try again later ."))
+            fetch()
     }
     const modalElement = (
         <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  p-6 text-left align-middle shadow-xl transition-all">
@@ -295,10 +304,11 @@ const Milestone = () => {
                                     contract?.milestones?.map((milestone, index: number) => (
                                         <li className={`border-l-2 ${milestone?.completed === "Pending" ? "border-red-500" : (milestone?.completed === "Progress" ? "border-blue-500" : "border-green-500")}`} key={index}>
                                             <div className="md:flex flex-start">
-                                                <div className={`${milestone?.completed === "Pending" ? "bg-red-500" : (milestone?.completed === "Progress" ? "bg-blue-500" : "bg-green-500")} w-6 h-6 flex items-center justify-center rounded-full -ml-3.5`}>
-                                                    <svg aria-hidden="true" focusable="false" data-prefix="fas" className=" text-white  w-3 h-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                        <path fill="currentColor" d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm64-192c0-8.8 7.2-16 16-16h288c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-64zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"></path>
-                                                    </svg>
+                                                <div className="bg-white w-6 h-6 flex items-center justify-center rounded-full -ml-3.5">
+                                                    {
+
+                                                        milestone.completed === "Pending" ? <PendingActions color='primary' /> : milestone.completed === "Progress" ? <EventRepeatIcon color="warning" /> : <CheckCircleIcon color="success" />
+                                                    }
                                                 </div>
 
                                                 <div className="block p-6 rounded-lg shadow-lg bg-gray-100 max-w-md ml-6 mb-10">

@@ -84,7 +84,7 @@ export const clientRoutes: CLIENTROUTES = {
     ContractSubmit: "/client/contract/send/",
     ContactListing: '/client/contract/all/',
     SendContract: "/client/send-contract/",
-    ViewMiles: "/client/contract/work-details/:success",
+    ViewMiles: "/client/contract/work-details/:id",
     TransactionHistry: "/client/transaction/history/"
 }
 //Talent routes
@@ -99,7 +99,7 @@ export const talent_routes: TALENT_ROUTES = {
     viewClient: '/talent/view-client-profile/',
     ContactListing: '/talent/contract/all/',
     SendContract: "/talent/send-contract/",
-    ViewMiles: "/talent/contract/work-details/",
+    ViewMiles: "/talent/contract/work-details/:id",
     TransactionHistry: "/talent/transaction/history/",
     InvitationJobView: "/talent/job-post/:id/"
 

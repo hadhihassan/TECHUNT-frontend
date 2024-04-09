@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
-import { getTransationHistory, getWalletAmount } from "../../../services/commonApiService";
+import { getTransationHistory } from "../../../services/commonApiService";
 import { formatMongoDate } from "../../../util/timeFormating";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
@@ -22,24 +22,14 @@ interface HistoryPropos {
 const TransactionsPage: React.FC = () => {
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     const [histories, setHistories] = useState<HistoryPropos[]>([])
-    const [walletAmount, setWalletAmount] = useState<number>(0)
-
     useEffect(() => {
         getTransationHistory(userData?.role)
             .then((res: AxiosResponse) => {
                 setHistories(res?.data?.data || 0)
+                console.log(res?.data?.data)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
-        if (userData.role === "TALENT") {
-            // getWalletAmount(userData?.role)
-            //     .then((res: AxiosResponse) => {
-            //         setWalletAmount(res?.data?.data)
-            //     }).catch((err: AxiosError) => {
-            //         console.log(err)
-            //     })
-            console.log(histories)
-        }
     }, [])
     return <>
         <div className="bg-blue-500 absolute -z-10 w-full sm:h-[10vh] md:h-[25vh] xl:h-[50vh] transition-transform duration-150" style={{ backgroundImage: image }}>

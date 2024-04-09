@@ -9,7 +9,6 @@ import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
 import { AxiosResponse } from 'axios';
 import type { ContractDetailsType, MilestoneType, ProposalInteface } from './contractInterface'
-import { remove } from 'lodash';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -73,7 +72,7 @@ const ContractForm: React.FC = () => {
     const validateText = (_: any, value: string) => {
         const trimmedValue = value.trim(); // Trim the input
         if (!trimmedValue) {
-            return Promise.reject('Input is required');
+            return Promise.reject('This field is required! Please enter ');
         }
         return Promise.resolve();
     };
@@ -96,6 +95,7 @@ const ContractForm: React.FC = () => {
                 message.error('Form submission failed. Please check the form for errors.');
             });
     };
+
     return (
         <>
             <div className='container m-auto flex flex-col justify-center rounded-lg items-center font-sans text-gray-700 font-semibold  '>
@@ -123,11 +123,11 @@ const ContractForm: React.FC = () => {
                             label="Terms"
                             name={"terms"}
                             rules={[
-                                { required: true, message: 'Please enter terms!' },
-                                { type: 'string' },
+                                { required: true, message: 'Terms is required' },
                                 { validator: validateText },
-                                { min: 200 },
-                                { max: 500 }
+                                { type: 'string' },
+                                { min: 200, message: 'Terms minimum more than 200 letters!' },
+                                { max: 500, message: 'Terms minimum less than 500 letters!' }
                             ]}
                         >
                             <ReactQuill
@@ -151,6 +151,26 @@ const ContractForm: React.FC = () => {
                             name={"duration"}
                             rules={[
                                 { required: true, message: 'Please select duration.' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || value.length !== 2) {
+                                            return Promise.reject(new Error('Please select a valid date range.'));
+                                        }
+
+                                        const [startDate, endDate] = value;
+                                        const currentDate = moment();
+
+                                        if (startDate.isBefore(currentDate)) {
+                                            return Promise.reject(new Error('Start date should be after current date.'));
+                                        }
+
+                                        if (startDate.isSame(endDate)) {
+                                            return Promise.reject(new Error('Start and end dates cannot be the same.'));
+                                        }
+
+                                        return Promise.resolve();
+                                    },
+                                }),
                             ]}
                         >
                             <RangePicker
@@ -161,8 +181,9 @@ const ContractForm: React.FC = () => {
                             name={"amount"}
                             rules={[
                                 { required: true, message: 'Please enter amount!' },
-                                { validator: validateAmount }
+                                { type: 'number', min: 0, message: 'Please enter a valid positive amount!' },
                             ]}
+
                         >
                             <InputNumber
                                 defaultValue={contractDetails?.amount}
@@ -171,9 +192,11 @@ const ContractForm: React.FC = () => {
                         <Form.Item
                             label="Notes"
                             name={"notes"}
-                            rules={[{ required: true, message: 'Please enter notes!' },
+                            rules={[{ required: true, message: '' },
                             { validator: validateText },
-                            { type: 'string' }]}
+                            { type: 'string' },
+                            { max: 500, message: 'Notes minimum less than 500 letters!' }
+                            ]}
                         >
                             <TextArea
                                 rows={4}
@@ -183,7 +206,12 @@ const ContractForm: React.FC = () => {
                         <Form.Item
                             name={"paymentTerms"}
                             label="Payment terms"
-                            rules={[{ required: true, message: 'Please enter payment terms!' }, { validator: validateText }, { type: 'string' }]}
+                            rules={[{ required: true, message: '' },
+                            { validator: validateText },
+                            { type: 'string' },
+                            { max: 500, message: 'Payment terms  minimum less than 500 letters!' }
+
+                            ]}
                         >
                             <TextArea defaultValue={contractDetails.paymentTerms} rows={4} className='border border-gray-500' />
                         </Form.Item>
@@ -212,7 +240,7 @@ const ContractForm: React.FC = () => {
                                             {
                                                 validator: (_, value) => {
                                                     const startingDate = moment(value);
-                                                    if (!startingDate.isValid()) {
+                                                    if (!value.isBefore(startingDate)) {
                                                         return Promise.reject('Invalid date');
                                                     }
                                                     return Promise.resolve();
@@ -243,7 +271,10 @@ const ContractForm: React.FC = () => {
                                     </Form.Item>
                                     <Form.Item
                                         className='w-[100%]'
-                                        rules={[{ required: true, message: 'Missing amount' }]}
+                                        rules={[
+                                            { required: true, message: 'Please enter amount!' },
+                                            { type: 'number', min: 0, message: 'Please enter a valid positive amount!' },
+                                        ]}
                                         style={{ marginRight: 1, marginBottom: 0 }}
                                     >
                                         <Input placeholder="Amount" defaultValue={proposal?.jobId?.Amount} onChange={(e) => handleChange('amount', e.target.value, 0)} />
@@ -260,7 +291,7 @@ const ContractForm: React.FC = () => {
                                                         className='w-[100%]'
                                                         {...restField}
                                                         name={[name, 'name']}
-                                                        rules={[{ required: true, message: 'Missing name' }, { min: 5 }]}
+                                                        rules={[{ required: true, message: 'Missing name' }, { validator: validateText }, { type: "string" }, { min: 5, message: "Name must be more than 5 letters" }, { max: 20, message: "Name must be less than 20 letters" }]}
                                                         style={{ marginRight: 1, marginBottom: 0 }}
                                                     >
                                                         <Input placeholder="name" onChange={(e) => handleChange('name', e.target.value, index)} />
@@ -269,7 +300,7 @@ const ContractForm: React.FC = () => {
                                                         className='w-[100%]'
                                                         {...restField}
                                                         name={[name, 'description']}
-                                                        rules={[{ required: true, message: 'Missing Description' }, { min: 50 }]}
+                                                        rules={[{ required: true, message: 'Please enter description' }, { validator: validateText }, { type: "string" }, { min: 5, message: "Description must be more than 5 letters" }, { max: 100, message: "Descipriot must be less than 100 letters" }]}
                                                         style={{ marginRight: 1, marginBottom: 0 }}
                                                     >
                                                         <Input placeholder="Description" onChange={(e) => handleChange('description', e.target.value, index)} />
@@ -282,9 +313,10 @@ const ContractForm: React.FC = () => {
                                                             { required: true, message: 'Missing starting date' },
                                                             {
                                                                 validator: (_, value) => {
-                                                                    const startingDate = moment(value);
-                                                                    if (!startingDate.isValid()) {
-                                                                        return Promise.reject('Invalid date');
+
+                                                                    const startingDate = moment(contractDetails.duration[0]);
+                                                                    if (value.isBefore(startingDate)) {
+                                                                        return Promise.reject('Starting date must be valid !');
                                                                     }
                                                                     return Promise.resolve();
                                                                 },
@@ -300,11 +332,16 @@ const ContractForm: React.FC = () => {
                                                         name={[name, 'dueDate']}
                                                         rules={[
                                                             { required: true, message: 'Missing due date' },
-                                                            () => ({
-                                                                validator(_, value) {
-                                                                    const dueDate = moment(value);
-                                                                    if (!dueDate.isValid()) {
-                                                                        return Promise.reject('Invalid date');
+                                                            ({ getFieldValue }) => ({
+                                                                validator: (_, value) => {
+                                                                    const EndingDate = moment(contractDetails.duration[1]);
+                                                                    const startingDate = getFieldValue([name, 'startingDate'])
+                                                                    const startingMoment = moment(startingDate);
+                                                                    if (value.isBefore(EndingDate)) {
+                                                                        return Promise.reject('Due Date must be before the duration of due date!');
+                                                                    }
+                                                                    if (value.isBefore(startingMoment)) {
+                                                                        return Promise.reject('Due date must be after the starting date!');
                                                                     }
                                                                     return Promise.resolve();
                                                                 },
@@ -318,7 +355,12 @@ const ContractForm: React.FC = () => {
                                                         className='w-[100%]'
                                                         {...restField}
                                                         name={[name, 'amount']}
-                                                        rules={[{ required: true, message: 'Missing amount' }]}
+                                                        rules={[
+                                                            { required: true, message: 'Please enter amount!' },
+                                                            { type: 'string', message: 'Please enter a valid number for the amount!' },
+                                                            { validator: (_, value) => value >= 0 ? Promise.resolve() : Promise.reject('Please enter a valid positive amount!') }
+                                                        ]}
+                                                        
                                                         style={{ marginRight: 1, marginBottom: 0 }}
                                                     >
                                                         <Input placeholder="Amount" onChange={(e) => handleChange('amount', e.target.value, index)} />
@@ -341,7 +383,7 @@ const ContractForm: React.FC = () => {
                         </Form.Item>
                     </Form>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

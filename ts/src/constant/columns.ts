@@ -12,6 +12,6 @@ export interface JOB_CATEGORY_FORM_DATA {
 export const IMG_URL = "http://localhost:3000/images/"
 export const BASE_URL = "http://localhost:3000"
 export const TABLE_HEAD = ["No", "Title", "Amount", "Date", "Recived / Payed"];
-export const INDIAN_RUPEE = "&#x20B9;";
+export const INDIAN_RUPEE = "₹";
 
 

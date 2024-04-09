@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
-import type {  ProposalInterface } from '../interface/interfaces';
+import type { ProposalInterface } from '../interface/interfaces';
 import { ObjectId } from 'mongoose';
 
 
@@ -80,6 +80,9 @@ export async function submitEditWork(id: string, data: { url: string, descriptio
 export async function saveResume(s3Link: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/profile/resume-save/`, { s3Link })
 }
-export async function searchJob(searchData:{query:string,postType:string, experiance:string, maxInputValue:number, inputValue:number}) {
-    return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`,{searchData})
+export async function searchJob(searchData: { query: string, postType: string, experiance: string, maxInputValue: number, inputValue: number }) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`, { searchData })
+}
+export async function saveEducation(data) {
+    return await axiosInstance.post(`${BASE_URL}TALENT/profile/save-education/`, { data })
 }

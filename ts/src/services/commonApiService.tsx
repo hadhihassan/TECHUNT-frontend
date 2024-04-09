@@ -93,3 +93,6 @@ export async function setNewPassword(password: string, email: string) {
 export async function setUserOfflineInConversation() {
     return await axiosInstance.patch(`${BASE_URL}message/set-user-is-offline/`)
 }
+export async function getContract(role: string, id: string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/contract/get-contract/${id}/`)
+}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { getAllPlans, purchasePlan } from "../../../services/commonApiService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
-import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
+import { INITIALSTATE, isPremimunUser } from "../../../redux/Slice/signupSlice";
 import { AxiosResponse } from "axios";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
@@ -22,12 +22,12 @@ const PlanPage = () => {
     const [selected, setSelected] = useState<number>(0)
     const { subscriptionPayment, loading } = useStripePayment()
     const useData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
+    const dispatch = useDispatch()
     useEffect(() => {
         getAllPlans(useData.role)
             .then((res: AxiosResponse) => {
                 setPlan(res?.data?.data)
             })
-
     }, [])
 
     function closeModal() {
@@ -39,6 +39,7 @@ const PlanPage = () => {
     }
     const handlePurchase = async () => {
         await purchasePlan(useData?.role, plan[selected]._id)
+        dispatch(isPremimunUser(true))
         await subscriptionPayment(useData?.role, plan[selected]?._id, plan[selected]?.amount);
     }
     return <>

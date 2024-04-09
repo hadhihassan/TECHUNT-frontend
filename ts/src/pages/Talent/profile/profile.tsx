@@ -12,7 +12,8 @@ import ProfileReviews from "../../../components/General/profile/profileReviews";
 import { AxiosError } from "axios"
 import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
 import EducationForm from "../../../components/General/profile/profileEducations";
-
+import Educations from "./education";
+import type { EducationType } from '../profile/education'
 export interface UserProfile {
     Last_name: string;
     First_name: string;
@@ -44,20 +45,26 @@ export interface UserProfile {
         _id: string
     },
     createdAt?: string
-    resume?: string
+    resume?: string,
+    educations?: EducationType[]
 }
 
 const Profile = () => {
     const [datas, setData] = useState<UserProfile>()
+    const [OpenEducation, setDeducations] = useState<boolean>(false)
     const { role }: { role: string } = useContext(MyContext) || { role: "" };
     const getUserProfile = () => {
         getUserProfileDetails(role)
             .then((res) => {
                 setData(res?.data?.data)
-            }).catch((err: AxiosError) => {
+                console.log(res?.data?.data.educations)
+            }).catch((err:  AxiosError) => {
                 console.log(err)
             })
     }
+    const toggleActive = () => {
+        setDeducations(prevIsActive => !prevIsActive);
+    };
     useEffect(() => {
         if (role) {
             getUserProfile();
@@ -68,7 +75,7 @@ const Profile = () => {
     return (<>
         <div>
             <AfterLoginHeader />
-            <div className="bg-blue-700 absolute -z-10 w-full h-[50vh] ">
+            <div className="bg-gradient-to-r from-blue-300 to-blue-500 absolute -z-10 w-full h-[50vh] ">
             </div>
             <div className="flex  container justify-center mt-10 gap-10 mb-5 ">
                 <div className="grid grid-col-12 gap-10">
@@ -76,13 +83,19 @@ const Profile = () => {
                         <ProfileTalentDetailsFirst datas={datas} onUpdate={getUserProfile} />
                     </div>
                     <div className="flex items-center  flex-row justify-center">
-                        
-                        <EducationForm />
-                        <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
-                            <p className="text-lg">Which university or school did you attend</p>
-                            <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
-                            <button className="p-2 mt-2 text-sm rounded-xl  border border-red-500">Add education</button>
-                        </div>
+                        {
+                            OpenEducation && <EducationForm />
+                        }
+                        {
+                            datas?.educations.length || 0 ? <Educations data={datas?.educations} onUpdate={getUserProfile} addState={toggleActive} /> : <>
+                                <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
+                                    <p className="text-lg">Which university or school did you attend</p>
+                                    <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
+                                    <button className="p-2 mt-2 text-sm rounded-xl  border border-red-500" onClick={() => setDeducations(!OpenEducation)}>Add education</button>
+                                </div>
+                            </>
+                        }
+
                     </div>
 
                     <div className={`flex items-center  flex-row justify-center `}>

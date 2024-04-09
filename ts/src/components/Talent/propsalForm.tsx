@@ -156,8 +156,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                 rules={[
                                     { required: true, message: 'Please enter the title' },
                                     { type: 'string', message: "Title must be letters" },
-                                    { min: 4, message: "Minium 4 letters required" },
-                                    { max: 50, message: "Maximum 50 letters allowed" },
+                                    { min: 5, message: "Minium 5 letters required" },
+                                    { max: 100, message: "Maximum 100 letters allowed" },
                                 ]}
                             >
                                 <Input
@@ -181,8 +181,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                         min: 50,
                                         message: "Minimum 50 charactors is required"
                                     }, {
-                                        max: 200,
-                                        message: "Maximum 200 charactors is allowed"
+                                        max: 500,
+                                        message: "Maximum 500 charactors is allowed"
                                     }, {
                                         type: 'string',
                                         message: "Cover letter must be letters"
@@ -238,10 +238,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                             <Form.Item
                                 name="rate"
                                 label="Additional Rate"
-                                rules={[{
-                                    validator: (rule, value, callback) => validatePositiveNumber(rule, value, callback),
-                                    message: 'Please enter a positive number.'
-                                }]}
                             >
                                 <Input
                                     name="rate"

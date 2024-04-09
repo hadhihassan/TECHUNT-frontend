@@ -140,9 +140,9 @@ const AfterLoginHeader = () => {
                     <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
                     <span className="mr-[1px] mt-1" onClick={()=>navigate(routerVariables.Message)}>Messages</span>
                     <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/contract/all/`)}>My Works</span>
-                    <div className="felx pb-">
+                    <div className="felx pb-" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }}>
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
-                        <NotificationsNoneOutlinedIcon color="primary" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }} />
+                        <NotificationsNoneOutlinedIcon color="primary"  />
                     </div>
                     <IconButton ref={anchorRef} onClick={handleToggle}>
                         <Avatar src={IMG} className="border-2 border-red-500" />

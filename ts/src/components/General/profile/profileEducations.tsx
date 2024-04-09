@@ -2,6 +2,9 @@ import React, { Fragment, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { validationSchema } from '../../../schema/profileBasedSchema';
 import { Dialog, Transition } from '@headlessui/react'
+import { saveEducation } from '../../../services/talentApiService';
+import { AxiosResponse } from 'axios';
+import { message } from 'antd';
 
 interface Education {
     institution: string;
@@ -12,15 +15,20 @@ interface Education {
 }
 const EducationForm: React.FC = () => {
 
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const openModal: () => void = () => {
-        setIsOpen(true);
-    };
-
+    const [isOpen, setIsOpen] = useState<boolean>(true);
     const closeModal: () => void = () => {
         setIsOpen(false);
     };
     const handleSubmit = (e: Education) => {
+        saveEducation(e)
+            .then((res: AxiosResponse) => {
+                if (res.data.success) {
+                    return message.success("Education saved.")
+                }
+                message.error("While saving education got an error")
+            }).catch(() => {
+                return message.error("While saving education got an error")
+            })
     };
 
     return (
@@ -59,14 +67,13 @@ const EducationForm: React.FC = () => {
                                                 fieldOfStudy: '',
                                                 startDate: '',
                                                 endDate: '',
-                                                notes: '',
                                             }}
                                             validationSchema={validationSchema}
                                             onSubmit={(values: Education) => handleSubmit(values)}
                                         >
                                             {() => (
                                                 <Form
-                                                    className='w-full'
+                                                    className='w-full  text-sm font-sans font-semibold flex flex-col gap-4'
                                                 >
                                                     <div >
                                                         <label htmlFor="institution">Institution:</label>
@@ -93,7 +100,7 @@ const EducationForm: React.FC = () => {
                                                         <Field type="date" id="endDate" name="endDate" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                                         <ErrorMessage name="endDate" component="div" className="error text-sm text-red-500" />
                                                     </div>
-                                                    <button type="submit">Add Education</button>
+                                                    <button type="submit" className='border-2 border-red-500 rounded-xl p-2 mt-2 font-semibold text-sm' >Add Education</button>
                                                 </Form>
                                             )}
                                         </Formik>

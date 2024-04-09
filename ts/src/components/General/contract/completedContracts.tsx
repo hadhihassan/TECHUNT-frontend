@@ -49,11 +49,10 @@ const CompletedContract: React.FC = () => {
     }
 
     const handleNavigateFullDetail = (index: number) => {
-        localStorage.setItem("contractDetails", JSON.stringify(contract[index]) || "")
         if (role === "CLIENT") {
-            navigate(clientRoutes.ViewMiles)
+            navigate(`${clientRoutes.ViewMiles}${contract[index]._id}`)
         } else {
-            navigate(talent_routes.ViewMiles)
+            navigate(`${talent_routes.ViewMiles}${contract[index]._id}`)
         }
     }
     return <>
@@ -86,7 +85,7 @@ const CompletedContract: React.FC = () => {
                     <br />
                 </>
             )) : <>
-                <EmptyJobs title={"No Completed Contracts"} description={"There are currently no completed contracts."}/>
+                <EmptyJobs title={"No Completed Contracts"} description={"There are currently no completed contracts."} />
             </>
         }
     </>;
