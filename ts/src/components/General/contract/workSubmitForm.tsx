@@ -14,13 +14,11 @@ import { message } from "antd";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { AxiosError, AxiosResponse } from "axios";
-import { ContractDetailsType } from "../../Client/contract/contractInterface";
 
-export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContract: React.Dispatch<React.SetStateAction<ContractDetailsType | null>>, open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
+export function WorkSubmitForm({  open, closeModal, id }: {  open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
 
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
-    const [isEdit, setisEdit] = useState<boolean>(false);
-    const [showBtn, setshowSubmitBtn] = useState<boolean>(false);
+    const [showBtn, setShowSubmitBtn] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [urlError, setUrlError] = useState<string>('');
@@ -29,12 +27,11 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
         const workItem = localStorage.getItem("work")
         const workData = JSON.parse(workItem ? workItem : "{}")
         if (workData) {
-            setshowSubmitBtn(false)
-            setisEdit(true)
+            setShowSubmitBtn(false)
             setUrl(workData.url)
             setDescription(workData.description)
         } else {
-            setshowSubmitBtn(true)
+            setShowSubmitBtn(true)
         }
     }, [open, closeModal, id])
     const handleUrlChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +71,6 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                 console.log(res)
                 if (res.data) {
                     message.success("successfully work submitted")
-                    // setContract(())
                 } else {
                     message.error("Something went wrong ! ")
                 }
@@ -171,7 +167,7 @@ export function WorkSubmitForm({ setContract, open, closeModal, id }: { setContr
                                             Submit{showBtn}
                                         </Button>
                                     </> : <>
-                                        <Button color="red" fullWidth onClick={() => { setshowSubmitBtn(!showBtn) }} placeholder={undefined}>
+                                        <Button color="red" fullWidth onClick={() => { setShowSubmitBtn(!showBtn) }} placeholder={undefined}>
                                             Edit
                                         </Button>
                                     </>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Avatar from "react-avatar";
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
@@ -17,7 +18,6 @@ const ProfileTitle: React.FC = () => {
     useEffect(() => {
         fetchAllJobCategory()
             .then((res: any) => {
-                console.log(res)
                 setTitles(res?.data?.data?.data)
             })
     }, [])
@@ -39,7 +39,7 @@ const ProfileTitle: React.FC = () => {
                 setError("");
             }, 3000);
         } else {
-            let data: {} = {
+            const data: object = {
                 title
             };
             localStorage.setItem("talent_Data", JSON.stringify(data));

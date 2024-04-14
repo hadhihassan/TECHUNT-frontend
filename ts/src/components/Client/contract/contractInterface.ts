@@ -1,24 +1,3 @@
-import { string } from "yup";
-
-export interface ContractDetailsType {
-    _id?: string
-    terms: string;
-    work: string | {
-        WorkType:string,
-        Title:string
-    }; 
-    duration: Date | null[];
-    amount: number;
-    notes: string;
-    paymentTerms: string;
-    talent: string | { _id: string },
-    client: string,
-    approval?: boolean,
-    status?: string
-    completed?: "Pending" | "Progress" | "Completed",
-    milestones: MilestoneType[]
-    createdAt?: string | Date
-}
 export interface MilestoneType {
     payed?: boolean;
     work: string;
@@ -31,6 +10,26 @@ export interface MilestoneType {
     dueDate: string;
     name: string,
     amount: number
+    createdAt?:Date
+}
+export interface ContractDetailsType {
+    _id?: string
+    terms: string;
+    work: string | {
+        WorkType:string,
+        Title:string
+    }; 
+    duration: Date[] | null[];
+    amount: number;
+    notes: string;
+    paymentTerms: string;
+    talent: string | { _id: string },
+    client: string| object, 
+    approval?: boolean,
+    status?: string
+    completed?: "Pending" | "Progress" | "Completed",
+    milestones?: MilestoneType[] | object[]
+    createdAt?: string | Date
 }
 export interface ProposalInteface {
     title: string;

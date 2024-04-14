@@ -17,7 +17,7 @@ import { List, Skeleton } from 'antd';
 import EmptyJobs from '../../../components/General/emptyData/emptyJobs';
 
 const optionsWithDisabled = [
-    { label: 'Experianced', value: 'Experianced' },
+    { label: 'Experienced', value: 'Experienced' },
     { label: 'Medium', value: 'Medium' },
     { label: 'Fresher', value: 'Fresher', },
 ];
@@ -29,15 +29,13 @@ const optionsWithDisabled1 = [
 
 const Search = () => {
 
-    // const [posts, setPost] = useState<JobInterface[]>([])
     const [actualPosts, setActualPost] = useState<JobInterface[]>([])
-
     const [loading, setLoading] = useState<boolean>(false)
     let value3: string = ""
     let value4: string = ""
     const [query, setQuery] = useState<string>("")
     const [postType, setPostType] = useState<string>("")
-    const [experiance, setExperianceLevel] = useState<string>("")
+    const [experience, setExperienceLevel] = useState<string>("")
     const [maxInputValue, setMaxInputValue] = useState<number>(0);
     const [inputValue, setInputValue] = useState<number>(0);
     const [max, setMax] = useState<number>(2000);
@@ -72,7 +70,7 @@ const Search = () => {
 
     const onChange3 = ({ target: { value } }: RadioChangeEvent) => {
         value3 = value
-        setExperianceLevel(value)
+        setExperienceLevel(value)
         search()
 
     };
@@ -89,7 +87,7 @@ const Search = () => {
         search()
     }
     const search = () => {
-        searchJob({ query, postType, experiance, maxInputValue, inputValue })
+        searchJob({ query, postType, experience: experience, maxInputValue, inputValue })
             .then((res) => {
                 if (res.data) {
                     setActualPost(res.data.data)
@@ -104,7 +102,7 @@ const Search = () => {
     const itemsPerPage: number = 5;
     const indexOfLastPost: number = currentPage * itemsPerPage;
     const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
-    const currentCients = actualPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const currentClient = actualPosts.slice(indexOfFirstPost, indexOfLastPost);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (
         <>
@@ -115,7 +113,7 @@ const Search = () => {
                 onSubmit={async (e) => {
                     setLoading(true)
                     e.preventDefault()
-                    searchJob({ query, postType, experiance, maxInputValue, inputValue })
+                    searchJob({ query, postType, experience: experience, maxInputValue, inputValue })
                         .then((res) => {
                             if (res.data) {
                                 setActualPost(res.data.data)
@@ -164,7 +162,7 @@ const Search = () => {
                             </div>
                             <div className='text-black '>
                                 <p className='m-3'>
-                                    Experiance Level
+                                    Experience Level
                                 </p>
                                 <Radio.Group
                                     className='m-3'
@@ -250,8 +248,8 @@ const Search = () => {
                                     )}
                                 />
                             ) : (
-                                currentCients.length ? (
-                                    currentCients.map((post: JobInterface, index: number) => (
+                                currentClient.length ? (
+                                    currentClient.map((post: JobInterface, index: number) => (
                                         <div className='m-5 text-black border-b ' key={index} onClick={() => {
                                             localStorage.setItem("deatildView", JSON.stringify(post))
                                             navigate(talent_routes.JobViewPage)

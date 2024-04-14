@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { ContractDetailsType, MilestoneType } from '../../Client/contract/contractInterface'
+import type {  MilestoneType } from '../../Client/contract/contractInterface'
 import { useEffect, useState } from 'react';
 import { formatMongoDate, } from '../../../util/timeFormating';
 import { useSelector } from 'react-redux';
@@ -18,18 +18,37 @@ import { addWalletAmount, sendMilestoneApproval } from '../../../services/client
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getContract, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
-import { useParams } from 'react-router-dom';
-
+import { useParams, useNavigate } from 'react-router-dom';
+interface ContractDetailsType {
+    _id?: string
+    terms: string;
+    work: {
+        WorkType:string,
+        Title:string
+    }; 
+    duration: Date[] | null[];
+    amount: number;
+    notes: string;
+    paymentTerms: string;
+    talent:  { _id: string },
+    client: string| object, 
+    approval?: boolean,
+    status?: string
+    completed?: "Pending" | "Progress" | "Completed",
+    milestones: MilestoneType[] 
+    createdAt?: string | Date
+}
 
 
 const Milestone = () => {
-    const { paymentToTalent, loading, error } = useStripePayment()
-    const [statusKey, setStausKey] = useState<number | undefined>()
+    const { paymentToTalent, loading } = useStripePayment()
+    const [statusKey, setStatusKey] = useState<number | undefined>()
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
     const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
     const [selectMilestone, setSelected] = useState<number>(0)
+    // const [reviewOpen, setReviewOpen] = useState<boolean>(false)
     const { id } = useParams();
-
+    const navigate = useNavigate()
     const fetch = () => {
         getContract(role, id?.slice(3) || "")
             .then((res: AxiosResponse) => {
@@ -40,19 +59,17 @@ const Milestone = () => {
         fetch()
         const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
         if (completedMilestones.length as number === contract?.milestones?.length) {
-            contractStatusUpdate(contractData?._id || "", "completed", role)
+            contractStatusUpdate(contract?._id || "", "completed", role)
         }
         return () => {
             localStorage.removeItem("payedMilestone")
         }
     }, [])
-
     const [isOpen, setIsOpen] = useState(false)
     const [formOpen, setFormOpen] = useState(false)
+    // const closeRatingModal = () => setReviewOpen(!reviewOpen)
     const openModal = () => setIsOpen(true)
     const closeModal = () => setIsOpen(false)
-
-
     // client side for sending the spesific milestone 
     const handleSendApproval = (index: number) => {
         const id: string = contract?.milestones[index]?._id || ""
@@ -90,14 +107,14 @@ const Milestone = () => {
     const handleMenuClick = (e: { key: number }) => {
         fetch()
         setConfirm(!confirm)
-        setStausKey(e?.key)
+        setStatusKey(e?.key)
     };
     const payment = async (index: number): Promise<void> => {
         const milestone = contract?.milestones[index];
         localStorage.setItem("payedMilestone", JSON.stringify(milestone));
         try {
-            await addWalletAmount(contract?.talent?._id, milestone?.amount as number, milestone?._id as unknown as boolean);
-            await paymentToTalent(contract?.talent?._id , milestone?.amount as number);
+            await addWalletAmount(contract?.talent?._id as string || "", milestone?.amount as number, milestone?._id as unknown as boolean);
+            await paymentToTalent(contract?.talent?._id as string || "", milestone?.amount as number);
         } catch (error) {
             console.error("Payment error:", error);
         }
@@ -114,8 +131,6 @@ const Milestone = () => {
             label: 'Update to completed',
             key: '4',
             icon: <CheckCircleIcon />,
-            danger: true,
-            // disabled: true,
         },
     ];
     const menuProps = {
@@ -150,7 +165,7 @@ const Milestone = () => {
                 localStorage.setItem("work", JSON.stringify(res.data.data) || "")
                 setFormOpen(!formOpen)
             }).catch(() => message.error("Something went wrong !. try again later ."))
-            fetch()
+        fetch()
     }
     const modalElement = (
         <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  p-6 text-left align-middle shadow-xl transition-all">
@@ -167,7 +182,7 @@ const Milestone = () => {
                             <PendingActions color='primary' />
                         </span>
                         <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Pending {contract?.milestones[selectMilestone].completed === "Pending" && <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Latest</span>}</h3>
-                        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Updated on {formatMongoDate(contract?.milestones[selectMilestone]?.createdAt as Date || "")}</time>
+                        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Updated on {formatMongoDate(contract?.milestones[selectMilestone]?.createdAt as unknown as Date || "")}</time>
                         <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Your project is currently in the pending stage. </p>
                     </li>
                     {
@@ -197,13 +212,12 @@ const Milestone = () => {
                             </li>
                         </>
                     }
-
                 </ol>
             </div>
             <div className="mt-4">
                 {
                     role === "TALENT" && contract?.milestones[selectMilestone].completed !== "Completed" && <>
-                        <Dropdown.Button menu={menuProps} danger>
+                        <Dropdown.Button menu={menuProps as unknown as MenuProps} danger >
                             Update
                         </Dropdown.Button>
                     </>
@@ -249,12 +263,10 @@ const Milestone = () => {
                 message.error("An error occurred while cancelling the contract.");
             });
     };
-
     return <>
         {/* <div className="bg-blue-600 absolute -z-10 w-full h-[50vh] " >
         </div> */}
         <WorkSubmitForm
-            setContract={setContract}
             open={formOpen}
             closeModal={() => {
                 setFormOpen(false)
@@ -277,7 +289,7 @@ const Milestone = () => {
                 <div className="h-auto w-[75%] border">
                     {/* s */}
                     <div className="w-full h-auto border ">
-                        <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex "> contract for {contract?.work?.Title || ""}<button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">{contract?.work?.WorkType || ""}</button></div>
+                        <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex "> contract for {contract?.work?.Title as string || ""}<button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">{contract?.work?.WorkType || ""}</button></div>
                         {
                             contract?.status === "completed" && <>
                                 <button className="bg-red-100 text-red-500 border-red-100 w-auto h-auto rounded-xl text-center px-2 border ml-2">
@@ -292,7 +304,6 @@ const Milestone = () => {
                                 </button>
                             </>
                         }
-
                         <p className="mt-2 m-2  text-slate-500 flex ">Total milestone (<p className="text-red-500 font-semibold font-sans">{contract?.milestones?.length}</p>)</p>
                     </div>
                     {/* for milestone */}
@@ -306,17 +317,12 @@ const Milestone = () => {
                                             <div className="md:flex flex-start">
                                                 <div className="bg-white w-6 h-6 flex items-center justify-center rounded-full -ml-3.5">
                                                     {
-
                                                         milestone.completed === "Pending" ? <PendingActions color='primary' /> : milestone.completed === "Progress" ? <EventRepeatIcon color="warning" /> : <CheckCircleIcon color="success" />
                                                     }
                                                 </div>
-
                                                 <div className="block p-6 rounded-lg shadow-lg bg-gray-100 max-w-md ml-6 mb-10">
-
                                                     <div className="flex justify-between mb-4">
-
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{milestone?.name}</p>
-
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate as unknown as Date)}</p>
                                                         {
                                                             milestone.work && <>
@@ -377,7 +383,6 @@ const Milestone = () => {
                                                                             </button>
                                                                         </>
                                                                     }
-
                                                                     <Modal isOpen={isOpen} closeModal={closeModal} content={modalElement} />
                                                                 </>
                                                             ) : (
@@ -405,7 +410,6 @@ const Milestone = () => {
                                                                         Send approval
                                                                     </button>
                                                                 </Popconfirm>
-
                                                             </>
                                                         }
                                                     </div>
@@ -426,16 +430,15 @@ const Milestone = () => {
                                 onClick={handleEndContract}
                                 className=" bg-red-500 font-sans text-white rounded-xl py-1">End contract </button>
                         }
-                        <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1">Message </button>
+                        <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1" onClick={()=>navigate("/message")}>Message </button>
+                        {/* <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                            <p>
+                                Thank you for your recent interaction! Would you like to share your experience by leaving a review rating?
+                            </p>
+                            <button className=" bg-red-500 px-5 py-1 rounded-xl text-white" onClick={closeRatingModal}>Rate</button>
+                        </div>
+                        <ReviewForm closeModal={closeRatingModal} openReview={reviewOpen}/> */}
                     </div>
-                    {/* <div className="container mt-4 flex  flex-col ">
-                        <p className="flex text-xs m-1 text-black font-sans ">Details for this work : <p className="ml-1 hover:underline  text-red-500 font-bold font-sans ">click me</p> </p>
-                        <p className="flex text-xs m-1 text-black font-sans ">Details for contract : <p className="ml-1  hover:underline text-red-500 font-bold font-sans ">click me</p> </p>
-                    </div>
-                    <div className="container mt-4 flex  flex-col ">
-                        <p className="text-xs m-1 text-black font-sans ">Next milestone due date : 01/02/2023 </p>
-                        <p className="text-xs m-1 text-black font-sans ">Next milestone amount : 30000 </p>
-                    </div> */}
                 </div>
             </div>
         </div>

@@ -2,19 +2,13 @@ import { Dialog, Transition } from '@headlessui/react'
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { getPlanForEdit, updatePlan } from '../../../services/adminApiService'
 import { message } from 'antd'
-
+import type { PlanInterface } from './createPlanForm'
 interface FormProps {
     isOpen: boolean,
     closeModal: () => void,
     data: string
 }
-export interface PlanInterface {
-    _id: string,
-    name: string,
-    description: string,
-    type: string,
-    amount: number,
-}
+
 const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
     const [planData, setPlanData] = useState<PlanInterface>({
         _id: "",
@@ -30,7 +24,6 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
                 setPlanData(res?.data?.data)
             })
     }
-
 
     const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -135,7 +128,6 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data }) => {
                                                                 <option value="Monthly" selected={planData?.type === "Monthly"}>Monthly</option>
                                                                 <option value="Yearly" selected={planData?.type === "Yearly"}>Yearly</option>
                                                             </select>
-
                                                         </div>
                                                     </div>
                                                     <button

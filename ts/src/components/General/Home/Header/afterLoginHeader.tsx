@@ -35,7 +35,7 @@ const AfterLoginHeader = () => {
     const sender_id = useSelector((state: ROOTSTORE) => state.signup.id)
     const [IMG, setIMG] = useState<string>("")
     const [openNotificationDrawer, setopenNotificationDrawer] = useState<boolean>(false)
-    const basicdata = useContext(MyContext) || ""
+    const basicData: { role: string, fn: () => void } | undefined = useContext(MyContext) || undefined
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [proposals, setProposals] = useState<ProposalInterface[]>([]);
     useEffect(() => {
@@ -69,7 +69,7 @@ const AfterLoginHeader = () => {
                 const openNotification = (placement: NotificationPlacement) => {
                     api.info({
                         message: `${notify?.user?.First_name} is posted new work post `,
-                        description: <Context.Consumer>{({ name }) => ` Work is ${notify?.formData?.Title}!`}</Context.Consumer>,
+                        description: <Context.Consumer>{() => ` Work is ${notify?.formData?.Title}!`}</Context.Consumer>,
                         placement,
                     });
                 };
@@ -82,7 +82,8 @@ const AfterLoginHeader = () => {
         };
     }, []);
     const [open, setOpen] = useState(false);
-    const anchorRef = React.useRef(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const anchorRef:any = React.useRef(null);
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -95,7 +96,7 @@ const AfterLoginHeader = () => {
     const handleLogout = () => {
         localStorage.removeItem('token')
         persistor.purge();
-        basicdata?.fn()
+        basicData?.fn()
         dispatch(cleanAllData())
         socket.emit("OfflineUser", { role: role, id: sender_id });
         navigate("/")
@@ -138,11 +139,11 @@ const AfterLoginHeader = () => {
                         </>
                     }
                     <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
-                    <span className="mr-[1px] mt-1" onClick={()=>navigate(routerVariables.Message)}>Messages</span>
-                    <span className="mr-[1px] mt-1" onClick={()=>navigate(`/${userData.role}/contract/all/`)}>My Works</span>
+                    <span className="mr-[1px] mt-1" onClick={() => navigate(routerVariables.Message)}>Messages</span>
+                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/contract/all/`)}>My Works</span>
                     <div className="felx pb-" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }}>
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
-                        <NotificationsNoneOutlinedIcon color="primary"  />
+                        <NotificationsNoneOutlinedIcon color="primary" />
                     </div>
                     <IconButton ref={anchorRef} onClick={handleToggle}>
                         <Avatar src={IMG} className="border-2 border-red-500" />
@@ -156,7 +157,7 @@ const AfterLoginHeader = () => {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow">
-                                            <MenuItem onClick={() => navigate(`/${basicdata?.role}/profile/`)}>
+                                            <MenuItem onClick={() => navigate(`/${basicData?.role}/profile/`)}>
                                                 <Person sx={{ mr: 1 }} /> Profile
                                             </MenuItem>
                                             <MenuItem onClick={handleLogout}><Logout sx={{ mr: 1 }} /> Logout</MenuItem>

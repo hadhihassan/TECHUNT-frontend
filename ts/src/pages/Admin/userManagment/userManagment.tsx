@@ -30,8 +30,8 @@ const UserManagement: React.FC = () => {
     }, [])
     function getData() {
         getAllUser()
-            .then((res) => {
-                const mappedData = res?.data?.data?.talent.map((item:any) => ({
+            .then((res: any) => {
+                const mappedData = res?.data?.data?.talent.map((item: any) => ({
                     fullData: item,
                     id: item?._id,
                     photo: item?.Profile?.profile_Dp || "N/A",
@@ -43,7 +43,7 @@ const UserManagement: React.FC = () => {
                     action: item?.isBlock,
                     role: "TALENT",
                 }));
-                const mappedData1 = res?.data?.data?.client.map((item:any) => ({
+                const mappedData1 = res?.data?.data?.client.map((item: any) => ({
                     fullData: item,
                     id: item?._id,
                     photo: item?.Profile?.profile_Dp || "N/A",
@@ -153,7 +153,7 @@ const UserManagement: React.FC = () => {
         },
         {
             Header: 'More Deatils',
-            Cell: ({ row }:{row:any}) => (
+            Cell: ({ row }: { row: any }) => (
                 <div>
                     <button className="text-blue-500" onClick={() => {
                         localStorage.setItem("drawerData", JSON.stringify(row.original.fullData));
@@ -219,21 +219,23 @@ const UserManagement: React.FC = () => {
         useSortBy,
         usePagination
     );
-    const { globalFilter, pageIndex }:{globalFilter:any, pageIndex:number} = state;
+    const { globalFilter, pageIndex } = state;
     const openDrawer = () => {
-        const drawerId = JSON.parse(localStorage.getItem("drawerData")) 
-        const id = drawerId?._id
-        getJobPosts(id)
-            .then((res) => {
-                if (res?.data) {
-                    setdrawerjobPost(res?.data.data.data)
-                }
-                const drawerData = drawerId;
-                setDrawerData(drawerData)
-                setOpen(true)
-            }).catch((err) => {
-                console.log(err)
-            })
+        const drawerId = JSON.parse(localStorage.getItem("drawerData"))
+        if (drawerId) {
+            const id = drawerId?._id
+            getJobPosts(id)
+                .then((res:any) => {
+                    if (res?.data) {
+                        setdrawerjobPost(res?.data.data.data)
+                    }
+                    const drawerData = drawerId;
+                    setDrawerData(drawerData)
+                    setOpen(true)
+                }).catch((err) => {
+                    console.log(err)
+                })
+        }
     }
     return (
         <>
@@ -321,18 +323,18 @@ const UserManagement: React.FC = () => {
                         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
                         <div className="inline-block align-bottom  bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                        <div className='flex justify-center mb-5 rounded-full overflow-auto'>
-                                            <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
-                                            <div className='m-2 font-sans text-gray-600 font-semibold'>
-                                                <p >{drawerData?.First_name}</p>
-                                                {
-                                                    drawerData?.Profile.Title && <>
-                                                        <p >{drawerData?.Profile.Title}</p>
-                                                    </>
-                                                }
+                                <div className='flex justify-center mb-5 rounded-full overflow-auto'>
+                                    <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
+                                    <div className='m-2 font-sans text-gray-600 font-semibold'>
+                                        <p >{drawerData?.First_name}</p>
+                                        {
+                                            drawerData?.Profile.Title && <>
+                                                <p >{drawerData?.Profile.Title}</p>
+                                            </>
+                                        }
 
-                                            </div>
-                                        </div>
+                                    </div>
+                                </div>
                                 <div className='overflow-auto '>
                                     <div className='overflow-auto'>
                                         <div className="overflow-auto">

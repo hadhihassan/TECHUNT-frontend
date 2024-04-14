@@ -1,8 +1,8 @@
 import Avatar from "react-avatar";
 import { IconButton } from '@mui/material';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
-import { FlagOutlined } from "@mui/icons-material";
+// import Rating from '@mui/material/Rating';
+// import Stack from '@mui/material/Stack';
+// import { FlagOutlined } from "@mui/icons-material";
 import { useEffect, useState } from 'react';
 import { getAllProposalForClient } from '../../../services/clientApiService';
 import type { ProposalInterface } from '../../../interface/interfaces';
@@ -15,7 +15,7 @@ import { clientRoutes } from "../../../routes/pathVariables";
 import { setConversation } from '../../../redux/Slice/conversationsSlice'
 import { createConversation } from "../../../services/commonApiService";
 
-const ListAllPropposals = () => {
+const ListAllProposals = () => {
     const navigate = useNavigate()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [proposals, setProposals] = useState<ProposalInterface[]>([])
@@ -36,7 +36,7 @@ const ListAllPropposals = () => {
         localStorage.setItem("proposal", JSON.stringify(proposals[index]))
         navigate(clientRoutes.viewProposal)
     }
-    const handleCreateConverstion = (index: number) => {
+    const handleCreateConversion = (index: number) => {
         console.log(proposals[index].talentId)
         setConversation({})
         createConversation(proposals[index]?.talentId as unknown as string)
@@ -49,13 +49,13 @@ const ListAllPropposals = () => {
     const itemsPerPage: number = 10;
     const indexOfLastPost: number = currentPage * itemsPerPage;
     const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
-    const pangatedProposals = proposals.slice(indexOfFirstPost, indexOfLastPost);
+    const paginatedProposals = proposals.slice(indexOfFirstPost, indexOfLastPost);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (<>
         {
-            pangatedProposals?.map((proposla: ProposalInterface, index: number) => (
-                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto" key={index} >
-                    <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button>
+            paginatedProposals?.map((proposla: ProposalInterface, index: number) => (
+                <div className="w-full mt-5 border rounded-xl shadow-xl h-auto p-3" key={index} >
+                    {/* <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button> */}
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
@@ -83,10 +83,10 @@ const ListAllPropposals = () => {
                         </div>
                         <div className='flex flex-col'>
                             <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={() => handleShowProposal(index)} >   Details </button>
-                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={() => handleCreateConverstion(index)}>Message</button>
+                            <button className="border border-red-500 text-red-500 ml-5 font-semibold text-xs px-12 py-1 rounded-full self-center mt-3" onClick={() => handleCreateConversion(index)}>Message</button>
                         </div>
                     </div>
-                    <div className="ml-30 flex mb-5 ml-36 h-auto">
+                    {/* <div className="ml-30 flex mb-5 ml-36 h-auto">
                         <div className="flex">
                             <Stack spacing={1}>
                                 <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
@@ -98,7 +98,7 @@ const ListAllPropposals = () => {
                             <FlagOutlined />
                             <span className="text-gray-500 font-sans font-normal text-sm">{proposla?.talentId?.City}, {proposla?.talentId?.Country}</span>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             ))
         }
@@ -133,4 +133,4 @@ const ListAllPropposals = () => {
         </div>
     </>)
 }
-export default ListAllPropposals;
+export default ListAllProposals;

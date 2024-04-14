@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import ChatSearchBar from '../../../components/General/chat/sideBar/charSearchInput';
-import { SearchProps } from 'antd/es/input';
+// import ChatSearchBar from '../../../components/General/chat/sideBar/charSearchInput';
+// import { SearchProps } from 'antd/es/input';
 import ListConversations from '../../../components/General/chat/sideBar/listConversations';
 import MessageHeader from '../../../components/General/chat/sideBar/messageContainer.tsx/header';
 import SendMessageInput from '../../../components/General/chat/sideBar/messageContainer.tsx/messageInput';
@@ -16,10 +16,11 @@ const Message = () => {
         return () => {
             setUserOfflineInConversation()
             dispatch(cleanChatItems())
+            
         };
     }, [])
 
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+    // const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
     return (
         <React.Fragment>
@@ -32,7 +33,7 @@ const Message = () => {
                             </div>
                         </div>
                         {/* side bar conversation search input */}
-                        <ChatSearchBar onSearch={onSearch} />
+                        {/* <ChatSearchBar onSearch={onSearch} /> */}
                         {/* Conversations listing */}
                         <ListConversations />
                     </div>

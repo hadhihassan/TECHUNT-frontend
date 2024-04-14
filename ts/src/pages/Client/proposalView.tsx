@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Avatar from "react-avatar";
 import image from '../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { updateproposalAsAccept, updateproposalAsDecline } from "../../services/clientApiService";
@@ -7,64 +7,63 @@ import { message } from 'antd';
 import useSocket from "../../hooks/useSocket";
 import { BASE_URL } from "../../config/axios";
 import { Socket } from "socket.io-client";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
-import { QuestionCircleOutlined, CheckCircleTwoTone } from '@ant-design/icons';
-import { Button, Popconfirm } from 'antd';
+import { CheckCircleTwoTone } from '@ant-design/icons';
+import { Popconfirm } from 'antd';
 import type { ProposalInterface } from '../../interface/interfaces'
 
 
 const ProposalClientView = () => {
-    const naviagte = useNavigate()
-    const [view, setView] = useState("")
-    const socket: Socket = useSocket(BASE_URL)
+    const navigate = useNavigate()
+    const socket: Socket | null = useSocket(BASE_URL)
     const [proposalData, setProposalData] = useState<ProposalInterface>([])
     useEffect(() => {
-        const ProposalData1 = JSON.parse(localStorage.getItem("proposal") || "")
-        console.log(ProposalData1, "view proposal")
-        setProposalData(ProposalData1)
+        const proposalItem = localStorage.getItem("proposal");
+        if (proposalItem) {
+            const ProposalData1 = JSON.parse(proposalItem);
+            setProposalData(ProposalData1);
+        }
     }, [])
     const handleAcceptProposal: () => void = () => {
-        lodder()
-        updateproposalAsAccept(proposalData?._id)
+        loader()
+        updateproposalAsAccept(proposalData?._id || "")
             .then((_res: AxiosResponse) => {
                 messageApi.destroy()
                 successMesseg("accepted")
-                socket.emit("sendNotification", {
-                    recipient_id: proposalData.talentId._id,
-                    sender_id: proposalData.Client_id,
-                    content: "Proposal accepted",
-                    type: "proposalAccept",
-                    metaData: proposalData?._id
-                })
+                if (socket) {
+                    socket.emit("sendNotification", {
+                        recipient_id: proposalData.talentId._id,
+                        sender_id: proposalData.Client_id,
+                        content: "Proposal accepted",
+                        type: "proposalAccept",
+                        metaData: proposalData?._id
+                    })
+                }
                 setProposalData(prevState => ({
                     ...prevState,
                     isAccept: true
                 }));
-                setView("accepted")
-            }).catch((err: AxiosError) => {
-                errorMesseg()
-                console.log("this error from update propsal", err)
+            }).catch(() => {
+                errorMessage()
             })
     }
     const handleDeclineProposal: () => void = () => {
-        lodder()
-        updateproposalAsDecline(proposalData?._id)
-            .then((res) => {
-                setView("declined")
+        loader()
+        updateproposalAsDecline(proposalData?._id || "")
+            .then(() => {
                 messageApi.destroy()
                 successMesseg("declined")
                 setProposalData(prevState => ({
                     ...prevState,
                     isAccept: false
                 }));
-            }).catch((err) => {
-                errorMesseg()
-                console.log("this error from update propsal", err)
+            }).catch(() => {
+                errorMessage()
             })
     }
     const [messageApi, contextHolder] = message.useMessage();
-    const lodder = () => {
+    const loader = () => {
         messageApi
             .open({
                 type: 'loading',
@@ -75,10 +74,10 @@ const ProposalClientView = () => {
     const successMesseg = (status: string) => {
         message.success(`Proposal ${status} successfully .`, 4.5)
         setTimeout(() => {
-            naviagte("/client/home/")
+            navigate("/client/home/")
         }, 2000);
     }
-    const errorMesseg = () => message.info('white updating proposal status failed ', 4.5)
+    const errorMessage = () => message.info('white updating proposal status failed ', 4.5)
     return (
         <>
             {contextHolder}
@@ -103,7 +102,7 @@ const ProposalClientView = () => {
                                 )
                             ) : (
                                 <>
-                                    
+
                                     <Popconfirm
                                         onConfirm={handleAcceptProposal}
                                         title="Accept proposal"
@@ -120,7 +119,7 @@ const ProposalClientView = () => {
                                     >
                                         <button className="border font-semibold border-black ml-2 mr-2 text-center font-sans px-5 py-1 rounded-full">Decline</button>
                                     </Popconfirm>
-                                    
+
                                 </>
                             )
                         }
@@ -141,19 +140,19 @@ const ProposalClientView = () => {
                     <div className=" w-auto h-auto m-5">
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Job Title</p>
-                            <p className="pt-3 text-sm font-bold mb-5">Looking for a{proposalData?.jobId?.Title}</p>
+                            <p className="pt-3 text-sm font-bold mb-5">Looking for a {typeof proposalData?.jobId === 'string' ? proposalData.jobId : proposalData?.jobId?.Title}</p>
                         </div>
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Cover letter</p>
                             <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{proposalData?.coverLetter}</p>
                         </div>
                         <div className="border-b-2 border-gray-200">
-                            <p className="font-semibold text-sm pt-5">Additional Informations</p>
+                            <p className="font-semibold text-sm pt-5">Additional Information</p>
                             <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{proposalData?.additionalInfo}</p>
                         </div>
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Availability</p>
-                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{proposalData?.availability}</p>
+                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{proposalData?.availability as string}</p>
                         </div>
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Additional Rate</p>
@@ -164,9 +163,9 @@ const ProposalClientView = () => {
                             <p
                                 className="pt-3 text-sm font-normal text-blue-600 underline mb-5 hover:cursor-pointer"
                                 onClick={() => {
-                                    console.log("open please")
-                                    if (proposalData && proposalData?.attachments && proposalData?.attachments?.length > 0) {
-                                        window.open(proposalData?.attachments, '_blank');
+                                    if (proposalData && proposalData.attachments) {
+                                        const fileURL = URL.createObjectURL(proposalData.attachments);
+                                        window.open(fileURL, '_blank');
                                     }
                                 }}
                             >

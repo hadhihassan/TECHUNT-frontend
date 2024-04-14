@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../../components/General/Home/Header/header";
@@ -10,7 +11,9 @@ import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { get } from "../../../config/axios";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
-const emailVerificationPage = () => {
+
+
+const EmailVerificationPage = () => {
     const [validUrl, setValidUrl] = useState<boolean>(true);
     const param = useParams<{ id: string }>();
     const dispatch = useDispatch()
@@ -19,7 +22,7 @@ const emailVerificationPage = () => {
     const handleClick: () => void = async () => {
         try {
             const url = `http://localhost:3000/${signupData.role}/verify/${param.id}`;
-            const data = await get(url, signupData.role)
+            await get(url, signupData.role)
                 .then((_res) => {
                     console.log(_res)
                     if (_res) {
@@ -31,10 +34,10 @@ const emailVerificationPage = () => {
                             showConfirmButton: false,
                             timer: 2000
                         });
-                        navigate("/profile-create/")
+                        navigate(routerVariables.CREATE_PROFILE_MESSAGE)
                     }
                 })
-        } catch (error:any) {
+        } catch (error: any) {
             console.log(error.message)
             Swal.fire({
                 icon: "error",
@@ -73,4 +76,4 @@ const emailVerificationPage = () => {
 }
 
 
-export default emailVerificationPage;
+export default EmailVerificationPage;

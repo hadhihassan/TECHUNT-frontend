@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
-import { useSelector, useDispatch } from "react-redux";
-import { INITIALSTATE, setRole } from "../../../redux/Slice/signupSlice";
-import { ROOTSTORE } from "../../../redux/store";
-import Avatar from "react-avatar";
+import { useDispatch } from "react-redux";
+import { setRole } from "../../../redux/Slice/signupSlice";
 import { Typerole } from "../../../interface/interfaces"
 import { useNavigate } from "react-router-dom";
 import routerVariables from '../../../routes/pathVariables'
@@ -14,12 +12,6 @@ import routerVariables from '../../../routes/pathVariables'
 const FindTypeUser: React.FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { email }: INITIALSTATE = useSelector(
-        (state: ROOTSTORE) => state.signup
-    );
-    const data: INITIALSTATE = useSelector(
-        (state: ROOTSTORE) => state.signup
-    );
 
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [_UserType, setUserType] = useState<Typerole["type"]>("NOTHING")
@@ -29,13 +21,13 @@ const FindTypeUser: React.FC = () => {
         setSelectedOption(index);
     };
 
-    const handleType = (index: Number) => {
+    const handleType = (index: number) => {
         if (index === 1) {
             setUserType("TALENT")
-            console.log("THIS WILL BE TALENT",_UserType)
+            console.log("THIS WILL BE TALENT", _UserType)
         } else if (index === 0) {
             setUserType("CLIENT")
-            console.log("THIS WILL BE CIENT" ,_UserType)
+            console.log("THIS WILL BE CIENT", _UserType)
         }
     }
 

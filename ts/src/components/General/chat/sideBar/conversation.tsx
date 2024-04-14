@@ -10,10 +10,9 @@ import { ConversationDoc } from '../../../../interface/interfaces'
 const Conversation = ({ conversation, _lastIndex ,index}: { conversation: ConversationDoc, _lastIndex: boolean,index:number }) => {
 
     const conversationState = useSelector((state: ROOTSTORE) => state.conversation)
-    const selectedConversation: boolean = conversationState?.selectedConversations?.participants[0]?._id === conversation.participants[0]?._id
+    const selectedConversation: boolean = conversationState?.selectedConversations?.participants[0]?._id  === conversation.participants[0]?._id
     const dispatch = useDispatch()
-    const { _loading, getMessages } = useGetMessage()
-    console.log(" this i rundeing useGetmesses")
+    const {  getMessages } = useGetMessage()
 
 
     return <>

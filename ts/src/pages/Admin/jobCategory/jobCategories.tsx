@@ -15,7 +15,8 @@ const JobCategories = () => {
     }, [])
     const fetchAllJobCategories = () => {
         getAllJobCategoies()
-            .then((res) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then((res:any) => {
                 setData(res?.data?.data?.data)
             }).catch((err) => {
                 console.log(err)

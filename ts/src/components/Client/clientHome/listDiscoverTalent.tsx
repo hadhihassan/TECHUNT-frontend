@@ -1,7 +1,7 @@
 import Avatar from "react-avatar";
 import { IconButton } from '@mui/material';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+// import Rating from '@mui/material/Rating';
+// import Stack from '@mui/material/Stack';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { fetchAllJobPost, getALlTalent, sendInvitation } from '../../../services/clientApiService';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -54,9 +54,7 @@ const ListDiscoverTalent = () => {
             .then(() => navigate('/message'))
     }
     const handleSendInvitation = () => {
-        console.log(workId, " this is the selected workrid")
-        const findJobPost = works.filter((value) => value?._id === workId)
-        sendInvitation(findJobPost, selectedUserId)
+        sendInvitation(workId , selectedUserId)
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
                     message.success("Invitation sended successfully")
@@ -68,11 +66,11 @@ const ListDiscoverTalent = () => {
     const itemsPerPage: number = 5;
     const indexOfLastPost: number = currentPage * itemsPerPage;
     const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
-    const pagnationTalens = discoverTalent.slice(indexOfFirstPost, indexOfLastPost);
+    const paginatedTalents = discoverTalent.slice(indexOfFirstPost, indexOfLastPost);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (<>
         {
-            pagnationTalens?.map((talent: UserProfile, index: number) => (
+            paginatedTalents?.map((talent: UserProfile, index: number) => (
                 <div className="w-full mt-5 border rounded-xl shadow-xl h-auto mb-5" key={index}>
                     {/* <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button> */}
                     <div className="flex justify-between p-4">
@@ -84,7 +82,7 @@ const ListDiscoverTalent = () => {
                                 <p className="text-md font-bold">{talent?.First_name}{talent?.Last_name}</p>
                                 <p className="text-sm text-gray-500">{talent?.Profile.Title}</p>
                                 <div className="mt-2">
-                                    <p className="text-sm text-gray-500">Total earnings <b>$0k</b> on {talent?.Profile.Title}</p>
+                                    {/* <p className="text-sm text-gray-500">Total earnings <b>$0k</b> on {talent?.Profile.Title}</p> */}
                                     <div className="flex mt-2">
                                         {talent?.Profile?.Skills.slice(0, showAllSkills ? talent?.Profile?.Skills?.length : MAX_SKILLS_DISPLAY).map((value: string, index: number) => (
                                             <p key={index} className="bg-slate-100 font-sans px-3 rounded-full text-sm border mr-2">
@@ -105,7 +103,7 @@ const ListDiscoverTalent = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col mt-10">
+                        <div className="flex flex-col mt-1">
                             <button className=" mb-2 border border-red-500 text-red-500 ml-5 font-semibold text-xs px-14 py-2 rounded-full self-center" onClick={() => {
                                 closeModal()
                                 setSelectedUserId(talent._id)
@@ -116,17 +114,17 @@ const ListDiscoverTalent = () => {
                         </div>
                     </div>
                     <div className="ml-30 flex ml-36 mb-4">
-                        <div className="flex">
+                        {/* <div className="flex">
                             <Stack spacing={1}>
                                 <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} />
                             </Stack>
                             <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                        </div>
-                        <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div>
-                        <div>
-                            {/* <FlagOutlined /> */}
+                        </div> */}
+                        {/* <div className="border-r border-solid  border-gray-500 h-5 ml-2 mr-2 "></div> */}
+                        {/* <div>
+                            <FlagOutlined />
                             <span className="text-gray-500 font-sans font-normal text-sm">{talent.Country}, {talent.City}</span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
@@ -169,7 +167,7 @@ const ListDiscoverTalent = () => {
                                                         Select you work post
                                                     </label>
                                                     <select
-                                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setWorkId(e.target.value)}
+                                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => {setWorkId(e.target.value);alert(e.target.value)}}
                                                         name="work"
                                                         className="outline-none bg-gray-50 border rounded-xl border-gray-300 text-gray-900 sm:text-sm  block w-full p-2.5">
                                                         {works?.map((work: jobInterface, index: number) => (

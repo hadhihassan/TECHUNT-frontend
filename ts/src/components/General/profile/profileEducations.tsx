@@ -1,34 +1,39 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { Fragment, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { validationSchema } from '../../../schema/profileBasedSchema';
 import { Dialog, Transition } from '@headlessui/react'
-import { saveEducation } from '../../../services/talentApiService';
+import { saveEducation, updateEducation } from '../../../services/talentApiService';
 import { AxiosResponse } from 'axios';
 import { message } from 'antd';
+import type { EducationType } from '../../../pages/Talent/profile/education'
 
-interface Education {
-    institution: string;
-    degree: string;
-    fieldOfStudy: string;
-    startDate: string;
-    endDate: string;
+interface EducationFormProps {
+    initialValues?: EducationType;
+    onUpdate: () => void;
 }
-const EducationForm: React.FC = () => {
+
+const EducationForm: React.FC<EducationFormProps> = ({ initialValues, onUpdate }) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const closeModal: () => void = () => {
         setIsOpen(false);
     };
-    const handleSubmit = (e: Education) => {
-        saveEducation(e)
+
+    const handleSubmit = (values: EducationType) => {
+        const apiCall = initialValues ? updateEducation(initialValues._id || "", values) : saveEducation(values);
+        apiCall
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
-                    return message.success("Education saved.")
+                    onUpdate();
+                    message.success("Education saved.");
+                } else {
+                    message.error("While saving education, an error occurred.");
                 }
-                message.error("While saving education got an error")
-            }).catch(() => {
-                return message.error("While saving education got an error")
             })
+            .catch(() => {
+                message.error("While saving education, an error occurred.");
+            });
     };
 
     return (
@@ -58,10 +63,10 @@ const EducationForm: React.FC = () => {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                    <p className="font-semibold text-xl">Let's add education</p>
+                                    <p className="font-semibold text-xl">Let's {initialValues ? 'edit' : 'add'} education</p>
                                     <div className="mt-2">
                                         <Formik
-                                            initialValues={{
+                                            initialValues={initialValues || {
                                                 institution: '',
                                                 degree: '',
                                                 fieldOfStudy: '',
@@ -69,13 +74,13 @@ const EducationForm: React.FC = () => {
                                                 endDate: '',
                                             }}
                                             validationSchema={validationSchema}
-                                            onSubmit={(values: Education) => handleSubmit(values)}
+                                            onSubmit={(values: EducationType) => handleSubmit(values)}
                                         >
                                             {() => (
                                                 <Form
                                                     className='w-full  text-sm font-sans font-semibold flex flex-col gap-4'
                                                 >
-                                                    <div >
+                                                    <div>
                                                         <label htmlFor="institution">Institution:</label>
                                                         <Field type="text" id="institution" name="institution" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                                         <ErrorMessage name="institution" component="div" className="error text-sm text-red-500" />
@@ -100,7 +105,7 @@ const EducationForm: React.FC = () => {
                                                         <Field type="date" id="endDate" name="endDate" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                                         <ErrorMessage name="endDate" component="div" className="error text-sm text-red-500" />
                                                     </div>
-                                                    <button type="submit" className='border-2 border-red-500 rounded-xl p-2 mt-2 font-semibold text-sm' >Add Education</button>
+                                                    <button type="submit" className='border-2 border-red-500 rounded-xl p-2 mt-2 font-semibold text-sm' >{initialValues ? 'Update' : 'Add'} Education</button>
                                                 </Form>
                                             )}
                                         </Formik>

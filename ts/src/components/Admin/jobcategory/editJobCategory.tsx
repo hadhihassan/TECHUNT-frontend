@@ -15,19 +15,19 @@ interface JobCategoryFormProps {
     error: (message: string) => void,
     reCall: () => void
 }
-interface ValidattionInterface {
+interface ValidationInterface {
     nameError: string,
     descriptionError: string,
     imageError: string,
 }
 const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, error, reCall }) => {
-    const [image, setimg] = useState<File | null>(null)
+    const [image, setImg] = useState<File | null>(null)
     const [inputData, setData] = useState<{ name: string, description: string, image: File | null }>({
         name: formData?.name,
         description: formData?.description,
         image: formData?.image
     })
-    const [errors, setErrors] = useState<ValidattionInterface>({
+    const [errors, setErrors] = useState<ValidationInterface>({
         nameError: "",
         descriptionError: "",
         imageError: "",
@@ -48,7 +48,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                     return;
                 }
                 setErrors({ ...errors, imageError: "" });
-                setimg(e.target.files[0])
+                setImg(e.target.files[0])
                 setData({
                     ...inputData,
                     image: selectedImage,
@@ -84,9 +84,9 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
     }
 
     useEffect(() => {
-        setimg(formData.image)
-    }, [])
-    const chandleEditJobCategory = () => {
+        setImg(formData.image)
+    }, [formData.image])
+    const handleEditJobCategory = () => {
         const formDataToUpload = new FormData();
         formDataToUpload.append('name', inputData.name);
         formDataToUpload.append('description', inputData.description);
@@ -119,7 +119,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
             setErrors({ ...errors, nameError: "Name is required" });
         } else {
             if (errors.descriptionError === "" && errors.nameError === "" && errors.imageError === "") {
-                chandleEditJobCategory()
+                handleEditJobCategory()
             }
         }
     }
@@ -144,7 +144,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                         />
                         <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
                         </label>
-                        <div className="font-sans text-xs text-red-500 fonse">{errors.nameError}</div>
+                        <div className="font-sans text-xs text-red-500 ">{errors.nameError}</div>
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
@@ -160,7 +160,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                             className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />
                         <label className="block tracking-wide text-red-500 text-sm font-normal mb-2">
                         </label>
-                        <div className="font-sans text-xs text-red-500 fonse">{errors.descriptionError}</div>
+                        <div className="font-sans text-xs text-red-500 ">{errors.descriptionError}</div>
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">

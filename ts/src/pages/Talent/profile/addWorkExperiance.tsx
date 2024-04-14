@@ -1,7 +1,7 @@
 import Avatar from "react-avatar";
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../../components/General/ui/progressBar";
+// import { ProgressBar } from "../../../components/General/ui/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import Button from '@mui/material/Button'
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import Alert from '@mui/material/Alert';
 
 
-const Addexperiance: React.FC = () => {
+const AddExperiance: React.FC = () => {
 
     const navigate = useNavigate();
     const data = useSelector((state: ROOTSTORE) => state.signup);
@@ -41,8 +41,8 @@ const Addexperiance: React.FC = () => {
         setError(""); // Clear error message when input changes
     };
     const handleClick = () => {
-        let dataString: string | null = localStorage.getItem("talent_Data");
-        let data: { experience?: string[] } = dataString ? JSON.parse(dataString) : {};
+        const dataString: string | null = localStorage.getItem("talent_Data");
+        const data: { experience?: string[] } = dataString ? JSON.parse(dataString) : {};
         data.experience = experience;
         localStorage.setItem("talent_Data", JSON.stringify(data));
         navigate(talent_routes.AddSkills);
@@ -132,4 +132,4 @@ const Addexperiance: React.FC = () => {
 
 
 
-export default Addexperiance;
+export default AddExperiance;

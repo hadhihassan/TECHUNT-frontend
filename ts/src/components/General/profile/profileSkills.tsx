@@ -33,7 +33,6 @@ const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => v
         } else {
             setViewSkills(data?.Profile?.Skills.slice(0, 4) || [""])
         }
-        console.log(viewSkills)
     }, [data, show]);
 
     const openModal: () => void = () => {

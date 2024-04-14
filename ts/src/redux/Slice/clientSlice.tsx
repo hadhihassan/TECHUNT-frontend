@@ -57,6 +57,6 @@ const Client = createSlice({
 })
 //exporting the actions
 export const { setFName, setContact, setImageUrl, setDescription, setLName, setLoader } = Client.actions
-//exprting the slice reducers
+//exerting the slice reducers
 export default Client.reducer
 

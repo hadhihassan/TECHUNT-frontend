@@ -7,7 +7,7 @@ import { ROOTSTORE } from "../../../../../redux/store";
 const SendMessageInput = () => {
     const [message, setMessage] = useState<string>("");
     const isSelectedConversation = useSelector((state: ROOTSTORE) => state.conversation.selectedConversations)
-    const { loading, sendMessage } = useSendMessages();
+    const {  sendMessage } = useSendMessages();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (message.trim() !== "") {

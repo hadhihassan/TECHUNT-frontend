@@ -9,7 +9,7 @@ import { validationSchema, otpValidationSchema } from "../../../util/validationS
 
 
 const ForgetPasswordOtpCard = () => {
-    const [showNewPasswor, setShowNewPasswor] = useState<boolean>(false)
+    const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
     const [minutes, setMinutes] = useState(1);
     const [seconds, setSeconds] = useState(59);
 
@@ -23,14 +23,14 @@ const ForgetPasswordOtpCard = () => {
             JSON.stringify(localStorage.setItem("showNewPass", JSON.stringify(indicate)))
             const res = await sendOtp(email, values?.otp);
             message.success(res.data.message);
-            setShowNewPasswor(true)
+            setShowNewPassword(true)
         } catch (err: any) {
-            message.error(err?.response?.data?.message || "somthings went wrong ? ")
+            message.error(err?.response?.data?.message || "Something went wrong ? ")
         } finally {
             setSubmitting(false);
         }
     }
-    const handeNewPasswordSubmit = async (values: { newPassword: string }, { setSubmitting }: { setSubmitting: (ar: boolean) => void }) => {
+    const handleNewPasswordSubmit = async (values: { newPassword: string }, { setSubmitting }: { setSubmitting: (ar: boolean) => void }) => {
         try {
             const forgetEmailItem = localStorage.getItem("forgetEmail");
             const email = forgetEmailItem ? JSON.parse(forgetEmailItem) : "";
@@ -41,7 +41,7 @@ const ForgetPasswordOtpCard = () => {
 
             navigate(routerVariables.Login)
         } catch (err: any) {
-            message.error(err?.response?.data?.message || "somthings went wrong ? ")
+            message.error(err?.response?.data?.message || "Something went wrong ? ")
         } finally {
             setSubmitting(false);
         }
@@ -65,7 +65,7 @@ const ForgetPasswordOtpCard = () => {
         const showItem = localStorage.getItem("showNewPass")
         const show = showItem ? JSON.parse(showItem) : "";
         if (show) {
-            setShowNewPasswor(true)
+            setShowNewPassword(true)
         }
         return () => {
             clearInterval(interval);
@@ -83,12 +83,12 @@ const ForgetPasswordOtpCard = () => {
             .then(() => {
                 message.success("New otp sended successfully .")
             }).catch((err) => {
-                message.error(err?.response?.data?.message as string || "somthings went wrong ? ")
+                message.error(err?.response?.data?.message as string || "something went wrong ? ")
             })
     }
     return <>
         {
-            !showNewPasswor ? <>
+            !showNewPassword ? <>
                 <div className="w-full flex justify-center items-center ">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-[550px] m-10    shadow-2xl rounded-xl border-2">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
@@ -161,10 +161,10 @@ const ForgetPasswordOtpCard = () => {
                         <Formik
                             initialValues={{
                                 newPassword: "",
-                                confrimPassword: "",
+                                confirmPassword: "",
                             }}
                             validationSchema={validationSchema}
-                            onSubmit={handeNewPasswordSubmit}
+                            onSubmit={handleNewPasswordSubmit}
                         >
                             {() => (
                                 <Form>
@@ -181,12 +181,12 @@ const ForgetPasswordOtpCard = () => {
                                         <label htmlFor="email" className="block mb-2 mt-5 text-sm font-medium text-gray-900">Confirm password</label>
                                         <Field
                                             type="text"
-                                            name="confrimPassword"
-                                            id="confrimPassword"
+                                            name="confirmPassword"
+                                            id="confirmPassword"
                                             className="bg-gray-50 border  border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600  dark:placeholder-gray-400 outline-none dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="confrimPassword"
+                                            placeholder="confirmPassword"
                                         />
-                                        <ErrorMessage name="confrimPassword" component="div" className=" font-semibold font-sans text-red-500 text-xs text-start" />
+                                        <ErrorMessage name="confirmPassword" component="div" className=" font-semibold font-sans text-red-500 text-xs text-start" />
                                     </div>
 
                                     <div className="flex justify-center items-center flex-col ">

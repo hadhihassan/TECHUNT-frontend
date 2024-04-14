@@ -15,7 +15,7 @@ const ProfileStarMessage = () => {
             <div className="w-full flex justify-center items-center">
                 <div className="w-[700px] flex space-y-14 items-center  xl:[700px] md:w[1100px] sm:w-[700px] xs:w[50px] flex-col h-[40rem] mt-16 mb-16 border shadow-2xl rounded-lg">
                     <div>
-                        <img src={IMG} className="w-[12rem] h-[13rem]" alt="Lodding" />
+                        <img src={IMG} className="w-[12rem] h-[13rem]" alt="Loading" />
                     </div>
 
                     <div>

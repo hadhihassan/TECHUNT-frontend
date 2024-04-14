@@ -1,40 +1,47 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import io from "socket.io-client";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import io, { Socket } from "socket.io-client";
 import { ROOTSTORE } from "../redux/store";
 import { useSelector } from "react-redux";
 
-const SocketContext = createContext();
+interface SocketContextValue {
+	socket: Socket | null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	onlineUsers: any[]; 
+}
+const SocketContext = createContext<SocketContextValue>({
+	socket: null,
+	onlineUsers: [],
+});
 
 export const useSocketContext = () => {
 	return useContext(SocketContext);
 };
 
-export const SocketContextProvider = ({ children }) => {
-    const id = useSelector((state:ROOTSTORE)=>state.signup.id)
-	const [socket, setSocket] = useState(null);
+export const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+	const id = useSelector((state: ROOTSTORE) => state.signup.id)
+	const [socket, setSocket] = useState<Socket | null>(null);
 	const [onlineUsers, setOnlineUsers] = useState([]);
 
 	useEffect(() => {
 		if (id) {
-			const socket = io("http://localhost:3000", {
+			const socketInstance = io("http://localhost:3000", {
 				query: {
 					userId: id,
 				},
 			});
 
-			setSocket(socket);
-
-			// socket.on() is used to listen to the events. can be used both on client and server side
-			socket.on("getOnlineUsers", (users) => {
+			socketInstance.on("getOnlineUsers", (users) => {
 				setOnlineUsers(users);
 			});
 
-			return () => socket.close();
-		} else {
-			if (socket) {
-				socket.close();
-				setSocket(null);
-			}
+			setSocket(socketInstance);
+
+			return () => {
+				socketInstance.close();
+			};
+		} else if (socket) {
+			socket.close();
+			setSocket(null);
 		}
 	}, [id]);
 

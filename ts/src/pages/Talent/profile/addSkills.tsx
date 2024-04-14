@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Avatar from "react-avatar";
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
@@ -6,11 +7,12 @@ import { ROOTSTORE } from "../../../redux/store";
 import Button from '@mui/material/Button';
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clientRoutes, talent_routes } from "../../../routes/pathVariables";
+import { clientRoutes } from "../../../routes/pathVariables";
 import { storeWorkBasedDataBioData } from "../../../services/talentApiService";
 import Alert from '@mui/material/Alert';
 import { Combobox } from '@headlessui/react'
 import axios from "axios";
+import { message } from "antd";
 
 
 
@@ -18,6 +20,9 @@ const AddSkills: React.FC = () => {
     const [selectedPerson, setSelectedPerson] = useState("")
     const [query, setQuery] = useState('')
     const [people, setPeople] = useState<string[]>([])
+    const [text, setText] = useState<string>("");
+    const [skills, setSkills] = useState<string[]>([]);
+    const [error, setError] = useState<string>("");
 
     const filteredPeople =
         query === ''
@@ -26,13 +31,10 @@ const AddSkills: React.FC = () => {
                 return person.toLowerCase().includes(query.toLowerCase())
             })
     const data = useSelector((state: ROOTSTORE) => state.signup);
-    const [text, setText] = useState<string>("");
-    const [skills, setSkills] = useState<string[]>([]);
-    const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
     const addSkill: (value: string) => void = (value) => {
-
+        
         if (value.trim() !== "") {
             if (!skills.includes(value.trim())) {
                 setSkills(prevSkills => [...prevSkills, value.trim()]);
@@ -51,26 +53,19 @@ const AddSkills: React.FC = () => {
         setSkills(prevSkills => prevSkills.filter((_, idx) => idx !== index));
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-        setError(""); // Clear error message when input changes
-    };
-
     const handleClick = () => {
-        let dataString: string | null = localStorage.getItem("talent_Data");
-        let data: { skills?: string[] } = dataString ? JSON.parse(dataString) : {};
+        const dataString: string | null = localStorage.getItem("talent_Data");
+        const data: { skills?: string[] } = dataString ? JSON.parse(dataString) : {};
         if (skills.length >= 5) {
             setError("")
             data.skills = skills;
             localStorage.setItem("talent_Data", JSON.stringify(data));
-
             storeWorkBasedDataBioData(data)
-                .then((res: any) => {
-                    console.log(res.data)
+                .then(() => {
                     navigate(clientRoutes.ADD_PROFILE_DESCRIPTION);
                 })
-                .catch((err) => {
-                    console.log(err)
+                .catch(() => {
+                    message.error("Something went wrong !")
                 })
                 .finally(() => {
                 });
@@ -89,7 +84,6 @@ const AddSkills: React.FC = () => {
                 'apikey': 'W7KRn2JNTycH8QoI9b0CVHczMD0rTofH'
             }
         });
-        console.log(response.data)
         setPeople(response.data)
     }
 

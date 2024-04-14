@@ -1,7 +1,7 @@
 function formatRelativeTime(dateString: Date) {
     const date: Date = new Date(dateString);
     const now: Date = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
     if (diffInSeconds < 60) {
         return `${diffInSeconds} s ago`;
     } else if (diffInSeconds < 3600) {
@@ -17,7 +17,7 @@ export default formatRelativeTime
 
 export function formatMongoDate(mongoDate:Date) {
     const date = new Date(mongoDate);
-    const options = { 
+    const options: Intl.DateTimeFormatOptions = { 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric',

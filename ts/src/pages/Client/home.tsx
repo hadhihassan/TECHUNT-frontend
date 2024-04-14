@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react"
 import Header from "../../components/General/Home/Header/afterLoginHeader";
 import Box from '@mui/material/Box';
 import { LinearProgressWithLabel } from "../../components/General/ui/linerProgressBar";
 import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from "react-router-dom";
-import routerVariables, { clientRoutes, talent_routes } from "../../routes/pathVariables";
+import routerVariables, { clientRoutes } from "../../routes/pathVariables";
 import { fetchAllJobPost, fetchConnectedTalent, getALlTalent, getAllProposalForClient } from '../../services/clientApiService'
 import ListDiscoverTalent from "../../components/Client/clientHome/listDiscoverTalent";
 import ListJobPost from "../../components/Client/clientHome/listJobPost";
@@ -12,16 +13,14 @@ import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { AxiosResponse } from "axios";
-import ListAllPropposals from "../../components/Client/clientHome/listProposals";
+import ListAllProposals from "../../components/Client/clientHome/listProposals";
 import type { JobInterface } from '../../interface/interfaces'
 import ListConnectedFreelancers from "../../components/Client/clientHome/listConnectedTalent";
-import { ArrowUpward, Contrast, Message, Work } from '@mui/icons-material';
+import { ArrowUpward } from '@mui/icons-material';
 import { Disclosure, Transition } from '@headlessui/react'
 import type { ProposalInterface, UserProfile } from '../../interface/interfaces'
-import Avatar from '@mui/material/Avatar';
-import type { MenuProps } from 'antd';
-import { Dropdown, message } from 'antd';
-import { CgProfile } from "react-icons/cg";
+// import Avatar from '@mui/material/Avatar';
+// import { Dropdown, message } from 'antd';
 import { INITIALSTATE } from "../../redux/Slice/signupSlice";
 import { getUserProfileDetails } from "../../services/talentApiService";
 import { Tour } from 'antd';
@@ -38,8 +37,7 @@ const Home = () => {
 
     const [userData, setUserData] = useState<UserProfile | null>(null)
     const [connectedTalent, setTalents] = useState<ProposalInterface[]>([])
-    const tabList = [<ListDiscoverTalent />, < ListAllPropposals />, < ListConnectedFreelancers />, <ListJobPost />,]
-    const [menuIndex, setMenuINdex] = useState<number>(0)
+    const tabList = [<ListDiscoverTalent />, < ListAllProposals />, < ListConnectedFreelancers />, <ListJobPost />,]
     const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
@@ -71,9 +69,9 @@ const Home = () => {
 
     useEffect(() => {
         fetchAllJobPost()
-            .then((res) => {
+            .then((res:any) => {
                 setJobs(res?.data?.data?.data)
-            })
+            });
         getAllProposalForClient(basicData?.id)
             .then((res) => {
                 setLength(res.data.data.length)
@@ -84,7 +82,7 @@ const Home = () => {
                 console.log(res.data.data)
             })
         getUserProfileDetails(basicData.role)
-            .then((res) => {
+            .then((res:any) => {
                 setUserData(res?.data?.data)
             })
         getAllProposalForClient(basicData?.id)
@@ -118,52 +116,6 @@ const Home = () => {
                 })
             })
     }, [basicData])
-
-    const items: MenuProps['items'] = [
-        {
-            label: 'Profile',
-            key: '1',
-            icon: <CgProfile />,
-            danger: true,
-            onClick: () => {
-                localStorage.setItem("profileData", JSON.stringify(connectedTalent[menuIndex].talentId))
-                navigate(talent_routes.ProfileView)
-            }
-        },
-        {
-            label: 'Proposal',
-            key: '2',
-            icon: < Contrast />,
-            danger: true,
-            onClick: () => {
-                localStorage.setItem("proposal", JSON.stringify(connectedTalent[menuIndex]))
-                navigate(clientRoutes.viewProposal)
-            }
-        },
-        {
-            label: 'Job',
-            key: '3',
-            icon: <Work />,
-            danger: true,
-            onClick: () => {
-                localStorage.setItem("deatildView", JSON.stringify(connectedTalent[menuIndex].jobId))
-                navigate(talent_routes.JobViewPage)
-            }
-        },
-        {
-            label: 'Message',
-            key: '3',
-            icon: <Message />,
-            danger: true,
-            onClick: () => {
-                message.loading("dsd", 3000)
-            }
-        },
-    ];
-
-    const menuProps = {
-        items,
-    };
     return (
         <>
             <Header />
@@ -212,7 +164,7 @@ const Home = () => {
                                 </div>
                             </div>}
                     {/* search */}
-                    <div className="w-full mt-5 border rounded-xl shadow-xl ">
+                    {/* <div className="w-full mt-5 border rounded-xl shadow-xl ">
                         <div className="flex h-[46px]">
                             <div className="flex w-fll items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200  p-5">
                                 <svg viewBox="0 0 20 20" aria-hidden="true" className="pointer-events-none  w-5 fill-gray-500 transition">
@@ -222,7 +174,7 @@ const Home = () => {
                             <input type="text" className="w-full rounded-r-full  pl-2 text-base font-semibold outline-0" placeholder="Search talent here" id="" />
                             <input type="button" value="Search" className="bg-red-500 p-2  rounded-tr-xl rounded-br-xl  text-white font-semibold transition-colors " />
                         </div>
-                    </div>
+                    </div> */}
                     {/* tyes */}
                     <div>
                         <div className="w-full mt-10">
@@ -231,7 +183,7 @@ const Home = () => {
                                     onClick={() => handleTabClick(1)}
                                     className={`text-sans font-semibold ml-5 px-4 py-2 focus:outline-none ${activeTab === 1 ? 'text-red-500 border-b-2 border-red-500 transition duration-500' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    Discover Talent({talentlength})
+                                    Talents({talentlength})
                                 </button>
                                 <button
                                     onClick={() => handleTabClick(2)}
@@ -256,6 +208,7 @@ const Home = () => {
                     </div>
                     {/* filter */}
                     <div className="w-full mt-5 flex justify-between ">
+
                     </div>
                     {/* talents */}
                     <div className="w-full h-auto mb-20">
@@ -270,7 +223,7 @@ const Home = () => {
                 <div className=" ml-10 w-[30vw] mt-5">
                     <div className="flex ml-48 mb-2 ">
                         <button onClick={() => {
-                            basicData.bankVerified && basicData.numberVerify && basicData.verify ? navigate(clientRoutes.CREATE_JOB_POST) : setOpen(true)
+                            basicData.progress === 100 ? navigate(clientRoutes.CREATE_JOB_POST) : setOpen(true)
                         }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">Post New Job</button>
                     </div>
                     {/* porfile proggress sections */}
@@ -324,7 +277,7 @@ const Home = () => {
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                                     </svg>
-                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Payemtn Verify</span>
+                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Payment Verify</span>
                                                 </div>
                                                 <div>
                                                     <span className={` ml-12 text-sm hover:text-red-500 ${basicData.bankVerified ? "text-red-500" : " text-blue-600"} `}>{basicData.bankVerified ? "Verified" : "Verify"}</span>
@@ -411,7 +364,7 @@ const Home = () => {
                                                 </div>
                                             </div>
                                             <div className="flex justify-center items-center m-5 ">
-                                                <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm">View all</button>
+                                                <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm" onClick={()=> navigate(`/${basicData.role}/contract/all/`)}>View all</button>
                                             </div>
                                         </div>
                                     </Disclosure.Panel>
@@ -419,7 +372,7 @@ const Home = () => {
                             </>
                         )}
                     </Disclosure>
-                    <Disclosure>
+                    {/* <Disclosure>
                         {({ open }) => (
                             <>
                                 <Disclosure.Button className='shadow-xl flex justify-between  border px-2 py-2 rounded-xl  w-[80%] mt-5 bg-white'>
@@ -438,27 +391,30 @@ const Home = () => {
                                 >
                                     <Disclosure.Panel>
                                         <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-2 ">
-                                            <div className="flex justify-between mt-2  border-b w-full">
+                                            <div className="flex justify-between mt-2  border-b ">
                                                 {
-                                                    connectedTalent && connectedTalent?.map((talent: ProposalInterface, index: number) => (
-                                                        <div key={index} className="flex m-5 justify-between">
-                                                            <div>
-                                                                <Avatar alt="Remy Sharp" src={`http://localhost:3000/images/${talent?.talentId?.Profile?.profile_Dp}`} />
-                                                            </div>
-                                                            <div className="flex flex-col">
-                                                                <span className="text-start text-sm ml-2 font-semibold font-sans">
-                                                                    {talent.talentId.First_name} {talent?.talentId?.Last_name}
-                                                                </span>
-                                                                <span className="text-gray-400 text-start text-sm ml-2 font-semibold font-sans">
-                                                                    {talent.talentId.Profile.Title}
-                                                                </span>
-                                                            </div>
-                                                            <div className="flex justify-end">
-                                                                <Dropdown.Button className="ml-7" menu={menuProps} onOpenChange={() => setMenuINdex(index)}  >
-                                                                    Show
-                                                                </Dropdown.Button>
+                                                    connectedTalent && connectedTalent?.map((talent: ProposalInterface, index: number) => (<>
+                                                        <div className="flex flex-row">
+                                                            <div key={index} className="flex m-5 justify-between flex-row">
+                                                                <div>
+                                                                    <Avatar alt="Remy Sharp" src={`http://localhost:3000/images/${talent?.talentId?.Profile?.profile_Dp}`} />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-start text-sm ml-2 font-semibold font-sans">
+                                                                        {talent.talentId.First_name} {talent?.talentId?.Last_name}
+                                                                    </span>
+                                                                    <span className="text-gray-400 text-start text-sm ml-2 font-semibold font-sans">
+                                                                        {talent.talentId.Profile.Title}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex justify-end">
+                                                                    <Dropdown.Button className="ml-7" menu={menuProps} onOpenChange={() => setMenuINdex(index)}  >
+                                                                        Show
+                                                                    </Dropdown.Button>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </>
                                                     ))
                                                 }
                                             </div>
@@ -467,7 +423,7 @@ const Home = () => {
                                 </Transition>
                             </>
                         )}
-                    </Disclosure>
+                    </Disclosure> */}
                 </div>
             </div >
             <Tour open={open} onClose={() => setOpen(false)} mask={false} type="primary" steps={steps} animated arrow zIndex={100} />

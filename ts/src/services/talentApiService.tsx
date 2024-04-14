@@ -4,6 +4,7 @@ import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import type { ProposalInterface } from '../interface/interfaces';
 import { ObjectId } from 'mongoose';
+import { EducationType } from '../pages/Talent/profile/education';
 
 
 export async function storeWorkBasedDataBioData(data: object) {
@@ -80,9 +81,15 @@ export async function submitEditWork(id: string, data: { url: string, descriptio
 export async function saveResume(s3Link: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/profile/resume-save/`, { s3Link })
 }
-export async function searchJob(searchData: { query: string, postType: string, experiance: string, maxInputValue: number, inputValue: number }) {
+export async function searchJob(searchData: { query: string, postType: string, experience: string, maxInputValue: number, inputValue: number }) {
     return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`, { searchData })
 }
-export async function saveEducation(data) {
+export async function saveEducation(data:EducationType) {
     return await axiosInstance.post(`${BASE_URL}TALENT/profile/save-education/`, { data })
+}
+export async function  deleteEducation(id: string) {
+    return await axiosInstance.delete(`${BASE_URL}TALENT/profile/delete-education/${id}`)
+}
+export async function  updateEducation(id: string, data:EducationType) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/profile/edit-education/`,{id, data})
 }

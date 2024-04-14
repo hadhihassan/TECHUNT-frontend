@@ -16,7 +16,7 @@ const ContactListPage: React.FC = () => {
         setActiveTab(tabNumber);
     };
     return <>
-        <div className="bg-blue-800 opacity-4     absolute -z-10 w-full h-[50vh]" >
+        <div className="bg-gradient-to-r from-blue-500 to-blue-700  opacity-4     absolute -z-10 w-full h-[50vh]" >
         </div>
         <div className="container  grid">
             <Button
@@ -37,33 +37,33 @@ const ContactListPage: React.FC = () => {
                     <div className={`flex ${role === "TALENT" ? "justify-between" : "justify-evenly"} mb-5 sm:grid-cols-3`}>
                         <button
                             onClick={() => handleTabClick(0)}
-                            className={`text-sans font-semibold mr-5 px-4 py-2  focus:outline-none ${activeTab === 0 ? 'text-red-500   transition duration-500' : 'text-white '}`}
+                            className={`text-sans font-semibold mr-5 px-4 py-2  focus:outline-none ${activeTab === 0 ? 'text-red-500 border rounded-xl bg-white transition duration-500' : 'text-white '}`}
                         >
-                            Active contracts (01)
+                            Active contracts 
                         </button>
                         <button
                             onClick={() => handleTabClick(1)}
-                            className={`text-sans font-semibold mr-5 px-4 py-2  focus:outline-none ${activeTab === 1 ? 'text-red-500   transition duration-500' : 'text-white '}`}
+                            className={`text-sans font-semibold mr-5 px-4 py-2  focus:outline-none ${activeTab === 1 ? 'text-red-500 border rounded-xl bg-white  transition duration-500' : 'text-white '}`}
                         >
-                            Cancelled contracts (01)
+                            Cancelled contracts
                         </button>
                         <button
                             onClick={() => handleTabClick(2)}
-                            className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 2 ? 'text-red-500  transition duration-500' : 'text-white '}`}
+                            className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 2 ? 'text-red-500 border rounded-xl bg-white  transition duration-500' : 'text-white '}`}
                         >
-                            Completed contracts (02)
+                            Completed contracts 
                         </button>{
                             role === "TALENT" && <button
                                 onClick={() => handleTabClick(3)}
-                                className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 3 ? 'text-red-500  transition duration-500' : 'text-white '}`}
+                                className={`text-sans font-semibold mr-5 px-4 py-2 focus:outline-none ${activeTab === 3 ? 'text-red-500 border rounded-xl bg-white transition duration-500' : 'text-white '}`}
                             >
-                                New  (02)
+                                New  
                             </button>
                         }
                     </div>
                 </div>
-                <div className="  h-auto bg-white  border-2 shadow-2xl border-gray-300  rounded-xl w-[85%]  ">
-                    <div className="mt-4  md:flex:flex-col xl:flex:flex-col h-auto   rounded-xl ">
+                <div className="  h-auto bg-white  border-2 mb-10 shadow-2xl border-gray-300  rounded-xl w-[85%]  ">
+                    <div className="mt-4 md:flex:flex-col xl:flex:flex-col h-auto   rounded-xl ">
                         {tabElements[activeTab]}
                     </div>
                 </div>

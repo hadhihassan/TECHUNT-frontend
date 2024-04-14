@@ -44,8 +44,8 @@ export interface ProposalInterface {
     _id?: string
     coverLetter: string
     rate: number
-    availability: Date | null
-    attachments: File | null
+    availability: string | Date 
+    attachments: File | null 
     additionalInfo: string
     jobId?: string | { Title: string }
     Client_id: {

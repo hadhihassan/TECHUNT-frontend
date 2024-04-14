@@ -4,8 +4,11 @@ export type ConversationType = {
     selectedConversations: {
         _id: string;
         participants: [{
-
-            _id: string
+            Profile?: {
+                profile_Dp:string
+            };
+            First_name:string
+            _id:string
         },
             {
                 Profile: {

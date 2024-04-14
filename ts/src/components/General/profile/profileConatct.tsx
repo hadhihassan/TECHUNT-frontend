@@ -4,7 +4,7 @@ import { MyContext } from "../../../context/myContext";
 import Alert from '@mui/material/Alert';
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../util/validatorsUtils'
 import Modal from "./profileEditModal";
-
+import ContactsIcon from '@mui/icons-material/Contacts';
 interface UserContact {
     Address: string,
     City: string,
@@ -112,7 +112,7 @@ const ProfileConatct: React.FC<{ data: UserContact, onUpdate: () => void }> = ({
     return (
         <div className="w-[48rem]  rounded-xl  border h-[20rem]  shadow-2xl col-span-2">
             <div className="flex justify-between">
-                <p className="m-4 font-sans font-medium">Conatct Details</p>
+                <p className="m-4 font-sans font-medium flex items-center gap-2"><ContactsIcon  /> Contact Details</p>
                 <button onClick={openModal} className="w-[5rem] mt-3 mr-2 font-sans font-medium rounded-full h-7 border border-red-500 text-red-500">Edit</button>
             </div> <hr />
             <Modal isOpen={isOpen} onClose={closeModal}>

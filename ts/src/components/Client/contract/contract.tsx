@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { LeftCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Input, InputNumber, Space, message } from 'antd';
@@ -58,19 +57,9 @@ const ContractForm: React.FC = () => {
             ...prevState,
             ...changedValues
         }));
-        console.log(contractDetails);
-
-    };
-    const validateAmount = (_: any, value: string) => {
-        // Check if the value is a valid number
-        if (isNaN(Number(value))) {
-            return Promise.reject('Amount must be a number.');
-        }
-        // Validation passed
-        return Promise.resolve();
     };
     const validateText = (_: any, value: string) => {
-        const trimmedValue = value.trim(); // Trim the input
+        const trimmedValue = value.trim(); 
         if (!trimmedValue) {
             return Promise.reject('This field is required! Please enter ');
         }
@@ -151,7 +140,7 @@ const ContractForm: React.FC = () => {
                             name={"duration"}
                             rules={[
                                 { required: true, message: 'Please select duration.' },
-                                ({ getFieldValue }) => ({
+                                () => ({
                                     validator(_, value) {
                                         if (!value || value.length !== 2) {
                                             return Promise.reject(new Error('Please select a valid date range.'));

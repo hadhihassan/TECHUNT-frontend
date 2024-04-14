@@ -274,14 +274,14 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
             {/* end the modal */}
 
 
-            <div className="mt-2 mr-5 flex justify-between">
-                <div>
+            <div className="mt-2 mr-5 flex justify-start gap-2">
+                {/* <div>
                     <Stack spacing={1}>
                         <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
                     </Stack>
                     <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
                 </div>
-                <div className="border-r border-solid  border-gray-500 h-8 "></div>
+                <div className="border-r border-solid  border-gray-500 h-8 "></div> */}
                 <div>
                     <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
                     <span className="text-gray-500 font-sans font-normal text-sm">Total earnings :  0  Rs</span>

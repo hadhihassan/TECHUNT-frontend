@@ -53,7 +53,6 @@ const ForgetPasswordEmailCard = () => {
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-xs text-end" />
                             </div>
-
                             <div className="flex justify-center items-center flex-col ">
                                 <br />
                                 <button type="submit" className="bg-red-500 w-[10rem] mb-4 h-[2rem] text-white border rounded-xl">Send otp</button>

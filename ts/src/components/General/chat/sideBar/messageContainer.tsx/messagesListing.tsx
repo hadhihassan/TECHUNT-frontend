@@ -14,20 +14,22 @@ const MessageListing = () => {
     const [_messages, setMessages] = useState<MessageDoc[]>([]);
     const { loading, getMessages }: { loading: boolean, getMessages: (id: string, fetchMessages: () => void) => Promise<unknown> } = useGetMessage();
 
-    useEffect(() => {
+    const getAllMessages = () => {
         if (conversation.selectedConversations) {
             getMessages(conversation?.selectedConversations?._id as string || "", setMessages as () => void);
         }
-    }, [conversation.selectedConversations]);
-
+    }
+    useEffect(() => {
+        getAllMessages()
+    }, [conversation.selectedConversations, getAllMessages]);
     return (
         <>{loading}
             {conversation.messages && (
                 conversation?.messages?.map((message: MessageDoc, index: number) => (
-                    <Message 
-                        key={index} 
-                        message={message} 
-                        index={index} 
+                    <Message
+                        key={index}
+                        message={message}
+                        index={index}
                     />
                 ))
             )}

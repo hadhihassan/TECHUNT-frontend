@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 import Swal from 'sweetalert2'
@@ -10,7 +11,7 @@ export const axiosInstance: AxiosInstance = axios.create({
   timeout: 5000,
 });
 
-const onRequest = (config: AxiosRequestConfig) => {
+const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig  => {
   let jwtToken = localStorage.getItem("token");
   if (!jwtToken || jwtToken == null) {
     jwtToken = localStorage.getItem("adminToken");
@@ -27,25 +28,19 @@ export const get = async <T>(url: string, _type?: string): Promise<T> => {
     const response: AxiosResponse = await axiosInstance.get(url);
     console.log("repones axios", response)
     return response.data
-  } catch (error) {
-    console.log(error);
-
-    handleRequestError(error);
+  } catch (error: unknown) {
+    handleRequestError(error as AxiosError);
     throw error;
   }
 };
 
-export const post = async <T>(url: string, data?: any): Promise<T> => {
+export const post = async <T>(url: string, data?: { type: string }): Promise<T> => {
   try {
-    console.log(url, data);
-
-    url = data.type + url;
+    url = data?.type + url;
     const response: AxiosResponse = await axiosInstance.post(url, data);
-    console.log(response, "axios post response");
     return response.data;
   } catch (error) {
     console.log(error);
-    // handleRequestError(error);
     throw error;
   }
 };
@@ -55,18 +50,25 @@ const handleRequestError = (error: AxiosError): void => {
 };
 
 interface resolve {
-  data: AxiosResponse | null,
-  error: AxiosError | null
+  data: unknown | null;
+  error: ErrorResponse | null;
 }
-export async function resolve(promise: Promise<any> | PromiseLike<null> | null) {
+interface ErrorResponse {
+  response?: {
+    data?: {
+      isBlocked?: boolean;
+    };
+  };
+}
+export async function resolve(promise: Promise<unknown> | PromiseLike<null> | null) {
   const resolved: resolve = {
     data: null,
     error: null
   };
   try {
-    resolved.data = await promise;
+    resolved.data = await promise
   } catch (e) {
-    resolved.error = e;
+    resolved.error = e as ErrorResponse;
   }
   if (resolved?.error?.response?.data?.isBlocked) {
     Swal.fire({

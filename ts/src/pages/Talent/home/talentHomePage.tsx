@@ -5,8 +5,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import BannerImage from '../../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { useNavigate } from 'react-router-dom';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+// import Rating from '@mui/material/Rating';
+// import Stack from '@mui/material/Stack';
 import { AxiosError, AxiosResponse } from 'axios';
 import {
     fetchAllJobPostForTalent,
@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
     const navigate = useNavigate()
     const [query, setQuery] = useState<string>("")
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
-    const [posts, setposts] = useState<Project[] | []>([])
+    const [posts, setPosts] = useState<Project[] | []>([])
     const [client, setClients] = useState<object[]>([])
     const [userData, setUserData] = useState<{ First_name: string, Last_name: string }>(
         { First_name: "", Last_name: "" }
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
-                setposts(res.data.data);
+                setPosts(res.data.data);
             })
             .catch((_err: AxiosError) => {
             });
@@ -71,7 +71,8 @@ const HomePage: React.FC = () => {
                 console.log(err)
             })
         getUserProfileDetails(basicData.role)
-            .then((res) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then((res:any) => {
                 setUserData(res?.data?.data)
             })
         //contract
@@ -114,7 +115,7 @@ const HomePage: React.FC = () => {
 
     const steps: TourProps['steps'] = [
         {
-            title: 'Completed your Verifictions ',
+            title: 'Completed your verifications .',
             description: '100% completion of you profile will help your get more reach.',
             cover: (
                 <img
@@ -195,7 +196,7 @@ const HomePage: React.FC = () => {
                     {/* profile progress sections */}
                     <div className="border  shadow-xl w-[80%] rounded-xl h-auto bg-white" ref={ref1}>
                         <p className="text-center font-sans font-bold text-xl mt-5">{userData?.First_name} {userData?.Last_name}</p>
-                        <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">techunt</p>
+                        <p className="text-center font-sans font-semibold text-sm mt-1 text-slate-500">TECHUNT</p>
                         <Box className="m-auto mt-2" sx={{ width: '80%' }}>
                             <span className=" font-sans font-semibold text-sm">{basicData.progress !== 100 ? "Set up your account" : "Set up completed"}</span>
                             <LinearProgressWithLabel value={basicData.progress} />
@@ -242,7 +243,7 @@ const HomePage: React.FC = () => {
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                                     </svg>
-                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Payemtn Verify</span>
+                                                    <span className="text-start ml-2 text-sm font-normal font-sans">Payment Verify</span>
                                                 </div>
                                                 <div>
                                                     <span

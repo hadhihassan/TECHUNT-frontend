@@ -9,6 +9,20 @@ export function IsLoggedUser() {
     const endPoints = url.slice(1, 7).toUpperCase();
     return userDatas?.role === endPoints ? <Outlet /> : <Navigate to={routerVariables.Login} />;
 }
+export function IsNoteLoggedUser(): React.ReactElement {
+    const userDatas = useSelector((state: ROOTSTORE) => state.signup);
+    if (userDatas?.isLogged) {
+        return <Navigate to="/" replace />;
+    }
+    return <Outlet />;
+}
+export function IsNoteLoggedAdmin() {
+    const userDatas = useSelector((state: ROOTSTORE) => state.signup);
+    if (userDatas?.isLogged) {
+        return <Navigate to="/" replace />;
+    }
+    return <Outlet />;
+}
 export function IsVerified() {
     const data = useSelector((state: ROOTSTORE) => state.signup);
     return (data?.verify && !data?.isLogged) ? <Outlet /> : <Navigate to={routerVariables.signup} />;

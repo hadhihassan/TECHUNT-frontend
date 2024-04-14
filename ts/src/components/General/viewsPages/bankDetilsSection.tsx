@@ -4,6 +4,7 @@ import { updateBankDetails } from "../../../services/commonApiService";
 import { message } from "antd";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
+import { BankOutlined } from "@ant-design/icons";
 
 export interface BankDetailsInterface {
     account_holder_name: string
@@ -57,7 +58,7 @@ export  const BankDetails: React.FC<BankDetailsSection> = ({ data, onUpdate }) =
     return <>
         <div className="w-[48rem]  rounded-xl  border h-[20rem]  shadow-2xl">
             <div className="flex justify-between">
-                <p className="m-4 font-sans font-medium">Bank Details</p>
+                <p className="m-4 font-sans font-medium flex flex-row items-center gap-2"> <BankOutlined />Bank Details</p>
                 <button
                     onClick={closeModal}
                     className="w-[5rem] mt-3 mr-2 font-sans font-medium rounded-full h-7 border border-red-500 text-red-500">Edit</button>

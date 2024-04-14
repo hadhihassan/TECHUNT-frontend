@@ -13,15 +13,14 @@ const useListenMessages = () => {
 	const dispatch = useDispatch()
 	useEffect(() => {
 		const handleNewMessage = (newMessage: { shouldShake: boolean; }) => {
-			// Create a new object instead of mutating the existing one
 			const updatedMessage = { ...newMessage, shouldShake: true };
 			console.log("new message is here");
-			dispatch(setMessages([...messages, updatedMessage])); // Assuming setMessages is an action creator
+			dispatch(setMessages([...messages, updatedMessage])); 
 		};
 
 		socket?.on("newMessage", handleNewMessage);
-		return () => socket?.off("newMessage", handleNewMessage); // Ensure the same handler is removed
-	}, [messages, socket, dispatch]); // Removed messages.length from the dependency array
+		return () => socket?.off("newMessage", handleNewMessage); 
+	}, [messages, socket, dispatch]); 
 
 };
 export default useListenMessages;

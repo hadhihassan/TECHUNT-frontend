@@ -7,7 +7,7 @@ import { setMessages } from "../redux/Slice/conversationsSlice";
 const useGetMessage = () => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch()
- 
+
     const [newMessage, setMessage] = useState()
 
     const getMessages = async (id: string) => {
@@ -19,9 +19,9 @@ const useGetMessage = () => {
                 setMessage(messages?.data?.messages)
                 return messages?.data?.messages
             }
-        } catch(err){
+        } catch (err) {
             console.log(err)
-        }finally {
+        } finally {
             setLoading(false)
         }
     }

@@ -10,10 +10,17 @@ export const validationSchema = Yup.object().shape({
         ),
     confrimPassword: Yup.string()
         .required("Confirm password is required")
-        .oneOf([Yup.ref('newPassword'), null], "Passwords must match")
+        .oneOf([Yup.ref('newPassword')], "Passwords must match")
 });
 export const otpValidationSchema = Yup.object().shape({
     otp: Yup.string()
         .required("OTP is required")
         .matches(/^\d{4}$/, "OTP must be a 4-digit number")
+});
+export const reviewRatingSchema = Yup.object().shape({
+    description: Yup.string()
+        .required("Description required")
+        .min(4, "Description more than 4 letters"),
+    rate: Yup.number()
+        .required("Rating is required.")
 });

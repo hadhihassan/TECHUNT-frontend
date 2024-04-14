@@ -68,6 +68,11 @@ const NewContract: React.FC<props> = ({ active }) => {
     const handleConfirm: (id: string, status: boolean) => void = (id, status) => updateContractStatus(id, status, "active")
         .then((res: AxiosResponse) => {
             console.log(res);
+            if (active === 3) {
+                fetchNewContract()
+            } else if (active === 0) {
+                fetchActiveContract()
+            }
         }).catch((err: AxiosError) => {
             console.log(err);
         });
@@ -85,10 +90,17 @@ const NewContract: React.FC<props> = ({ active }) => {
             fetchActiveContract()
         }
     }, [active])
+    //pagination logic
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage: number = 5;
+    const indexOfLastPost: number = currentPage * itemsPerPage;
+    const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
+    const paginationContract = contract.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return <>
         {
 
-            contract.length ? contract?.map((contract: Contract, index: number) => (
+            paginationContract.length ? paginationContract?.map((contract: Contract, index: number) => (
                 <><div key={index} className="m-4 w-auto h-auto border border-gray-400 rounded-lg px-3 py-3">
                     <h1 className="font-sans font-medium text-gray-900 underline ">Contract of {contract?.work?.Title}</h1>
                     <h1 className="font-sans font-semibold text-gray-500  text-sm">Client name: {contract?.client?.First_name}  </h1>
@@ -137,8 +149,39 @@ const NewContract: React.FC<props> = ({ active }) => {
                     <br />
                 </>
             )) : <>
-                <EmptyJobs title={`No  ${active === 3 ? "New" :"Active" } Contracts`} description={`There are currently no ${active === 3 ? "New" :"Active" } contracts.`} />
+                <EmptyJobs title={`No  ${active === 3 ? "New" : "Active"} Contracts`} description={`There are currently no ${active === 3 ? "New" : "Active"} contracts.`} />
             </>
+        }
+        {
+            contract.length > 0 && <div className="flex items-center gap-4 justify-center m-10">
+                <button
+                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                {Array.from({ length: Math.ceil(contract.length / itemsPerPage) }, (_, index) => (
+                    <button
+                        className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${currentPage === index + 1 ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
+                        type="button"
+                        onClick={() => paginate(index + 1)}
+                    >
+                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                            {index + 1}
+                        </span>
+                    </button>
+                ))}
+                <button
+                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === Math.ceil(contract.length / itemsPerPage)}
+                >
+                    Next
+                </button>
+            </div>
         }
     </>;
 }

@@ -4,14 +4,8 @@ import React, { Fragment } from 'react'
 import { createNewPlan } from '../../../services/adminApiService'
 import { message } from 'antd'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { PlanSchema } from '../../../schema/profileBasedSchema'
 
-const PlanSchema = Yup.object().shape({
-    name: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Name is required'),
-    description: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Description is required'),
-    amount: Yup.number().required('Amount is required').positive('Amount must be positive'),
-    type: Yup.string().transform((_value, originalValue) => originalValue.trim()).required('Type is required'),
-});
 
 interface FormProps {
     isOpen: boolean,
@@ -20,7 +14,7 @@ interface FormProps {
 export interface PlanInterface {
     name: string,
     description: string,
-    amount: string,
+    amount: string | number,
     type: string,
     _id?: string
 }
@@ -73,7 +67,7 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
                                         validationSchema={PlanSchema}
                                         onSubmit={handleSubmitForm}
                                     >
-                                        {({ _errors, _touched, handleChange, handleSubmit, isSubmitting }) => (
+                                        {({ handleChange, isSubmitting }) => (
                                             <Form>
                                                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
                                                     <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
@@ -94,12 +88,12 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
                                                             </div>
                                                             <div>
                                                                 <label className="block mb-2 text-sm font-medium text-gray-900">
-                                                                    Descirption
+                                                                    Description
                                                                 </label>
                                                                 <Field
                                                                     onChange={handleChange}
                                                                     className="bg-gray-50 border border-gray-300 outline-none text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
-                                                                    placeholder="wrie here"
+                                                                    placeholder="write  here"
                                                                     name='description' />
                                                                 <ErrorMessage name="description" component="div" className="text-red-500" />
                                                             </div>
@@ -126,7 +120,7 @@ const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
                                                                     onChange={handleChange}
                                                                     className="bg-gray-50 border border-gray-300 text-gray-900 outline-none sm:text-sm rounded-lg block w-full p-2.5">
                                                                     <option defaultValue="Weekly">Weekly</option>
-                                                                    <option defaultValue="Mothly">Monthly</option>
+                                                                    <option defaultValue="Monthly">Monthly</option>
                                                                     <option defaultValue="Yearly">Yearly</option>
                                                                 </Field>
                                                                 <ErrorMessage name="type" component="div" className="text-red-500" />

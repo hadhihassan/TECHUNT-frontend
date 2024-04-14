@@ -88,7 +88,7 @@ export function descriptionValidator(address: string) {
     return null;
 }
 
-//amount validtor for the antd
+//amount validator for the antd
 import { Rule } from 'antd/lib/form';
 const positiveNumberRegex = /^\d*\.?\d+$/;
 

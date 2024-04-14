@@ -32,11 +32,9 @@ const Signup = createSlice({
             state.email = action.payload
         },
         setVerify: (state, action: PayloadAction<boolean>) => {
-            console.log(action.payload)
             state.verify = action.payload
         },
         setRole: (state, action: PayloadAction<INITIALSTATE['role']>) => {
-            console.log("ROLE CHANGING ROLE IS ", action.payload)
             state.role = action.payload
         },
         setLogged: (state, action: PayloadAction<boolean>) => {
@@ -68,7 +66,6 @@ const Signup = createSlice({
             state.bankVerified = false
             state.progress = 0
         },
-
     }
 })
 export const { setEmail,

@@ -56,7 +56,6 @@ const LoginPage: React.FC = () => {
                                 dispatch(isBankVeried(true));
                             }
                             if (res?.data?.data?.data.subscription && res?.data?.data.role === "TALENT") {
-                                console.log("you expected worked")
                                 const userId: string = res?.data?.data?.data?._id
                                 socket.emit("subscribedUser", userId)
                             }
@@ -70,9 +69,6 @@ const LoginPage: React.FC = () => {
                         }
                     }
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
         }
     }
     const naviagteSignup = () => {

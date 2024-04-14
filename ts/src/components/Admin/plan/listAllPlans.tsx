@@ -29,7 +29,7 @@ export function ListAllPlans() {
 
     const closeEdit = () => setEditOpen(false)
     const openEdit = () => setEditOpen(true)
-    const hadnleOpenEdit = (index: number) => {
+    const handleOpenEdit = (index: number) => {
         setEdit(plans[index]?._id || "")
         openEdit()
     }
@@ -147,12 +147,10 @@ export function ListAllPlans() {
                                                 <Tooltip content="Edit User">
                                                     <IconButton variant="text" placeholder={undefined}>
                                                         <PencilIcon
-                                                            onClick={() => hadnleOpenEdit(index)}
+                                                            onClick={() => handleOpenEdit(index)}
                                                             className="h-4 w-4" />
                                                     </IconButton>
                                                 </Tooltip>
-
-
                                             </td>
                                         </tr>
                                     );
@@ -161,7 +159,6 @@ export function ListAllPlans() {
                         </tbody>
                     </table>
                 </CardBody>
-
             </Card>
             {
                 editOpen && <EditPlanForm isOpen={editOpen} closeModal={closeEdit} data={editData} />
@@ -196,7 +193,6 @@ export function ListAllPlans() {
                         </button>
                     </div>
         </div>
-
     );
 }
 export default ListAllPlans

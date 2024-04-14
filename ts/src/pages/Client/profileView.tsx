@@ -4,10 +4,11 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import { Toaster } from "react-hot-toast";
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+
+// import Rating from '@mui/material/Rating';
+// import Stack from '@mui/material/Stack';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
-import ProfileReviews from "../../components/General/profile/profileReviews";
+// import ProfileReviews from "../../components/General/profile/profileReviews";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { ProposalInterface } from "../../interface/interfaces";
@@ -42,7 +43,7 @@ interface UserProfile {
     isVerify?: boolean;
     isNumberVerify?: boolean;
     createdAt: Date
-    UpdatedAt:string
+    updatedAt: Date
     resume?: string
 }
 const Profile = () => {
@@ -82,9 +83,9 @@ const Profile = () => {
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>
                             {/* <AccessTimeRoundedIcon fontSize="inherit" /> */}
-                            <span className="font-sans font-normal text-xs" >Last seen {formatRelativeTime(datas?.updatedAt)} </span><br />
+                            <span className="font-sans font-normal text-xs" >Last seen {formatRelativeTime(datas?.updatedAt as Date)} </span><br />
                             <EditCalendarRoundedIcon fontSize="inherit" />
-                            <span className="font-sans font-normal text-xs ml-2">  Joined {formatMongoDate(datas?.createdAt)}</span>
+                            <span className="font-sans font-normal text-xs ml-2">  Joined {formatMongoDate(datas?.createdAt as Date)}</span>
                         </div>
                         {
                             datas?.resume ? <>
@@ -98,7 +99,7 @@ const Profile = () => {
                                 />
                             </> : <>
                                 <div className="flex  items-center justify-center   ">
-                                    <p className="font-semibold font-sans text-red-500">{basicData.role === "CLIENT" && "Freelancer not uploded resume"}</p>
+                                    <p className="font-semibold font-sans text-red-500">{basicData.role === "CLIENT" && "Freelancer not uploaded resume"}</p>
                                 </div>
                             </>
                         }
@@ -114,14 +115,14 @@ const Profile = () => {
                             position="top-left"
                             reverseOrder={false}
                         />
-                        <div className="mt-2 mr-5 flex justify-between">
-                            <div>
+                        <div className="mt-2 mr-5 flex justify-start gap-2">
+                            {/* <div>
                                 <Stack spacing={1}>
                                     <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
                                 </Stack>
                                 <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                            </div>
-                            <div className="border-r border-solid  border-gray-500 h-8 "></div>
+                            </div> */}
+                            {/* <div className="border-r border-solid  border-gray-500 h-8 "></div> */}
                             <div>
                                 <span className="text-gray-500 font-sans font-normal text-sm">Total job post : {proposal.length} <b>0</b> </span>
                             </div><div className="border-r border-solid border-gray-500 h-8"></div>
@@ -153,7 +154,7 @@ const Profile = () => {
                     </div>
                     <div className="flex items-center m-8 justify-between">
                         <LocalPhoneIcon fontSize="small" />
-                        <span className="font-normal font-sans ">Phone Number Verify</span>
+                        <span className="font-normal font-sans "> Number Verify</span>
                         <span
                             className={`${datas?.isNumberVerify ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}> {datas?.isNumberVerify ? "Verified" : "Not Verified"} </span>
                     </div>
@@ -172,7 +173,7 @@ const Profile = () => {
                         <div className={`flex items-center  flex-row  ml-[6rem]  `}>
                             <div className="w-[48rem] m-5 rounded-xl  border h-[20rem]   shadow-2xl ">
                                 <div className="flex justify-between">
-                                    <p className="m-4 font-sans font-medium">Conatct Details</p>
+                                    <p className="m-4 font-sans font-medium">Contact Details</p>
                                 </div> <hr />
                                 <div className=" ">
                                     <div className="w-full max-w-lg m-5">
@@ -215,12 +216,12 @@ const Profile = () => {
                             </div>
                             {
                                 basicData.role === "CLIENT" &&
-                                <div className="w-[22rem] h-[20rem] rounded-2xl   border shadow-xl ">
+                                <div className="w-[22rem] h-auto rounded-2xl  border shadow-xl ">
                                     <div className="flex justify-between">
                                         <p className="m-4 font-sans font-medium">Top Skills</p>
                                     </div>
                                     <hr />
-                                    <div className="flex flex-col space-y-5 items-start m-5">
+                                    <div className="flex flex-col space-y-5 items-start m-5 ">
                                         {
                                             datas && datas.Profile && datas.Profile.Skills && datas.Profile.Skills.length > 0 ? (
                                                 datas?.Profile?.Skills.map((value: string, key: number) => (
@@ -229,10 +230,11 @@ const Profile = () => {
                                                     </span>
                                                 ))
                                             ) : (
-                                                <p className="font-sans font-medium text-red-300">Add skills here</p>
+                                                <p className="font-sans font-medium text-red-300">No Skills added yet</p>
                                             )
                                         }
                                     </div>
+
                                 </div>
                             }
                         </div>
@@ -243,9 +245,9 @@ const Profile = () => {
                     </>
             }
 
-            <div className="flex items-center  flex-row m-1 mb-5 ml-[7rem] ">
+            {/* <div className="flex items-center  flex-row m-1 mb-5 ml-[7rem] ">
                 <ProfileReviews />
-            </div>
+            </div> */}
         </div>
     </>
     );

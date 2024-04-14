@@ -82,7 +82,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                 setData({ ...inputData, [name]: value });
             }
         }
-        handleChnage(e)
+        handleChnage(e as ChangeEvent<HTMLInputElement>)
     }
     const Validate = () => {
         if (!inputData.description && inputData.description === "") {

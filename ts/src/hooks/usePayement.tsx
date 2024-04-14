@@ -1,26 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { makePayment } from '../services/talentApiService';
 import { makePaymentToBank } from '../services/clientApiService';
 import { makePaymentToPlan } from '../services/commonApiService';
-import { AxiosError } from 'axios';
 
 const useStripePayment = () => {
-    console.log()
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const handlePayment = async (id: string,) => {
         try {
             setLoading(true);
-            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
+            if (!process.env.STRIP_PUBLISHABLE_KEY) {
+                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+            }
+            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
             const session = await makePayment(id);
             const result = await stripe?.redirectToCheckout({
                 sessionId: session.data.id
             });
             if (result) {
-                localStorage.setItem("payemnt", result)
+                localStorage.setItem("payemnt", JSON.stringify(result))
             }
-        } catch (error) {
+        } catch (error:any) {
             setError(error.message);
         } finally {
             setLoading(false);
@@ -29,15 +31,18 @@ const useStripePayment = () => {
     const paymentToTalent = async (talentId: string, amount: number) => {
         try {
             setLoading(true);
-            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
+            if (!process.env.STRIP_PUBLISHABLE_KEY) {
+                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+            }
+            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
             const session = await makePaymentToBank(talentId, amount);
             const result = await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });
             if (result) {
-                localStorage.setItem("payemnt", result)
+                localStorage.setItem("payemnt", JSON.stringify(result))
             }
-        } catch (error: { message: string }) {
+        } catch (error: any) {
             setError(error.message);
         } finally {
             setLoading(false);
@@ -46,13 +51,16 @@ const useStripePayment = () => {
     const subscriptionPayment = async (role: string, planId: string, amount: number) => {
         try {
             setLoading(true);
-            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
+            if (!process.env.STRIP_PUBLISHABLE_KEY) {
+                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+            }
+            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
             const session = await makePaymentToPlan(role, planId, amount);
             localStorage.setItem("payemnt", JSON.stringify(session))
             await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });
-        } catch (error: AxiosError) {
+        } catch (error:any) {
             setError(error.message as string);
         } finally {
             setLoading(false);

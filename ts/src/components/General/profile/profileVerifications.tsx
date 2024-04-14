@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
 
 const ProfileVerifications = () => {
-    const numberIsVerify = useSelector((state: ROOTSTORE) => state.signup.numberVerify)
+    const userData = useSelector((state: ROOTSTORE) => state.signup)
     const basicData = useContext(MyContext)
     const navigate = useNavigate()
     return (
@@ -18,15 +18,15 @@ const ProfileVerifications = () => {
             <hr />
             <div className="flex items-center m-8 justify-between">
                 <PaymentIcon fontSize="small" />
-                <span className="text-start  font-normal font-sans">Payemtn Verify</span>
-                <span className="text-blue-600 ml-12 hover:text-red-500">Verify</span>
+                <span className="text-start  font-normal font-sans">Payments Verify</span>
+                <span  className={`${userData.bankVerified ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}>{userData.bankVerified ? "Verify" : "Verified"}</span>
             </div>
             <div className="flex items-center m-8 justify-between">
                 <LocalPhoneIcon fontSize="small" />
-                <span className="font-normal font-sans ">Phone Number Verify</span>
+                <span className="font-normal font-sans "> Number Verify</span>
                 <span
                     onClick={() => navigate(routerVariables.Settings)}
-                    className={`${numberIsVerify ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}> {numberIsVerify ? "Verified" : "Verify"} </span>
+                    className={`${userData.numberVerify ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}> {userData.numberVerify ? "Verified" : "Verify"} </span>
             </div>
             <div className="flex items-center justify-between m-8">
                 <EmailIcon fontSize="small" />

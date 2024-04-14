@@ -6,13 +6,12 @@ import { IMG_URL } from '../../../../../constant/columns'
 
 const MessageHeader = () => {
     const conversationState = useSelector((state: ROOTSTORE) => state?.conversation?.selectedConversations?.participants[0])
-
     return <>
         {
             conversationState && <div className='mb-1 flex justify-between'>
                 <div className='flex '>
-                    <img src={`${IMG_URL}${conversationState?.Profile.profile_Dp}`} className='size-14 rounded-full  border-2 border-red-500' alt="" />
-                    <p className='font-sans m-3  font-semibold text-black text-xl'>{conversationState?.First_name}</p>
+                    <img src={`${IMG_URL}${conversationState?.Profile?.profile_Dp}`} className='size-14 rounded-full  border-2 border-red-500' alt="" />
+                    <p className='font-sans m-3  font-semibold text-black text-xl'>{conversationState?.First_name }</p>
                 </div>
                 <div className='flex justify-between m-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-red-500 xl:mr-2">

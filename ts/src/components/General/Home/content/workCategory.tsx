@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
-import ReactCardSlider from "react-card-slider-component";
+// import ReactCardSlider from "react-card-slider-component";
 import quality from '../../../../assets/images.png'
 import const_and_secure from '../../../../assets/download.png'
 import {
@@ -25,6 +26,7 @@ const WorkCategory = () => {
         //     }).catch((err) => console.log(err))
         getAllUser()
             .then((res) => {
+                // eslint-disable-next-line prefer-const
                 let array = [];
                 for (let i = 0; i < res?.data?.data?.talent.length; i++) {
                     const value = res?.data?.data?.talent[i]
@@ -34,32 +36,32 @@ const WorkCategory = () => {
                 setUser(res?.data?.data?.talent)
             }).catch((err) => console.log(err))
     }, [])
-    const [activeTab, setActiveTab] = useState("html");
-    const slides = [
-        {
-            image: "https://picsum.photos/600/500",
-            title: "TDevelopment & IT",
-            description: "User experience designers",
-            clickEvent: "sliderClick"
-        },
-        {
-            image: "https://picsum.photos/600/500",
-            title: "TDevelopment & IT",
-            description: "User experience designers",
-            clickEvent: "sliderClick"
-        },
-        {
-            image: "https://picsum.photos/700/600",
-            title: "This is a third title",
-            description: "User experience designers",
-            clickEvent: "sliderClick"
-        },
-    ];
+    // const [activeTab, setActiveTab] = useState("html");
+    // const slides = [
+    //     {
+    //         image: "https://picsum.photos/600/500",
+    //         title: "TDevelopment & IT",
+    //         description: "User experience designers",
+    //         clickEvent: "sliderClick"
+    //     },
+    //     {
+    //         image: "https://picsum.photos/600/500",
+    //         title: "TDevelopment & IT",
+    //         description: "User experience designers",
+    //         clickEvent: "sliderClick"
+    //     },
+    //     {
+    //         image: "https://picsum.photos/700/600",
+    //         title: "This is a third title",
+    //         description: "User experience designers",
+    //         clickEvent: "sliderClick"
+    //     },
+    // ];
     return (
         <div className="m-auto  w-[60%] h-auto">
             <div className="mt-5">
                 <div className="m-auto mt-3 w-full h-auto ">
-                    <h1 className=" font-montserrat  text-center font-bold sm:text-xl md:text-xl text-xl xl:text-3xl">Top Work Categories</h1>
+                    {/* <h1 className=" font-montserrat  text-center font-bold sm:text-xl md:text-xl text-xl xl:text-3xl">Top Work Categories</h1> */}
                     <div className="mt-20">
                         {/* <Tabs indicatorColor="secondary" >
                             <TabsHeader
@@ -90,9 +92,9 @@ const WorkCategory = () => {
                                 </div>
                             </TabsBody>
                         </Tabs> */}
-                        <div className='m-10 w-full'>
+                        {/* <div className='m-10 w-full'>
                             <ReactCardSlider slides={user !== null && user ? user : slides} />
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <h1 className=" font-montserrat text-3xl text-center font-bold ">Why Techunt</h1>

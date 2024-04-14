@@ -3,7 +3,6 @@ import Dummy from "../../../components/General/Home/content/dummy";
 import DeveView from "../../../components/General/Home/content/developpers";
 import Footer from '../../../components/General/Home/footer/footer'
 import WorkCategory from "../../../components/General/Home/content/workCategory";
-import { useEffect, useRef } from "react";
 
 const Home = () => {
     

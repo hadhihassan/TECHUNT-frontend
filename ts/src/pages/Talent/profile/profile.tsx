@@ -8,12 +8,19 @@ import { MyContext } from "../../../context/myContext";
 import { getUserProfileDetails } from "../../../services/talentApiService";
 import ProfileSkills from "../../../components/General/profile/profileSkills";
 import ProfileExperiance from "../../../components/General/profile/profileExperiance";
-import ProfileReviews from "../../../components/General/profile/profileReviews";
+// import ProfileReviews from "../../../components/General/profile/profileReviews";
 import { AxiosError } from "axios"
 import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
 import EducationForm from "../../../components/General/profile/profileEducations";
 import Educations from "./education";
 import type { EducationType } from '../profile/education'
+import { useSelector } from "react-redux";
+import { ROOTSTORE } from "../../../redux/store";
+import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
+import CheckoutForm from "../../../components/General/settings/numberVerifiactions/bankDetailsForm";
+
+
+
 export interface UserProfile {
     Last_name: string;
     First_name: string;
@@ -46,19 +53,20 @@ export interface UserProfile {
     },
     createdAt?: string
     resume?: string,
-    educations?: EducationType[]
+    educations: EducationType[]
 }
 
 const Profile = () => {
     const [datas, setData] = useState<UserProfile>()
+    const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const [OpenEducation, setDeducations] = useState<boolean>(false)
+    const [openBank, setBanks] = useState<boolean>(false)
     const { role }: { role: string } = useContext(MyContext) || { role: "" };
     const getUserProfile = () => {
         getUserProfileDetails(role)
             .then((res) => {
                 setData(res?.data?.data)
-                console.log(res?.data?.data.educations)
-            }).catch((err:  AxiosError) => {
+            }).catch((err: AxiosError) => {
                 console.log(err)
             })
     }
@@ -70,7 +78,7 @@ const Profile = () => {
             getUserProfile();
         }
     }, [role]);
-
+console.log(basicData.progress,"this is the progress")
 
     return (<>
         <div>
@@ -84,14 +92,27 @@ const Profile = () => {
                     </div>
                     <div className="flex items-center  flex-row justify-center">
                         {
-                            OpenEducation && <EducationForm />
+                            OpenEducation && <EducationForm onUpdate={getUserProfile} />
                         }
                         {
-                            datas?.educations.length || 0 ? <Educations data={datas?.educations} onUpdate={getUserProfile} addState={toggleActive} /> : <>
-                                <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
-                                    <p className="text-lg">Which university or school did you attend</p>
-                                    <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
-                                    <button className="p-2 mt-2 text-sm rounded-xl  border border-red-500" onClick={() => setDeducations(!OpenEducation)}>Add education</button>
+                            basicData.role === 'TALENT' && <>
+                                {
+                                    datas?.educations?.length > 0 ? <Educations data={datas?.educations} onUpdate={getUserProfile} addState={toggleActive} /> : <>
+                                        <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
+                                            <p className="text-lg">Which university or school did you attend</p>
+                                            <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
+                                            <button className="p-2 mt-2 text-sm rounded-xl  border border-red-500" onClick={() => setDeducations(!OpenEducation)}>Add education</button>
+                                        </div>
+                                    </>
+                                }
+                            </>
+                        }
+                        {
+                            datas?.Profile?.Work_Experiance?.length === 0 && <>
+                                <div className="bg-gray-100 border h-auto w-full p-5 font-semibold rounded-xl">
+                                    <p className="text-lg">Which company or organization did you work for?</p>
+                                    <p className="text-sm font-normal">Enhance your profile visibility and opportunities by adding your work experiences.</p>
+                                    <button className="p-2 mt-2 text-sm rounded-xl border border-red-500">Add work experience</button>
                                 </div>
                             </>
                         }
@@ -102,9 +123,23 @@ const Profile = () => {
                         <ProfileContact data={datas} onUpdate={getUserProfile} />
                     </div>
                     <div>
-                        <BankDetails data={datas?.bankDetails} onUpdate={getUserProfile} />
+                        {
+                            Object.keys(datas?.bankDetails || {}).length !== 0 && <BankDetails data={datas?.bankDetails} onUpdate={getUserProfile} />
+                        }
+                        {
+                            Object.keys(datas?.bankDetails || {}).length === 0 && <>
+                                <div className="bg-gray-100 border h-auto w-full p-5 font-semibold rounded-xl">
+                                    <p className="text-lg">Add your bank details ?</p>
+                                    <p className="text-sm font-normal">Enhance your profile visibility and opportunities by adding your bank details.</p>
+                                    <button className="p-2 mt-2 text-sm rounded-xl border border-red-500" onClick={()=>setBanks(!openBank)}>Add bank details</button>
+                                </div>
+                            </>
+                        }
+                        {
+                            openBank && <CheckoutForm onUpdate={getUserProfile}/>
+                        }
                     </div>
-                    <ProfileReviews />
+                    {/* <ProfileReviews /> */}
                 </div>
                 <div className="flex flex-col gap-10">
                     <ProfileVerifications />
@@ -113,6 +148,7 @@ const Profile = () => {
                     }
                     {
                         role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
+
                     }
                 </div>
             </div>

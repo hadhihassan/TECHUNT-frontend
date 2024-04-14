@@ -3,7 +3,7 @@ import Footer from "../../../components/General/Home/footer/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { INITIALSTATE, setEmail } from "../../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../../redux/store";
-import Routers, { Routes } from "../../../routes/pathVariables";
+import Routers from "../../../routes/pathVariables";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../../services/commonApiService";
 import Alert from '@mui/material/Alert';
@@ -14,36 +14,35 @@ import { emailValidator, passwordValidator } from "../../../util/validatorsUtils
 
 const Login = () => {
 
-    const naviagte = useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [inputvalue, setValue] = useState<string | null>("")
-    const [password, setPassword] = useState<string | null>("")
+    const [inputValue, setValue] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
     const [error, setError] = useState<string>("")
     const data: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup);
-    const [Emailerrors, setErrorsEmail] = useState<string | null>(" ");
+    const [EmailErrors, setErrorsEmail] = useState<string | null>(" ");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(" ");
 
     const handleClickBtn: () => void = () => {
-        naviagte("/login/")
+        navigate(Routers.Login)
     }
 
     const verifyEmail = async (): Promise<void> => {
-        setErrorsEmail(emailValidator(inputvalue))
+        setErrorsEmail(emailValidator(inputValue))
         setErrorsPassword(passwordValidator(password))
-        console.log(Emailerrors, PasswordErrors)
-        if (!Emailerrors && !PasswordErrors) {
-            if (inputvalue !== "") {
-                dispatch(setEmail(inputvalue));
+        console.log(EmailErrors, PasswordErrors)
+        if (!EmailErrors && !PasswordErrors) {
+            if (inputValue !== "") {
+                dispatch(setEmail(inputValue));
             }
             try {
-                const url: string = Routers.VerifyEmail;
-                const result: any = await signup({ email: inputvalue, password: password }, data.role)
-                console.log(result)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const result: any = await signup({ email: inputValue, password: password }, data.role)
                 if (result.data) {
                     setTimeout(() => {
                         setError("")
                     }, 3000);
-                    const { token } = result?.data?.data as string
+                    const { token }: { token:string } = result?.data?.data as { token: string }
                     localStorage.setItem("token", token)
                     Swal.fire({
                         position: "top-end",
@@ -52,7 +51,7 @@ const Login = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    naviagte("/login/")
+                    navigate(Routers.Login)
                 } else {
                     setError(result?.error?.response?.data?.message)
                     setTimeout(() => {
@@ -87,7 +86,7 @@ const Login = () => {
                             </div>
                             <div className="mt-5">
                                 <label className="font-semibold text-sm  pb-1 block">E-mail</label>
-                                {Emailerrors && <p className="text-red-500 text-xs text-end">{Emailerrors}</p>}
+                                {EmailErrors && <p className="text-red-500 text-xs text-end">{EmailErrors}</p>}
                                 <input
                                     onChange={handleChange}
                                     className="border rounded-xl px-3 py-2 mt-1 mb-5 text-sm w-full text-black"

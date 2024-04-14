@@ -2,7 +2,7 @@ import React from "react";
 import Avatar from "react-avatar";
 import Header from "../../components/General/Home/Header/header";
 import Footer from "../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../components/General/ui/progressBar";
+// import { ProgressBar } from "../../components/General/ui/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from '../../redux/store'
 import { useDispatch } from "react-redux";
@@ -24,7 +24,7 @@ const ProfileDescription = () => {
 
     const dispatch = useDispatch()
     const [_description, addDescription] = useState("")
-    const [lengthError, setLenghtError] = useState<string | any>("")
+    const [lengthError, setLenghtError] = useState<string>("")
     const handleType: (event: ChangeEvent<HTMLTextAreaElement>) => void = (event) => {
         if (_description.trim() === "") {
             setLenghtError("Description is required")
@@ -33,8 +33,7 @@ const ProfileDescription = () => {
         } else if (_description?.length && _description?.length > 440) {
             setLenghtError("Description going long maximum 450 characters")
         } else {
-            console.log(_description);
-            setLenghtError(null)
+            setLenghtError("")
         }
         addDescription(event.target.value)
     }
