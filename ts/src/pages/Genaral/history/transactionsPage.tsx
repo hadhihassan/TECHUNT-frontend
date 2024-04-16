@@ -1,4 +1,4 @@
-import image from '../../../assets/3714960.jpg'
+import image from './3714960.jpg'
 import { Card, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { AxiosError, AxiosResponse } from "axios";
