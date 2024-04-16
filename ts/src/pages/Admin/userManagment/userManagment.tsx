@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column } from 'react-table';
+import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column, TableInstance, UsePaginationInstanceProps, UseFiltersInstanceProps, UseGlobalFiltersInstanceProps, TableState } from 'react-table';
 import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
 import Swal from 'sweetalert2';
 import { Dialog } from '@headlessui/react';
@@ -15,6 +15,20 @@ interface Row {
     "join date": string;
     action: boolean;
     role: string;
+}
+interface ExtendedTableInstance extends TableInstance<any>, UsePaginationInstanceProps<any>, UseFiltersInstanceProps<any>, UseGlobalFiltersInstanceProps<any>, UseSortByInstanceProps<any> {
+    getTableProps: () => any;
+    getTableBodyProps: () => any;
+    headerGroups: any;
+    prepareRow: any;
+    page: any;
+    nextPage: any;
+    previousPage: any;
+    canNextPage: any;
+    canPreviousPage: any;
+    pageOptions: any;
+    state: any;
+    setGlobalFilter: any;
 }
 const UserManagement: React.FC = () => {
     const [drawerData, setDrawerData] = useState<any>(null)
@@ -177,7 +191,7 @@ const UserManagement: React.FC = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 blockUser({ email, block, role })
-                    .then((res) => {
+                    .then(() => {
                         Swal.fire({
                             title: `${block ? "Unblocked" : "Blocked"}`,
                             text: `Your user has been ${block ? "Unblocked" : "Blocked"}.`,
@@ -185,7 +199,7 @@ const UserManagement: React.FC = () => {
                         });
                         getData();
                     })
-                    .catch((err) => {
+                    .catch(() => {
                         Swal.fire({
                             title: "Error",
                             text: "Failed to block user. Please try again later.",
@@ -208,33 +222,37 @@ const UserManagement: React.FC = () => {
         pageOptions,
         state,
         setGlobalFilter,
-    } = useTable<any>(
+    }: ExtendedTableInstance = useTable<any>(
         {
             columns,
             data: switchUser ? data1 : data,
-            initialState: { pageIndex: 0 }
+            initialState: { pageIndex: 0 } as Partial<TableState<any>>
         },
+        usePagination,
         useFilters,
         useGlobalFilter,
         useSortBy,
-        usePagination
     );
     const { globalFilter, pageIndex } = state;
     const openDrawer = () => {
-        const drawerId = JSON.parse(localStorage.getItem("drawerData"))
-        if (drawerId) {
-            const id = drawerId?._id
-            getJobPosts(id)
-                .then((res:any) => {
-                    if (res?.data) {
-                        setdrawerjobPost(res?.data.data.data)
-                    }
-                    const drawerData = drawerId;
-                    setDrawerData(drawerData)
-                    setOpen(true)
-                }).catch((err) => {
-                    console.log(err)
-                })
+        const drawerDataString = localStorage.getItem("drawerData");
+        if (drawerDataString) {
+            const drawerId = JSON.parse(drawerDataString);
+
+            if (drawerId) {
+                const id = drawerId?._id
+                getJobPosts(id)
+                    .then((res: any) => {
+                        if (res?.data) {
+                            setdrawerjobPost(res?.data.data.data)
+                        }
+                        const drawerData = drawerId;
+                        setDrawerData(drawerData)
+                        setOpen(true)
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+            }
         }
     }
     return (

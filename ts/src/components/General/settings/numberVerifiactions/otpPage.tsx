@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import  { useState } from "react";
+import { useState } from "react";
 import './style.css'
 import PhoneInput from "react-phone-input-2"
 import 'react-phone-input-2/lib/style.css'
@@ -26,16 +26,17 @@ const NumberVerification = () => {
     const [otp, setOtp] = useState<string>("")
     const [showOtpPage, setSwitch] = useState<boolean>(false)
     const [loading, setLoading] = useState(false);
-    console.log(phone)
+
     const sendOtp = async () => {
+        setLoading(true)
         try {
             // Ensure phone number is in E.164 format
             checkValidNumber(phone.slice(2), basicData?.role, basicData?.id || "")
-                .then(async (res:any) => {
+                .then(async (res: any) => {
                     if (res.error) {
                         error(res?.error?.response?.data.message || "Error occurs While processing you request ")
                     } else {
-                        console.log(res)
+
                         const formattedPhone = `+${phone.replace(/\D/g, '')}`;
                         const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {})
                         const confirmation: ConfirmationResult = await signInWithPhoneNumber(auth, formattedPhone, recaptcha)
@@ -46,21 +47,23 @@ const NumberVerification = () => {
                 }).catch((err) => {
                     error(err?.error?.response?.data.message || "Error occurs While processing you request ")
                 })
-        } catch (err:{message:string}) {
-            error(`Somthing went wrong!.${err.message || "Somthing went wrong"}`)
+            setLoading(false)
+        } catch (err) {
+            setLoading(false)
+            error(`Somthing went wrong!.${(err as Error)?.message || "Somthing went wrong"}`)
         }
     }
     const verifyOtp = async () => {
         try {
-            const data = await user.confirm(otp)
+            await user.confirm(otp)
             success("Your number is verified .")
             updateNumberVerification(basicData?.role, basicData?.id || "")
                 .then(() => {
                     dispatch(isNumberVerify(true))
                     navigate(`/${basicData.role}/profile`)
                 })
-        } catch (err:{message:string}) {
-            error(`${err.message || "Somthing went wrong"}`)
+        } catch (err) {
+            error(`Somthing went wrong!.${(err as Error)?.message || "Somthing went wrong"}`)
         }
     }
 
@@ -99,9 +102,6 @@ const NumberVerification = () => {
                                     numInputs={6}
                                     renderSeparator={<span>-</span>}
                                     renderInput={(props) => <input {...props} className="w-40 border m-5 border-gray-400  h-8 rounded-md " />}
-                                    disabled={false}
-                                    autoFocus
-                                    className="opt-container "
                                 />
                                 <button
                                     onClick={verifyOtp}

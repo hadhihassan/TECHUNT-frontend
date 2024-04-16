@@ -31,6 +31,7 @@ import ListWorkPost from '../../../components/Talent/home/workPostListing';
 
 
 export interface Project {
+    createdAt?: Date;
     Title: string;
     Client_id: string;
     Skills: string[];

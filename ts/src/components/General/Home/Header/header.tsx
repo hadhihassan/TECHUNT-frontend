@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import Routers from "../../../../routes/pathVariables";
 import { useContext } from "react";
 // import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import io from 'socket.io-client';
 import { useDispatch } from "react-redux";
 import { persistor } from '../../../../redux/store'
 import { useNavigate } from "react-router-dom";
 
 import { MyContext } from "../../../../context/myContext";
 import { cleanAllData } from "../../../../redux/Slice/signupSlice";
-const socket: any = io.connect("http://localhost:3000");
 
 
 type Layout = {
@@ -24,10 +22,7 @@ const Header = ({ layout }: Layout) => {
     naviagte(`/${basicdata.role}/profile/`)
   }
   const data = useContext(MyContext)
-  console.log(data);
-  const s = () => {
-    socket.emit()
-  }
+
   const dispatch = useDispatch()
 
   const logOutHandle = () => {

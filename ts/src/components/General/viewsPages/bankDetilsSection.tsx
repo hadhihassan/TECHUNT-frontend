@@ -47,7 +47,7 @@ export  const BankDetails: React.FC<BankDetailsSection> = ({ data, onUpdate }) =
     }
     const closeModal = () => setIsOpen(!isOpen)
     const handleSubmit = () => {
-        updateBankDetails(newBankDetails, userData.role, userData.id)
+        updateBankDetails(newBankDetails, userData.role, userData.id as string || "")
         .then((res)=>{
             if(res.data.success){
                 message.success("Successfully update your bank details.")

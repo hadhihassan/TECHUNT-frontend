@@ -10,7 +10,7 @@ const useSendMessages = () => {
     const conversation = useSelector((state: ROOTSTORE) => state.conversation.selectedConversations)
 
     const sendMessage = async (message: string) => {
-        setMessages([...conversation?.messages , { message }]);
+        setMessages([...conversation?.messages  || [], { message }]);
         setLoading(true);
         await sendMessageBakend(message, conversation?.participants[0]._id || "")
 

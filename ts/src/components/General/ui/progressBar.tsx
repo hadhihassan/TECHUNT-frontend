@@ -2,16 +2,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import CircularProgress, {
-    circularProgressClasses,
-    CircularProgressProps,
-} from '@mui/material/CircularProgress';
-import  { linearProgressClasses } from '@mui/material/LinearProgress';
+
+import { linearProgressClasses } from '@mui/material/LinearProgress';
 
 interface ProgressBarProps {
-    value: number;
+  value: number
 }
-
+interface ProgressBarComponentProps {
+  percentage: ProgressBarProps;
+}
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 5,
   borderRadius: 5,
@@ -26,15 +25,13 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 
 
-export const ProgressBar: React.FC<ProgressBarProps>  = ({ percentage }) => {
-
-
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-          <br />
-          <BorderLinearProgress variant="determinate" value={percentage} />
-        </Box>
-      );
+export const ProgressBar: React.FC<ProgressBarComponentProps> = ({ percentage }) => {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <br />
+      <BorderLinearProgress variant="determinate" value={percentage.value} />
+    </Box>
+  );
 };
 
 

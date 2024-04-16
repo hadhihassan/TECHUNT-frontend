@@ -7,7 +7,6 @@ import type { ProposalInterface } from '../../../interface/interfaces'
 import { Drawer } from 'antd';
 import toast, { Toaster } from 'react-hot-toast';
 import formatRelativeTime from '../../../util/timeFormating';
-import { makePayment } from '../../../services/talentApiService';
 import useStripePayment from '../../../hooks/usePayement';
 
 export interface Notification {
@@ -27,12 +26,12 @@ interface NotificationDrawerProps {
 }
 
 const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, open, proposals }) => {
-    const { handlePayment, loading, error } = useStripePayment()
-    const { role, id } = useSelector((state: ROOTSTORE) => state.signup)
+    const { handlePayment,  } = useStripePayment()
+    const { role} = useSelector((state: ROOTSTORE) => state.signup)
     const navigate = useNavigate()
     const [notifications, setNotifications] = useState<NotificationDrawerProps["notification"]>([]);
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [proposalId, setproposalId] = useState<null | string>(null)
+    const [proposalId, setproposalId] = useState<string>("")
     useEffect(() => {
         setNotifications(notification);
         setIsOpen(open)
@@ -49,13 +48,12 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
         navigate(clientRoutes.viewProposal)
     }
     const handleProposalPayment: (index: number) => void = (index:number) => {
-        setproposalId(notification[index].metaData)
+        setproposalId(notification[index].metaData as unknown as string || "")
         localStorage.setItem("paymentProposalId",JSON.stringify(notification[index].metaData))
         showPaymentComfirmaMessage()
     }
     const StartPayment: () => void = async () => {
-        console.log(proposalId)
-        await handlePayment(proposalId);
+        await handlePayment(proposalId as string);
     }
 
     const showPaymentComfirmaMessage = () => {
@@ -79,7 +77,6 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
                 <div className="flex border-l border-gray-200">
                     <button
                         onClick={() => {
-
                             toast.dismiss(t.id)
                             StartPayment()
                         }}

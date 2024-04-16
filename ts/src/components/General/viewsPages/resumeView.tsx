@@ -14,11 +14,9 @@ interface DisplayPdfProps {
 const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal }) => {
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-    const [numPages, setNumPages] = useState<number>(1);
     const [pageNumber, setPageNumber] = useState(1);
 
-    function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-        setNumPages(numPages);
+    function onDocumentLoadSuccess() {
         setPageNumber(1);
     }
     const onButtonClick = async () => {

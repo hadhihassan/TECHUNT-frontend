@@ -19,6 +19,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { topSkills } from "../../../schema/profileBasedSchema";
 
+
 export interface jobInterface {
     _id?: string;
     Title: string;
@@ -78,22 +79,25 @@ const EditjobPostForm = () => {
     };
     useEffect(() => {
         fetchAllJobPost()
-            .then((res) => {
-                const data = res?.data?.data?.data.find((item: { _id: string | undefined; }) => item._id === id)
-                console.log(data, res?.data?.data?.data)
-                setId(data?._id)
-                setSelectedOption(data.WorkType)
-                setValue(data.Skills)
-                setFormData({
-                    Title: data?.Title,
-                    Description: data?.Description,
-                    Skills: data?.Skills,
-                    TimeLine: data?.TimeLine,
-                    Expertiselevel: data?.Expertiselevel,
-                    WorkType: data?.WorkType,
-                    Amount: data?.Amount,
-                })
-                setEditorHtml(data?.Description)
+            .then((res: any) => {
+                if (res) {
+                    const data: jobInterface | undefined = res?.data?.data?.data.find((item: jobInterface) => item._id === id) || undefined
+                    if (data) {
+                        setId(data?._id || "")
+                        setSelectedOption(data.WorkType)
+                        setValue(data.Skills)
+                        setFormData({
+                            Title: data?.Title,
+                            Description: data?.Description,
+                            Skills: data?.Skills,
+                            TimeLine: data?.TimeLine,
+                            Expertiselevel: data?.Expertiselevel,
+                            WorkType: data?.WorkType,
+                            Amount: data?.Amount,
+                        })
+                        setEditorHtml(data?.Description)
+                    }
+                }
             })
     }, [])
     const onChangeInput: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void = (e) => {
@@ -184,11 +188,11 @@ const EditjobPostForm = () => {
             formDataError.TitleError === "" && validationError === ""
         ) {
             editJobPost(formData, docId || "")
-                .then((res:any) => {
+                .then((res: any) => {
                     if (res.data) {
                         success(res?.data?.data?.message || "")
                     } else {
-                        error(res?.error?.response?.data?.message  || "")
+                        error(res?.error?.response?.data?.message || "")
                     }
                 }).catch(() => {
                     error("Internal server error.")

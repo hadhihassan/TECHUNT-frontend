@@ -1,6 +1,6 @@
 const bankTypes = ["Savings", "Current", "Joint", "Business", "Student", "Retirement", "Online", "Islamic", "Credit Union", "Community", "Private"];
 import { Dialog, Transition } from '@headlessui/react'
-import React, { ChangeEvent, useState, Fragment } from "react";
+import React, {  useState, Fragment } from "react";
 import {
     Card,
     CardBody,
@@ -40,7 +40,7 @@ export default function CheckoutForm({ onUpdate }: { onUpdate: () => void }) {
     })
     const dispatch = useDispatch()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleOnChnage = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | any>) => {
+    const handleOnChnage = (e: { target: { name: string, value: string } } | any) => {
         if (e.target) {
             const { name, value } = e.target;
             setDetails({
@@ -53,7 +53,6 @@ export default function CheckoutForm({ onUpdate }: { onUpdate: () => void }) {
                 account_type: ""
             })
         }
-        console.log(bankDetails)
     }
     const submit = (e: React.FormEvent) => {
         e.preventDefault()

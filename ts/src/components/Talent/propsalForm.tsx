@@ -1,14 +1,45 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row, Space } from 'antd';
-import type { Proposal as ProposalInterface } from '../../interface/interfaces';
 import type { DatePickerProps } from 'antd';
 import { CAllS3ServiceToStore, uploadFileToSignedUelInS3, submitProposal } from '../../services/talentApiService';
 import { AxiosError, AxiosResponse } from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from '../General/Home/Header/afterLoginHeader';
 import { useNavigate } from 'react-router-dom';
-import { Rule } from 'antd/lib/form';
-import { validatePositiveNumber } from '../../util/validatorsUtils';
+export interface ProposalInterface {
+    title: string
+    _id?: string
+    coverLetter: string
+    rate: number
+    availability: string | string[]
+    attachments: File | null 
+    additionalInfo: string
+    jobId?: string | { Title: string }
+    Client_id: {
+        _id: string;
+        Last_name: string;
+        First_name: string;
+        Password: string;
+        Email: string;
+        Number: string;
+        Profile: {
+            profile_Dp: string;
+            Description: string;
+            Title: string;
+            Skills: string[];
+            Work_Experiance: string[];
+        };
+        Address: string;
+        PinCode: string;
+        City: string;
+        Country: string;
+        lastSeen?: Date;
+        isBlock?: boolean;
+        online?: boolean;
+        isVerify?: boolean;
+        isNumberVerify?: boolean;
+    } | string
+}
 
 interface ProposalFormProps {
     isOpen: boolean;
@@ -22,7 +53,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     const jobidRaw = localStorage.getItem("deatildView");
     const jobid: ProposalInterface | null = jobidRaw ? JSON.parse(jobidRaw) : null;
     const sender_id: string = jobid?._id || "ds";
-    const recipient_id: string = jobid?.Client_id?._id
+    const recipient_id: string = jobid && typeof jobid.Client_id !== 'string' ? jobid.Client_id?._id : '';
     useEffect(() => {
         setOpen(isOpen)
     }, [isOpen])
@@ -34,7 +65,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         title: "",
         coverLetter: "",
         rate: 0,
-        availability: null,
+        availability: "",
         attachments: null,
         additionalInfo: "",
         jobId: "",
@@ -55,7 +86,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             ["jobId"]: jobid?._id
         });
     };
-    //success toast hot message
     const success = (message: string) => {
 
         toast.success(message);
@@ -63,7 +93,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             navigate("/talent/home/")
         }, 3000);
     }
-    //error toast host message
     const error = (err: string) => toast.error(err);
     const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e?.target.files?.length === 1) {
@@ -88,7 +117,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
     };
     const hadleSubmit = (e: ProposalInterface) => {
         if (e.coverLetter) {
-            submitProposal(proposalData)
+            submitProposal(proposalData )
                 .then((res: AxiosResponse) => {
                     success(res.data.message)
                     sendNotification(res.data.data._id)
@@ -101,11 +130,11 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });
     }
     useEffect(() => {
-        socket.on("receiveNotification", (data) => {
+        socket.on("receiveNotification", (data:string) => {
             setReceivedNotifications([...receivedNotifications, data])
         })
         socket.emit("getNotifications", sender_id);
-        socket.on("receivedNotificatios", (notifications) => {
+        socket.on("receivedNotificatios", (notifications:string[]) => {
             setReceivedNotifications(notifications)
             console.log(notifications)
         })
@@ -115,7 +144,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         }
     }, [sender_id])
 
-    const validateDate = (rule: Rule, value: string | undefined, callback: (error?: string) => void) => {
+    const validateDate = ( value: string | undefined, callback: (error?: string) => void) => {
         const currentDate = new Date();
         const selectedDate = value ? new Date(value) : null;
         if (!value || (selectedDate && selectedDate > currentDate)) {
@@ -271,7 +300,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                         </Col>
                     </Row>
                     <Button onClick={hadleSubmit} htmlType="submit">Submit</Button>
-
                 </Form>
             </Drawer>
         </>

@@ -2,13 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type ConversationType = {
     selectedConversations: {
+        messages?: string[]
         _id: string;
         participants: [{
             Profile?: {
-                profile_Dp:string
+                profile_Dp: string
             };
-            First_name:string
-            _id:string
+            First_name: string
+            _id: string
         },
             {
                 Profile: {
@@ -16,7 +17,8 @@ export type ConversationType = {
                 }
             }]
     } | null,
-    messages: []
+    messages: string[]
+
 };
 
 const initialState: ConversationType = {

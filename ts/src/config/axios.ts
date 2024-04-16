@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosError } from 'axios';
+import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 import Swal from 'sweetalert2'
 export const BASE_URL: string = 'http://localhost:3000/';
 axios.defaults.withCredentials = true;
@@ -11,7 +11,7 @@ export const axiosInstance: AxiosInstance = axios.create({
   timeout: 5000,
 });
 
-const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig  => {
+const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig  => {
   let jwtToken = localStorage.getItem("token");
   if (!jwtToken || jwtToken == null) {
     jwtToken = localStorage.getItem("adminToken");

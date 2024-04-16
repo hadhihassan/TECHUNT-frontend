@@ -80,23 +80,6 @@ export function WorkSubmitForm({  open, closeModal, id }: {  open: boolean, clos
                 console.log(err)
             })
     };
-    const handleSubmitEdit = () => {
-        const workItem = localStorage.getItem("work")
-        const workData = JSON.parse(workItem ? workItem : "{}")
-        submitEditWork(id, { url, description }, workData._id)
-            .then((res) => {
-                console.log(res)
-                if (res.data.success) {
-                    message.success("successfully work submitted")
-                } else {
-                    message.error("Something went wrong ! ")
-                }
-                closeModal(!open)
-            }).catch((err) => {
-                message.error("Something went wrong ! ")
-                console.log(err)
-            })
-    };
     return (
         <>
             <Dialog

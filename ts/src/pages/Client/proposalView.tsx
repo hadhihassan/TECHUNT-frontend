@@ -17,7 +17,7 @@ import type { ProposalInterface } from '../../interface/interfaces'
 const ProposalClientView = () => {
     const navigate = useNavigate()
     const socket: Socket | null = useSocket(BASE_URL)
-    const [proposalData, setProposalData] = useState<ProposalInterface>([])
+    const [proposalData, setProposalData] = useState<ProposalInterface | null>(null)
     useEffect(() => {
         const proposalItem = localStorage.getItem("proposal");
         if (proposalItem) {
@@ -33,17 +33,21 @@ const ProposalClientView = () => {
                 successMesseg("accepted")
                 if (socket) {
                     socket.emit("sendNotification", {
-                        recipient_id: proposalData.talentId._id,
-                        sender_id: proposalData.Client_id,
+                        recipient_id: proposalData?.talentId?._id || "",
+                        sender_id: proposalData?.Client_id || "",
                         content: "Proposal accepted",
                         type: "proposalAccept",
                         metaData: proposalData?._id
                     })
                 }
-                setProposalData(prevState => ({
-                    ...prevState,
-                    isAccept: true
-                }));
+                setProposalData((prevState) => {
+                    if (prevState === null) return null;
+                    return {
+                        ...prevState,
+                        isAccept: true,
+                    };
+                });
+
             }).catch(() => {
                 errorMessage()
             })
@@ -54,10 +58,13 @@ const ProposalClientView = () => {
             .then(() => {
                 messageApi.destroy()
                 successMesseg("declined")
-                setProposalData(prevState => ({
-                    ...prevState,
-                    isAccept: false
-                }));
+                setProposalData((prevState) => {
+                    if (prevState === null) return null;
+                    return {
+                        ...prevState,
+                        isAccept: false,
+                    };
+                });
             }).catch(() => {
                 errorMessage()
             })

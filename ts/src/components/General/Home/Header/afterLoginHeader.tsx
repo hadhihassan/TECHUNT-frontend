@@ -25,6 +25,7 @@ import type { NotificationArgsProps } from 'antd';
 // eslint-disable-next-line react-refresh/only-export-components
 export const socket = io("http://localhost:3000")
 
+
 type NotificationPlacement = NotificationArgsProps['placement'];
 const Context = React.createContext({ name: 'Default' });
 
@@ -41,8 +42,11 @@ const AfterLoginHeader = () => {
     useEffect(() => {
         if (role) {
             getUserProfileDetails(role)
-                .then((res: unknown) => {
-                    setIMG(`http://localhost:3000/images/${res?.data?.data?.Profile?.profile_Dp}`)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .then((res:any) => {
+                    if (res) {
+                        setIMG(`http://localhost:3000/images/${res?.data?.data?.Profile?.profile_Dp}`)
+                    }
                 }).catch((err: AxiosError) => {
                     console.log(err)
                 })
@@ -56,14 +60,14 @@ const AfterLoginHeader = () => {
             }
         }
         socket.emit("getNotifications", sender_id);
-        socket.on("recevieNotification", (notification) => {
-            if (notification.length > notifications) {
+        socket.on("recevieNotification", (notification:Notification[]) => {
+            if (notification.length > notifications.length) {
                 if (notification[0].recipient_id == sender_id) {
                     setNotifications(notification)
                 }
             }
         })
-        socket.on("newPost", (notify) => {
+        socket.on("newPost", (notify: { user: { First_name: string; }; formData: { Title: string; }; }) => {
 
             if (userData.role === 'TALENT' && userData.premiumUser) {
                 const openNotification = (placement: NotificationPlacement) => {
@@ -83,7 +87,7 @@ const AfterLoginHeader = () => {
     }, []);
     const [open, setOpen] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const anchorRef:any = React.useRef(null);
+    const anchorRef: any = React.useRef(null);
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };

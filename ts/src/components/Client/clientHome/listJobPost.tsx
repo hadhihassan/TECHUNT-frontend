@@ -4,6 +4,14 @@ import { useNavigate } from "react-router-dom";
 import type { JobInterface } from '../../../interface/interfaces'
 import { formatMongoDate } from "../../../util/timeFormating";
 
+interface ResponseData {
+    data: {
+        data: {
+            data: JobInterface[];
+        }
+    };
+}
+
 const ListJobPost = () => {
     const [jobs, setJobs] = useState<JobInterface[]>([])
     const [sortType, setSortType] = useState<string>('');
@@ -13,7 +21,7 @@ const ListJobPost = () => {
     useEffect(() => {
         fetchAllJobPost()
             .then((res) => {
-                setJobs(res?.data?.data?.data)
+                setJobs((res as ResponseData)?.data?.data?.data);
             })
     }, [])
     // Sorting and filtering logic
@@ -41,14 +49,14 @@ const ListJobPost = () => {
                 <div className="border p-2 bg-red-500 text-white rounded-xl flex gap-2 font-semibold text-sm ">
                     <label htmlFor="sortType">Work Type</label>
                     <select id="sortType" className="form-select outline-none text-gray-600 rounded-xl " value={sortType} onChange={(e) => setSortType(e.target.value)}>
-                        <option  value="">Select work Type</option>
-                        <option  value="Milestone">Milestone</option>
-                        <option  value="Fixed">Fixed</option>
+                        <option value="">Select work Type</option>
+                        <option value="Milestone">Milestone</option>
+                        <option value="Fixed">Fixed</option>
                     </select>
                 </div>
                 <div className="border p-2 bg-red-500 text-white rounded-xl flex gap-2 font-semibold text-sm ">
                     <label htmlFor="sortExperience">Experience</label>
-                    <select id="sortExperience" className="form-select outline-none text-gray-600 rounded-xl "  value={sortExperience} onChange={(e) => setSortExperience(e.target.value)}>
+                    <select id="sortExperience" className="form-select outline-none text-gray-600 rounded-xl " value={sortExperience} onChange={(e) => setSortExperience(e.target.value)}>
                         <option value="">Select Experience</option>
                         <option value="Fresher">Fresher</option>
                         <option value="Medium">Medium</option>
@@ -57,7 +65,7 @@ const ListJobPost = () => {
                 </div>
                 <div className="border p-2 bg-red-500 text-white rounded-xl flex gap-2 font-semibold text-sm ">
                     <label htmlFor="sortPrice">Sort Price</label>
-                    <select id="sortPrice" className="form-select outline-none text-gray-600 rounded-xl "  value={sortPrice} onChange={(e) => setSortPrice(e.target.value)}>
+                    <select id="sortPrice" className="form-select outline-none text-gray-600 rounded-xl " value={sortPrice} onChange={(e) => setSortPrice(e.target.value)}>
                         <option value="" selected>Sort</option>
                         <option value="lowToHigh">Low to High</option>
                         <option value="highToLow">High to Low</option>

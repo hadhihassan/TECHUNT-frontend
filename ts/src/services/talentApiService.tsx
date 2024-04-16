@@ -2,8 +2,6 @@
 import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
-import type { ProposalInterface } from '../interface/interfaces';
-import { ObjectId } from 'mongoose';
 import { EducationType } from '../pages/Talent/profile/education';
 
 
@@ -47,13 +45,14 @@ export async function uploadFileToSignedUelInS3(signedUrl: string, file: File | 
         onUploadProgress: onProgress,
     });
 }
-export async function submitProposal(formData: ProposalInterface) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function submitProposal(formData: any) {
     return await axiosInstance.post(`${BASE_URL}TALENT/submit-proposal/`, formData)
 }
 export async function makePayment(id: string) {
     return await axiosInstance.post(`${BASE_URL}TALENT/make-payment-proposal/`, { id })
 }
-export async function updatePaymentStatus(status: string, proposalId: ObjectId) {
+export async function updatePaymentStatus(status: string, proposalId: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/update-payment-status/`, { status, proposalId })
 }
 export async function getAllClientForTalent() {

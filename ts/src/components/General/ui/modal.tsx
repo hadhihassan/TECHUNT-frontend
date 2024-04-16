@@ -1,7 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-
-export default function Modal({ isOpen, closeModal, content }) {
+interface ModalPropsType {
+    isOpen: boolean
+    closeModal: () => void
+    content: string
+}
+export default function Modal({ isOpen, closeModal, content }:ModalPropsType) {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment} >

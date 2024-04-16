@@ -8,8 +8,12 @@ import { ROOTSTORE } from "../../../redux/store";
 import { useParams } from "react-router-dom";
 import { fetchAllJobPostForTalent } from "../../../services/talentApiService";
 
+type RouteParams = {
+    id :string
+}
+
 const InvitationJobView = () => {
-    const { id }: { id: string } = useParams()
+    const { id } = useParams<RouteParams>()
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const close = () => {
         localStorage.removeItem("deatildView")
@@ -67,7 +71,7 @@ const InvitationJobView = () => {
                             <div className="flex justify-between m-5">
                                 <div>
                                     <p className=" font-bold">{post?.Title}</p>
-                                    <p className="mt-2 text-sm text-gray-600">{post?.createdAt}Posted 3 hours ago</p>
+                                    <p className="mt-2 text-sm text-gray-600">{post?.createdAt as string || ""}Posted 3 hours ago</p>
                                 </div>
                                 <div>
                                     <p> <b>${post?.Amount} USD</b>    <span className="text-red-500 font-semibold">{post?.WorkType}</span></p>
@@ -125,10 +129,10 @@ const InvitationJobView = () => {
                             }
                             <div className="font-sans  mt-5  border-b-2 w-full">
                                 <p className="ml-5 text-xl font-semibold">About the client</p>
-                                <p className="ml-5 mb-1 text-xs">{post?.Client_id?.City} <span className="ml-1 text-xs">{post?.Client_id?.Country}</span> </p>
+                                <p className="ml-5 mb-1 text-xs">{typeof post?.Client_id === "object" ? post?.Client_id?.City as string || "" : ""  } <span className="ml-1 text-xs">{typeof post?.Client_id === "object" ? post?.Client_id?.Country as string || "" : ""  }</span> </p>
                                 <p className="ml-5 mb-1 text-xs">2 jobs posted</p>
                                 <p className="ml-5 mb-1 text-xs">It's currently 4:45 PM here</p>
-                                <p className="ml-5 mb-5 text-xs">Joined {post?.Client_id?.createdAt}</p>
+                                <p className="ml-5 mb-5 text-xs">Joined {typeof post?.Client_id === 'object' ? post.Client_id.createdAt as string || "" : ""}</p>
                             </div>
                         </div>
                     </div>

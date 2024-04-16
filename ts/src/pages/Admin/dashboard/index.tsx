@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import EngineeringIcon from '@mui/icons-material/Engineering';
@@ -12,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { getDashBoardData } from '../../../services/adminApiService';
 import { AxiosResponse } from 'axios';
 import populateChartData from '../../../util/dashboadHelperFunctions';
+import { ApexOptions } from 'apexcharts';
 export interface overalRevenuseInterface {
     month: string;
     totalAmount: number;
@@ -38,8 +40,8 @@ const IndexDashBoard = () => {
                 setTalentData(res?.data.monthlyTalent)
             })
     }, [])
-    const chartConfigClient = {
-        type: "line",
+    const chartConfigClient: { type: "line", height: number, series: any[], options: ApexOptions } = {
+        type: "line" as const,
         height: 240,
         series: [
             {
@@ -54,15 +56,15 @@ const IndexDashBoard = () => {
                 },
             },
             title: {
-                show: "",
+                text: "",
             },
             dataLabels: {
                 enabled: false,
             },
             colors: ["#020617"],
             stroke: {
-                lineCap: "round",
-                curve: "smooth",
+                lineCap: "round" as "round" | "butt" | "square" | undefined,
+                curve: "smooth" as "smooth" | "straight" | "stepline" | "monotoneCubic",
             },
             markers: {
                 size: 0,
@@ -116,8 +118,8 @@ const IndexDashBoard = () => {
             },
         },
     };
-    const chartConfigTalent = {
-        type: "line",
+    const chartConfigTalent: { type: "line", height: number, series: any[], options: ApexOptions }  = {
+        type: "line" as const,
         height: 240,
         series: [
             {
@@ -132,7 +134,7 @@ const IndexDashBoard = () => {
                 },
             },
             title: {
-                show: "",
+                text: "",
             },
             dataLabels: {
                 enabled: false,
@@ -194,8 +196,8 @@ const IndexDashBoard = () => {
             },
         },
     };
-    const chartConfigMonth = {
-        type: "bar",
+    const chartConfigMonth: { type: "bar", height: number, series: any[], options: ApexOptions }  = {
+        type: "bar" as const,
         height: 240,
         series: [
             {
@@ -210,7 +212,7 @@ const IndexDashBoard = () => {
                 },
             },
             title: {
-                show: "",
+                text: "",
             },
             dataLabels: {
                 enabled: false,

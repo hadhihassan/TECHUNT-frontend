@@ -105,11 +105,11 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                 error(err?.error?.response?.data?.message || 'An error occurred while processing your request.');
             })
     }
-    const [editData, setEditData] = useState<object | null>(null)
+    const [editData, setEditData] = useState<JOB_CATEGORY_FORM_DATA>()
     const editCategory = (index: number) => {
         setEditData(data[index])
         setFormData({
-            name: data[index].name ,
+            name: data[index].name,
             description: data[index].description,
             image: data[index].image,
         })
@@ -163,7 +163,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                 {/* <!-- BODY start --> */}
                                 <tbody className="bg-white">
                                     {
-                                        filteredData?.map((value:JOB_CATEGORY_FORM_DATA, index:number) => (
+                                        filteredData?.map((value: JOB_CATEGORY_FORM_DATA, index: number) => (
                                             <tr>
                                                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                     {index + 1}
@@ -250,7 +250,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         <Modal isOpen={isOpen} onClose={closeModal}>
             <JobCategoryForm
                 editable={false}
-                formData={{}}
+                formData={{ name: "", description: "", image: null }}
                 handleChnage={handleChange}
                 OnSubmit={chandleAddNewJobCategory} />
         </Modal>
@@ -258,7 +258,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         {/* editjob category modal starting */}
         <Modal isOpen={isOpen1} onClose={closeModal1}>
             <EditJobCategoryForm
-                formData={editData || {}}
+                formData={editData || { _id: "", name: "", description: "", image: null }}
                 success={success}
                 error={error}
                 reCall={reCall}

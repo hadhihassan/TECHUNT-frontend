@@ -13,6 +13,7 @@ import { UserProfile } from '../../../pages/Talent/profile/profile'
 const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => void }> = ({ data, onUpdate }) => {
     const [selectedPerson, setSelectedPerson] = useState<string[] | string>("")
     const [query, setQuery] = useState<string>('')
+    setQuery("")
     const [people, setPeople] = useState<string[]>([])
     const [show, setShowAll] = useState<boolean>(false)
     const filteredPeople =

@@ -9,7 +9,6 @@ import { getUserProfileDetails } from "../../../services/talentApiService";
 import ProfileSkills from "../../../components/General/profile/profileSkills";
 import ProfileExperiance from "../../../components/General/profile/profileExperiance";
 // import ProfileReviews from "../../../components/General/profile/profileReviews";
-import { AxiosError } from "axios"
 import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
 import EducationForm from "../../../components/General/profile/profileEducations";
 import Educations from "./education";
@@ -55,7 +54,11 @@ export interface UserProfile {
     resume?: string,
     educations: EducationType[]
 }
-
+interface ApiResponse {
+    data: {
+        data: UserProfile;
+    };
+}
 const Profile = () => {
     const [datas, setData] = useState<UserProfile>()
     const basicData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
@@ -65,9 +68,9 @@ const Profile = () => {
     const getUserProfile = () => {
         getUserProfileDetails(role)
             .then((res) => {
-                setData(res?.data?.data)
-            }).catch((err: AxiosError) => {
-                console.log(err)
+                if (res) {
+                    setData((res as ApiResponse).data?.data)
+                }
             })
     }
     const toggleActive = () => {
@@ -78,7 +81,6 @@ const Profile = () => {
             getUserProfile();
         }
     }, [role]);
-console.log(basicData.progress,"this is the progress")
 
     return (<>
         <div>
@@ -97,7 +99,7 @@ console.log(basicData.progress,"this is the progress")
                         {
                             basicData.role === 'TALENT' && <>
                                 {
-                                    datas?.educations?.length > 0 ? <Educations data={datas?.educations} onUpdate={getUserProfile} addState={toggleActive} /> : <>
+                                    datas?.educations && datas?.educations?.length > 0 ? <Educations data={datas?.educations} onUpdate={getUserProfile} addState={toggleActive} /> : <>
                                         <div className="bg-gray-100 border h-auto w-full p-5  font-semibold rounded-xl">
                                             <p className="text-lg">Which university or school did you attend</p>
                                             <p className="text-sm font-normal">Those who have add there educations more profile view and opportunity </p>
@@ -120,7 +122,7 @@ console.log(basicData.progress,"this is the progress")
                     </div>
 
                     <div className={`flex items-center  flex-row justify-center `}>
-                        <ProfileContact data={datas} onUpdate={getUserProfile} />
+                        <ProfileContact data={datas ? { Address: datas.Address, City: datas.City, Country: datas.Country, Number: datas.Number, PinCode: datas.PinCode } : { Address: '', City: '', Country: '', Number: '', PinCode: '' }} onUpdate={getUserProfile} />
                     </div>
                     <div>
                         {
@@ -131,12 +133,12 @@ console.log(basicData.progress,"this is the progress")
                                 <div className="bg-gray-100 border h-auto w-full p-5 font-semibold rounded-xl">
                                     <p className="text-lg">Add your bank details ?</p>
                                     <p className="text-sm font-normal">Enhance your profile visibility and opportunities by adding your bank details.</p>
-                                    <button className="p-2 mt-2 text-sm rounded-xl border border-red-500" onClick={()=>setBanks(!openBank)}>Add bank details</button>
+                                    <button className="p-2 mt-2 text-sm rounded-xl border border-red-500" onClick={() => setBanks(!openBank)}>Add bank details</button>
                                 </div>
                             </>
                         }
                         {
-                            openBank && <CheckoutForm onUpdate={getUserProfile}/>
+                            openBank && <CheckoutForm onUpdate={getUserProfile} />
                         }
                     </div>
                     {/* <ProfileReviews /> */}

@@ -1,41 +1,38 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from 'react';
 // import ReactCardSlider from "react-card-slider-component";
 import quality from '../../../../assets/images.png'
 import const_and_secure from '../../../../assets/download.png'
-import {
-    Tabs,
-    TabsHeader,
-    Tab,
-    TabsBody,
-    TabPanel
-} from "@material-tailwind/react";
-import { getAllJobCategoies, getAllUser } from '../../../../services/adminApiService';
-import { IMG_URL } from '../../../../constant/columns';
+// import {
+//     Tabs,
+//     TabsHeader,
+//     Tab,
+//     TabsBody,
+//     TabPanel
+// } from "@material-tailwind/react";
+// import {  getAllUser } from '../../../../services/adminApiService';
+// import { IMG_URL } from '../../../../constant/columns';
 
 
 
 const WorkCategory = () => {
-    const [tabsHeader, setTabsHeader] = useState<object[]>([]);
-    const [user, setUser] = useState<object[]>([]);
-    useEffect(() => {
+    // const [tabsHeader, setTabsHeader] = useState<object[]>([]);
+    // const [user, setUser] = useState<object[]>([]);
+    // useEffect(() => {
         // getAllJobCategoies()
         //     .then((res) => {
         //         console.log(res)
         //         setTabsHeader(res?.data?.data?.data)
         //     }).catch((err) => console.log(err))
-        getAllUser()
-            .then((res) => {
-                // eslint-disable-next-line prefer-const
-                let array = [];
-                for (let i = 0; i < res?.data?.data?.talent.length; i++) {
-                    const value = res?.data?.data?.talent[i]
-                    array.push({ image: `${IMG_URL}${value?.Profile?.profile_Dp}`, title: value?.Profile?.Title, description: value?.Profile?.Description, clickEvent: "sliderClick" })
-                }
-                console.log(array)
-                setUser(res?.data?.data?.talent)
-            }).catch((err) => console.log(err))
-    }, [])
+        // getAllUser()
+        //     .then((res) => {
+        //         // eslint-disable-next-line prefer-const
+        //         let array = [];
+        //         for (let i = 0; i < res?.data?.data?.talent.length; i++) {
+        //             const value = res?.data?.data?.talent[i]
+        //             array.push({ image: `${IMG_URL}${value?.Profile?.profile_Dp}`, title: value?.Profile?.Title, description: value?.Profile?.Description, clickEvent: "sliderClick" })
+        //         }
+        //         // setUser(res?.data?.data?.talent)
+        //     }).catch((err) => console.log(err))
+    // }, [])
     // const [activeTab, setActiveTab] = useState("html");
     // const slides = [
     //     {

@@ -23,7 +23,7 @@ const AddSkills: React.FC = () => {
     const [text, setText] = useState<string>("");
     const [skills, setSkills] = useState<string[]>([]);
     const [error, setError] = useState<string>("");
-
+    setQuery("")
     const filteredPeople =
         query === ''
             ? people
@@ -145,7 +145,7 @@ const AddSkills: React.FC = () => {
                                         ))}
                                     </Combobox.Options>
                                 </Combobox>
-                                <label className="text-red-500 text-sm font-medium" onClick={addSkill}>+ Add skills</label>
+                                <label className="text-red-500 text-sm font-medium">+ Add skills</label>
                                 {error && <Alert severity="warning">{error}</Alert>}
                                 <div className="flex flex-wrap mt-2">
                                     {skills &&

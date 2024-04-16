@@ -89,10 +89,9 @@ export function descriptionValidator(address: string) {
 }
 
 //amount validator for the antd
-import { Rule } from 'antd/lib/form';
 const positiveNumberRegex = /^\d*\.?\d+$/;
 
-export const validatePositiveNumber = (rule: Rule, value: string, callback: (error?: string) => void) => {
+export const validatePositiveNumber = ( value: string, callback: (error?: string) => void) => {
     if (!positiveNumberRegex.test(value) ) {
         callback('Please enter a valid amount.');
     } else if(parseInt(value) < 0){

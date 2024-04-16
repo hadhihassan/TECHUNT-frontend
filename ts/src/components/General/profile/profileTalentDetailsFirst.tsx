@@ -1,16 +1,14 @@
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+// import Rating from '@mui/material/Rating';
+// import Stack from '@mui/material/Stack';
 import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
 import { editMainProfileSection } from '../../../services/commonApiService';
-import { MyContext } from '../../../context/myContext';
 import { uploadProfilePhoto } from '../../../services/clientApiService';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../../util/validatorsUtils'
-import { Context as ContextInterface } from '../../../context/myContext'
 import { UserProfile } from '../../../pages/Talent/profile/profile'
 import DisplayResume from '../viewsPages/resumeView';
 import toast, { Toaster } from "react-hot-toast";
@@ -31,7 +29,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
 
     const error = (err: string) => toast.error(err);
     const success = (message: string) => toast.success(message);
-    const basicData: ContextInterface = useContext<ContextInterface>(MyContext) ;
+    const basicData = useSelector((state:ROOTSTORE)=> state.signup)
     const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
     const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;

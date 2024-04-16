@@ -25,6 +25,11 @@ export interface CONTACT_FROM {
 
 }
 
+interface SelectedOption {
+    value: string;
+    label: string;
+}
+
 const ContactForm: React.FC = () => {
     const error = (err: string) => toast.error(err);
 
@@ -91,14 +96,12 @@ const ContactForm: React.FC = () => {
         if (!image) {
             setPhotoErro("Photo is required");
         }
-
         setfError(errors.fName);
         setlError(errors.lName);
         setCityError(errors.city);
         setNumberError(errors.number);
         setPinCodeError(errors.pinCode);
         setAddressError(errors.address);
-
         return !(errors.city || errors.number || errors.pinCode || errors.address || formData.country === "" || !image);
     };
     const handleFormSubmit = (e: React.FormEvent) => {
@@ -115,9 +118,9 @@ const ContactForm: React.FC = () => {
     }
     const handlePhotoChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
         if (e.target.files && e.target.files.length > 0) {
-            const img:File = e.target.files[0];
+            const img: File = e.target.files[0];
             if (img) {
-                if (img.size > 5242880) { 
+                if (img.size > 5242880) {
                     error('File size exceeds the limit (5MB)');
                     return;
                 }
@@ -133,15 +136,13 @@ const ContactForm: React.FC = () => {
             uploadProfilePhoto(data, role)
         }
     }
-
-    const handleCountryChange = (selectedOption: React.SetStateAction<null>) => {
+    const handleCountryChange = (selectedOption: SelectedOption | null) => {
         setCountryError("")
         setFormData({
             ...formData,
-            ["country"]: selectedOption?.value,
+            ["country"]: selectedOption?.value || "", 
         });
     };
-
 
     return (
         <form onSubmit={handleFormSubmit} className="mx-auto mt-4 max-w-xl sm:mt-20" encType="multipart/form-data">
@@ -179,7 +180,6 @@ const ContactForm: React.FC = () => {
                 reverseOrder={false}
             />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-
                 <div>
                     <div className="flex justify-between">
                         <label className="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
@@ -191,7 +191,6 @@ const ContactForm: React.FC = () => {
                 </div>
                 <div>
                     <div className="flex justify-between">
-
                         <label className="block text-sm font-semibold leading-6 text-gray-900">First name</label>
                         {fError && <p className="text-red-500 text-xs text-end">{fError}</p>}
                     </div>
@@ -217,7 +216,7 @@ const ContactForm: React.FC = () => {
                         <div className="mt-2.5">
                             <div className="mt-2.5">
                                 <Select
-                                    options={countries.map((country:{name:{common:string}}) => ({ value: country?.name?.common, label: country?.name?.common }))}
+                                    options={countries.map((country: { name: { common: string } }) => ({ value: country?.name?.common, label: country?.name?.common }))}
                                     onChange={handleCountryChange}
                                 />
                             </div>
@@ -249,13 +248,10 @@ const ContactForm: React.FC = () => {
                         <label className="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
                         {numberError && <p className="text-red-500 text-xs text-end">{numberError}</p>}
                     </div>
-
                     <div className="mt-2.5">
                         <input onChange={handleInputChnage} type="text" name="number" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
-
-
             </div>
             <div className="mt-10">
                 <button type="submit" className="block w-full rounded-md () px-1 py-1 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>

@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../routes/route/imports";
 import { sendForgetOtp } from "../../../services/commonApiService";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { message } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
