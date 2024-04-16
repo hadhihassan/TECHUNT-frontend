@@ -1,266 +1,266 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
-import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column, TableInstance, UsePaginationInstanceProps, UseFiltersInstanceProps, UseGlobalFiltersInstanceProps, TableState } from 'react-table';
-import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
-import Swal from 'sweetalert2';
+import React, { useEffect } from 'react';
+// import { useTable, useFilters, useGlobalFilter, useSortBy, usePagination, Column, TableInstance, UsePaginationInstanceProps, UseFiltersInstanceProps, UseGlobalFiltersInstanceProps, TableState, UseSortByInstanceProps } from 'react-table';
+// import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
+// import Swal from 'sweetalert2';
 import { Dialog } from '@headlessui/react';
 
-interface Row {
-    photo: string;
-    user: string;
-    email: string;
-    status: boolean;
-    job: string;
-    "join date": string;
-    action: boolean;
-    role: string;
-}
-interface ExtendedTableInstance extends TableInstance<any>, UsePaginationInstanceProps<any>, UseFiltersInstanceProps<any>, UseGlobalFiltersInstanceProps<any>, UseSortByInstanceProps<any> {
-    getTableProps: () => any;
-    getTableBodyProps: () => any;
-    headerGroups: any;
-    prepareRow: any;
-    page: any;
-    nextPage: any;
-    previousPage: any;
-    canNextPage: any;
-    canPreviousPage: any;
-    pageOptions: any;
-    state: any;
-    setGlobalFilter: any;
-}
+// interface Row {
+//     photo: string;
+//     user: string;
+//     email: string;
+//     status: boolean;
+//     job: string;
+//     "join date": string;
+//     action: boolean;
+//     role: string;
+// }
+// interface ExtendedTableInstance extends TableInstance<any>, UsePaginationInstanceProps<any>, UseFiltersInstanceProps<any>, UseGlobalFiltersInstanceProps<any>, UseSortByInstanceProps<any> {
+//     getTableProps: () => any;
+//     getTableBodyProps: () => any;
+//     headerGroups: any;
+//     prepareRow: any;
+//     page: any;
+//     nextPage: any;
+//     previousPage: any;
+//     canNextPage: any;
+//     canPreviousPage: any;
+//     pageOptions: any;
+//     state: any;
+//     setGlobalFilter: any;
+// }
 const UserManagement: React.FC = () => {
-    const [drawerData, setDrawerData] = useState<any>(null)
-    const [data, setData] = useState<Row[]>([]);
-    const [data1, setData1] = useState<Row[]>([]);
+    // const [drawerData, setDrawerData] = useState<any>(null)
+    // const [data, setData] = useState<Row[]>([]);
+    // const [data1, setData1] = useState<Row[]>([]);
     const [open, setOpen] = React.useState(false);
     const closeDrawer = () => setOpen(false);
-    const [switchUser, setSwitch] = useState<boolean>(false);
-    const [drawerjobPost, setdrawerjobPost] = useState<any[] | null>(null)
-
+    // const [switchUser, setSwitch] = useState<boolean>(false);
+    // const [drawerjobPost, setdrawerjobPost] = useState<any[] | null>(null)
     useEffect(() => {
         getData();
     }, [])
     function getData() {
-        getAllUser()
-            .then((res: any) => {
-                const mappedData = res?.data?.data?.talent.map((item: any) => ({
-                    fullData: item,
-                    id: item?._id,
-                    photo: item?.Profile?.profile_Dp || "N/A",
-                    user: `${item?.First_name} ${item?.Last_name}` || "N/A",
-                    email: item?.Email,
-                    status: item?.online || false,
-                    job: item?.Profile?.Title || "N/A",
-                    "join date": item?.createAt || "N/A",
-                    action: item?.isBlock,
-                    role: "TALENT",
-                }));
-                const mappedData1 = res?.data?.data?.client.map((item: any) => ({
-                    fullData: item,
-                    id: item?._id,
-                    photo: item?.Profile?.profile_Dp || "N/A",
-                    user: `${item?.First_name} ${item?.Last_name}` || "N/A",
-                    email: item?.Email || "N/A",
-                    job: item?.Profile?.Title || "N/A",
-                    status: item?.online || false,
-                    "join date": item?.createAt || "N/A",
-                    action: item?.isBlock,
-                    role: "CLIENT",
-                }));
-                setData(mappedData);
-                setData1(mappedData1);
-            }).catch((err) => {
-                console.log(err);
-            });
+        // getAllUser()
+        //     .then((res: any) => {
+        //         console.log(res)
+        //         // const mappedData = res?.data?.data?.talent.map((item: any) => ({
+        //         //     fullData: item,
+        //         //     id: item?._id,
+        //         //     photo: item?.Profile?.profile_Dp || "N/A",
+        //         //     user: `${item?.First_name} ${item?.Last_name}` || "N/A",
+        //         //     email: item?.Email,
+        //         //     status: item?.online || false,
+        //         //     job: item?.Profile?.Title || "N/A",
+        //         //     "join date": item?.createAt || "N/A",
+        //         //     action: item?.isBlock,
+        //         //     role: "TALENT",
+        //         // }));
+        //         // const mappedData1 = res?.data?.data?.client.map((item: any) => ({
+        //         //     fullData: item,
+        //         //     id: item?._id,
+        //         //     photo: item?.Profile?.profile_Dp || "N/A",
+        //         //     user: `${item?.First_name} ${item?.Last_name}` || "N/A",
+        //         //     email: item?.Email || "N/A",
+        //         //     job: item?.Profile?.Title || "N/A",
+        //         //     status: item?.online || false,
+        //         //     "join date": item?.createAt || "N/A",
+        //         //     action: item?.isBlock,
+        //         //     role: "CLIENT",
+        //         // }));
+        //         // setData(mappedData);
+        //         // setData1(mappedData1);
+        //     }).catch((err) => {
+        //         console.log(err);
+        //     });
     }
-    const columns: Column<Row>[] = React.useMemo(() => [
-        {
-            Header: 'User',
-            accessor: 'user',
-            Cell: ({ row }) => (
-                <div className="flex items-center">
-                    <img src={`http://localhost:3000/images/${row.original.photo}`} alt="User" className='rounded-md border border-gray-700 w-10 h-10' />
-                    <div className="ml-2">
-                        <div className='font-medium font-sans text-gray-800'>{row.original.user}</div>
-                        <div className='font-light text-sm font-sans'>{row.original.email}</div>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            Header: 'Job',
-            accessor: 'job',
-            Cell: ({ row }) => (
-                <div className="flex items-center">
-                    <p>{row.original.job}</p>
-                </div>
-            ),
-        },
-        {
-            Header: 'Status',
-            accessor: 'status',
-            Cell: ({ row }) => (
-                <div className="flex items-center">
-                    <label
-                        className="group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
-                    >
-                        <span
-                            className="relative px-3 py-1 transition-all ease-in duration-200 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                        >
-                            {row.original.status ? "Online" : "Offline"}
-                        </span>
-                        <div
-                            className="ease-in duration-300 opacity-0 group-hover:block group-hover:opacity-100 transition-all"
-                        >
-                            <div
-                                className="ease-in-out duration-500 -translate-y-4 pointer-events-none transition-all group-hover:-translate-y-16 absolute left-1/2 z-50 flex -translate-x-1/2 flex-col items-center rounded-sm text-center text-sm text-slate-300 before:-top-2"
-                            >
-                                <div className="rounded-sm bg-black py-1 px-2">
-                                    <p className="whitespace-nowrap">{row.original.status ? "User is Online" : "User is Offline"}</p>
-                                </div>
-                                <div
-                                    className="h-0 w-fit border-l-8 border-r-8 border-t-8 border-transparent border-t-black"
-                                ></div>
-                            </div>
-                        </div>
-                    </label>
-                </div>
-            ),
-        },
-        {
-            Header: 'Join Date',
-            accessor: 'join date',
-        },
-        {
-            Header: 'Action',
-            accessor: 'action',
-            Cell: ({ row }) => (
-                <div>
-                    <button
-                        className={`group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br ${row.original.action ? 'from-red-500 to-red-700' : 'from-green-500 to-green-700'} group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 outline-none  focus:ring-purple-200 dark:focus:ring-purple-800`}
-                        onClick={() => handleActionClick(row.original.email, row.original.role, row.original.action)}
-                    >
-                        <span
-                            className="relative px-3 py-1  transition-all ease-in duration-200 bg-white dark:bg-gray-900  group-hover:bg-opacity-0"
-                        >
-                            {row.original.action ? "Unblock" : "Block"}
-                        </span>
-                        <div
-                            className="ease-in duration-300 opacity-0 group-hover:block group-hover:opacity-100 transition-all"
-                        >
-                            <div
-                                className="ease-in-out duration-500 -translate-y-4 pointer-events-none transition-all group-hover:-translate-y-16 absolute left-1/2 z-50 flex -translate-x-1/2 flex-col items-center rounded-sm text-center text-sm text-slate-300 before:-top-2"
-                            >
-                                <div className="rounded-sm bg-black py-1 px-2">
-                                    <p className="whitespace-nowrap">{row.original.action ? "Unblock the user" : "Block the user"}</p>
-                                </div>
-                                <div
-                                    className="h-0 w-fit border-l-8 border-r-8 border-t-8 border-transparent border-t-black"
-                                ></div>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-            ),
-        },
-        {
-            Header: 'More Deatils',
-            Cell: ({ row }: { row: any }) => (
-                <div>
-                    <button className="text-blue-500" onClick={() => {
-                        localStorage.setItem("drawerData", JSON.stringify(row.original.fullData));
-                        openDrawer()
-                    }}>
-                        View
-                    </button>
-                </div>
-            ),
-        },
-    ], []);
-    const handleActionClick = (email: string, role: string, block: boolean) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: `Yes, ${block ? "Unblocked it" : "Blocked it"}!`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                blockUser({ email, block, role })
-                    .then(() => {
-                        Swal.fire({
-                            title: `${block ? "Unblocked" : "Blocked"}`,
-                            text: `Your user has been ${block ? "Unblocked" : "Blocked"}.`,
-                            icon: "success"
-                        });
-                        getData();
-                    })
-                    .catch(() => {
-                        Swal.fire({
-                            title: "Error",
-                            text: "Failed to block user. Please try again later.",
-                            icon: "error"
-                        });
-                    });
-            }
-        });
-    };
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page,
-        nextPage,
-        previousPage,
-        canNextPage,
-        canPreviousPage,
-        pageOptions,
-        state,
-        setGlobalFilter,
-    }: ExtendedTableInstance = useTable<any>(
-        {
-            columns,
-            data: switchUser ? data1 : data,
-            initialState: { pageIndex: 0 } as Partial<TableState<any>>
-        },
-        usePagination,
-        useFilters,
-        useGlobalFilter,
-        useSortBy,
-    );
-    const { globalFilter, pageIndex } = state;
-    const openDrawer = () => {
-        const drawerDataString = localStorage.getItem("drawerData");
-        if (drawerDataString) {
-            const drawerId = JSON.parse(drawerDataString);
+    // const columns: Column<Row>[] = React.useMemo(() => [
+    //     {
+    //         Header: 'User',
+    //         accessor: 'user',
+    //         Cell: ({ row }) => (
+    //             <div className="flex items-center">
+    //                 <img src={`http://localhost:3000/images/${row.original.photo}`} alt="User" className='rounded-md border border-gray-700 w-10 h-10' />
+    //                 <div className="ml-2">
+    //                     <div className='font-medium font-sans text-gray-800'>{row.original.user}</div>
+    //                     <div className='font-light text-sm font-sans'>{row.original.email}</div>
+    //                 </div>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         Header: 'Job',
+    //         accessor: 'job',
+    //         Cell: ({ row }) => (
+    //             <div className="flex items-center">
+    //                 <p>{row.original.job}</p>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         Header: 'Status',
+    //         accessor: 'status',
+    //         Cell: ({ row }) => (
+    //             <div className="flex items-center">
+    //                 <label
+    //                     className="group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
+    //                 >
+    //                     <span
+    //                         className="relative px-3 py-1 transition-all ease-in duration-200 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+    //                     >
+    //                         {row.original.status ? "Online" : "Offline"}
+    //                     </span>
+    //                     <div
+    //                         className="ease-in duration-300 opacity-0 group-hover:block group-hover:opacity-100 transition-all"
+    //                     >
+    //                         <div
+    //                             className="ease-in-out duration-500 -translate-y-4 pointer-events-none transition-all group-hover:-translate-y-16 absolute left-1/2 z-50 flex -translate-x-1/2 flex-col items-center rounded-sm text-center text-sm text-slate-300 before:-top-2"
+    //                         >
+    //                             <div className="rounded-sm bg-black py-1 px-2">
+    //                                 <p className="whitespace-nowrap">{row.original.status ? "User is Online" : "User is Offline"}</p>
+    //                             </div>
+    //                             <div
+    //                                 className="h-0 w-fit border-l-8 border-r-8 border-t-8 border-transparent border-t-black"
+    //                             ></div>
+    //                         </div>
+    //                     </div>
+    //                 </label>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         Header: 'Join Date',
+    //         accessor: 'join date',
+    //     },
+    //     {
+    //         Header: 'Action',
+    //         accessor: 'action',
+    //         Cell: ({ row }) => (
+    //             <div>
+    //                 <button
+    //                     className={`group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br ${row.original.action ? 'from-red-500 to-red-700' : 'from-green-500 to-green-700'} group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 outline-none  focus:ring-purple-200 dark:focus:ring-purple-800`}
+    //                     onClick={() => handleActionClick(row.original.email, row.original.role, row.original.action)}
+    //                 >
+    //                     <span
+    //                         className="relative px-3 py-1  transition-all ease-in duration-200 bg-white dark:bg-gray-900  group-hover:bg-opacity-0"
+    //                     >
+    //                         {row.original.action ? "Unblock" : "Block"}
+    //                     </span>
+    //                     <div
+    //                         className="ease-in duration-300 opacity-0 group-hover:block group-hover:opacity-100 transition-all"
+    //                     >
+    //                         <div
+    //                             className="ease-in-out duration-500 -translate-y-4 pointer-events-none transition-all group-hover:-translate-y-16 absolute left-1/2 z-50 flex -translate-x-1/2 flex-col items-center rounded-sm text-center text-sm text-slate-300 before:-top-2"
+    //                         >
+    //                             <div className="rounded-sm bg-black py-1 px-2">
+    //                                 <p className="whitespace-nowrap">{row.original.action ? "Unblock the user" : "Block the user"}</p>
+    //                             </div>
+    //                             <div
+    //                                 className="h-0 w-fit border-l-8 border-r-8 border-t-8 border-transparent border-t-black"
+    //                             ></div>
+    //                         </div>
+    //                     </div>
+    //                 </button>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         Header: 'More Deatils',
+    //         Cell: ({ row }: { row: any }) => (
+    //             <div>
+    //                 <button className="text-blue-500" onClick={() => {
+    //                     localStorage.setItem("drawerData", JSON.stringify(row.original.fullData));
+    //                     openDrawer()
+    //                 }}>
+    //                     View
+    //                 </button>
+    //             </div>
+    //         ),
+    //     },
+    // ], []);
+    // const handleActionClick = (email: string, role: string, block: boolean) => {
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         text: "You won't be able to revert this!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#3085d6",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: `Yes, ${block ? "Unblocked it" : "Blocked it"}!`
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             blockUser({ email, block, role })
+    //                 .then(() => {
+    //                     Swal.fire({
+    //                         title: `${block ? "Unblocked" : "Blocked"}`,
+    //                         text: `Your user has been ${block ? "Unblocked" : "Blocked"}.`,
+    //                         icon: "success"
+    //                     });
+    //                     getData();
+    //                 })
+    //                 .catch(() => {
+    //                     Swal.fire({
+    //                         title: "Error",
+    //                         text: "Failed to block user. Please try again later.",
+    //                         icon: "error"
+    //                     });
+    //                 });
+    //         }
+    //     });
+    // };
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     prepareRow,
+    //     page,
+    //     nextPage,
+    //     previousPage,
+    //     canNextPage,
+    //     canPreviousPage,
+    //     pageOptions,
+    //     state,
+    //     setGlobalFilter,
+    // }: ExtendedTableInstance = useTable<any>(
+    //     {
+    //         columns,
+    //         data: switchUser ? data1 : data,
+    //         initialState: { pageIndex: 0 } as Partial<TableState<any>>
+    //     },
+    //     usePagination,
+    //     useFilters,
+    //     useGlobalFilter,
+    //     useSortBy,
+    // );
+    // const { globalFilter, pageIndex } = state;
+    // const openDrawer = () => {
+    //     const drawerDataString = localStorage.getItem("drawerData");
+    //     if (drawerDataString) {
+    //         const drawerId = JSON.parse(drawerDataString);
 
-            if (drawerId) {
-                const id = drawerId?._id
-                getJobPosts(id)
-                    .then((res: any) => {
-                        if (res?.data) {
-                            setdrawerjobPost(res?.data.data.data)
-                        }
-                        const drawerData = drawerId;
-                        setDrawerData(drawerData)
-                        setOpen(true)
-                    }).catch((err) => {
-                        console.log(err)
-                    })
-            }
-        }
-    }
+    //         if (drawerId) {
+    //             const id = drawerId?._id
+    //             getJobPosts(id)
+    //                 .then((res: any) => {
+    //                     if (res?.data) {
+    //                         setdrawerjobPost(res?.data.data.data)
+    //                     }
+    //                     const drawerData = drawerId;
+    //                     setDrawerData(drawerData)
+    //                     setOpen(true)
+    //                 }).catch((err) => {
+    //                     console.log(err)
+    //                 })
+    //         }
+    //     }
+    // }
     return (
         <>
             <main id="content" className="flex-1 p-6 lg:px-8 h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="px-4 py-6 sm:px-0">
-                        <div className="flex justify-between mb-4">
+                        {/* <div className="flex justify-between mb-4">
                             <div className="flex items-center">
                                 <input
                                     id="search"
@@ -289,8 +289,8 @@ const UserManagement: React.FC = () => {
                                     Next
                                 </button>
                             </div>
-                        </div>
-                        <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">
+                        </div> */}
+                        {/* <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-300">
                                 {headerGroups.map((headerGroup: { getHeaderGroupProps: () => JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>; headers: any[]; }) => (
                                     <tr {...headerGroup.getHeaderGroupProps()}>
@@ -328,7 +328,7 @@ const UserManagement: React.FC = () => {
                                     );
                                 })}
                             </tbody>
-                        </table>
+                        </table> */}
                     </div>
                 </div>
                 <div >
@@ -341,7 +341,7 @@ const UserManagement: React.FC = () => {
                         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
                         <div className="inline-block align-bottom  bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <div className='flex justify-center mb-5 rounded-full overflow-auto'>
+                                {/* <div className='flex justify-center mb-5 rounded-full overflow-auto'>
                                     <img src={`http://localhost:3000/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
                                     <div className='m-2 font-sans text-gray-600 font-semibold'>
                                         <p >{drawerData?.First_name}</p>
@@ -352,8 +352,8 @@ const UserManagement: React.FC = () => {
                                         }
 
                                     </div>
-                                </div>
-                                <div className='overflow-auto '>
+                                </div> */}
+                                {/* <div className='overflow-auto '>
                                     <div className='overflow-auto'>
                                         <div className="overflow-auto">
                                             {
@@ -409,7 +409,7 @@ const UserManagement: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

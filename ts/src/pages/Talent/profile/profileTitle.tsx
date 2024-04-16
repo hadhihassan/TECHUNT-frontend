@@ -77,7 +77,7 @@ const ProfileTitle: React.FC = () => {
                             <p>1/2</p>
                         </div>
                         <div className="pt-2 ">
-                            <ProgressBar value={10} />
+                            <ProgressBar percentage={10} />
                         </div>
                     </div>
                     <div className="mt-6">

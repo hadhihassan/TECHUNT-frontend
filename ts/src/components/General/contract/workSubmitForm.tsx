@@ -9,7 +9,7 @@ import {
     Typography,
     Textarea,
 } from "@material-tailwind/react";
-import { submitWork, submitEditWork, CAllS3ServiceToStore, uploadFileToSignedUelInS3 } from "../../../services/talentApiService";
+import { submitWork, CAllS3ServiceToStore, uploadFileToSignedUelInS3 } from "../../../services/talentApiService";
 import { message } from "antd";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";

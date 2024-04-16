@@ -5,11 +5,8 @@ import Box from '@mui/material/Box';
 
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 
-interface ProgressBarProps {
-  value: number
-}
 interface ProgressBarComponentProps {
-  percentage: ProgressBarProps;
+  percentage: number;
 }
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 5,
@@ -29,7 +26,7 @@ export const ProgressBar: React.FC<ProgressBarComponentProps> = ({ percentage })
   return (
     <Box sx={{ flexGrow: 1 }}>
       <br />
-      <BorderLinearProgress variant="determinate" value={percentage.value} />
+      <BorderLinearProgress variant="determinate" value={percentage} />
     </Box>
   );
 };

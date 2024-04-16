@@ -6,13 +6,14 @@ import { AxiosError, AxiosResponse } from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import { socket } from '../General/Home/Header/afterLoginHeader';
 import { useNavigate } from 'react-router-dom';
+import { RuleObject } from 'antd/es/form';
 export interface ProposalInterface {
     title: string
     _id?: string
     coverLetter: string
     rate: number
     availability: string | string[]
-    attachments: File | null 
+    attachments: File | null
     additionalInfo: string
     jobId?: string | { Title: string }
     Client_id: {
@@ -77,7 +78,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             ...proposalData,
             [name]: value
         });
-        console.log("proposal object ", proposalData)
     };
     const onChange: DatePickerProps['onChange'] = (_date, dateString) => {
         setData({
@@ -115,26 +115,24 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             error("Maximum file limit is one . Selete one file")
         }
     };
-    const hadleSubmit = (e: ProposalInterface) => {
-        if (e.coverLetter) {
-            submitProposal(proposalData )
-                .then((res: AxiosResponse) => {
-                    success(res.data.message)
-                    sendNotification(res.data.data._id)
-                }).catch(() => {
-                    error("Error uploading file")
-                })
-        }
+    const hadleSubmit = () => {
+        submitProposal(proposalData)
+            .then((res: AxiosResponse) => {
+                success(res.data.message)
+                sendNotification(res.data.data._id)
+            }).catch(() => {
+                error("Error uploading file")
+            })
     }
     const sendNotification = (id: string) => {
         socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });
     }
     useEffect(() => {
-        socket.on("receiveNotification", (data:string) => {
+        socket.on("receiveNotification", (data: string) => {
             setReceivedNotifications([...receivedNotifications, data])
         })
         socket.emit("getNotifications", sender_id);
-        socket.on("receivedNotificatios", (notifications:string[]) => {
+        socket.on("receivedNotificatios", (notifications: string[]) => {
             setReceivedNotifications(notifications)
             console.log(notifications)
         })
@@ -144,7 +142,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         }
     }, [sender_id])
 
-    const validateDate = ( value: string | undefined, callback: (error?: string) => void) => {
+    const validateDate = (_rule: RuleObject, value: string | undefined, callback: (error?: string) => void) => {
         const currentDate = new Date();
         const selectedDate = value ? new Date(value) : null;
         if (!value || (selectedDate && selectedDate > currentDate)) {

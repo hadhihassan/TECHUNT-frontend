@@ -23,9 +23,11 @@ const MessageListing = () => {
         getAllMessages()
     }, [conversation.selectedConversations, getAllMessages]);
     return (
-        <>{loading}
-            {conversation.messages && (
-                conversation?.messages?.map((message: MessageDoc, index: number) => (
+        <>
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                (conversation?.messages as unknown as MessageDoc[])?.map((message: MessageDoc, index: number) => (
                     <Message
                         key={index}
                         message={message}
