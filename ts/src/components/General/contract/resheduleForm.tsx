@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ChangeEvent, useEffect, useState, Fragment } from "react";
+import { Fragment } from "react";
 import { reSheduleWork } from "../../../services/talentApiService";
 import { message } from "antd";
 import { Dialog, Transition } from '@headlessui/react'
@@ -13,7 +13,7 @@ export interface ReasonType {
     reason: string;
 }
 
-export function ResheduleSubmitForm({ open, closeModal,  milestoneId, workId, onUpdate }: { open: boolean, closeModal: () => void,  milestoneId: string, workId: string, onUpdate:()=> void }) {
+export function ResheduleSubmitForm({ open, closeModal, milestoneId, workId, onUpdate }: { open: boolean, closeModal: () => void, milestoneId: string, workId: string, onUpdate: () => void }) {
 
     const validationSchema = Yup.object().shape({
         newDeadline: Yup.number()
