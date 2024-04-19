@@ -24,7 +24,7 @@ export const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		if (id) {
-			const socketInstance = io("http://localhost:3000", {
+			const socketInstance = io("https://timezones.website", {
 				query: {
 					userId: id,
 				},

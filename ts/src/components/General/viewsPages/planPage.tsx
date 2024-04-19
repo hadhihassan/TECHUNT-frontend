@@ -47,11 +47,17 @@ const PlanPage = () => {
             <div className="flex flex-col text-center justify-center m-20 gap-5 ">
                 <p className="font-serif text-4xl font-semibold text-gray-700">Subscription </p>
                 <p className="font-serif text-xl font-semibold text-gray-700">Get started with a TECHUNT Subscription that works for you.</p>
+                {
+                        plan?.length === 0 && <>
+                            <p className="font-serif text-xl text-center font-semibold text-gray-700">No subscriptions .</p>
+                        </>
+                    }
             </div>
 
             <div className="w-full md:w-2/3 mt-5 grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto">
+
                 {
-                    plan.map((plan: PlanInterface, index: number) => (
+                    plan?.map((plan: PlanInterface, index: number) => (
                         <div
                             key={index}
                             className="shadow-2xl rounded-xl p-5 font-sans border-t-4 border-green-400 bg-white">
@@ -132,7 +138,9 @@ const PlanPage = () => {
                             </div>
                         </div>
                     ))
+
                 }
+
                 <Transition appear show={isOpen} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={closeModal}>
                         <Transition.Child

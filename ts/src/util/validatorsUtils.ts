@@ -43,11 +43,14 @@ export function numberValidator(number: string) {
     const mobileNumber = number.trim();
     const zeroCount = (mobileNumber.match(/0/g) || []).length;
     const mobileNumberPattern = /^\d+$/;
+    if(mobileNumber.length === 10 ){
+        return null
+    }
     if(mobileNumber === ""){
         return "Number is required";
     }else if(!mobileNumberPattern.test(mobileNumber)) {
         return "Invalid mobile number. Please enter numbers only.";
-    }else if(mobileNumber.length !== 10){
+    }else if(mobileNumber.length < 9 || mobileNumber.length > 9 ){
         return "Invalid mobile number must be 10 digits";
     } else if (zeroCount > 5) {
         return "Too many zeros in the mobile number.";
@@ -58,13 +61,16 @@ export function numberValidator(number: string) {
 // pincode
 export function pincodeValidator(number: string) {
     const pincodeRegex = /^\d+$/;
+    if(number.trim().length === 6 ){
+        return null
+    }
     if (number.trim() === "") {
         return 'Pincode is required';
     }
     if (!pincodeRegex.test(number.trim())) {
         return "Pincode only includes numbers";
     }
-    if (number.trim().length !== 6) {
+    if (number.trim().length < 5 || number.trim().length > 5) {
         return "Pincode must be 6 digits";
     }
     return null;

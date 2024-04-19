@@ -11,9 +11,9 @@ import { UserProfile } from '../../../pages/Talent/profile/profile'
 
 
 const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => void }> = ({ data, onUpdate }) => {
+    
     const [selectedPerson, setSelectedPerson] = useState<string[] | string>("")
-    const [query, setQuery] = useState<string>('')
-    setQuery("")
+    const query:string = "";
     const [people, setPeople] = useState<string[]>([])
     const [show, setShowAll] = useState<boolean>(false)
     const filteredPeople =
@@ -94,7 +94,7 @@ const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => v
                                 placeholder="Example: node js | react js"
                             />
                             <Combobox.Options>
-                                {filteredPeople.map((person) => (
+                                {filteredPeople?.map((person) => (
                                     <Combobox.Option onClick={() => addSkill(person)} key={person} value={person}>
                                         {person}
                                     </Combobox.Option>
@@ -103,10 +103,10 @@ const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => v
                         </Combobox>
                         <div className="flex flex-wrap mt-2">
                             {skills &&
-                                skills.map((value, key) => (
+                                skills?.map((value, key) => (
                                     <div key={key} className="flex items-center mt-2 mr-2">
                                         <p
-                                            className={`bg-red-500 text-white rounded-xl text-center text-sm border relative ${value.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
+                                            className={`bg-red-500 text-white rounded-xl text-center text-sm border relative ${value?.length > 10 ? 'w-[10rem]' : 'w-[10rem]'
                                                 } `}
                                         >
                                             {value}
@@ -131,8 +131,8 @@ const profileSkills: React.FC<{ data: UserProfile | undefined, onUpdate: () => v
             <hr />
             <div className="flex flex-col space-y-5 items-start m-5 h-auto">
                 {
-                    viewSkills.length > 0 ? (
-                        viewSkills.map((value: string, key: number) => (
+                    viewSkills?.length > 0 ? (
+                        viewSkills?.map((value: string, key: number) => (
                             <span className="text-start font-semibold font-sans" key={key}>
                                 {value}
                             </span>

@@ -1,10 +1,10 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type {  MilestoneType } from '../../Client/contract/contractInterface'
+import type { MilestoneType } from '../../Client/contract/contractInterface'
 import { useEffect, useState } from 'react';
 import { formatMongoDate, } from '../../../util/timeFormating';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
-import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import Modal from '../ui/modal';
 import { Dialog } from '@headlessui/react';
 import { PendingActions } from '@mui/icons-material';
@@ -14,29 +14,38 @@ import type { MenuProps } from 'antd';
 import { Dropdown, message, Popconfirm, } from 'antd';
 import { updateMilestoneStatus } from '../../../services/talentApiService';
 import { AxiosError, AxiosResponse } from 'axios';
-import { addWalletAmount, sendMilestoneApproval } from '../../../services/clientApiService';
+import { addWalletAmount, sendMilestoneApproval, udpdateReason } from '../../../services/clientApiService';
 import { WorkSubmitForm } from './workSubmitForm';
 import { contractStatusUpdate, getContract, getSubmittedWork } from '../../../services/commonApiService';
 import useStripePayment from '../../../hooks/usePayement';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ResheduleSubmitForm } from './resheduleForm';
+import ReviewForm from './contractReview';
+import { EditOutlined } from '@ant-design/icons';
+import { EditMilestone } from './milestoneEditForm';
+
+
+
 interface ContractDetailsType {
     _id?: string
     terms: string;
     work: {
-        WorkType:string,
-        Title:string
-    }; 
+        WorkType: string,
+        Title: string
+    };
     duration: Date[] | null[];
     amount: number;
     notes: string;
     paymentTerms: string;
-    talent:  { _id: string },
-    client: string| object, 
+    talent: { _id: string },
+    client: string | { _id: string },
     approval?: boolean,
     status?: string
     completed?: "Pending" | "Progress" | "Completed",
-    milestones: MilestoneType[] 
+    milestones: MilestoneType[]
     createdAt?: string | Date
+    TALENTreview?: string
+    CLIENTreview?: string
 }
 
 
@@ -44,13 +53,30 @@ const Milestone = () => {
     const { paymentToTalent, loading } = useStripePayment()
     const [statusKey, setStatusKey] = useState<number | undefined>()
     const [contract, setContract] = useState<ContractDetailsType | null>(null)
-    const role: INITIALSTATE["role"] = useSelector((state: ROOTSTORE) => state.signup.role)
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [selectMilestone, setSelected] = useState<number>(0)
-    // const [reviewOpen, setReviewOpen] = useState<boolean>(false)
+    const [reviewOpen, setReviewOpen] = useState<boolean>(false)
+    const [showReshedule, setShowReshedule] = useState<boolean>(false)
+    const [t, setT] = useState<string>("");
+    const [showReason, setShowReason] = useState<boolean>(false)
+    const [isOpen, setIsOpen] = useState(false)
+    const [formOpen, setFormOpen] = useState(false)
+    const [showEditMilestone, setEditMilestone] = useState<boolean>(false)
+    const closeEditMilStone = () => setEditMilestone(!showEditMilestone);
+
+
+    const toId = () => {
+        let clientId = typeof contract?.client === "object" ? contract?.client._id : contract?.client || "";
+        if (basicData.id === clientId) {
+            return typeof contract?.talent === "object" ? contract?.talent._id : contract?.talent || "";
+        }
+        return clientId;
+    };
+
     const { id } = useParams();
     const navigate = useNavigate()
     const fetch = () => {
-        getContract(role, id?.slice(3) || "")
+        getContract(basicData.role, id?.slice(3) || "")
             .then((res: AxiosResponse) => {
                 setContract(res.data.data)
             })
@@ -59,15 +85,17 @@ const Milestone = () => {
         fetch()
         const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
         if (completedMilestones.length as number === contract?.milestones?.length) {
-            contractStatusUpdate(contract?._id || "", "completed", role)
+            contractStatusUpdate(contract?._id || "", "completed", basicData.role)
         }
+        setT(toId);
+
         return () => {
             localStorage.removeItem("payedMilestone")
         }
-    }, [])
-    const [isOpen, setIsOpen] = useState(false)
-    const [formOpen, setFormOpen] = useState(false)
-    // const closeRatingModal = () => setReviewOpen(!reviewOpen)
+    }, [reviewOpen])
+    const closeRatingModal = () => {
+        setReviewOpen(!reviewOpen)
+    }
     const openModal = () => setIsOpen(true)
     const closeModal = () => setIsOpen(false)
     // client side for sending the spesific milestone 
@@ -81,11 +109,12 @@ const Milestone = () => {
                 } else {
                     message.error("something went wrong !!.")
                 }
-            }).catch((_err: AxiosError) => {
-                console.log(_err)
+            }).catch(() => {
                 message.error("something went wrong !.")
             })
     }
+
+    const closeReshduleModal = () => { setShowReshedule(!showReshedule) }
     // for freelancer to submit the work 
     const submitWork = () => {
         fetch()
@@ -114,11 +143,11 @@ const Milestone = () => {
         localStorage.setItem("payedMilestone", JSON.stringify(milestone));
         try {
             await addWalletAmount(contract?.talent?._id as string || "", milestone?.amount as number, milestone?._id as unknown as boolean);
-            await paymentToTalent(contract?.talent?._id as string || "", milestone?.amount as number);
+            paymentToTalent(contract?.talent?._id as string || "", milestone?.amount as number)
+                .then((res) => console.log(res)).catch((err) => console.log(err))
         } catch (error) {
             console.error("Payment error:", error);
         }
-        fetch()
     };
     const items: MenuProps['items'] = [
         {
@@ -137,6 +166,7 @@ const Milestone = () => {
         items,
         onClick: handleMenuClick,
     };
+
     const updateStatus = async () => {
         let status: string = ""
         if (statusKey == 1) {
@@ -152,20 +182,29 @@ const Milestone = () => {
             } else {
                 message.warning('Failed to update milestone status.');
             }
-        } catch (err) {
-            console.log(err);
+        } finally {
+            setConfirm(!confirm)
+            fetch()
         }
-        setConfirm(!confirm)
-        fetch()
     }
     const showWork = () => {
         const workId: string = contract?.milestones[selectMilestone]?.work as string || ""
-        getSubmittedWork(workId, role)
+        getSubmittedWork(workId, basicData.role)
             .then((res: AxiosResponse) => {
                 localStorage.setItem("work", JSON.stringify(res.data.data) || "")
                 setFormOpen(!formOpen)
             }).catch(() => message.error("Something went wrong !. try again later ."))
         fetch()
+    }
+
+    const updateReasonStatus = async (id: string, status: boolean) => {
+        udpdateReason(id, basicData.role, status)
+            .then(() => {
+                fetch()
+                message.success("Status updated")
+            }).catch(() => {
+                message.error("Somthing went wrong ?.")
+            })
     }
     const modalElement = (
         <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  p-6 text-left align-middle shadow-xl transition-all">
@@ -216,7 +255,7 @@ const Milestone = () => {
             </div>
             <div className="mt-4">
                 {
-                    role === "TALENT" && contract?.milestones[selectMilestone].completed !== "Completed" && <>
+                    basicData.role === "TALENT" && contract?.milestones[selectMilestone].completed !== "Completed" && <>
                         <Dropdown.Button menu={menuProps as unknown as MenuProps} danger >
                             Update
                         </Dropdown.Button>
@@ -224,8 +263,8 @@ const Milestone = () => {
                 }
                 <Popconfirm
                     open={confirm}
-                    title="Title"
-                    description="Open Popconfirm with Promise"
+                    title="Note"
+                    description="Are you sure to update the progress ?"
                     onConfirm={updateStatus}
                 >
                 </Popconfirm>
@@ -243,13 +282,11 @@ const Milestone = () => {
         </Dialog.Panel>
     )
     const handleEndContract = () => {
-        contractStatusUpdate(contract?._id || "", "cancelled", role)
+        contractStatusUpdate(contract?._id || "", "cancelled", basicData.role)
             .then((res: AxiosResponse) => {
                 if (res.data.success) {
                     message.success("Successfully contract cancelled ");
                     if (contract) {
-                        // const newUpdatedContract: ContractDetailsType = { ...contract, completed, "cancelled" };
-                        // setContract(newUpdatedContract);
                         setTimeout(() => {
                             history.back()
                         }, 1000);
@@ -263,15 +300,27 @@ const Milestone = () => {
                 message.error("An error occurred while cancelling the contract.");
             });
     };
+    let countOfCompleted: number = 0;
+    contract?.milestones?.forEach((milestone: MilestoneType) => {
+        if (milestone?.completed === "Completed") {
+            countOfCompleted++;
+        }
+    });
+
+    const handleEditMilestone = (index: number) => {
+        setSelected(index)
+        setEditMilestone(!showEditMilestone)
+    }
+
     return <>
-        {/* <div className="bg-blue-600 absolute -z-10 w-full h-[50vh] " >
-        </div> */}
+        <EditMilestone closeModal={closeEditMilStone} open={showEditMilestone} milestoneData={contract?.milestones[selectMilestone]} onUpdate={fetch} />
         <WorkSubmitForm
             open={formOpen}
             closeModal={() => {
                 setFormOpen(false)
                 localStorage.removeItem("work");
             }} id={contract?.milestones[selectMilestone]?._id as string} />
+        <ResheduleSubmitForm open={showReshedule} milestoneId={contract?.milestones[countOfCompleted]?._id as string} workId={contract?._id || ""} closeModal={closeReshduleModal} onUpdate={fetch} />
         <div className="mb-20  font-sans w-[90%] h-auto border bg-white m-auto mt-20 rounded-xl shadow-2xl">
             <div
                 onClick={() => {
@@ -309,18 +358,18 @@ const Milestone = () => {
                     {/* for milestone */}
                     <div className="w-full h-auto border-b-2">
                         <div className=" m-2 uppercase tracking-wide text-sm  font-semibold flex ">Milestones</div>
-                        <div className="bg-white">
+                        <div className="bg-white ">
                             <ol className="m-10 ">
                                 {
                                     contract?.milestones?.map((milestone, index: number) => (
-                                        <li className={`border-l-2 ${milestone?.completed === "Pending" ? "border-red-500" : (milestone?.completed === "Progress" ? "border-blue-500" : "border-green-500")}`} key={index}>
-                                            <div className="md:flex flex-start">
+                                        <li className={`  border-l-2 ${milestone?.completed === "Pending" ? "border-red-500" : (milestone?.completed === "Progress" ? "border-blue-500" : "border-green-500")}`} key={index}>
+                                            <div className="md:flex flex-start ">
                                                 <div className="bg-white w-6 h-6 flex items-center justify-center rounded-full -ml-3.5">
                                                     {
                                                         milestone.completed === "Pending" ? <PendingActions color='primary' /> : milestone.completed === "Progress" ? <EventRepeatIcon color="warning" /> : <CheckCircleIcon color="success" />
                                                     }
                                                 </div>
-                                                <div className="block p-6 rounded-lg shadow-lg bg-gray-100 max-w-md ml-6 mb-10">
+                                                <div className="block p-6  shadow-lg bg-gray-100 max-w-md ml-6 mb-10 rounded hover:border-2">
                                                     <div className="flex justify-between mb-4">
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{milestone?.name}</p>
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate as unknown as Date)}</p>
@@ -329,13 +378,30 @@ const Milestone = () => {
                                                                 <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Submitted</span>
                                                             </>
                                                         }
+                                                        {
+                                                            countOfCompleted === index && !milestone?.isResheduleMilestone && basicData.role === "TALENT" && <>
+                                                                <div>
+                                                                    <button className="p-1 bg-blue-700 rounded shadow-sm text-white text-xs font-sans  inline-block px-2 py-1  leading-tight" onClick={() => setShowReshedule(!showReshedule)}>Reshedule</button>
+                                                                </div>
+                                                            </>
+                                                        }
+                                                        {
+                                                            milestone?.isResheduleMilestone && <>
+                                                                <div>
+                                                                    <button className="p-1 bg-blue-700 rounded shadow-sm text-white text-xs font-sans  inline-block px-2 py-1  leading-tight" onClick={() => {
+                                                                        setShowReason(!showReason)
+                                                                        setSelected(index)
+                                                                    }}>Reshedule requested</button>
+                                                                </div>
+                                                            </>
+                                                        }
                                                     </div>
                                                     <p className="text-gray-700 mb-6">{milestone?.description}</p>
                                                     <div className="flex gap-1">
                                                         {
                                                             (index == 0 || milestone.approval) ? (
                                                                 <>{
-                                                                    role === "TALENT" && !milestone.work && milestone.completed === "Completed" && <>
+                                                                    basicData.role === "TALENT" && !milestone.work && milestone.completed === "Completed" && <>
                                                                         <button
                                                                             onClick={() => {
                                                                                 submitWork()
@@ -347,7 +413,7 @@ const Milestone = () => {
                                                                     </>
                                                                 }
                                                                     {
-                                                                        milestone.work && role === "CLIENT" && <>
+                                                                        milestone.work && basicData.role === "CLIENT" && <>
                                                                             <button
                                                                                 onClick={() => milestone.payed ? undefined : payment(index)}
                                                                                 type="button"
@@ -362,9 +428,10 @@ const Milestone = () => {
                                                                             </button>
                                                                         </>
                                                                     }
+
                                                                     <button
                                                                         onClick={() => {
-                                                                            if (role === "TALENT") {
+                                                                            if (basicData.role === "TALENT") {
                                                                                 showWorkProggress(index)
                                                                             } else {
                                                                                 updateWorkProggress(index)
@@ -372,10 +439,10 @@ const Milestone = () => {
                                                                         }}
                                                                         type="button"
                                                                         className="inline-block px-3.5 py-1 border-2 border-red-500 text-red-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out" data-mdb-ripple="true">
-                                                                        {role === "CLIENT" ? "show details" : milestone?.completed == "Completed" ? "show details" : "Update progress"}
+                                                                        {basicData.role === "CLIENT" ? "show details" : milestone?.completed == "Completed" ? "show details" : "Update progress"}
                                                                     </button>
                                                                     {
-                                                                        role === "TALENT" && milestone.payed && <>
+                                                                        basicData.role === "TALENT" && milestone.payed && <>
                                                                             <button
                                                                                 type="button"
                                                                                 className="inline-block px-3.5 py-1 border-2 border-red-500 text-red-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out" data-mdb-ripple="true">
@@ -387,18 +454,19 @@ const Milestone = () => {
                                                                 </>
                                                             ) : (
                                                                 <> {
-                                                                    role === "TALENT" && <>
+                                                                    basicData.role === "TALENT" && <>
                                                                         <label
                                                                             className="inline-block px-3.5 py-1 border-2 border-red-500 text-red-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out" data-mdb-ripple="true">
-                                                                            {role === "TALENT" && "Milestone approval not sent"}
+                                                                            {basicData.role === "TALENT" && "Milestone approval not sent"}
                                                                         </label>
                                                                     </>
                                                                 }
                                                                 </>
                                                             )
                                                         }
+
                                                         {
-                                                            role === "CLIENT" && index !== 0 && !milestone.approval && <>
+                                                            basicData.role === "CLIENT" && index !== 0 && !milestone.approval && <>
                                                                 <Popconfirm
                                                                     title="Send milestone approval"
                                                                     description="Are you sure to send a approval"
@@ -410,6 +478,13 @@ const Milestone = () => {
                                                                         Send approval
                                                                     </button>
                                                                 </Popconfirm>
+                                                            </>
+                                                        }
+                                                        {
+                                                            basicData.role === "CLIENT" && countOfCompleted === index && <>
+                                                                <button
+                                                                    onClick={() => handleEditMilestone(index)}
+                                                                    className='bg-blue-500 text-white py-1 px-3 flex items-center justify-center shadow-border rounded shadow-2xl '><EditOutlined /></button>
                                                             </>
                                                         }
                                                     </div>
@@ -426,22 +501,84 @@ const Milestone = () => {
                 <div className="h-[100vh] w-[25%]  font-sans border">
                     <div className="container mt-4 flex  flex-col ">
                         {
-                            role === "CLIENT" && <button
+                            basicData.role === "CLIENT" && contract?.milestones[selectMilestone].completed !== "Completed" && <button
                                 onClick={handleEndContract}
                                 className=" bg-red-500 font-sans text-white rounded-xl py-1">End contract </button>
                         }
-                        <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1" onClick={()=>navigate("/message")}>Message </button>
-                        {/* <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
-                            <p>
-                                Thank you for your recent interaction! Would you like to share your experience by leaving a review rating?
-                            </p>
-                            <button className=" bg-red-500 px-5 py-1 rounded-xl text-white" onClick={closeRatingModal}>Rate</button>
+                        <button className=" mt-2 border font-sans  border-black font-semibold rounded-xl py-1" onClick={() => navigate("/message")}>Message </button>
+                        {
+                            basicData.role === "CLIENT" ? (
+                                contract?.CLIENTreview ? (
+                                    <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                        <p>Thank you for your review rating?</p>
+                                    </div>
+                                ) : (
+                                    contract?.status === "completed" && (
+                                        <>
+                                            <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                                <p>Thank you for your recent interaction! Would you like to share your experience by leaving a review rating?</p>
+                                            </div>
+                                            <button className="bg-red-500 px-5 py-1 rounded-xl text-white" onClick={() => closeRatingModal()}>Rate</button>
+                                        </>
+                                    )
+                                )
+                            ) : (
+                                contract?.TALENTreview ? (
+                                    <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                        <p>Thank you for your review rating?</p>
+                                    </div>
+                                ) : (
+                                    contract?.status === "completed" && (
+                                        <>
+                                            <div className="mt-3 bg-gray-300 p-3 rounded-xl text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                                <p>Thank you for your recent interaction! Would you like to share your experience by leaving a review rating?</p>
+                                            </div>
+                                            <button className="bg-red-500 px-5 py-1 rounded-xl text-white" onClick={() => closeRatingModal()}>Rate</button>
+                                        </>
+                                    )
+                                )
+                            )
+                        }
+                        <div>
+                            {
+                                showReason && (
+                                    <>
+                                        <p className='text-red-500 font-sans font-semibold mt-2'>Request</p>
+                                        <div className="mt-3 bg-gray-300 p-3 rounded text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                            <p>Reason: {contract?.milestones[selectMilestone]?.resheduleReason?.reason}</p>
+                                            <p>Requested date number of days / month: {contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
+                                            {
+                                                basicData.role === "TALENT" ? (
+                                                    <p className="border p-2 rounded bg-red-500 text-white">
+                                                        {contract?.milestones[selectMilestone]?.resheduleReason?.accept ? "Accepted" : "Rejected"}
+                                                    </p>
+                                                ) : (
+                                                    contract?.milestones[selectMilestone]?.resheduleReason?.accept ? (
+                                                        <p className="border p-2 rounded bg-red-500 text-white">
+                                                            Accepted
+                                                        </p>
+                                                    ) : (
+                                                        <div className="flex gap-2">
+                                                            <p className="border p-2 rounded bg-red-500 text-white" onClick={() => updateReasonStatus(contract?.milestones[selectMilestone]?.resheduleReason?._id as string || "", true)}>
+                                                                Accept
+                                                            </p>
+                                                            <p className="border p-2 rounded bg-blue-700 text-white" onClick={() => updateReasonStatus(contract?.milestones[selectMilestone]?.resheduleReason?._id as string || "", false)}>
+                                                                Reject
+                                                            </p>
+                                                        </div>
+                                                    )
+                                                )
+                                            }
+                                        </div>
+                                    </>
+                                )
+                            }
                         </div>
-                        <ReviewForm closeModal={closeRatingModal} openReview={reviewOpen}/> */}
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
+        <ReviewForm closeModal={closeRatingModal} openReview={reviewOpen} workId={id?.slice(3)} to={t} onUpdate={fetch} />
     </>;
 }
 export default Milestone;

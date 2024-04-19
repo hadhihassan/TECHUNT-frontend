@@ -458,7 +458,6 @@ const JobPostForm = () => {
                         {/* right side for the  create button*/}
                         <div className="md:w-[20%] sm:m-5 md:m-5 m-1 xl:m-0">
                             <button onClick={onSubmit} className="bg-red-500 px-5 py-2 rounded-full text-white font-sans text-sm font-semibold md:mt-10 md:ml-10">Post job now</button>
-                            <button className="border border-red-500 px-4 py-2 rounded-full font-sans text-sm font-semibold md:mt-2 md:ml-10 ">Saved as draft</button>
                         </div>
                     </div>
                 </div>

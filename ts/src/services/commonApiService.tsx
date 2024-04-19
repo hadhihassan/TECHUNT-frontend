@@ -96,3 +96,6 @@ export async function setUserOfflineInConversation() {
 export async function getContract(role: string, id: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/contract/get-contract/${id}/`)
 }
+export async function getAllReviews(id: string, role: string) {
+    return await axiosInstance.get(`${BASE_URL}${role}/review/get-review/${id}`)
+}

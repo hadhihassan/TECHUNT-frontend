@@ -32,7 +32,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
     const basicData = useSelector((state:ROOTSTORE)=> state.signup)
     const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
-    const IMG: string = `http://localhost:3000/images/${details?.Profile?.profile_Dp}`;
+    const IMG: string = `https://timezones.website/images/${details?.Profile?.profile_Dp}`;
     const truncatedDescription: string = details?.Profile?.Description?.slice(0, 200) || '';
     const [image, setImage] = useState<File | null>(null);
 

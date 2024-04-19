@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 import { INITIALSTATE } from '../redux/Slice/signupSlice';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import type { ContractDetailsType, MilestoneType } from '../components/Client/contract/contractInterface'
-
+import type { MilestoneFormDataType } from '../components/General/contract/milestoneEditForm'
 // CLIENT / USERS API 
 export async function createContactDetails(formData: CONTACT_FROM, role: INITIALSTATE["role"]) {
     return await resolve(
@@ -69,6 +69,15 @@ export async function addWalletAmount(talentId: string, amount: number, mileston
 }
 export async function sendInvitation(WorkId: string, talentId: string) {
     return await axiosInstance.post(`${BASE_URL}CLIENT/send-Invitation/`, { WorkId, talentId })
+}
+export async function rateTheWork(workId: string, data: { comment: string, rating: number, from: string, to: string }, role: string) {
+    return await axiosInstance.post(`${BASE_URL}${role}/review/add-review/`, { workId, data, role })
+}
+export async function udpdateReason(id: string, role: string, status: boolean) {
+    return await axiosInstance.patch(`${BASE_URL}${role}/contrat/update-reason-status/`, { status, id })
+}
+export async function udpdateMilestone(id: string, data:MilestoneFormDataType) {
+    return await axiosInstance.patch(`${BASE_URL}CLIENT/contrat/milestone/update/`, { id, data })
 }
 
 

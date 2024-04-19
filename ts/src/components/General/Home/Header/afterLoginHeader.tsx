@@ -23,7 +23,7 @@ import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const socket = io("http://localhost:3000")
+export const socket = io("https://timezones.website")
 
 
 type NotificationPlacement = NotificationArgsProps['placement'];
@@ -45,7 +45,7 @@ const AfterLoginHeader = () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .then((res:any) => {
                     if (res) {
-                        setIMG(`http://localhost:3000/images/${res?.data?.data?.Profile?.profile_Dp}`)
+                        setIMG(`https://timezones.website/images/${res?.data?.data?.Profile?.profile_Dp}`)
                     }
                 }).catch((err: AxiosError) => {
                     console.log(err)

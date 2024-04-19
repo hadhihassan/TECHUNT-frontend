@@ -152,9 +152,8 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
                         <label className="block tracking-wide text-gray-900 text-xs font-bold mb-2">
                             Description
                         </label>
-                        <textarea
+                        <input
                             value={inputData?.description}
-                            rows={2}
                             onChange={changeData}
                             name="description"
                             className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />

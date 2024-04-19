@@ -23,7 +23,7 @@ const AddSkills: React.FC = () => {
     const [text, setText] = useState<string>("");
     const [skills, setSkills] = useState<string[]>([]);
     const [error, setError] = useState<string>("");
-    setQuery("")
+    
     const filteredPeople =
         query === ''
             ? people
@@ -34,7 +34,7 @@ const AddSkills: React.FC = () => {
     const navigate = useNavigate();
 
     const addSkill: (value: string) => void = (value) => {
-        
+        setQuery("")
         if (value.trim() !== "") {
             if (!skills.includes(value.trim())) {
                 setSkills(prevSkills => [...prevSkills, value.trim()]);
@@ -114,24 +114,12 @@ const AddSkills: React.FC = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                                     </svg>
                                 </p>
-                                <p>1/2</p>
-                            </div>
-                            <div className="pt-2 ">
-                                {/* <ProgressBar value={40} /> */}
                             </div>
                         </div>
                         <div className="mt-6">
                             <div className="w-full">
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900">Add your skills.</h1>
                                 <p className="text-xs pt-4 font-normal">Add skills that increase your rating.</p>
-
-                                {/* <input
-                                    value={text}
-                                    onChange={handleChange}
-                                    id="message"
-                                    className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Example: node js | react js"
-                                /> */}
                                 <Combobox value={selectedPerson} onChange={setSelectedPerson} >
                                     <Combobox.Input value={text} onChange={onChangeQuery}
                                         className="block mt-4 p-2.5 w-full text-sm bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:text-neutral-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"

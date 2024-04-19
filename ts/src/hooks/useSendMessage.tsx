@@ -13,7 +13,6 @@ const useSendMessages = () => {
         setMessages([...conversation?.messages  || [], { message }]);
         setLoading(true);
         await sendMessageBakend(message, conversation?.participants[0]._id || "")
-
     };
     return { loading, sendMessage };
 }

@@ -1,19 +1,36 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
-import { Fragment } from 'react'
-import { reviewRatingSchema } from '../../../util/validationSchema'
+import { Fragment, useState } from 'react'
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import { rateTheWork } from '../../../services/clientApiService';
+import { useSelector } from 'react-redux';
+import { ROOTSTORE } from '../../../redux/store';
+import { message } from 'antd';
+
 
 interface ReviewProps {
     openReview: boolean,
     closeModal: () => void,
+    workId: string | undefined,
+    to: string
+    onUpdate : () => void
 }
-interface ReviewType {
-    description: string
-    rate: string
-}
-const ReviewForm: React.FC<ReviewProps> = ({ openReview, closeModal }) => {
-    const handleSubmit = (reviewData: ReviewType) => {
-        console.log(reviewData)
+
+const ReviewForm: React.FC<ReviewProps> = ({ openReview, closeModal, workId, to, onUpdate }) => {
+    const [comment, setDescription] = useState<string>("")
+    const [rating, setRate] = useState<number>(0)
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
+    const handleSubmit = () => {
+        rateTheWork(workId || "", { comment, rating, from: basicData.id || "", to }, basicData.role)
+            .then((res) => {
+                console.log(res)
+                message.success("Review addedd successfully, Thank you for rating .")
+                onUpdate()
+                closeModal()
+            }).catch(()=>{
+                message.error("Something went wrong .")
+                closeModal()
+            })
     }
     return (<>
         <Transition appear show={openReview} as={Fragment}>
@@ -48,32 +65,17 @@ const ReviewForm: React.FC<ReviewProps> = ({ openReview, closeModal }) => {
                                     Rate Your Experience
                                 </Dialog.Title>
                                 <div className="mt-5">
-                                    <Formik
-                                        initialValues={{
-                                            description: '',
-                                            rate: ''
-                                        }}
-                                        validationSchema={reviewRatingSchema}
-                                        onSubmit={(values:ReviewType) => handleSubmit(values)}
-                                    >
-                                        {() => (
-                                            <Form
-                                                className='w-full  text-sm font-sans font-semibold flex flex-col gap-4'
-                                            >
-                                                <div>
-                                                    <label htmlFor="institution">Description:</label>
-                                                    <Field type="text" id="institution" name="institution" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                    <ErrorMessage name="institution" component="div" className="error text-sm text-red-500" />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="degree">Rate:</label>
-                                                    <Field type="text" id="degree" name="degree" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                    <ErrorMessage name="degree" component="div" className="error text-sm text-red-500" />
-                                                </div>
-                                                <button type="submit" className='border-2 border-red-500 rounded-xl p-2 mt-2 font-semibold text-sm' >Rate</button>
-                                            </Form>
-                                        )}
-                                    </Formik>
+                                    <div>
+                                        <label htmlFor="institution">Description:</label>
+                                        <input onChange={(e: { target: { value: string } }) => setDescription(e.target.value)} type="text" id="institution" name="institution" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="degree">Rate:</label>
+                                        <Stack spacing={2} >
+                                            <Rating name="size-small" defaultValue={0} size="small" onChange={(_event, newValue: number | null) => setRate(newValue || 0)} />
+                                        </Stack>
+                                    </div>
+                                    <button type="submit" className='border-2 border-red-500 rounded-xl p-2 mt-2 font-semibold text-sm' onClick={handleSubmit}>Rate</button>
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

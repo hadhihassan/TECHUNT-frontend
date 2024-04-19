@@ -18,6 +18,7 @@ export function IsNoteLoggedUser(): React.ReactElement {
 }
 export function IsNoteLoggedAdmin() {
     const userDatas = useSelector((state: ROOTSTORE) => state.signup);
+    console.log(userDatas)
     if (userDatas?.isLogged) {
         return <Navigate to="/" replace />;
     }

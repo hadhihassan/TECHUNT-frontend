@@ -8,7 +8,7 @@ import { MyContext } from "../../../context/myContext";
 import { getUserProfileDetails } from "../../../services/talentApiService";
 import ProfileSkills from "../../../components/General/profile/profileSkills";
 import ProfileExperiance from "../../../components/General/profile/profileExperiance";
-// import ProfileReviews from "../../../components/General/profile/profileReviews";
+import ProfileReviews from "../../../components/General/profile/profileReviews";
 import { BankDetails } from "../../../components/General/viewsPages/bankDetilsSection";
 import EducationForm from "../../../components/General/profile/profileEducations";
 import Educations from "./education";
@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import CheckoutForm from "../../../components/General/settings/numberVerifiactions/bankDetailsForm";
-
 
 
 export interface UserProfile {
@@ -118,9 +117,7 @@ const Profile = () => {
                                 </div>
                             </>
                         }
-
                     </div>
-
                     <div className={`flex items-center  flex-row justify-center `}>
                         <ProfileContact data={datas ? { Address: datas.Address, City: datas.City, Country: datas.Country, Number: datas.Number, PinCode: datas.PinCode } : { Address: '', City: '', Country: '', Number: '', PinCode: '' }} onUpdate={getUserProfile} />
                     </div>
@@ -141,7 +138,7 @@ const Profile = () => {
                             openBank && <CheckoutForm onUpdate={getUserProfile} />
                         }
                     </div>
-                    {/* <ProfileReviews /> */}
+                    <ProfileReviews id={basicData.id || ""}  />
                 </div>
                 <div className="flex flex-col gap-10">
                     <ProfileVerifications />

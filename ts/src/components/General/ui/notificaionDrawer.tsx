@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
 import type { ProposalInterface } from '../../../interface/interfaces'
-import { Drawer } from 'antd';
+import { Drawer, message } from 'antd';
 import toast, { Toaster } from 'react-hot-toast';
 import formatRelativeTime from '../../../util/timeFormating';
 import useStripePayment from '../../../hooks/usePayement';
@@ -26,7 +26,7 @@ interface NotificationDrawerProps {
 }
 
 const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, open, proposals }) => {
-    const { handlePayment,  } = useStripePayment()
+    const { handlePayment, error } = useStripePayment()
     const { role} = useSelector((state: ROOTSTORE) => state.signup)
     const navigate = useNavigate()
     const [notifications, setNotifications] = useState<NotificationDrawerProps["notification"]>([]);
@@ -36,7 +36,10 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
         setNotifications(notification);
         setIsOpen(open)
         console.log(notifications, "drawer")
-    }, [notification, notifications, open]);
+        if(error){
+            message.error(error)
+        }
+    }, [notification, notifications, open, error]);
 
     const onClose = () => {
         setIsOpen(false);
@@ -77,8 +80,8 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
                 <div className="flex border-l border-gray-200">
                     <button
                         onClick={() => {
-                            toast.dismiss(t.id)
                             StartPayment()
+                            toast.dismiss(t.id)
                         }}
                         className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >

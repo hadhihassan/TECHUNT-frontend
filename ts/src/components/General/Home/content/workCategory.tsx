@@ -1,97 +1,15 @@
-// import ReactCardSlider from "react-card-slider-component";
 import quality from '../../../../assets/images.png'
 import const_and_secure from '../../../../assets/download.png'
-// import {
-//     Tabs,
-//     TabsHeader,
-//     Tab,
-//     TabsBody,
-//     TabPanel
-// } from "@material-tailwind/react";
-// import {  getAllUser } from '../../../../services/adminApiService';
-// import { IMG_URL } from '../../../../constant/columns';
+
 
 
 
 const WorkCategory = () => {
-    // const [tabsHeader, setTabsHeader] = useState<object[]>([]);
-    // const [user, setUser] = useState<object[]>([]);
-    // useEffect(() => {
-        // getAllJobCategoies()
-        //     .then((res) => {
-        //         console.log(res)
-        //         setTabsHeader(res?.data?.data?.data)
-        //     }).catch((err) => console.log(err))
-        // getAllUser()
-        //     .then((res) => {
-        //         // eslint-disable-next-line prefer-const
-        //         let array = [];
-        //         for (let i = 0; i < res?.data?.data?.talent.length; i++) {
-        //             const value = res?.data?.data?.talent[i]
-        //             array.push({ image: `${IMG_URL}${value?.Profile?.profile_Dp}`, title: value?.Profile?.Title, description: value?.Profile?.Description, clickEvent: "sliderClick" })
-        //         }
-        //         // setUser(res?.data?.data?.talent)
-        //     }).catch((err) => console.log(err))
-    // }, [])
-    // const [activeTab, setActiveTab] = useState("html");
-    // const slides = [
-    //     {
-    //         image: "https://picsum.photos/600/500",
-    //         title: "TDevelopment & IT",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    //     {
-    //         image: "https://picsum.photos/600/500",
-    //         title: "TDevelopment & IT",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    //     {
-    //         image: "https://picsum.photos/700/600",
-    //         title: "This is a third title",
-    //         description: "User experience designers",
-    //         clickEvent: "sliderClick"
-    //     },
-    // ];
     return (
         <div className="m-auto  w-[60%] h-auto">
             <div className="mt-5">
                 <div className="m-auto mt-3 w-full h-auto ">
-                    {/* <h1 className=" font-montserrat  text-center font-bold sm:text-xl md:text-xl text-xl xl:text-3xl">Top Work Categories</h1> */}
                     <div className="mt-20">
-                        {/* <Tabs indicatorColor="secondary" >
-                            <TabsHeader
-                                className="rounded-none border-b border-gray-500 bg-transparent p-0"
-                                indicatorProps={{
-                                    className: "bg-transparent border-b-2 border-red-900  shadow-none rounded-none",
-                                }} placeholder={undefined}                            >
-                                {tabsHeader?.map(({ name }) => (
-                                    <Tab
-                                        key={name}
-                                        value={name}
-                                        onClick={() => setActiveTab(name)}
-                                        className={`${activeTab === name ? "text-red-500 xl:font-semibold " : " font-sans xl:font-semibold   "} sm:text:xs md:text:xs xl:text-xl text-xs  `} placeholder={undefined}                                    >
-                                        {name}
-                                    </Tab>
-                                ))}
-                            </TabsHeader>
-                            <TabsBody placeholder={undefined}>
-
-                                <div className="mt-10">
-                                    <p className="text-center font-medium font-montserrat">
-                                        {tabsHeader?.map(({ name, description }) => (
-                                            <TabPanel key={name} value={name} className="text-center font-medium font-montserrat sm:text:xs md:text:xs xl:text-xl text-xs ">
-                                                {description}
-                                            </TabPanel>
-                                        ))}
-                                    </p>
-                                </div>
-                            </TabsBody>
-                        </Tabs> */}
-                        {/* <div className='m-10 w-full'>
-                            <ReactCardSlider slides={user !== null && user ? user : slides} />
-                        </div> */}
                     </div>
                     <div>
                         <h1 className=" font-montserrat text-3xl text-center font-bold ">Why Techunt</h1>

@@ -8,7 +8,7 @@ import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 // import Rating from '@mui/material/Rating';
 // import Stack from '@mui/material/Stack';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
-// import ProfileReviews from "../../components/General/profile/profileReviews";
+import ProfileReviews from "../../components/General/profile/profileReviews";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { ProposalInterface } from "../../interface/interfaces";
@@ -78,7 +78,7 @@ const Profile = () => {
                 <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
                     <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
                         <div>
-                            <img className="border border-black rounded-xl" src={`http://localhost:3000/images/${datas?.Profile.profile_Dp}`} alt="Loading" />
+                            <img className="border border-black rounded-xl" src={`https://timezones.website/images/${datas?.Profile.profile_Dp}`} alt="Loading" />
                         </div>
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>
@@ -245,9 +245,9 @@ const Profile = () => {
                     </>
             }
 
-            {/* <div className="flex items-center  flex-row m-1 mb-5 ml-[7rem] ">
-                <ProfileReviews />
-            </div> */}
+            <div className="flex items-center  flex-row m-1 mb-5 ml-[7rem] ">
+                <ProfileReviews id={basicData.id || ""} />
+            </div>
         </div>
     </>
     );

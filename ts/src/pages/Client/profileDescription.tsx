@@ -76,10 +76,6 @@ const ProfileDescription = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                                 </svg>
                                 </p>
-                                <p>1/2</p>
-                            </div>
-                            <div className="pt-5 ">
-                                {/* <ProgressBar value={100} /> */}
                             </div>
                         </div>
                         {lengthError && <Alert severity="warning">{lengthError}</Alert>}

@@ -10,21 +10,28 @@ export interface MilestoneType {
     dueDate: string;
     name: string,
     amount: number
-    createdAt?:Date
+    createdAt?: Date,
+    isResheduleMilestone?: boolean
+    resheduleReason?: {
+        newDeadline : number,
+        reason:string,
+        accept:boolean
+        _id?:string
+    }
 }
 export interface ContractDetailsType {
     _id?: string
     terms: string;
     work: string | {
-        WorkType:string,
-        Title:string
-    }; 
+        WorkType: string,
+        Title: string
+    };
     duration: Date[] | null[];
     amount: number;
     notes: string;
     paymentTerms: string;
     talent: string | { _id: string },
-    client: string| object, 
+    client: string | object,
     approval?: boolean,
     status?: string
     completed?: "Pending" | "Progress" | "Completed",

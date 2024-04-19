@@ -135,7 +135,7 @@ const Home = () => {
                                     and find world’s best talent here.</p>
                                 <button onClick={() => {
                                     navigate(clientRoutes.CREATE_JOB_POST)
-                                }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">work now</button>
+                                }} className="bg-red-500 text-white mt-3 font-sans font-semibold text-xs w-32 rounded-full h-8">post now</button>
                             </div>
                             <div className="-mt-9 mr-10">
                                 <img src={IMAGE1} alt="" className="h-[30vh] " />
@@ -372,58 +372,6 @@ const Home = () => {
                             </>
                         )}
                     </Disclosure>
-                    {/* <Disclosure>
-                        {({ open }) => (
-                            <>
-                                <Disclosure.Button className='shadow-xl flex justify-between  border px-2 py-2 rounded-xl  w-[80%] mt-5 bg-white'>
-                                    <label className='w-full h-full text-start font-sans font-semibold'>
-                                        Connected
-                                    </label>
-                                    <ArrowUpward className={open ? 'rotate-180 transform' : ''} />
-                                </Disclosure.Button>
-                                <Transition
-                                    enter="transition duration-100 ease-out"
-                                    enterFrom="transform scale-95 opacity-0"
-                                    enterTo="transform scale-100 opacity-100"
-                                    leave="transition duration-75 ease-out"
-                                    leaveFrom="transform scale-100 opacity-100"
-                                    leaveTo="transform scale-95 opacity-0"
-                                >
-                                    <Disclosure.Panel>
-                                        <div className="border  shadow-xl w-[80%] rounded-xl h-auto mb-5  mt-2 ">
-                                            <div className="flex justify-between mt-2  border-b ">
-                                                {
-                                                    connectedTalent && connectedTalent?.map((talent: ProposalInterface, index: number) => (<>
-                                                        <div className="flex flex-row">
-                                                            <div key={index} className="flex m-5 justify-between flex-row">
-                                                                <div>
-                                                                    <Avatar alt="Remy Sharp" src={`http://localhost:3000/images/${talent?.talentId?.Profile?.profile_Dp}`} />
-                                                                </div>
-                                                                <div className="flex flex-col">
-                                                                    <span className="text-start text-sm ml-2 font-semibold font-sans">
-                                                                        {talent.talentId.First_name} {talent?.talentId?.Last_name}
-                                                                    </span>
-                                                                    <span className="text-gray-400 text-start text-sm ml-2 font-semibold font-sans">
-                                                                        {talent.talentId.Profile.Title}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex justify-end">
-                                                                    <Dropdown.Button className="ml-7" menu={menuProps} onOpenChange={() => setMenuINdex(index)}  >
-                                                                        Show
-                                                                    </Dropdown.Button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                    ))
-                                                }
-                                            </div>
-                                        </div>
-                                    </Disclosure.Panel>
-                                </Transition>
-                            </>
-                        )}
-                    </Disclosure> */}
                 </div>
             </div >
             <Tour open={open} onClose={() => setOpen(false)} mask={false} type="primary" steps={steps} animated arrow zIndex={100} />

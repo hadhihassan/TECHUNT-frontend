@@ -25,6 +25,7 @@ const LoginPage: React.FC = () => {
 
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
+        console.log("login form fun tiggerd")
         setErrorsEmail(emailValidator(email))
         setErrorsPassword(passwordValidator(password))
         if (Emailerrors === null && PasswordErrors === null) {
@@ -38,6 +39,7 @@ const LoginPage: React.FC = () => {
                         });
                     } else {
                         if (!res?.data) {
+                            console.log(res)
                             setError("Email Or Password incorrect")
                         } else {
                             localStorage.setItem("token", res?.data?.data.token)
@@ -68,6 +70,8 @@ const LoginPage: React.FC = () => {
                             }
                         }
                     }
+                }).catch((err)=>{
+                    console.log(err)
                 })
         }
     }

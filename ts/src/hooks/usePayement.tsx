@@ -5,24 +5,29 @@ import { makePayment } from '../services/talentApiService';
 import { makePaymentToBank } from '../services/clientApiService';
 import { makePaymentToPlan } from '../services/commonApiService';
 
+
 const useStripePayment = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const handlePayment = async (id: string,) => {
         try {
             setLoading(true);
-            if (!process.env.STRIP_PUBLISHABLE_KEY) {
-                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-            }
-            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
-            const session = await makePayment(id);
-            const result = await stripe?.redirectToCheckout({
-                sessionId: session.data.id
-            });
+            // if (!import.VITE_STRIP_PUBLISHABLE_KEY) {
+            //     throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+            // }
+            const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+
+            let result
+            makePayment(id)
+                .then(async (res) => {
+                    result = await stripe?.redirectToCheckout({
+                        sessionId: res.data.id
+                    });
+                })
             if (result) {
                 localStorage.setItem("payemnt", JSON.stringify(result))
             }
-        } catch (error:any) {
+        } catch (error: any) {
             setError(error.message);
         } finally {
             setLoading(false);
@@ -31,16 +36,21 @@ const useStripePayment = () => {
     const paymentToTalent = async (talentId: string, amount: number) => {
         try {
             setLoading(true);
-            if (!process.env.STRIP_PUBLISHABLE_KEY) {
-                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-            }
-            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
-            const session = await makePaymentToBank(talentId, amount);
-            const result = await stripe?.redirectToCheckout({
-                sessionId: session.data?.data
-            });
-            if (result) {
-                localStorage.setItem("payemnt", JSON.stringify(result))
+            if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
+                alert('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+            } else {
+                const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+                let result
+                makePaymentToBank(talentId, amount)
+                    .then(async (res) => {
+                        result = await stripe?.redirectToCheckout({
+                            sessionId: res.data?.data
+                        });
+                        if (result) {
+                            localStorage.setItem("payemnt", JSON.stringify(result))
+                        }
+                        return "ok"
+                    })
             }
         } catch (error: any) {
             setError(error.message);
@@ -51,16 +61,16 @@ const useStripePayment = () => {
     const subscriptionPayment = async (role: string, planId: string, amount: number) => {
         try {
             setLoading(true);
-            if (!process.env.STRIP_PUBLISHABLE_KEY) {
+            if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
                 throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
             }
-            const stripe = await loadStripe(process.env.STRIP_PUBLISHABLE_KEY);
+            const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
             const session = await makePaymentToPlan(role, planId, amount);
             localStorage.setItem("payemnt", JSON.stringify(session))
             await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });
-        } catch (error:any) {
+        } catch (error: any) {
             setError(error.message as string);
         } finally {
             setLoading(false);

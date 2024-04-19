@@ -2,7 +2,6 @@
 import Avatar from "react-avatar";
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
-import { ProgressBar } from "../../../components/General/ui/progressBar";
 import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import Button from '@mui/material/Button'
@@ -74,10 +73,6 @@ const ProfileTitle: React.FC = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                             </svg>
                             </p>
-                            <p>1/2</p>
-                        </div>
-                        <div className="pt-2 ">
-                            <ProgressBar percentage={10} />
                         </div>
                     </div>
                     <div className="mt-6">
@@ -87,7 +82,6 @@ const ProfileTitle: React.FC = () => {
                                 <h1 className="text-2xl font-medium tracking-tight text-gray-900 ">First, add a title to tell the world what you do.</h1>
                                 <p className="text-xs pt-4   font-normal">Write here the write the title of the work .</p>
 
-                                {/* <label className="block mt-5 mb-5 text-sm font-medium ">Profile description</label> */}
                                 <select
                                     onChange={(e) => setTitle(e.target.value)}
                                     id="message"

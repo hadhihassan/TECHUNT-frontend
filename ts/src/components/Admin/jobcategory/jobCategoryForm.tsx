@@ -101,7 +101,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
         <>
             <div className="w-full  ">
                 <div className="mb-1">
-                    <p className="m-4 font-sans font-semibold text-center">{editable ? "Add new Job category" : "Edit job category"}</p>
+                    <p className="m-4 font-sans font-semibold text-center">Add new Job category</p>
                     <hr />
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-1 mt-2">
@@ -127,10 +127,9 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ editable, formData, h
                         <label className="block tracking-wide text-gray-900 text-xs font-bold mb-2">
                             Description
                         </label>
-                        <textarea
+                        <input
                             required
                             value={inputData?.description}
-                            rows={2}
                             onChange={changeData}
                             name="description"
                             className="appearance-none block w-full  text-gray-900 border border-gray-200 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" />

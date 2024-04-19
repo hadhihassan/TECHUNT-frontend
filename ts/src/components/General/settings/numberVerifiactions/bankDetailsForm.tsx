@@ -138,7 +138,7 @@ export default function CheckoutForm({ onUpdate }: { onUpdate: () => void }) {
                                                                 <Input
                                                                     onChange={handleOnChnage}
                                                                     name="bank_name"
-                                                                    placeholder="name@mail.com"
+                                                                    placeholder="sample bank"
                                                                     className=" w-full !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                                     labelProps={{
                                                                         className: "before:content-none after:content-none",
@@ -155,7 +155,8 @@ export default function CheckoutForm({ onUpdate }: { onUpdate: () => void }) {
                                                             <Input
                                                                 onChange={handleOnChnage}
                                                                 name="account_number"
-                                                                maxLength={19}
+                                                                type='number'
+                                                                maxLength={17}
                                                                 // value={formatCardNumber(cardNumber)}
                                                                 // onChange={(event) => setCardNumber(event.target.value)}
                                                                 placeholder="0000 0000 0000 0000"
@@ -173,7 +174,7 @@ export default function CheckoutForm({ onUpdate }: { onUpdate: () => void }) {
                                                             <Input
                                                                 onChange={handleOnChnage}
                                                                 name="ifsc_code"
-                                                                maxLength={19}
+                                                                maxLength={11}
                                                                 // value={formatCardNumber(cardNumber)}
                                                                 // onChange={(event) => setCardNumber(event.target.value)}
                                                                 placeholder="0000 0000 0000 0000"

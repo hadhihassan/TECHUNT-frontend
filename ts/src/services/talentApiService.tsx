@@ -3,7 +3,7 @@ import axios from 'axios';
 import { resolve } from '../config/axios';
 import { axiosInstance, BASE_URL } from '../config/axios'
 import { EducationType } from '../pages/Talent/profile/education';
-
+import type { ReasonType } from '../components/General/contract/resheduleForm'
 
 export async function storeWorkBasedDataBioData(data: object) {
     return await resolve(
@@ -83,12 +83,15 @@ export async function saveResume(s3Link: string) {
 export async function searchJob(searchData: { query: string, postType: string, experience: string, maxInputValue: number, inputValue: number }) {
     return await axiosInstance.post(`${BASE_URL}TALENT/search/find-job/`, { searchData })
 }
-export async function saveEducation(data:EducationType) {
+export async function saveEducation(data: EducationType) {
     return await axiosInstance.post(`${BASE_URL}TALENT/profile/save-education/`, { data })
 }
-export async function  deleteEducation(id: string) {
+export async function deleteEducation(id: string) {
     return await axiosInstance.delete(`${BASE_URL}TALENT/profile/delete-education/${id}`)
 }
-export async function  updateEducation(id: string, data:EducationType) {
-    return await axiosInstance.patch(`${BASE_URL}TALENT/profile/edit-education/`,{id, data})
+export async function updateEducation(id: string, data: EducationType) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/profile/edit-education/`, { id, data })
+}
+export async function reSheduleWork(milestoneId: string, reasonData: ReasonType, workId: string, isMilestone: boolean) {
+    return await axiosInstance.patch(`${BASE_URL}TALENT/contract/reShedule/`, { reasonData, workId, milestoneId, isMilestone });
 }
