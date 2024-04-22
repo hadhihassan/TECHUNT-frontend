@@ -270,7 +270,7 @@ const UserManagement: React.FC = () => {
                     </button>
                     {Array.from({ length: Math.ceil(slicesData.length / itemsPerPage) }, (_, index) => (
                         <button
-                            className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
+                            className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none bg-gray-900  shadow-md shadow-gray-900/10' : ''}`}
                             type="button"
                             onClick={() => paginate(index + 1)}
                         >
