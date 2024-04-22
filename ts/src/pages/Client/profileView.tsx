@@ -78,7 +78,7 @@ const Profile = () => {
                 <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
                     <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
                         <div>
-                            <img className="border border-black rounded-xl" src={`https://timezones.website/images/${datas?.Profile.profile_Dp}`} alt="Loading" />
+                            <img className="border border-black rounded-xl" src={`http://localhost:3000/images/${datas?.Profile.profile_Dp}`} alt="Loading" />
                         </div>
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>

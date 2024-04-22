@@ -21,7 +21,7 @@ const EmailVerificationPage = () => {
     const navigate = useNavigate()
     const handleClick: () => void = async () => {
         try {
-            const url = `https://timezones.website/${signupData.role}/verify/${param.id}`;
+            const url = `http://localhost:3000/${signupData.role}/verify/${param.id}`;
             await get(url, signupData.role)
                 .then((_res) => {
                     console.log(_res)

@@ -59,7 +59,7 @@ const ListAllProposals = () => {
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
-                                <Avatar src={`https://timezones.website/images/${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
+                                <Avatar src={`http://localhost:3000/images/${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
                             </IconButton>
                             <div className="ml-4">
                                 {/* <p className="text-md font-bold">{proposla?.talentId?.First_name}{proposla?.talentId?.Last_name}</p> */}
