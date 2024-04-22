@@ -21,7 +21,6 @@ import { ROOTSTORE } from "../../../redux/store";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { Socket } from "socket.io-client";
 import { topSkills } from "../../../schema/profileBasedSchema";
-import { message } from "antd";
 
 
 const JobPostForm = () => {
@@ -132,8 +131,6 @@ const JobPostForm = () => {
                     } else {
                         error("Internal server error.")
                     }
-                }).catch(() => {
-                    message.error("Somting went wrong ?")
                 })
         }
     };
