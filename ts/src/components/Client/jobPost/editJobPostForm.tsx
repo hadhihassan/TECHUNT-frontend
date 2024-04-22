@@ -32,7 +32,6 @@ export interface jobInterface {
 }
 const EditjobPostForm = () => {
     const { id } = useParams();
-    console.log(id, "this is the params")
     const success = (message: string) => {
         toast.success(message);
     }

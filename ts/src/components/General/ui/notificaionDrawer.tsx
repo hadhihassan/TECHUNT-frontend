@@ -35,7 +35,6 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
     useEffect(() => {
         setNotifications(notification);
         setIsOpen(open)
-        console.log(notifications, "drawer")
         if(error){
             message.error(error)
         }

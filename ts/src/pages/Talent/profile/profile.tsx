@@ -1,6 +1,6 @@
 import Footer from "../../../components/General/Home/footer/footer";
 import AfterLoginHeader from "../../../components/General/Home/Header/afterLoginHeader";
-import ProfileTalentDetailsFirst from "../../../components/General/profile/profileTalentDetailsFirst";
+import ProfileTalentDetailsFirst from "../../../components/General/profile/profileSectionOne";
 import ProfileVerifications from "../../../components/General/profile/profileVerifications";
 import ProfileContact from "../../../components/General/profile/profileConatct";
 import { useContext, useEffect, useState } from "react";

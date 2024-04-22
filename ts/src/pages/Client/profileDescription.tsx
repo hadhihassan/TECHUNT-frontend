@@ -17,10 +17,8 @@ import Alert from '@mui/material/Alert';
 
 const ProfileDescription = () => {
     const data = useSelector((state: ROOTSTORE) => state.signup)
-    const data1 = useSelector((state: ROOTSTORE) => state.client)
     const navigate = useNavigate()
 
-    console.log(data1);
 
     const dispatch = useDispatch()
     const [_description, addDescription] = useState("")
@@ -44,7 +42,6 @@ const ProfileDescription = () => {
         } else {
 
             if (!lengthError) {
-                console.log(data1);
                 dispatch(setDescription(_description))
                 addDescription("")
                 navigate(clientRoutes.ADD_CONTACT_DETAILS)

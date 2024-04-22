@@ -6,7 +6,6 @@ import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { sendContract } from '../../../services/clientApiService';
-import { AxiosResponse } from 'axios';
 import type { ContractDetailsType, MilestoneType, ProposalInteface } from './contractInterface'
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -72,8 +71,7 @@ const ContractForm: React.FC = () => {
             .validateFields()
             .then(() => {
                 sendContract({ contract: contractDetails, milestone: milestones, isMilestone: true })
-                    .then((res: AxiosResponse) => {
-                        console.log(res, "this is response of the contract");
+                    .then(() => {
                         message.success("Successfully contract submitted.")
                         setTimeout(() => {
                             history.back()

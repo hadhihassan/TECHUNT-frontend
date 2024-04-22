@@ -24,15 +24,12 @@ const FindTypeUser: React.FC = () => {
     const handleType = (index: number) => {
         if (index === 1) {
             setUserType("TALENT")
-            console.log("THIS WILL BE TALENT", _UserType)
         } else if (index === 0) {
             setUserType("CLIENT")
-            console.log("THIS WILL BE CIENT", _UserType)
         }
     }
 
     const handleClickBtn = () => {
-        console.log("dispatch work", _UserType);
         dispatch(setRole(_UserType))
         navigate(routerVariables.signup)
     }

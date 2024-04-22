@@ -32,7 +32,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
     const basicData = useSelector((state:ROOTSTORE)=> state.signup)
     const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
-    const IMG: string = `http://localhost:3000/website/images/${details?.Profile?.profile_Dp}`;
+    const IMG: string = `https://timezones.website/images/${details?.Profile?.profile_Dp}`;
     const truncatedDescription: string = details?.Profile?.Description?.slice(0, 200) || '';
     const [image, setImage] = useState<File | null>(null);
 
@@ -167,7 +167,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
     return <div className="w-[48rem]  flex  rounded-xl  h-[20rem] shadow-xl  border bg-white ">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
-                <img className="border border-black rounded-xl " src={IMG} alt="" />
+                <img className="border border-black rounded-xl h-48 w-full" src={IMG} alt="" />
             </div>
             <div className="m-2 w-[18rem] mt-2">
                 <p className="font-sans font-normal text-sm">from : {details?.Country}</p>

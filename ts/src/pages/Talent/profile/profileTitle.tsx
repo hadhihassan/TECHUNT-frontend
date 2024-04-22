@@ -25,7 +25,6 @@ const ProfileTitle: React.FC = () => {
     const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<string>("")
     const saveProfileTitle = (e: React.FormEvent) => {
-        console.log(title, "this is a title")
         e.preventDefault();
         if (title.trim() === "") {
             setError("Title is required");

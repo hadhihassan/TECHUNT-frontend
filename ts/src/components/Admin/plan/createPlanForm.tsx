@@ -20,7 +20,6 @@ export interface PlanInterface {
 }
 const CreatePlanForm: React.FC<FormProps> = ({ isOpen, closeModal }) => {
     const handleSubmitForm = (values: PlanInterface, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-        console.log(values)
         createNewPlan(values)
             .then((res) => {
                 if (res?.data?.success) {

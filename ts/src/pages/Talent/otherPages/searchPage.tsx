@@ -39,20 +39,15 @@ const Search = () => {
     const [maxInputValue, setMaxInputValue] = useState<number>(0);
     const [inputValue, setInputValue] = useState<number>(0);
     const [max, setMax] = useState<number>(2000);
-    // const [allSkills, setAllskills] = useState<string[]>([])
     useEffect(() => {
         setQuery(localStorage.getItem("search") || "")
         fetchAllJobPostForTalent()
             .then((res: AxiosResponse) => {
-                // setPost(res.data.data)
                 setActualPost(res.data.data)
                 // eslint-disable-next-line no-unsafe-optional-chaining
                 const maxValue: number = Math.max(...res?.data?.data?.map((obj: { Amount: number; }) => obj.Amount));
                 setMax(maxValue)
                 setMaxInputValue(maxValue)
-                // const allSkills = res?.data?.data?.flatMap(obj => obj.Skills);
-                // const uniqueSkills: string[] = Array.from(new Set(allSkills));
-                // setAllskills(uniqueSkills)
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
@@ -75,7 +70,6 @@ const Search = () => {
 
     };
     const onChange4 = ({ target: { value } }: RadioChangeEvent) => {
-        console.log(value)
         value4 = value
         setPostType(value)
         search()
@@ -157,8 +151,6 @@ const Search = () => {
                                     buttonStyle="solid"
                                     size='small'
                                 />
-                                {/* <Checkbox onChange={onChangeRadio} className='m-3 font-normal' id="filter" value='Fixed'>Fixed </Checkbox>
-                            <Checkbox onChange={onChangeRadio} className='m-3 font-normal' id="filter" value="Milestone">Milestone </Checkbox> */}
                             </div>
                             <div className='text-black '>
                                 <p className='m-3'>
@@ -204,35 +196,10 @@ const Search = () => {
                                     />
                                 </Col>
                             </Row>
-                            {/* <p className='font-semibold ml-3 text-black'>Skills </p>
-                        <Space direction="vertical" className='m-3 mb-5 w-auto'>
-                            <AutoComplete
-                                options={options}
-                                onSearch={(text) => setOptions(getPanelValue(text))}
-                                style={{ width: 200 }}
-                                onSelect={handleSetSkill}
-                                />
-                        </Space>
-                        {
-                            selectedSkills?.map((skill: string, index: number) => (
-                                <><Checkbox className='ml-3 font-normal' checked key={index}>{skill}</Checkbox><br /></>
-                            ))
-                        } */}
                         </div>
                     </div>
                     {/* content */}
                     <div className='w-[80%]'>
-                        {/* <div className='flex justify-between'>
-                            <label>Top results <span className="font-normal text-xs">Showing 1-20 of 3291 results</span> </label>
-                            <Dropdown menu={menuProps}>
-                                <Button className='text-white font-sans font-semibold rounded-xl'>
-                                    <Space>
-                                        Sort by -
-                                        <DownOutlined />
-                                    </Space>
-                                </Button>
-                            </Dropdown>
-                        </div> */}
                         <div className='w-full xl:mt-16 md:mt-5 sm:mt1 border rounded-xl h-auto ml-2 bg-white shadow-xl mb-40'>
                             {loading ? (
                                 <List

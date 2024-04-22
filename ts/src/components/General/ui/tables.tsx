@@ -58,7 +58,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         formDataToUpload.append('description', formData.description);
         if (formData.image) {
             formDataToUpload.append('image', formData.image);
-            console.log(formDataToUpload)
         }
         createNewJobCategoru(formDataToUpload)
             .then((res: any) => {

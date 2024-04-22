@@ -76,7 +76,7 @@ const ListDiscoverTalent = () => {
                     <div className="flex justify-between p-4">
                         <div className="flex">
                             <IconButton size="small">
-                                <Avatar src={`http://localhost:3000/images/${talent.Profile.profile_Dp}`} className="w-8 h-8" />
+                                <Avatar src={`http://timezones.website/images/${talent.Profile.profile_Dp}`} className="w-8 h-8" />
                             </IconButton>
                             <div className="ml-4">
                                 <p className="text-md font-bold">{talent?.First_name}{talent?.Last_name}</p>

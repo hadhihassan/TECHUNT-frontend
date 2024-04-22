@@ -6,7 +6,6 @@ import { IconButton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getAllProposalForClient } from '../../../services/clientApiService';
 import type { ProposalInterface } from '../../../interface/interfaces';
-import { AxiosError, AxiosResponse } from 'axios';
 import { ROOTSTORE } from '../../../redux/store';
 import { useSelector } from 'react-redux';
 import React from 'react';
@@ -14,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { clientRoutes } from "../../../routes/pathVariables";
 import { setConversation } from '../../../redux/Slice/conversationsSlice'
 import { createConversation } from "../../../services/commonApiService";
+import { message } from "antd";
+import { AxiosResponse } from "axios";
 
 const ListAllProposals = () => {
     const navigate = useNavigate()
@@ -26,10 +27,9 @@ const ListAllProposals = () => {
     useEffect(() => {
         getAllProposalForClient(basicData?.id)
             .then((res: AxiosResponse) => {
-                console.log(res.data, "this is the proposal for you ")
                 setProposals(res.data.data)
-            }).catch((err: AxiosError) => {
-                console.log(err.message)
+            }).catch(() => {
+                message.error("Somthing went wrong ?")
             })
     }, [])
     const handleShowProposal = (index: number) => {
@@ -37,7 +37,6 @@ const ListAllProposals = () => {
         navigate(clientRoutes.viewProposal)
     }
     const handleCreateConversion = (index: number) => {
-        console.log(proposals[index].talentId)
         setConversation({})
         createConversation(proposals[index]?.talentId as unknown as string)
             .then(() => {
@@ -59,7 +58,7 @@ const ListAllProposals = () => {
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
-                                <Avatar src={`http://localhost:3000/images/${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
+                                <Avatar src={`https://timezones.website/images/${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
                             </IconButton>
                             <div className="ml-4">
                                 {/* <p className="text-md font-bold">{proposla?.talentId?.First_name}{proposla?.talentId?.Last_name}</p> */}

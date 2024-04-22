@@ -1,6 +1,5 @@
 // for email
 export function emailValidator(email: string) {
-    console.log(email, "am herer");
     if (email.trim() === "") {
         return "Email is required"
     }
@@ -38,7 +37,6 @@ export function nameValidator(name: string, fieldName: string) {
 // number
 export function numberValidator(number: string) {
 
-    console.log(number);
     
     const mobileNumber = number.trim();
     const zeroCount = (mobileNumber.match(/0/g) || []).length;

@@ -134,7 +134,6 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         socket.emit("getNotifications", sender_id);
         socket.on("receivedNotificatios", (notifications: string[]) => {
             setReceivedNotifications(notifications)
-            console.log(notifications)
         })
         return () => {
             socket.off('receiveNotification');

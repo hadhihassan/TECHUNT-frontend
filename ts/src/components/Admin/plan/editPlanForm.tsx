@@ -29,7 +29,6 @@ const EditPlanForm: React.FC<FormProps> = ({ isOpen, closeModal, data, editData 
     const fetchData = (data: string) => {
         getPlanForEdit(data)
             .then((res) => {
-                console.log(res?.data?.data)
                 setPlanData(res?.data?.data)
             })
     }

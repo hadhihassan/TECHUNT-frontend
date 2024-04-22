@@ -92,7 +92,6 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         formDataToUpload.append('description', inputData.description);
         if (formData.image) {
             formDataToUpload.append('image', inputData.image || "");
-            console.log(formDataToUpload)
         }
         formDataToUpload.append("id", formData._id || "")
         editJobCategory(formDataToUpload)

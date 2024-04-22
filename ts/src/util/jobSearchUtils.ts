@@ -8,14 +8,11 @@ export function findMostSuitableJobPost(jobPosts: JobInterface[], requiredSkills
             mostSuitableJobPost.push(jobPost)
         }
     }
-    console.log(mostSuitableJobPost,"the most sutable post in skillsbase ")
     return mostSuitableJobPost;
 }
 function calculateSuitabilityScore(skills: string[], requiredSkills: string[]): number {
     let score = 0;
-    console.log(skills)
     for (const skill of skills) {
-        console.log(skill);
         if (requiredSkills?.includes(skill)) {
             score++;
         }

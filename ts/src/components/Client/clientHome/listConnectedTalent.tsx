@@ -23,7 +23,6 @@ const ListConnectedFreelancers: React.FC = () => {
         const fetchData = async () => {
             try {
                 const response: AxiosResponse = await fetchConnectedTalent();
-                console.log(response.data, "connected talents");
                 setConnections(response?.data?.data);
             } catch (error) {
                 console.error('Error fetching connected talents:', error);

@@ -14,7 +14,6 @@ import { postJob } from "../../../services/clientApiService";
 import toast, { Toaster } from "react-hot-toast";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSocketContext } from "../../../context/socketContext";
 import { useSelector } from "react-redux";
@@ -132,8 +131,8 @@ const JobPostForm = () => {
                     } else {
                         error("Internal server error.")
                     }
-                }).catch((err: AxiosError) => {
-                    console.log(err)
+                }).catch(() => {
+                    message.error("Somting went wrong ?")
                 })
         }
     };

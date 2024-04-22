@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AxiosError, AxiosResponse } from "axios";
-import { Button } from 'antd';
+import { AxiosResponse } from "axios";
+import { Button, message } from 'antd';
 import { fetchCompletedContract } from "../../../services/commonApiService";
 import { ROOTSTORE } from "../../../redux/store";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
@@ -41,10 +41,9 @@ const CompletedContract: React.FC = () => {
         fetchCompletedContract(role)
             .then((res: AxiosResponse) => {
                 setActiveContract(res?.data?.data)
-                console.log(res)
             })
-            .catch((err: AxiosError) => {
-                console.log(err.message)
+            .catch(() => {
+                message.error("Somthing went wrong  ?")
             })
     }
 
