@@ -270,30 +270,7 @@ const Profile = () => {
                     <>
                     </>
             }
-            <div className="flex gap-4  mt-10 flex-row m-1 mb-5 ml-[7rem] ">
-                <div>
-                    <ProfileReviews id={basicData.id || ""} />
-                </div>
-                {
-                    datas?.Profile && datas?.Profile?.Work_Experiance && datas?.Profile?.Work_Experiance.length > 0 ? <div className="w-[22rem]  h-auto rounded-2xl  border shadow-xl ">
-                        <div className="flex justify-between">
-                            <p className="m-4 font-sans font-medium">Experiance</p>
-                        </div>
-                        <hr />
-                        <div className="flex flex-col space-y-5 items-start m-5 ">
-                            {datas?.Profile?.Work_Experiance[0] ? (
-                                <>
-                                    <p className="text-gray-700 text-md font-sans font-medium">
-                                        {datas?.Profile?.Work_Experiance[0]}
-                                    </p>
-                                </>
-                            ) : (
-                                <p className="text-center text-3xl font-sans font-medium">Fresher</p>
-                            )}
-                        </div>
-                    </div> : null
-                }
-            </div>
+
             {
                 basicData.role === "CLIENT" && datas?.educations.length && <>
                     <Transition appear show={isOpen} as={Fragment}>
@@ -380,6 +357,30 @@ const Profile = () => {
                     </div>
                 </>
             }
+            <div className="flex gap-4  mt-10 flex-row m-1 mb-5 ml-[7rem] ">
+                <div>
+                    <ProfileReviews id={basicData.id || ""} />
+                </div>
+                {
+                    datas?.Profile && datas?.Profile?.Work_Experiance && datas?.Profile?.Work_Experiance.length > 0 ? <div className="w-[22rem]  h-auto rounded-2xl  border shadow-xl ">
+                        <div className="flex justify-between">
+                            <p className="m-4 font-sans font-medium">Experiance</p>
+                        </div>
+                        <hr />
+                        <div className="flex flex-col space-y-5 items-start m-5 ">
+                            {datas?.Profile?.Work_Experiance[0] ? (
+                                <>
+                                    <p className="text-gray-700 text-md font-sans font-medium">
+                                        {datas?.Profile?.Work_Experiance[0]}
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="text-center text-3xl font-sans font-medium">Fresher</p>
+                            )}
+                        </div>
+                    </div> : null
+                }
+            </div>
         </div>
     </>
     );
