@@ -178,7 +178,7 @@ const Milestone = () => {
         try {
             const res: AxiosResponse | AxiosError = await updateMilestoneStatus(id, status);
             if (res?.data.success) {
-                message.success('successfully miles status updated.');
+                message.success('successfully milestone status updated.');
             } else {
                 message.warning('Failed to update milestone status.');
             }
@@ -234,7 +234,7 @@ const Milestone = () => {
                                     {contract?.milestones[selectMilestone].completed === "Progress" && <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Latest</span>}
                                 </h3>
                                 {/* <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 7th, 2021</time> */}
-                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">All of the pages and components are first designed in Figma and we keep a parity between the two versions even as we update the project.</p>
+                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">Your project is currently in the on progess stage</p>
                             </li>
                         </>
                     }
@@ -247,7 +247,7 @@ const Milestone = () => {
                                 <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Completed
                                     <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Latest</span></h3>
                                 {/* <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 2nd, 2021</time> */}
-                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements built on top of Tailwind CSS.</p>
+                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">Your project is currently in completed</p>
                             </li>
                         </>
                     }
@@ -372,22 +372,22 @@ const Milestone = () => {
                                                 <div className="block p-6  shadow-lg bg-gray-100 max-w-md ml-6 mb-10 rounded hover:border-2">
                                                     <div className="flex justify-between mb-4">
                                                         <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{milestone?.name}</p>
-                                                        <p className="font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate as unknown as Date)}</p>
+                                                        <p className="ml-2 font-medium text-red-500 hover:text-red-700 focus:text-red-800 duration-300 transition ease-in-out text-sm">{formatMongoDate(milestone?.dueDate as unknown as Date)}</p>
                                                         {
                                                             milestone.work && <>
-                                                                <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Submitted</span>
+                                                                <span className="bg-blue-100 text-blue-800 text-sm ml-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">Submitted</span>
                                                             </>
                                                         }
                                                         {
                                                             countOfCompleted === index && !milestone?.isResheduleMilestone && basicData.role === "TALENT" && <>
                                                                 <div>
-                                                                    <button className="p-1 bg-blue-700 rounded shadow-sm text-white text-xs font-sans  inline-block px-2 py-1  leading-tight" onClick={() => setShowReshedule(!showReshedule)}>Reshedule</button>
+                                                                    <button className="p-1 ml-2 bg-blue-700 rounded shadow-sm text-white text-xs font-sans  inline-block px-2 py-1  leading-tight" onClick={() => setShowReshedule(!showReshedule)}>Reshedule</button>
                                                                 </div>
                                                             </>
                                                         }
                                                         {
                                                             milestone?.isResheduleMilestone && <>
-                                                                <div>
+                                                                <div className='ml-1'>
                                                                     <button className="p-1 bg-blue-700 rounded shadow-sm text-white text-xs font-sans  inline-block px-2 py-1  leading-tight" onClick={() => {
                                                                         setShowReason(!showReason)
                                                                         setSelected(index)
@@ -546,7 +546,7 @@ const Milestone = () => {
                                         <p className='text-red-500 font-sans font-semibold mt-2'>Request</p>
                                         <div className="mt-3 bg-gray-300 p-3 rounded text-xs font-semibold border-2 flex flex-col gap-2 items-start">
                                             <p>Reason: {contract?.milestones[selectMilestone]?.resheduleReason?.reason}</p>
-                                            <p>Requested date number of days / month: {contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
+                                            <p>Requested date number of days: { contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
                                             {
                                                 basicData.role === "TALENT" ? (
                                                     <p className="border p-2 rounded bg-red-500 text-white">

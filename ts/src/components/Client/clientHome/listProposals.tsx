@@ -15,6 +15,7 @@ import { setConversation } from '../../../redux/Slice/conversationsSlice'
 import { createConversation } from "../../../services/commonApiService";
 import { message } from "antd";
 import { AxiosResponse } from "axios";
+import { IMG_URL } from "../../../constant/columns";
 
 const ListAllProposals = () => {
     const navigate = useNavigate()
@@ -54,14 +55,12 @@ const ListAllProposals = () => {
         {
             paginatedProposals?.map((proposla: ProposalInterface, index: number) => (
                 <div className="w-full mt-5 border rounded-xl shadow-xl h-auto p-3" key={index} >
-                    {/* <button className="bg-blue-700 cursor-none w-[5vw] h-[3vh] rounded-full text-white font-normal font-sans text-xs relative bottom-3 left-5">Top rate</button> */}
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
-                                <Avatar src={`https://timezones.website/images/${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
+                                <Avatar src={`${IMG_URL}${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
                             </IconButton>
                             <div className="ml-4">
-                                {/* <p className="text-md font-bold">{proposla?.talentId?.First_name}{proposla?.talentId?.Last_name}</p> */}
                                 <p className="text-sm text-gray-500">{proposla?.title}, {(proposla?.jobId as { Title: string }).Title}</p>
                                 <div className="mt-2">
                                     <p className="text-sm text-gray-500">Total earnings <b>$0</b> on {proposla?.talentId?.Profile?.Title} </p>

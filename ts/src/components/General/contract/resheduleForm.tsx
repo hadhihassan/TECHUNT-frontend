@@ -32,7 +32,7 @@ export function ResheduleSubmitForm({ open, closeModal, milestoneId, workId, onU
         const isMilestone: boolean = true
         reSheduleWork(milestoneId, values, workId, isMilestone)
             .then((res) => {
-                if (res && res.data.success) {
+                if (res) {
                     message.success("ReShedule requested .")
                     onUpdate()
                 }

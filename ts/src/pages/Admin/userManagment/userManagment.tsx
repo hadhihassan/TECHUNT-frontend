@@ -297,7 +297,7 @@ const UserManagement: React.FC = () => {
                         <div className="inline-block align-bottom  bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className='flex justify-center mb-5 rounded-full overflow-auto'>
-                                    <img src={`https://timezones.website/images/${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
+                                    <img src={`${IMG_URL}${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
                                     <div className='m-2 font-sans text-gray-600 font-semibold'>
                                         <p >{drawerData?.First_name}</p>
                                         {
@@ -305,7 +305,6 @@ const UserManagement: React.FC = () => {
                                                 <p >{drawerData?.Profile.Title}</p>
                                             </>
                                         }
-
                                     </div>
                                 </div>
                                 <div className='overflow-auto '>

@@ -12,6 +12,7 @@ import { createConversation } from "../../../services/commonApiService";
 import { Dialog, Transition } from '@headlessui/react'
 import type { jobInterface } from '../jobPost/editJobPostForm'
 import { message } from "antd";
+import { IMG_URL } from "../../../constant/columns";
 
 const ListDiscoverTalent = () => {
     const navigate = useNavigate()
@@ -76,7 +77,7 @@ const ListDiscoverTalent = () => {
                     <div className="flex justify-between p-4">
                         <div className="flex">
                             <IconButton size="small">
-                                <Avatar src={`http://timezones.website/images/${talent.Profile.profile_Dp}`} className="w-8 h-8" />
+                                <Avatar src={`${IMG_URL}${talent.Profile.profile_Dp}`} className="w-8 h-8" />
                             </IconButton>
                             <div className="ml-4">
                                 <p className="text-md font-bold">{talent?.First_name}{talent?.Last_name}</p>

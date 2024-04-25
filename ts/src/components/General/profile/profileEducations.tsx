@@ -35,7 +35,7 @@ const EducationForm: React.FC<EducationFormProps> = ({ initialValues, onUpdate }
                 message.error("While saving education, an error occurred.");
             });
     };
-
+    
     return (
         <div>
             <Transition appear show={isOpen} as={Fragment}>
@@ -63,8 +63,8 @@ const EducationForm: React.FC<EducationFormProps> = ({ initialValues, onUpdate }
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6z text-left align-middle shadow-xl transition-all">
-                                    <p className="font-semibold text-xl">Let's {initialValues ? 'edit' : 'add'} education</p>
-                                    <div className="mt-2">
+                                    <p className="font-semibold text-xl p-1">Let's {initialValues ? 'edit' : 'add'} education</p>
+                                    <div className="mt-2 p-3">
                                         <Formik
                                             initialValues={initialValues || {
                                                 institution: '',

@@ -1,8 +1,4 @@
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
-// import Rating from '@mui/material/Rating';
-// import Stack from '@mui/material/Stack';
-import CurrencyRupeeTwoToneIcon from '@mui/icons-material/CurrencyRupeeTwoTone';
-import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
 import { editMainProfileSection } from '../../../services/commonApiService';
@@ -24,15 +20,16 @@ import { CAllS3ServiceToStore, saveResume, uploadFileToSignedUelInS3 } from '../
 import { message } from 'antd';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
+import { IMG_URL } from '../../../constant/columns';
 
 const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
     const error = (err: string) => toast.error(err);
     const success = (message: string) => toast.success(message);
-    const basicData = useSelector((state:ROOTSTORE)=> state.signup)
+    const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
-    const IMG: string = `https://timezones.website/images/${details?.Profile?.profile_Dp}`;
+    const IMG: string = `${IMG_URL}${details?.Profile?.profile_Dp}`;
     const truncatedDescription: string = details?.Profile?.Description?.slice(0, 200) || '';
     const [image, setImage] = useState<File | null>(null);
 
@@ -69,20 +66,21 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
         return !(errors.fName || errors.lName || errors.description || errors.title);
     }
     const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e?.target.files?.length === 1) {
-            const file: File = e.target.files[0];
-            const content_type: string = file.type;
-            const key: string = `test/image/${file.name}`;
-            CAllS3ServiceToStore({ key, content_type })
-                .then(async (res: AxiosResponse) => {
-                    await saveResume(res.data.fileLink)
-                    uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+            if (e?.target.files?.length === 1) {
+                const file: File = e.target.files[0];
+                const content_type: string = file.type;
+                const key: string = `test/image/${file.name}`;
+                CAllS3ServiceToStore({ key, content_type })
+                    .then(async (res: AxiosResponse) => {
+                        await saveResume(res.data.fileLink)
+                        uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+                            message.success("Successfully resume uploaded")
+                        })
                     })
-                })
-                .catch(() => message.error("Error uploading file"));
-        } else {
-            message.error("Maximum file limit is one . Selete one file")
-        }
+                    .catch(() => message.error("Error uploading file"));
+            } else {
+                message.error("Maximum file limit is one . Selete one file")
+            }
     };
     useEffect(() => {
         setDetails(datas || null);
@@ -108,7 +106,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
         if (e.target.files && e.target.files.length > 0) {
             const img: File | null = e.target.files[0];
             if (img) {
-                if (img.size > 5242880) { // Max file size: 5MB (in bytes)
+                if (img.size > 5242880) {
                     error('File size exceeds the limit (5MB)');
                     return;
                 }
@@ -129,20 +127,17 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
                 });
         }
     }
-    console.log(details)
     const changeHandle: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void = (e) => {
         validateForm()
         setData({
             ...formData,
             [e.target.name]: e.target.value,
         })
-
     }
     const handleSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
         const valid = validateForm()
         if (valid) {
-
             editMainProfileSection(formData, basicData?.role)
                 .then(() => {
                     onUpdate()
@@ -171,8 +166,6 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
             </div>
             <div className="m-2 w-[18rem] mt-2">
                 <p className="font-sans font-normal text-sm">from : {details?.Country}</p>
-                {/* <AccessTimeRoundedIcon fontSize="inherit" /> */}
-                {/* <span className="font-sans font-normal text-xs ml-2" >It's currently 4:45 PM here</span><br /> */}
                 <EditCalendarRoundedIcon fontSize="inherit" />
                 <span className="font-sans font-normal text-xs ml-2">Joined {formattedDate ? formattedDate : "Joined September 1, 2013"}</span>
             </div>
@@ -193,6 +186,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
                                 onClick={closeShowResume}
                                 className="px-2 py-1 font-sans font-semibold rounded-full  border text-xs  border-red-500 text-red-500 " >Show Resume</button>
                             <DisplayResume
+                                uploadNewResume={uploadFile}
                                 pdfUrl={details?.resume}
                                 open={showResume}
                                 closeModal={closeShowResume}
@@ -272,23 +266,6 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
             {/* end the modal */}
 
 
-            <div className="mt-2 mr-5 flex justify-start gap-2">
-                {/* <div>
-                    <Stack spacing={1}>
-                        <Rating name="half-rating-read" size="small" defaultValue={2.5} precision={0.5} readOnly />
-                    </Stack>
-                    <p className="text-gray-500 font-sans font-normal text-sm">4/5 (12 Reviews)</p>
-                </div>
-                <div className="border-r border-solid  border-gray-500 h-8 "></div> */}
-                <div>
-                    <CurrencyRupeeTwoToneIcon fontSize="inherit" color="error" />
-                    <span className="text-gray-500 font-sans font-normal text-sm">Total earnings :  0  Rs</span>
-                </div><div className="border-r border-solid border-gray-500 h-8"></div>
-                <div>
-                    <VerifiedTwoToneIcon fontSize="inherit" color="primary" />
-                    <span className="text-gray-500 font-sans ml-1 font-normal text-sm">0 projects completed</span>
-                </div>
-            </div>
             <div className="mr-3 mt-4">
                 <p className="text-gray-700 font-sans font-normal text-sm">
                     {showMore ? details?.Profile?.Description : `${truncatedDescription}...`}

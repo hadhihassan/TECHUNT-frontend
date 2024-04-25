@@ -42,7 +42,7 @@ const ProfileConatct: React.FC<{ data: UserContact, onUpdate: () => void }> = ({
             setdetails(data);
             console.log(data.Address)
             setData({
-                Address: data.Address || 'ad address here',
+                Address: data.Address || 'add address here',
                 City: data.City || 'add city here',
                 Country: data.Country || ' add country here',
                 PinCode: data.PinCode || 'add pin code here',

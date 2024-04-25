@@ -44,8 +44,8 @@ const WebRouters: React.FC = () => {
                     <Imports.Route path={Imports.talent_routes.AddWorkExperiance} element={<Imports.Addexperiance />} />
                     <Imports.Route path={Imports.clientRoutes.ADD_PROFILE_DESCRIPTION} element={<Imports.ProfileDescription />} />
                     <Imports.Route path={Imports.talent_routes.Profile_title} element={<Imports.ProfileTitle />} />
-                    <Imports.Route path={Imports.clientRoutes.ADD_CONTACT_DETAILS} element={<Imports.ContractDetails />} />
                 </Imports.Route>
+                    <Imports.Route path={Imports.clientRoutes.ADD_CONTACT_DETAILS} element={<Imports.ContractDetails />} />
                 {/* new user note verified user only allowed routes */}
                 <Imports.Route element={<Imports.IsNewUser />}>
                     <Imports.Route element={<Imports.CheckUserType />}>

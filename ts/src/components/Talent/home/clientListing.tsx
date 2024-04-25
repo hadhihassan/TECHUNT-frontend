@@ -3,9 +3,6 @@ import { getAllClientForTalent } from '../../../services/talentApiService';
 import { UserProfile } from '../../../interface/interfaces';
 import { AxiosError, AxiosResponse } from 'axios';
 import Avatar from 'react-avatar';
-// import Rating from '@mui/material/Rating';
-// import Stack from '@mui/material/Stack';
-// import { FlagOutlined } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { talent_routes } from '../../../routes/pathVariables';
 import { createConversation } from '../../../services/commonApiService';
@@ -21,7 +18,6 @@ const ClientList = () => {
             }).catch((err: AxiosError) => {
                 console.log(err)
             })
-
     }, [])
     const hadnleShowFullDetails = (index: number) => {
         localStorage.setItem("profileData", JSON.stringify(clients[index]))

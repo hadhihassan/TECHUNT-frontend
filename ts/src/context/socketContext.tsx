@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { ROOTSTORE } from "../redux/store";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../config/axios";
 
 interface SocketContextValue {
 	socket: Socket | null;
@@ -24,7 +25,7 @@ export const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		if (id) {
-			const socketInstance = io("https://timezones.website", {
+			const socketInstance = io(BASE_URL, {
 				query: {
 					userId: id,
 				},

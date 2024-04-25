@@ -64,7 +64,6 @@ export async function getAllClientProposalsForTalent(id: string) {
 export async function getAllNewContracts() {
     return await axiosInstance.get(`${BASE_URL}TALENT/fetch-all-new-contract/`)
 }
-
 export async function updateContractStatus(id: string, status: boolean, actualStatus: string) {
     return await axiosInstance.patch(`${BASE_URL}TALENT/update-contract-status/`, { id, status, actualStatus })
 }

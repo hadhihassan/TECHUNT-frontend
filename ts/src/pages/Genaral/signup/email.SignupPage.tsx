@@ -1,7 +1,7 @@
 import Header from "../../../components/General/Home/Header/header";
 import Footer from "../../../components/General/Home/footer/footer";
 import { useDispatch, useSelector } from "react-redux";
-import { INITIALSTATE, setEmail } from "../../../redux/Slice/signupSlice";
+import { INITIALSTATE, setEmail, isNumberVerify } from "../../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../../redux/store";
 import Routers from "../../../routes/pathVariables";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +34,7 @@ const Login = () => {
         if (!EmailErrors && !PasswordErrors) {
             if (inputValue !== "") {
                 dispatch(setEmail(inputValue));
+                dispatch(isNumberVerify(false));
             }
             try {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

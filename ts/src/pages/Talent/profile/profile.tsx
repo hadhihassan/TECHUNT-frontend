@@ -43,10 +43,10 @@ export interface UserProfile {
     isNumberVerify?: boolean;
     bankDetails: {
         account_holder_name: string
-        account_number: number
+        account_number: string
         account_type: string
         bank_name: string
-        ifsc_code: number
+        ifsc_code: string
         _id: string
     },
     createdAt?: string

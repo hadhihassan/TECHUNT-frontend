@@ -21,9 +21,11 @@ import { getAllProposalForClient } from "../../../../services/clientApiService";
 import { ProposalInterface, } from "../../../../interface/interfaces";
 import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
+import { BASE_URL } from "../../../../config/axios";
+import { IMG_URL } from "../../../../constant/columns";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const socket = io("https://timezones.website")
+export const socket = io(BASE_URL)
 
 
 type NotificationPlacement = NotificationArgsProps['placement'];
@@ -45,7 +47,7 @@ const AfterLoginHeader = () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .then((res:any) => {
                     if (res) {
-                        setIMG(`https://timezones.website/images/${res?.data?.data?.Profile?.profile_Dp}`)
+                        setIMG(`${IMG_URL}${res?.data?.data?.Profile?.profile_Dp}`)
                     }
                 }).catch((err: AxiosError) => {
                     console.log(err)
@@ -107,7 +109,7 @@ const AfterLoginHeader = () => {
     }
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     const [api, contextHolder] = notification.useNotification();
-
+    const portionOfUrl = role.toLocaleLowerCase()
     return <>
         <div className="sticky top-0">
             {contextHolder}
@@ -115,7 +117,7 @@ const AfterLoginHeader = () => {
                 {/* Logo */}
                 <div className="w-full flex items-center justify-between ">
                     <div className="m-auto" onClick={() => {
-                        navigate(`/${role}/home/`)
+                        navigate(`/${portionOfUrl}/home/`)
                     }}>
                         <span className="text-white text-3xl font-extrabold font-montserrat break-words">TECH</span>
                         <span className="text-white text-3xl font-normal font-montserrat break-words">UNT</span>
@@ -142,9 +144,9 @@ const AfterLoginHeader = () => {
                             </button>
                         </>
                     }
-                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/transaction/history/`)}>Transactions</span>
+                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${portionOfUrl}/transaction/history/`)}>Transactions</span>
                     <span className="mr-[1px] mt-1" onClick={() => navigate(routerVariables.Message)}>Messages</span>
-                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${userData.role}/contract/all/`)}>My Works</span>
+                    <span className="mr-[1px] mt-1" onClick={() => navigate(`/${portionOfUrl}/contract/all/`)}>My Works</span>
                     <div className="felx pb-" onClick={() => { setopenNotificationDrawer(!openNotificationDrawer) }}>
                         <div className="bg-red-500 w-[7px] h-[7px] ml-3 top-3 relative rounded-full  bg-gradient-to-br"></div>
                         <NotificationsNoneOutlinedIcon color="primary" />
@@ -161,7 +163,7 @@ const AfterLoginHeader = () => {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow">
-                                            <MenuItem onClick={() => navigate(`/${basicData?.role}/profile/`)}>
+                                            <MenuItem onClick={() => navigate(`/${portionOfUrl}/profile/`)}>
                                                 <Person sx={{ mr: 1 }} /> Profile
                                             </MenuItem>
                                             <MenuItem onClick={handleLogout}><Logout sx={{ mr: 1 }} /> Logout</MenuItem>

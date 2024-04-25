@@ -103,12 +103,6 @@ const ProfileExperiance: React.FC<{ data: any, onUpdate: () => void }> = ({ data
                         <p className="text-gray-700 text-md font-sans font-medium">
                             {data?.Profile?.Work_Experiance[0]}
                         </p>
-                        {/* <span className="text-gray-700 font-sans font-normal text-xs">2019- 2021</span>
-                        <p className="text-gray-700 font-sans font-normal text-sm">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod.
-                        </p> */}
                     </>
                 ) : (
                     <p className="text-center text-3xl font-sans font-medium">Fresher</p>

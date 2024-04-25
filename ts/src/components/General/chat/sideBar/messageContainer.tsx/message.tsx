@@ -3,8 +3,7 @@ import { ROOTSTORE } from "../../../../../redux/store";
 import { forwardRef, useRef } from "react";
 import { MessageDoc } from '../../../../../interface/interfaces';
 import { IMG_URL } from "../../../../../constant/columns";
-import DoneIcon from '@mui/icons-material/Done';
-import { DoneAll } from "@mui/icons-material";
+import formatRelativeTime from "../../../../../util/timeFormating";
 
 const Message = forwardRef(({ message, index }: { message: MessageDoc, index: number }) => {
     const id = useSelector((state: ROOTSTORE) => state.signup.id);
@@ -23,12 +22,7 @@ const Message = forwardRef(({ message, index }: { message: MessageDoc, index: nu
                     className={`relative ${messageFromMe ? "mr-3 text-sm bg-indigo-100" : "ml-3 text-sm bg-white"} py-2 px-4 shadow rounded-xl flex items-center gap-2 `}
                 >
                     <div className="chat-bubble chat chat-start">{message.message}</div>
-                    {
-                        message.senderId === id && (
-                            message.read ? <DoneAll color='primary' fontSize="inherit"  /> : <DoneIcon fontSize="inherit" color='primary' />
-                        )
-                    }
-                    {/* <label className=' text-end text-xs font-sans text-gray-400'>{formatRelativeTime(message.updatedAt)} </label> */}
+                    <label className=' text-end text-xs font-sans text-gray-400'>{formatRelativeTime(message.updatedAt)} </label>
                 </div>
             </div>
         </div>

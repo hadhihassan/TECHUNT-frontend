@@ -1,7 +1,7 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 import { ROOTSTORE } from '../../../../redux/store';
-import { setConversation } from '../../../../redux/Slice/conversationsSlice'
+import { setConversation ,cleanChatItems} from '../../../../redux/Slice/conversationsSlice'
 import { IMG_URL } from '../../../../constant/columns';
 import formatRelativeTime from '../../../../util/timeFormating';
 import useGetMessage from '../../../../hooks/useGetMessages';
@@ -18,6 +18,7 @@ const Conversation = ({ conversation, _lastIndex ,index}: { conversation: Conver
     return <>
         <div className={`flex flex-row items-center justify-between text-xs w-full ${_lastIndex && "rounded-b-xl"} ${index === 0 && "rounded-t-xl"} ${selectedConversation ? "bg-red-500" : ""}`}
             onClick={() => {
+                dispatch(cleanChatItems())
                 dispatch(setConversation(conversation))
                 getMessages(conversation?.participants[0]?._id)
             }}

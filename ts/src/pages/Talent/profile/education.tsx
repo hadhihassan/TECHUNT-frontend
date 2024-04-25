@@ -8,6 +8,8 @@ import { message } from "antd";
 import { AxiosResponse } from "axios";
 import EducationForm from "../../../components/General/profile/profileEducations";
 
+
+
 export interface EducationType {
     _id?: string
     institution: string,

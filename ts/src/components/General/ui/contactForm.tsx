@@ -66,7 +66,6 @@ const ContactForm: React.FC = () => {
             try {
                 const response = await axios.get('https://restcountries.com/v3.1/all');
                 setCountries(response.data);
-                console.log(response)
             } catch (error) {
                 console.error('Error fetching countries:', error);
             }
@@ -107,9 +106,11 @@ const ContactForm: React.FC = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         const valid = validateForm()
+        console.log(formData)
         if (valid) {
             createContactDetails(formData, role)
                 .then(() => {
+                    console.log("success fullyt addedd")
                     naviagte(routerVariables.Login)
                 }).catch((e: AxiosError) => {
                     console.log(e.message)

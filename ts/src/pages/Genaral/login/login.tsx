@@ -22,10 +22,8 @@ const LoginPage: React.FC = () => {
     const [Emailerrors, setErrorsEmail] = useState<string | null>("");
     const [PasswordErrors, setErrorsPassword] = useState<string | null>(null);
     const { socket }: { socket: Socket } = useSocketContext() as { socket: Socket };
-
     const handleEmailSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
-        console.log("login form fun tiggerd")
         setErrorsEmail(emailValidator(email))
         setErrorsPassword(passwordValidator(password))
         if (Emailerrors === null && PasswordErrors === null) {
@@ -38,8 +36,7 @@ const LoginPage: React.FC = () => {
                             icon: "warning"
                         });
                     } else {
-                        if (!res?.data) {
-                            console.log(res)
+                        if (!res.data) {
                             setError("Email Or Password incorrect")
                         } else {
                             localStorage.setItem("token", res?.data?.data.token)
@@ -48,20 +45,20 @@ const LoginPage: React.FC = () => {
                             dispatch(setRole(res?.data?.data.role));
                             dispatch(setId(res?.data?.data?.data?._id));
                             dispatch(setEmail(res?.data?.data?.data?.Email));
-                            dispatch(isNumberVerify(res?.data?.data?.data?.isNumberVerify));
                             dispatch(setProgress(res?.data?.data?.progress));
-
                             if (res?.data?.data?.data.subscription) {
                                 dispatch(isPremimunUser(true));
                             }
                             if (res?.data?.data?.data.bankDetails) {
                                 dispatch(isBankVeried(true));
                             }
+                            if (res?.data?.data?.data.isNumberVerify) {
+                                dispatch(isNumberVerify(res?.data?.data?.data.isNumberVerify || false));
+                            }
                             if (res?.data?.data?.data.subscription && res?.data?.data.role === "TALENT") {
                                 const userId: string = res?.data?.data?.data?._id
                                 socket.emit("subscribedUser", userId)
                             }
-                            // for online user
                             socket.emit("OnlineUser", { role: res?.data?.data.role, id: res?.data?.data?.data?._id })
                             if (res?.data?.data.role === "CLIENT") {
                                 navigate("/client/home/");
@@ -70,8 +67,6 @@ const LoginPage: React.FC = () => {
                             }
                         }
                     }
-                }).catch((err)=>{
-                    console.log(err)
                 })
         }
     }
@@ -107,14 +102,6 @@ const LoginPage: React.FC = () => {
                             <input onChange={handleChangePassword} type="password" name="password" id="password" placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-800 outline-none" />
                         </div>
                         <div className="flex items-center justify-between">
-                            <div className="flex items-start">
-                                <div className="flex items-center h-5">
-                                    <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300  bg-gray-50 focus:ring-3 focus:ring-primary-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                    <label htmlFor="remember" className="text-normal font-sans">Remember me</label>
-                                </div>
-                            </div>
                             <span
                                 onClick={() => navigate(Path.forgetPassowrdEmail)}
                                 className="text-sm font-normal hover:text-red-500 font-sans text-primary-600 hover:underline dark:text-primary-500">Forgot password?</span>

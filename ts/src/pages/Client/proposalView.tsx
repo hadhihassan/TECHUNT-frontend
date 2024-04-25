@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import type { ProposalInterface } from '../../interface/interfaces'
+import { INDIAN_RUPEE } from "../../constant/columns";
+import { formatMongoDate } from "../../util/timeFormating";
 
 
 const ProposalClientView = () => {
@@ -23,6 +25,9 @@ const ProposalClientView = () => {
         if (proposalItem) {
             const ProposalData1 = JSON.parse(proposalItem);
             setProposalData(ProposalData1);
+        }
+        return () => {
+            localStorage.removeItem("proposal");
         }
     }, [])
     const handleAcceptProposal: () => void = () => {
@@ -47,7 +52,6 @@ const ProposalClientView = () => {
                         isAccept: true,
                     };
                 });
-
             }).catch(() => {
                 errorMessage()
             })
@@ -109,7 +113,6 @@ const ProposalClientView = () => {
                                 )
                             ) : (
                                 <>
-
                                     <Popconfirm
                                         onConfirm={handleAcceptProposal}
                                         title="Accept proposal"
@@ -126,7 +129,6 @@ const ProposalClientView = () => {
                                     >
                                         <button className="border font-semibold border-black ml-2 mr-2 text-center font-sans px-5 py-1 rounded-full">Decline</button>
                                     </Popconfirm>
-
                                 </>
                             )
                         }
@@ -136,11 +138,10 @@ const ProposalClientView = () => {
                     <div className=" m-5 h-auto w-[100px] border">
                         <Avatar src={image} />
                     </div>
-                    <div className="  m-4 h-auto ">
+                    <div className="  m-4 h-auto mt-7 ">
                         <p className="font-semibold text-xl">{proposalData?.talentId?.First_name} {proposalData?.talentId?.Last_name}</p>
                         <p className="text-gray-600 text-sm mt-1">{proposalData?.talentId?.Profile?.Title}</p>
                         <p className="text-gray-500 text-xs mt-1">{proposalData?.talentId?.City}, {proposalData?.talentId?.Country}</p>
-                        <p className="text-gray-600 text-sm mt-1">Total earnings- 0k USD</p>
                     </div>
                 </div>
                 <div className="w-full shadow-md  rounded-xl mt-8  h-auto border mb-5">
@@ -159,11 +160,11 @@ const ProposalClientView = () => {
                         </div>
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Availability</p>
-                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{proposalData?.availability as string}</p>
+                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{formatMongoDate(proposalData?.availability as Date)}</p>
                         </div>
                         <div className="border-b-2 border-gray-200">
                             <p className="font-semibold text-sm pt-5">Additional Rate</p>
-                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">${proposalData?.rate}</p>
+                            <p className="pt-3 text-sm font-normal text-gray-600 mb-5">{INDIAN_RUPEE}{proposalData?.rate}</p>
                         </div>
                         <div className="mb-2    border-gray-200">
                             <p className="font-semibold text-sm pt-5">Attachments</p>

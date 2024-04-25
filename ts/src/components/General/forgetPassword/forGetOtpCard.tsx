@@ -38,9 +38,9 @@ const ForgetPasswordOtpCard = () => {
             message.success(res.data.message);
             localStorage.removeItem("showNewPass")
             localStorage.removeItem("forgetEmail")
-
             navigate(routerVariables.Login)
         } catch (err: any) {
+            console.log(err)
             message.error(err?.response?.data?.message || "Something went wrong ? ")
         } finally {
             setSubmitting(false);
@@ -166,32 +166,32 @@ const ForgetPasswordOtpCard = () => {
                             validationSchema={validationSchema}
                             onSubmit={handleNewPasswordSubmit}
                         >
-                            {() => (
+                            {({ handleChange, isSubmitting }) => (
                                 <Form>
                                     <div>
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">New password</label>
                                         <Field
+                                            onChange={handleChange}
                                             type="text"
                                             name="newPassword"
-                                            id="newPassword"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600  dark:placeholder-gray-400 outline-none dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="newPassword"
                                         />
                                         <ErrorMessage name="newPassword" component="div" className=" font-semibold font-sans text-red-500 text-xs text-start" />
                                         <label htmlFor="email" className="block mb-2 mt-5 text-sm font-medium text-gray-900">Confirm password</label>
                                         <Field
+                                            onChange={handleChange}
                                             type="text"
                                             name="confirmPassword"
-                                            id="confirmPassword"
                                             className="bg-gray-50 border  border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600  dark:placeholder-gray-400 outline-none dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="confirmPassword"
                                         />
                                         <ErrorMessage name="confirmPassword" component="div" className=" font-semibold font-sans text-red-500 text-xs text-start" />
                                     </div>
-
                                     <div className="flex justify-center items-center flex-col ">
                                         <br />
-                                        <button type="submit" className="bg-red-500 w-[10rem] mb-4 h-[2rem] text-white border rounded-xl">Submit</button>
+                                        <button
+                                            disabled={isSubmitting}
+                                            type="submit"
+                                            className="bg-red-500 w-[10rem] mb-4 h-[2rem] text-white border rounded-xl">Submit</button>
                                     </div>
                                 </Form>
                             )}

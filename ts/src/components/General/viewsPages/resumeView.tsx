@@ -9,9 +9,10 @@ interface DisplayPdfProps {
     pdfUrl: string;
     open: boolean
     closeModal: () => void
+    uploadNewResume: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal }) => {
+const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal, uploadNewResume }) => {
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     const [pageNumber, setPageNumber] = useState(1);
@@ -22,7 +23,7 @@ const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal }) 
     const onButtonClick = async () => {
         try {
             const response = await axios.get(pdfUrl, {
-                responseType: 'blob', 
+                responseType: 'blob',
             });
             const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(pdfBlob);
@@ -70,11 +71,23 @@ const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal }) 
                                     My Resume
                                 </Dialog.Title>
                                 <div className='h-[110vh] w-[100vh] overflow-auto mt-20'>
-                                    {
-                                        userData.premiumUser &&  <>
-                                            <button className='mb-5 border border-red-500 rounded-xl font-sans font-semibold text-red-500 px-2 py-1' onClick={onButtonClick}>Download</button>
-                                        </>
-                                    }
+                                    <div className='flex items-start gap-2'>
+                                        {
+                                            userData.premiumUser && <>
+                                                <button className='mb-5 border border-red-500 rounded-xl font-sans font-semibold text-red-500 px-2 py-1' onClick={onButtonClick}>Download</button>
+                                            </>
+                                        }
+                                        {
+                                            userData.role === "TALENT" && <>
+                                                <div className="flex  items-center justify-center">
+                                                    <label className="mb-5 border border-red-500 rounded-xl font-sans font-semibold text-red-500 px-2 py-1">
+                                                        <span className="font-sans font-semibold leading-normal" >Upload resume</span>
+                                                        <input type='file' className="hidden" onChange={uploadNewResume} />
+                                                    </label>
+                                                </div>
+                                            </>
+                                        }
+                                    </div>
                                     <Document
                                         file={pdfUrl}
                                         onLoadSuccess={onDocumentLoadSuccess}

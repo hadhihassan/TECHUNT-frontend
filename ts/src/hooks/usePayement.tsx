@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -12,11 +13,7 @@ const useStripePayment = () => {
     const handlePayment = async (id: string,) => {
         try {
             setLoading(true);
-            // if (!import.VITE_STRIP_PUBLISHABLE_KEY) {
-            //     throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-            // }
             const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
-
             let result
             makePayment(id)
                 .then(async (res) => {
@@ -24,9 +21,6 @@ const useStripePayment = () => {
                         sessionId: res.data.id
                     });
                 })
-            if (result) {
-                localStorage.setItem("payemnt", JSON.stringify(result))
-            }
         } catch (error: any) {
             setError(error.message);
         } finally {
@@ -46,9 +40,6 @@ const useStripePayment = () => {
                         result = await stripe?.redirectToCheckout({
                             sessionId: res.data?.data
                         });
-                        if (result) {
-                            localStorage.setItem("payemnt", JSON.stringify(result))
-                        }
                         return "ok"
                     })
             }
@@ -66,7 +57,6 @@ const useStripePayment = () => {
             }
             const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
             const session = await makePaymentToPlan(role, planId, amount);
-            localStorage.setItem("payemnt", JSON.stringify(session))
             await stripe?.redirectToCheckout({
                 sessionId: session.data?.data
             });

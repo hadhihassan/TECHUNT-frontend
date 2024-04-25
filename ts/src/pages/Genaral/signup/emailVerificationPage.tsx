@@ -11,6 +11,7 @@ import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { get } from "../../../config/axios";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import { BASE_URL } from "../../../constant/columns";
 
 
 const EmailVerificationPage = () => {
@@ -21,10 +22,9 @@ const EmailVerificationPage = () => {
     const navigate = useNavigate()
     const handleClick: () => void = async () => {
         try {
-            const url = `https://timezones.website/${signupData.role}/verify/${param.id}`;
+            const url = `${BASE_URL}/${signupData.role}/verify/${param.id}`;
             await get(url, signupData.role)
                 .then((_res) => {
-                    console.log(_res)
                     if (_res) {
                         dispatch(setVerify(true))
                         Swal.fire({
@@ -38,14 +38,12 @@ const EmailVerificationPage = () => {
                     }
                 })
         } catch (error: any) {
-            console.log(error.message)
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Something went wrong! check again",
-                footer: '<a href="#">Check again</a>'
+                footer: '<a href="/">Check again</a>'
             });
-            console.error('Error verifying email:', error);
             setValidUrl(false);
         }
     }

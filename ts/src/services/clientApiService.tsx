@@ -76,8 +76,11 @@ export async function rateTheWork(workId: string, data: { comment: string, ratin
 export async function udpdateReason(id: string, role: string, status: boolean) {
     return await axiosInstance.patch(`${BASE_URL}${role}/contrat/update-reason-status/`, { status, id })
 }
-export async function udpdateMilestone(id: string, data:MilestoneFormDataType) {
+export async function udpdateMilestone(id: string, data: MilestoneFormDataType) {
     return await axiosInstance.patch(`${BASE_URL}CLIENT/contrat/milestone/update/`, { id, data })
+}
+export async function getAllTalentData(id: string) {
+    return await axiosInstance.get(`${BASE_URL}TALENT/get-all-talent-data/${id}`,)
 }
 
 

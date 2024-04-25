@@ -21,7 +21,7 @@ const MessageListing = () => {
     }
     useEffect(() => {
         getAllMessages()
-    }, [conversation.selectedConversations, getAllMessages]);
+    }, [conversation.selectedConversations]);
     return (
         <>
             {

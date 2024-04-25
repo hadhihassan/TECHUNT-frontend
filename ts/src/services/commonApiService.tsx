@@ -1,6 +1,7 @@
 import axiosInstance, { BASE_URL, resolve } from "../config/axios";
 import routerVariables from '../routes/pathVariables'
 import type { BankDetailsInterface } from '../components/General/viewsPages/bankDetilsSection'
+import type { UserProfile } from '../pages/Client/profileView' 
 export async function editMainProfileSection(data: object, role: string) {
 
     return await resolve(
@@ -98,4 +99,7 @@ export async function getContract(role: string, id: string) {
 }
 export async function getAllReviews(id: string, role: string) {
     return await axiosInstance.get(`${BASE_URL}${role}/review/get-review/${id}`)
+}
+export async function getEducations(educations: UserProfile["educations"], role: string) {
+    return await axiosInstance.post(`${BASE_URL}${role}/educations/get-educations/`,{ educations })
 }

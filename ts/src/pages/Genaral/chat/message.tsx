@@ -39,7 +39,7 @@ const Message = () => {
                     <div className="flex flex-col flex-auto h-full p-2 ">
                         {/* Message container header */}
                         <MessageHeader />
-                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4 shadow-xl border w-full ">
+                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-b-2xl border h-full p-4 shadow-xl  w-full ">
                             <div className="flex flex-col h-full w-full ">
                                 <div className="grid relative grid-cols-12 w-full overflow-auto h-[60vh]">
                                     <MessageListing />

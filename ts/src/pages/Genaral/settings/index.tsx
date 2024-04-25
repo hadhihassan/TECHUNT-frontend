@@ -23,23 +23,6 @@ const Settings: React.FC = () => {
                             <ArrowBack />
                             <label className=" text-md font-sans font-semibold">Back</label>
                         </div>
-                        {/* {
-                            userData.bankVerified && <>
-                                <div className="w-auto">
-                                    <label className=" text-2xl font-sans font-bold">Billing</label>
-                                    <a
-                                        className="flex items-center px-3 py-2 dark:text-gray-400 text-black transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
-                                        <CommentBankOutlined />
-                                        <span
-                                            onClick={() => setTab(1)}
-
-                                            className="mx-2 text-sm font-medium">
-                                            Add Bank Details</span>
-                                    </a>
-                                </div>
-                            </>
-                        } */}
-
                         <div className="space-y-3 ">
                             {
                                 !userData.numberVerify && <>
@@ -51,19 +34,6 @@ const Settings: React.FC = () => {
                                     </a>
                                 </>
                             }
-                            {/* {
-                                !userData.verify && <>
-                                    <a className="flex items-center px-3 py-2 text-black  dark:text-gray-400 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
-                                        <Email />
-                                        <span
-                                            className="mx-2 text-sm font-medium">Email Verified</span>
-                                    </a>
-                                </>
-                            } */}
-                            {/* <a className="flex items-center px-3 py-2 dark:text-gray-400 text-black transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
-                                <Password />
-                                <span className="mx-2 text-sm font-medium">Password & security</span>
-                            </a> */}
                         </div>
                     </nav>
                 </div>

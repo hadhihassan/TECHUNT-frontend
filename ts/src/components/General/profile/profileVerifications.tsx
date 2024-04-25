@@ -19,7 +19,7 @@ const ProfileVerifications = () => {
             <div className="flex items-center m-8 justify-between">
                 <PaymentIcon fontSize="small" />
                 <span className="text-start  font-normal font-sans">Payments Verify</span>
-                <span  className={`${userData.bankVerified ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}>{userData.bankVerified ? "Verify" : "Verified"}</span>
+                <span  className={`${userData.bankVerified ? "text-green-500" : "text-blue-600"} ml-12 hover:text-red-500`}>{userData.bankVerified ? "Verified" : "Verify"}</span>
             </div>
             <div className="flex items-center m-8 justify-between">
                 <LocalPhoneIcon fontSize="small" />

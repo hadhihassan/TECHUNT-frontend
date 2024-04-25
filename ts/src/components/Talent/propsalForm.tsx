@@ -7,6 +7,9 @@ import toast, { Toaster } from "react-hot-toast";
 import { socket } from '../General/Home/Header/afterLoginHeader';
 import { useNavigate } from 'react-router-dom';
 import { RuleObject } from 'antd/es/form';
+
+
+
 export interface ProposalInterface {
     title: string
     _id?: string
@@ -176,7 +179,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
-                                // validateFirst={true}
+                                validateFirst={true}
                                 name="title"
                                 label="Title"
                                 rules={[
@@ -264,6 +267,12 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                             <Form.Item
                                 name="rate"
                                 label="Additional Rate"
+                                rules={[
+                                    {
+                                        type: 'number',
+                                        message: "Rate must be number"
+                                    }
+                                ]}
                             >
                                 <Input
                                     name="rate"
