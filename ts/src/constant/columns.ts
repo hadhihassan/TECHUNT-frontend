@@ -9,9 +9,9 @@ export interface JOB_CATEGORY_FORM_DATA {
     image: File | null,
 }
 
-export const IMG_URL = "https://techunt.vercel.app/images/"
+export const IMG_URL = "https://timezones.website/images/"
 // export const IMG_URL = "http://localhost:3000/images/"
-export const BASE_URL = "https://techunt.vercel.app"
+export const BASE_URL = "https://timezones.website/"
 // export const BASE_URL = "http://localhost:3000"
 export const TABLE_HEAD = ["No", "Title", "Amount", "Date", "Recived / Payed"];
 export const INDIAN_RUPEE = "₹";
