@@ -9,7 +9,7 @@ interface DisplayPdfProps {
     pdfUrl: string;
     open: boolean
     closeModal: () => void
-    uploadNewResume: (event: React.ChangeEvent<HTMLInputElement>) => void
+    uploadNewResume?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const DisplayResume: React.FC<DisplayPdfProps> = ({ pdfUrl, open, closeModal, uploadNewResume }) => {

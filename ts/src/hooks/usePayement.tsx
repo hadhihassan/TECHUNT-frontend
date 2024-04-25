@@ -21,27 +21,29 @@ const useStripePayment = () => {
                         sessionId: res.data.id
                     });
                 })
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-    const paymentToTalent = async (talentId: string, amount: number) => {
-        try {
-            setLoading(true);
-            if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
-                alert('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-            } else {
-                const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
-                let result
-                makePaymentToBank(talentId, amount)
+                console.log(result)
+            } catch (error: any) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        const paymentToTalent = async (talentId: string, amount: number) => {
+            try {
+                setLoading(true);
+                if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
+                    alert('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
+                } else {
+                    const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+                    let result
+                    makePaymentToBank(talentId, amount)
                     .then(async (res) => {
                         result = await stripe?.redirectToCheckout({
                             sessionId: res.data?.data
                         });
                         return "ok"
                     })
+                    console.log(result)
             }
         } catch (error: any) {
             setError(error.message);
