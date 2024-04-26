@@ -22,7 +22,7 @@ const EmailVerificationPage = () => {
     const navigate = useNavigate()
     const handleClick: () => void = async () => {
         try {
-            const url = `${BASE_URL}/${signupData.role}/verify/${param.id}`;
+            const url = `${BASE_URL}${signupData.role}/verify/${param.id}`;
             await get(url, signupData.role)
                 .then((_res) => {
                     if (_res) {
