@@ -2,7 +2,6 @@ import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from './profileEditModal';
 import { editMainProfileSection } from '../../../services/commonApiService';
-import { uploadProfilePhoto } from '../../../services/clientApiService';
 import Alert from '@mui/material/Alert';
 import { nameValidator, descriptionValidator } from '../../../util/validatorsUtils'
 import { UserProfile } from '../../../pages/Talent/profile/profile'
@@ -20,16 +19,14 @@ import { CAllS3ServiceToStore, saveResume, uploadFileToSignedUelInS3 } from '../
 import { message } from 'antd';
 import { useSelector } from 'react-redux';
 import { ROOTSTORE } from '../../../redux/store';
-import { IMG_URL } from '../../../constant/columns';
 
 const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUpdate: () => void }> = ({ datas, onUpdate }) => {
 
     const error = (err: string) => toast.error(err);
-    const success = (message: string) => toast.success(message);
     const basicData = useSelector((state: ROOTSTORE) => state.signup)
     const [details, setDetails] = useState<UserProfile | null>(null);
     const [sp_Message, setMessage] = useState<boolean>(false);
-    const IMG: string = `${IMG_URL}${details?.Profile?.profile_Dp}`;
+    const IMG: string = `${details?.Profile?.profile_Dp}`;
     const truncatedDescription: string = details?.Profile?.Description?.slice(0, 200) || '';
     const [image, setImage] = useState<File | null>(null);
 
@@ -44,6 +41,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
         last_name: "",
         description: "",
         title: "",
+        photo: "",
     })
     const userData = useSelector((state: ROOTSTORE) => state.signup)
     const validateForm = () => {
@@ -66,21 +64,21 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
         return !(errors.fName || errors.lName || errors.description || errors.title);
     }
     const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
-            if (e?.target.files?.length === 1) {
-                const file: File = e.target.files[0];
-                const content_type: string = file.type;
-                const key: string = `test/image/${file.name}`;
-                CAllS3ServiceToStore({ key, content_type })
-                    .then(async (res: AxiosResponse) => {
-                        await saveResume(res.data.fileLink)
-                        uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
-                            message.success("Successfully resume uploaded")
-                        })
+        if (e?.target.files?.length === 1) {
+            const file: File = e.target.files[0];
+            const content_type: string = file.type;
+            const key: string = `test/image/${file.name}`;
+            CAllS3ServiceToStore({ key, content_type })
+                .then(async (res: AxiosResponse) => {
+                    await saveResume(res.data.fileLink)
+                    uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+                        message.success("Successfully resume uploaded")
                     })
-                    .catch(() => message.error("Error uploading file"));
-            } else {
-                message.error("Maximum file limit is one . Selete one file")
-            }
+                })
+                .catch(() => message.error("Error uploading file"));
+        } else {
+            message.error("Maximum file limit is one . Selete one file")
+        }
     };
     useEffect(() => {
         setDetails(datas || null);
@@ -89,6 +87,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
             last_name: datas?.Last_name || "add you last  name",
             description: datas?.Profile?.Description || "add you profile description",
             title: datas?.Profile?.Title || "add you profile title ",
+            photo: datas?.Profile?.profile_Dp || "add you profile  photo",
         })
     }, [datas]);
     const [showMore, setShowMore] = useState(false);
@@ -116,14 +115,22 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
                 }
             }
             setImage(e.target.files[0]);
-            const data = new FormData();
-            data.append('image', img);
-            uploadProfilePhoto(data, basicData?.role)
-                .then(() => {
-                    onUpdate()
-                    success("Image uploaded success")
-                }).catch((error: AxiosError) => {
-                    console.log(error);
+            const file: File = e.target.files[0];
+            const content_type: string = file.type;
+            const key: string = `test/image/${file.name}`;
+            CAllS3ServiceToStore({ key, content_type })
+                .then((res: AxiosResponse) => {
+                    console.log("is saved ", res?.data)
+                    setData({
+                        ...formData,
+                        ['photo']: res?.data?.fileLink,
+                    });
+                    uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+                    })
+
+                })
+                .catch((error: AxiosError) => {
+                    console.error("Error uploading file:", error);
                 });
         }
     }
@@ -137,6 +144,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
     const handleSubmit: (e: React.FormEvent) => void = (e) => {
         e.preventDefault()
         const valid = validateForm()
+        console.log(formData)
         if (valid) {
             editMainProfileSection(formData, basicData?.role)
                 .then(() => {
@@ -162,7 +170,7 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
     return <div className="w-[48rem]  flex  rounded-xl  h-[20rem] shadow-xl  border bg-white ">
         <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
             <div>
-                <img className="border border-black rounded-xl h-48 w-full" src={IMG} alt="" />
+                <img className="border border-black rounded-xl h-48 w-full" src={details?.Profile?.profile_Dp} alt={details?.Profile?.profile_Dp} />
             </div>
             <div className="m-2 w-[18rem] mt-2">
                 <p className="font-sans font-normal text-sm">from : {details?.Country}</p>

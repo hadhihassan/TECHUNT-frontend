@@ -75,6 +75,7 @@ const Profile = () => {
     const toggleActive = () => {
         setDeducations(prevIsActive => !prevIsActive);
     };
+
     useEffect(() => {
         if (role) {
             getUserProfile();
@@ -108,15 +109,6 @@ const Profile = () => {
                                 }
                             </>
                         }
-                        {
-                            datas?.Profile?.Work_Experiance?.length === 0 && <>
-                                <div className="bg-gray-100 border h-auto w-full p-5 font-semibold rounded-xl">
-                                    <p className="text-lg">Which company or organization did you work for?</p>
-                                    <p className="text-sm font-normal">Enhance your profile visibility and opportunities by adding your work experiences.</p>
-                                    <button className="p-2 mt-2 text-sm rounded-xl border border-red-500">Add work experience</button>
-                                </div>
-                            </>
-                        }
                     </div>
                     <div className={`flex items-center  flex-row justify-center `}>
                         <ProfileContact data={datas ? { Address: datas.Address, City: datas.City, Country: datas.Country, Number: datas.Number, PinCode: datas.PinCode } : { Address: '', City: '', Country: '', Number: '', PinCode: '' }} onUpdate={getUserProfile} />
@@ -138,7 +130,7 @@ const Profile = () => {
                             openBank && <CheckoutForm onUpdate={getUserProfile} />
                         }
                     </div>
-                    <ProfileReviews id={basicData.id || ""}  />
+                    <ProfileReviews id={basicData.id || ""} />
                 </div>
                 <div className="flex flex-col gap-10">
                     <ProfileVerifications />
@@ -148,6 +140,17 @@ const Profile = () => {
                     {
                         role === "CLIENT" ? null : <ProfileExperiance data={datas} onUpdate={getUserProfile} />
 
+                    }
+                </div>
+                <div>
+                    {
+                        datas?.Profile?.Work_Experiance?.length === 0 && <>
+                            <div className="bg-gray-100 border h-auto w-full p-5 font-semibold rounded-xl">
+                                <p className="text-lg">Which company or organization did you work for?</p>
+                                <p className="text-sm font-normal">Enhance your profile visibility and opportunities by adding your work experiences.</p>
+                                <button className="p-2 mt-2 text-sm rounded-xl border border-red-500">Add work experience</button>
+                            </div>
+                        </>
                     }
                 </div>
             </div>

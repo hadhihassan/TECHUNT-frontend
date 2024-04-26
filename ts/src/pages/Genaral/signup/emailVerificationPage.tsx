@@ -20,10 +20,11 @@ const EmailVerificationPage = () => {
     const dispatch = useDispatch()
     const signupData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const navigate = useNavigate()
-    const handleClick: () => void = async () => {
+    const handleClick: () => void = () => {
+        console.log(param.id, signupData.role)
         try {
-            const url = `${BASE_URL}${signupData.role}/verify/${param.id}`;
-            await get(url, signupData.role)
+            const url = `${BASE_URL}/${signupData.role}/verify/${param.id}`;
+            get(url, signupData.role)
                 .then((_res) => {
                     if (_res) {
                         dispatch(setVerify(true))
@@ -38,6 +39,7 @@ const EmailVerificationPage = () => {
                     }
                 })
         } catch (error: any) {
+            console.log(error)
             Swal.fire({
                 icon: "error",
                 title: "Oops...",

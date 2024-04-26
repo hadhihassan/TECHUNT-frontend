@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { createContactDetails, uploadProfilePhoto } from "../../../services/clientApiService";
+import { createContactDetails } from "../../../services/clientApiService";
 import { useSelector } from "react-redux";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { ROOTSTORE } from "../../../redux/store";
@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 import routerVariables from "../../../routes/pathVariables";
 import { Client_INITIALSTATE } from "../../../redux/Slice/clientSlice";
 import Select from 'react-select'
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../util/validatorsUtils'
 import toast, { Toaster } from "react-hot-toast";
+import { CAllS3ServiceToStore, uploadFileToSignedUelInS3 } from "../../../services/talentApiService";
 
 // interface for the form data shap
 export interface CONTACT_FROM {
-    photo?: File | null,
+    photo?: File | null | string,
     lName: string,
     fName: string,
     address: string,
@@ -51,7 +52,7 @@ const ContactForm: React.FC = () => {
     const description: Client_INITIALSTATE["description"] = useSelector((state: ROOTSTORE) => state.client.description)
 
     const [formData, setFormData] = useState({
-        photo: null,
+        photo: "",
         address: "",
         city: "",
         fName: "",
@@ -72,7 +73,7 @@ const ContactForm: React.FC = () => {
         };
         fetchCountries();
     }, []);
-    
+
     const handleInputChnage = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -105,8 +106,8 @@ const ContactForm: React.FC = () => {
     };
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        const valid = validateForm()
         console.log(formData)
+        const valid = validateForm()
         if (valid) {
             createContactDetails(formData, role)
                 .then(() => {
@@ -132,16 +133,29 @@ const ContactForm: React.FC = () => {
             }
             setImage(e.target.files[0]);
             setPhotoErro("")
-            const data = new FormData();
-            data.append('image', img);
-            uploadProfilePhoto(data, role)
+            const file: File = e.target.files[0];
+            const content_type: string = file.type;
+            const key: string = `test/image/${file.name}`;
+            CAllS3ServiceToStore({ key, content_type })
+                .then((res: AxiosResponse) => {
+                    setFormData({
+                        ...formData,
+                        ['photo']: res?.data?.fileLink,
+                    });
+                    uploadFileToSignedUelInS3(res.data.signedUrl, file, content_type, () => {
+                    })
+                    
+                })
+                .catch((error: AxiosError) => {
+                    console.error("Error uploading file:", error);
+                });
         }
     }
     const handleCountryChange = (selectedOption: SelectedOption | null) => {
         setCountryError("")
         setFormData({
             ...formData,
-            ["country"]: selectedOption?.value || "", 
+            ["country"]: selectedOption?.value || "",
         });
     };
 

@@ -15,7 +15,6 @@ import { setConversation } from '../../../redux/Slice/conversationsSlice'
 import { createConversation } from "../../../services/commonApiService";
 import { message } from "antd";
 import { AxiosResponse } from "axios";
-import { IMG_URL } from "../../../constant/columns";
 
 const ListAllProposals = () => {
     const navigate = useNavigate()
@@ -58,7 +57,7 @@ const ListAllProposals = () => {
                     <div className="flex justify-between p-2 h-auto" >
                         <div className="flex" >
                             <IconButton size="small">
-                                <Avatar src={`${IMG_URL}${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
+                                <Avatar src={`${proposla?.talentId?.Profile.profile_Dp}`} className="w-8 h-8 border" />
                             </IconButton>
                             <div className="ml-4">
                                 <p className="text-sm text-gray-500">{proposla?.title}, {(proposla?.jobId as { Title: string }).Title}</p>

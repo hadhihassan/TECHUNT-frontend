@@ -5,7 +5,6 @@ import { Dialog } from '@headlessui/react';
 import { Toaster } from 'react-hot-toast';
 import { blockUser, getAllUser, getJobPosts } from '../../../services/adminApiService';
 import Swal from 'sweetalert2';
-import { IMG_URL } from '../../../constant/columns';
 import { formatMongoDate } from '../../../util/timeFormating';
 import { UserProfile } from '../../../interface/interfaces';
 const columns = ["No", "Name/Email", "Job", "Status", "Join Date", "Action", "Details"];
@@ -175,16 +174,15 @@ const UserManagement: React.FC = () => {
                             {/* <!-- HEAD end --> */}
                             {/* <!-- BODY start --> */}
                             <tbody className="bg-white text-sm">
-                                {slicesData?.map((user: Row, index: number) => (
+                                {users?.map((user: Row, index: number) => (
 
-                                    user?.fullData.isVerify && (
                                         <tr key={index}>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 {index + 1}
                                             </td>
                                             <td className="px-6 flex gap-2 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 <img className="h-10 w-10 rounded-full"
-                                                    src={`${IMG_URL}${user?.photo}`}
+                                                    src={`${user?.photo}`}
                                                     alt="loading" />
                                                 <div className="text-sm leading-5 text-gray-900">
 
@@ -246,7 +244,6 @@ const UserManagement: React.FC = () => {
                                                 </button>
                                             </td>
                                         </tr>
-                                    )
 
                                 ))
                                 }
@@ -297,7 +294,7 @@ const UserManagement: React.FC = () => {
                         <div className="inline-block align-bottom  bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className='flex justify-center mb-5 rounded-full overflow-auto'>
-                                    <img src={`${IMG_URL}${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
+                                    <img src={`${drawerData?.Profile?.profile_Dp}  `} className="w-16 h-16 rounded-full border-2 border-red-500" />
                                     <div className='m-2 font-sans text-gray-600 font-semibold'>
                                         <p >{drawerData?.First_name}</p>
                                         {

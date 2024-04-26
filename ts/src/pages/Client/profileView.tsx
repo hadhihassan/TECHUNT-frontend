@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import DisplayResume from "../../components/General/viewsPages/resumeView";
 import formatRelativeTime, { formatMongoDate } from "../../util/timeFormating";
-import { IMG_URL } from "../../constant/columns";
 import { Dialog, Transition } from '@headlessui/react'
 import { message } from "antd";
 import { getEducations } from "../../services/commonApiService";
@@ -109,7 +108,7 @@ const Profile = () => {
                 <div className="w-[48rem] m-5 flex  rounded-xl  h-[20rem] shadow-xl  border bg-white">
                     <div className=" xl:w-[13rem] m-5  sm:w[10rem] md:[14rem] ">
                         <div>
-                            <img className="border border-red-500 rounded-xl w-full h-44" src={`${IMG_URL}${datas?.Profile.profile_Dp}`} alt="Loading" />
+                            <img className="border border-red-500 rounded-xl w-full h-44" src={`${datas?.Profile.profile_Dp}`} alt="Loading" />
                         </div>
                         <div className="m-2 w-[18rem] mt-2">
                             <p className="font-sans font-normal text-sm">from : {datas?.Country}, {datas?.City}</p>

@@ -10,7 +10,7 @@ import { fetchAllJobPost, fetchConnectedTalent, getALlTalent, getAllProposalForC
 import ListDiscoverTalent from "../../components/Client/clientHome/listDiscoverTalent";
 import ListJobPost from "../../components/Client/clientHome/listJobPost";
 import IMAGE1 from '../../../src/assets/4950287_19874-removebg-preview.png'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTORE } from "../../redux/store";
 import { AxiosResponse } from "axios";
 import ListAllProposals from "../../components/Client/clientHome/listProposals";
@@ -21,11 +21,11 @@ import { Disclosure, Transition } from '@headlessui/react'
 import type { ProposalInterface, UserProfile } from '../../interface/interfaces'
 // import Avatar from '@mui/material/Avatar';
 // import { Dropdown, message } from 'antd';
-import { INITIALSTATE } from "../../redux/Slice/signupSlice";
+import { INITIALSTATE, setProgress } from "../../redux/Slice/signupSlice";
 import { getUserProfileDetails } from "../../services/talentApiService";
 import { Tour } from 'antd';
 import type { TourProps } from 'antd';
-import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts } from "../../services/commonApiService";
+import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts, getNewProgress } from "../../services/commonApiService";
 
 
 const Home = () => {
@@ -34,15 +34,17 @@ const Home = () => {
     const [jobs, setJobs] = useState<JobInterface[]>([])
     const [proposalength, setProposalsLength] = useState<number>(0)
     const [talentlength, setTalentLength] = useState<number>(0)
-
     const [userData, setUserData] = useState<UserProfile | null>(null)
     const [connectedTalent, setTalents] = useState<ProposalInterface[]>([])
     const tabList = [<ListDiscoverTalent />, < ListAllProposals />, < ListConnectedFreelancers />, <ListJobPost />,]
+
     const navigate = useNavigate()
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);
     };
     const [lenProposal, setLength] = useState<number>(0)
+
+    const dispatch = useDispatch()
 
     const ref1 = useRef(null);
 
@@ -69,7 +71,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchAllJobPost()
-            .then((res:any) => {
+            .then((res: any) => {
                 setJobs(res?.data?.data?.data)
             });
         getAllProposalForClient(basicData?.id)
@@ -82,7 +84,7 @@ const Home = () => {
                 console.log(res.data.data)
             })
         getUserProfileDetails(basicData.role)
-            .then((res:any) => {
+            .then((res: any) => {
                 setUserData(res?.data?.data)
             })
         getAllProposalForClient(basicData?.id)
@@ -114,6 +116,10 @@ const Home = () => {
                     ...contractDetails,
                     cacelledLength: res.data.data?.length
                 })
+            })
+        getNewProgress(basicData.id || "", basicData.role)
+            .then((res) => {
+                dispatch(setProgress(res?.data?.data))
             })
     }, [basicData])
     return (
@@ -163,19 +169,6 @@ const Home = () => {
                                     </div>
                                 </div>
                             </div>}
-                    {/* search */}
-                    {/* <div className="w-full mt-5 border rounded-xl shadow-xl ">
-                        <div className="flex h-[46px]">
-                            <div className="flex w-fll items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200  p-5">
-                                <svg viewBox="0 0 20 20" aria-hidden="true" className="pointer-events-none  w-5 fill-gray-500 transition">
-                                    <path d="M16.72 17.78a.75.75 0 1 0 1.06-1.06l-1.06 1.06ZM9 14.5A5.5 5.5 0 0 1 3.5 9H2a7 7 0 0 0 7 7v-1.5ZM3.5 9A5.5 5.5 0 0 1 9 3.5V2a7 7 0 0 0-7 7h1.5ZM9 3.5A5.5 5.5 0 0 1 14.5 9H16a7 7 0 0 0-7-7v1.5Zm3.89 10.45 3.83 3.83 1.06-1.06-3.83-3.83-1.06 1.06ZM14.5 9a5.48 5.48 0 0 1-1.61 3.89l1.06 1.06A6.98 6.98 0 0 0 16 9h-1.5Zm-1.61 3.89A5.48 5.48 0 0 1 9 14.5V16a6.98 6.98 0 0 0 4.95-2.05l-1.06-1.06Z"></path>
-                                </svg>
-                            </div>
-                            <input type="text" className="w-full rounded-r-full  pl-2 text-base font-semibold outline-0" placeholder="Search talent here" id="" />
-                            <input type="button" value="Search" className="bg-red-500 p-2  rounded-tr-xl rounded-br-xl  text-white font-semibold transition-colors " />
-                        </div>
-                    </div> */}
-                    {/* tyes */}
                     <div>
                         <div className="w-full mt-10">
                             <div className="flex border-b justify-between border-gray-200">
@@ -364,7 +357,7 @@ const Home = () => {
                                                 </div>
                                             </div>
                                             <div className="flex justify-center items-center m-5 ">
-                                                <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm" onClick={()=> navigate(`/${basicData.role}/contract/all/`)}>View all</button>
+                                                <button className="border px-2 m-2 text-red-500 border-red-500 rounded-full font-sans font-semibold text-sm" onClick={() => navigate(`/${basicData.role}/contract/all/`)}>View all</button>
                                             </div>
                                         </div>
                                     </Disclosure.Panel>

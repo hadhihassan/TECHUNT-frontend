@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, ChangeEvent } from "react"
 import Modal from "../profile/profileEditModal";
-import { IMG_URL, JOB_CATEGORY_FORM_DATA } from '../../../constant/columns'
+import { JOB_CATEGORY_FORM_DATA } from '../../../constant/columns'
 import { createNewJobCategoru, softDeleteJobCategory } from "../../../services/adminApiService";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
@@ -36,29 +36,17 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
     const [formData, setFormData] = useState<JOB_CATEGORY_FORM_DATA>({
         name: "",
         description: "",
-        image: null,
     })
     const handleChange: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
-        if (e.target.name === 'image' && e.target.files && e.target.files.length > 0) {
-            const selectedImage = e.target.files[0];
-            setFormData({
-                ...formData,
-                image: selectedImage,
-            });
-        } else {
-            setFormData({
-                ...formData,
-                [e.target.name]: e.target.value,
-            });
-        }
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
     const chandleAddNewJobCategory: () => void = () => {
         const formDataToUpload = new FormData();
         formDataToUpload.append('name', formData.name);
         formDataToUpload.append('description', formData.description);
-        if (formData.image) {
-            formDataToUpload.append('image', formData.image);
-        }
         createNewJobCategoru(formDataToUpload)
             .then((res: any) => {
                 if (res?.data?.data?.success) {
@@ -67,7 +55,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                     setFormData({
                         name: "",
                         description: "",
-                        image: null,
                     })
                 } else if (res?.data?.data?.message) {
                     error(res?.data?.data?.message);
@@ -110,17 +97,19 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         setFormData({
             name: data[index].name,
             description: data[index].description,
-            image: data[index].image,
         })
         openModal1()
     }
     // paginaion logic
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage: number = 5;
+    const totalPages: number = Math.ceil(filteredData.length / itemsPerPage);
     const indexOfLastPost: number = currentPage * itemsPerPage;
     const indexOfFirstPost: number = indexOfLastPost - itemsPerPage;
-    const slicesData = data.slice(indexOfFirstPost, indexOfLastPost);
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    const slicedData = filteredData.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
     return <>
         <div className="w-full h-screen bg-gray-100">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -162,7 +151,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                 {/* <!-- BODY start --> */}
                                 <tbody className="bg-white">
                                     {
-                                        filteredData?.map((value: JOB_CATEGORY_FORM_DATA, index: number) => (
+                                        slicedData?.map((value: JOB_CATEGORY_FORM_DATA, index: number) => (
                                             <tr>
                                                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                     {index + 1}
@@ -170,19 +159,6 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                                                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                     <div className="text-sm leading-5 text-gray-900">
                                                         {value.name}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                    <div className="flex items-center">
-                                                        <div className="flex-shrink-0 h-10 w-10">
-                                                            <img className="h-10 w-10 rounded-full"
-                                                                src={`${IMG_URL}${value.image}`}
-                                                                alt="" />
-                                                        </div>
-                                                        {/* <div className="ml-4">
-                                                            <div className="text-sm leading-5 font-medium text-gray-900">
-                                                            </div>
-                                                        </div> */}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -214,29 +190,24 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
                         </div>
                         <div className="flex items-end gap-4 justify-end m-10">
                             <button
-                                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                type="button"
                                 onClick={() => paginate(currentPage - 1)}
                                 disabled={currentPage === 1}
                             >
                                 Previous
                             </button>
-                            {Array.from({ length: Math.ceil(slicesData.length / itemsPerPage) }, (_, index) => (
+                            {Array.from({ length: totalPages }, (_, index) => (
                                 <button
-                                    className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${currentPage === index + 1 ? 'bg-gray-900 text-white shadow-md shadow-gray-900/10' : ''}`}
-                                    type="button"
+                                className="bg-gray-900 px-3 py-1 text-white rounded-full"
+                                    key={index}
                                     onClick={() => paginate(index + 1)}
+                                    disabled={currentPage === index + 1}
                                 >
-                                    <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                        {index + 1}
-                                    </span>
+                                    {index + 1}
                                 </button>
                             ))}
                             <button
-                                className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                type="button"
                                 onClick={() => paginate(currentPage + 1)}
-                                disabled={currentPage === Math.ceil(slicesData.length / itemsPerPage)}
+                                disabled={currentPage === totalPages}
                             >
                                 Next
                             </button>
@@ -249,7 +220,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         <Modal isOpen={isOpen} onClose={closeModal}>
             <JobCategoryForm
                 editable={false}
-                formData={{ name: "", description: "", image: null }}
+                formData={{ name: "", description: "" }}
                 handleChnage={handleChange}
                 OnSubmit={chandleAddNewJobCategory} />
         </Modal>
@@ -257,7 +228,7 @@ const Tables: React.FC<TablesProps> = ({ data, columns, reCall }) => {
         {/* editjob category modal starting */}
         <Modal isOpen={isOpen1} onClose={closeModal1}>
             <EditJobCategoryForm
-                formData={editData || { _id: "", name: "", description: "", image: null }}
+                formData={editData || { _id: "", name: "", description: "" }}
                 success={success}
                 error={error}
                 reCall={reCall}

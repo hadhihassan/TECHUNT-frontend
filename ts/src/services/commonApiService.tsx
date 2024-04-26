@@ -103,3 +103,6 @@ export async function getAllReviews(id: string, role: string) {
 export async function getEducations(educations: UserProfile["educations"], role: string) {
     return await axiosInstance.post(`${BASE_URL}${role}/educations/get-educations/`,{ educations })
 }
+export async function getNewProgress(id: string, role: string) {
+    return await axiosInstance.post(`${BASE_URL}calculate-progress`,{ id, role })
+}

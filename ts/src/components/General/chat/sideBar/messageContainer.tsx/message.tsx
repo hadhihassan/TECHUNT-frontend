@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../../../redux/store";
 import { forwardRef, useRef } from "react";
 import { MessageDoc } from '../../../../../interface/interfaces';
-import { IMG_URL } from "../../../../../constant/columns";
 import formatRelativeTime from "../../../../../util/timeFormating";
 
 const Message = forwardRef(({ message, index }: { message: MessageDoc, index: number }) => {
@@ -16,7 +15,7 @@ const Message = forwardRef(({ message, index }: { message: MessageDoc, index: nu
             <div className={`flex  ${messageFromMe ? "items-center justify-start flex-row-reverse" : "flex-row items-center"}`}>
                 {
                     !messageFromMe &&
-                    <img src={`${IMG_URL}${conversation?.selectedConversations?.participants[0]?.Profile?.profile_Dp}`} alt="" className="h-10 w-10 flex-shrink-0 rounded-full border-2 border-red-500" />
+                    <img src={`${conversation?.selectedConversations?.participants[0]?.Profile?.profile_Dp}`} alt="" className="h-10 w-10 flex-shrink-0 rounded-full border-2 border-red-500" />
                 }
                 <div
                     className={`relative ${messageFromMe ? "mr-3 text-sm bg-indigo-100" : "ml-3 text-sm bg-white"} py-2 px-4 shadow rounded-xl flex items-center gap-2 `}

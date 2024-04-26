@@ -23,7 +23,7 @@ import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
 import ClientList from '../../../components/Talent/home/clientListing';
 import { formatMongoDate } from '../../../util/timeFormating';
-import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts } from '../../../services/commonApiService';
+import { fetchCompletedContract, getAllActiveContract, getAllCancelledContracts, getNewProgress } from '../../../services/commonApiService';
 import { Tour } from 'antd';
 import type { TourProps } from 'antd';
 import ListWorkPost from '../../../components/Talent/home/workPostListing';
@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
             })
         getUserProfileDetails(basicData.role)
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .then((res:any) => {
+            .then((res: any) => {
                 setUserData(res?.data?.data)
             })
         //contract
@@ -97,6 +97,10 @@ const HomePage: React.FC = () => {
                     ...contractDetails,
                     cacelledLength: res.data.data?.length
                 })
+            })
+        getNewProgress(basicData.id || "", basicData.role)
+            .then((res) => {
+                console.log(res.data)
             })
     }, []);
     const [activeTab, setActiveTab] = useState<number>(1);
@@ -185,7 +189,7 @@ const HomePage: React.FC = () => {
                     </div>
                     {/* filter */}
                     {
-                        activeTab == 2 ?<><ListWorkPost handleShowJobPostDetails={handleShowJobPostDetails}/></>
+                        activeTab == 2 ? <><ListWorkPost handleShowJobPostDetails={handleShowJobPostDetails} /></>
                             : <ClientList />
                     }
                     {/* talents */}

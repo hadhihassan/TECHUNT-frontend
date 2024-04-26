@@ -29,10 +29,11 @@ export interface BankType {
 export const validationSchema = Yup.object().shape({
     account_holder_name: Yup.string().trim().required('Holder Name is required'),
     bank_name: Yup.string().trim().required('Bank Name is required'),
-    account_number: Yup.string().trim()
-        .required('Account Number is required')
-        .min(8, "Atleast 8 number is required")
-        .max(11, "Maximum 11 number "),
+    account_number: Yup.string()
+        .required('Bank account number is required')
+        .matches(/^\d+$/, 'Bank account number must only contain digits')
+        .min(8, 'Bank account number must be at least 8 digits long')
+        .max(20, 'Bank account number must be at most 20 digits long'),
     ifsc_code: Yup.string()
         .trim()
         .required('IFCS code is required')

@@ -2,7 +2,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { ROOTSTORE } from '../../../../redux/store';
 import { setConversation ,cleanChatItems} from '../../../../redux/Slice/conversationsSlice'
-import { IMG_URL } from '../../../../constant/columns';
 import formatRelativeTime from '../../../../util/timeFormating';
 import useGetMessage from '../../../../hooks/useGetMessages';
 
@@ -24,7 +23,7 @@ const Conversation = ({ conversation, _lastIndex ,index}: { conversation: Conver
             }}
         >
             <div className='flex m-2'>
-                <img src={`${IMG_URL}${conversation.participants[0]?.Profile?.profile_Dp}`} alt="" className='size-12  border-4 rounded-full border-white ' />
+                <img src={`${conversation.participants[0]?.Profile?.profile_Dp}`} alt="" className='size-12  border-4 rounded-full border-white ' />
                 <div className=' ml-2 mt-1 m'>
                     <p className='font-sans font-semibold text-white'>{conversation.participants[0]?.First_name}</p>
                     {/* <p className='font-sans font-semibold text-gray-500 mb-1 mt-1'>You: Jai</p> */}

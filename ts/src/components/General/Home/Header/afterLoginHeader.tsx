@@ -22,7 +22,6 @@ import { ProposalInterface, } from "../../../../interface/interfaces";
 import { notification } from 'antd';
 import type { NotificationArgsProps } from 'antd';
 import { BASE_URL } from "../../../../config/axios";
-import { IMG_URL } from "../../../../constant/columns";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const socket = io(BASE_URL)
@@ -47,7 +46,7 @@ const AfterLoginHeader = () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .then((res:any) => {
                     if (res) {
-                        setIMG(`${IMG_URL}${res?.data?.data?.Profile?.profile_Dp}`)
+                        setIMG(`${res?.data?.data?.Profile?.profile_Dp}`)
                     }
                 }).catch((err: AxiosError) => {
                     console.log(err)

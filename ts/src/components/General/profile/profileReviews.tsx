@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { Dialog, Transition } from '@headlessui/react'
 import Rating from '@mui/material/Rating';
-import { IMG_URL } from "../../../constant/columns";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ReviewType {
     from: string | {
@@ -49,7 +48,7 @@ const ProfileReviews: React.FC<{ id: string }> = ({ id }) => {
 
                         <div className="bg-gray-200 border items-center rounded-md flex w-[18rem] h-[12rem]">
                             <div>
-                                <img src={`${IMG_URL}${userData[0]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
+                                <img src={`${userData[0]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
                             </div>
                             <div >
                                 <p className="text-lg m-1">{userData[0]?.First_name}</p>
@@ -59,7 +58,7 @@ const ProfileReviews: React.FC<{ id: string }> = ({ id }) => {
                         </div>
                         <div className="bg-gray-200 border rounded-md items-center flex w-[18rem] h-[12rem]">
                             <div>
-                                <img src={`${IMG_URL}${userData[1]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
+                                <img src={`${userData[1]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
                             </div>
                             <div>
                                 <p className="text-lg m-1">{userData[1]?.First_name}</p>
@@ -102,7 +101,7 @@ const ProfileReviews: React.FC<{ id: string }> = ({ id }) => {
                                                 reviews.map((review: ReviewType, index: number) => (
                                                     <div key={index} className="bg-gray-200 border rounded-md flex w-auto h-auto mt-2">
                                                         <div>
-                                                            <img src={`${IMG_URL}${userData[index]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
+                                                            <img src={`${userData[index]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
                                                         </div>
                                                         <div>
                                                             <p className="text-lg m-1">{userData[index]?.First_name}</p>
