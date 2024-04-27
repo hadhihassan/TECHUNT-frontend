@@ -80,14 +80,14 @@ const Milestone = () => {
             .then((res: AxiosResponse) => {
                 setContract(res.data.data)
             })
-    }
-    useEffect(() => {
-        fetch()
         const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
         if (completedMilestones.length as number === contract?.milestones?.length) {
             contractStatusUpdate(contract?._id || "", "completed", basicData.role)
-            console.log(completedMilestones.length,contract?.milestones?.length)
+            console.log(completedMilestones.length, contract?.milestones?.length)
         }
+    }
+    useEffect(() => {
+        fetch()
         setT(toId);
 
         return () => {
@@ -547,7 +547,7 @@ const Milestone = () => {
                                         <p className='text-red-500 font-sans font-semibold mt-2'>Request</p>
                                         <div className="mt-3 bg-gray-300 p-3 w-auto rounded text-xs font-semibold border-2 flex flex-col gap-2 items-start">
                                             <p className="text-balance break-all ">Reason:    {contract?.milestones[selectMilestone]?.resheduleReason?.reason}</p>
-                                            <p>Requested date number of days: { contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
+                                            <p>Requested date number of days: {contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
                                             {
                                                 basicData.role === "TALENT" ? (
                                                     <p className="border p-2 rounded bg-red-500 text-white">

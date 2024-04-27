@@ -36,7 +36,6 @@ const NumberVerification = () => {
                     if (res.error) {
                         error(res?.error?.response?.data.message || "Error occurs While processing you request ")
                     } else {
-
                         const formattedPhone = `+${phone.replace(/\D/g, '')}`;
                         const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {})
                         const confirmation: ConfirmationResult = await signInWithPhoneNumber(auth, formattedPhone, recaptcha)
