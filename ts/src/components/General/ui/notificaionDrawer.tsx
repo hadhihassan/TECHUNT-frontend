@@ -71,7 +71,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ notification, o
                                 Payment required
                             </p>
                             <p className="mt-1 text-sm text-gray-500">
-                                Please note that  the client is accepted your  proposal, a fee of 5000 rupees will be charged.Otherwise, you loss this proposal.
+                                Please note that  the client is accepted your  proposal, a fee of 500 rupees will be charged.Otherwise, you loss this proposal.
                             </p>
                         </div>
                     </div>

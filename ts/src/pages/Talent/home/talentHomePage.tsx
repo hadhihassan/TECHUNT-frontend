@@ -5,8 +5,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import BannerImage from '../../../assets/istockphoto-1283536918-1024x1024.jpg'
 import { useNavigate } from 'react-router-dom';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-// import Rating from '@mui/material/Rating';
-// import Stack from '@mui/material/Stack';
 import { AxiosError, AxiosResponse } from 'axios';
 import {
     fetchAllJobPostForTalent,
@@ -15,11 +13,11 @@ import {
 } from '../../../services/talentApiService';
 
 import 'quill/dist/quill.snow.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Disclosure, Transition } from '@headlessui/react'
 import { ROOTSTORE } from '../../../redux/store';
 import routerVariables, { talent_routes } from '../../../routes/pathVariables';
-import { INITIALSTATE } from '../../../redux/Slice/signupSlice';
+import { INITIALSTATE, setProgress } from '../../../redux/Slice/signupSlice';
 import { ArrowUpward } from '@mui/icons-material';
 import ClientList from '../../../components/Talent/home/clientListing';
 import { formatMongoDate } from '../../../util/timeFormating';
@@ -52,6 +50,7 @@ const HomePage: React.FC = () => {
     const [userData, setUserData] = useState<{ First_name: string, Last_name: string }>(
         { First_name: "", Last_name: "" }
     )
+    const dispatch = useDispatch()
     const [contractDetails, setDetails] = useState<{ activeLength: number, completedLength: number, cacelledLength: number, }>({
         activeLength: 0,
         completedLength: 0,
@@ -100,9 +99,9 @@ const HomePage: React.FC = () => {
             })
         getNewProgress(basicData.id || "", basicData.role)
             .then((res) => {
-                console.log(res.data)
+                setProgress(res?.data?.data || 100)
             })
-    }, []);
+    }, [basicData]);
     const [activeTab, setActiveTab] = useState<number>(1);
     const handleTabClick = (tabNumber: React.SetStateAction<number>) => {
         setActiveTab(tabNumber);

@@ -12,6 +12,7 @@ import axios, { AxiosError, AxiosResponse } from "axios"
 import { nameValidator, numberValidator, pincodeValidator, addressValidator } from '../../../util/validatorsUtils'
 import toast, { Toaster } from "react-hot-toast";
 import { CAllS3ServiceToStore, uploadFileToSignedUelInS3 } from "../../../services/talentApiService";
+import { message } from "antd";
 
 // interface for the form data shap
 export interface CONTACT_FROM {
@@ -78,6 +79,7 @@ const ContactForm: React.FC = () => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
+            ["description"]: description,
         });
         validateForm()
     }
@@ -110,9 +112,14 @@ const ContactForm: React.FC = () => {
         const valid = validateForm()
         if (valid) {
             createContactDetails(formData, role)
-                .then(() => {
-                    console.log("success fullyt addedd")
-                    naviagte(routerVariables.Login)
+                .then((res) => {
+                    if(res?.data){
+                        localStorage.setItem("contactDetails", JSON.stringify(formData))
+                        console.log("success fullyt addedd",res)
+                        naviagte(routerVariables.Login)
+                    }else{
+                        message.error("Somthing went wrong please try agin .")
+                    }
                 }).catch((e: AxiosError) => {
                     console.log(e.message)
                 })

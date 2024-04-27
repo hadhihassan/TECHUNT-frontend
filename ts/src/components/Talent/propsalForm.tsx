@@ -118,7 +118,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
             error("Maximum file limit is one . Selete one file")
         }
     };
-    const hadleSubmit = () => {
+    const hadleSubmit = async () => {
         submitProposal(proposalData)
             .then((res: AxiosResponse) => {
                 success(res.data.message)
@@ -269,7 +269,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                 label="Additional Rate"
                                 rules={[
                                     {
-                                        type: 'number',
+                                        type: 'string',
                                         message: "Rate must be number"
                                     }
                                 ]}
@@ -279,6 +279,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
                                     onChange={handleFormChange}
                                     style={{ width: '100%' }}
                                     placeholder="Please enter the rate"
+                                    type='number'
                                 />
                             </Form.Item>
                         </Col>

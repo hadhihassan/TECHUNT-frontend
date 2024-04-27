@@ -119,7 +119,7 @@ const Home = () => {
             })
         getNewProgress(basicData.id || "", basicData.role)
             .then((res) => {
-                dispatch(setProgress(res?.data?.data))
+                dispatch(setProgress(res?.data?.data || 100))
             })
     }, [basicData])
     return (

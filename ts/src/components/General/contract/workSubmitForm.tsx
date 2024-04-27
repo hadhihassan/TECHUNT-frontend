@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { ROOTSTORE } from "../../../redux/store";
 import { AxiosError, AxiosResponse } from "axios";
 
-export function WorkSubmitForm({  open, closeModal, id }: {  open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
+export function WorkSubmitForm({ open, closeModal, id }: { open: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>>, id: string }) {
 
     const role = useSelector((state: ROOTSTORE) => state.signup.role)
     const [showBtn, setShowSubmitBtn] = useState<boolean>(false);
@@ -66,6 +66,13 @@ export function WorkSubmitForm({  open, closeModal, id }: {  open: boolean, clos
         }
     };
     const handleSubmit = () => {
+        if (url === "") {
+            setUrlError("Upload an file ?")
+            if (description === "") {
+                setDescription("Description is required ?")
+            }
+            return
+        }
         submitWork(id, { url, description })
             .then((res) => {
                 console.log(res)
@@ -155,7 +162,7 @@ export function WorkSubmitForm({  open, closeModal, id }: {  open: boolean, clos
                                         </Button>
                                     </>
                                 } */}
-                                <Button color="red" fullWidth onClick={ handleSubmit} placeholder={undefined}>
+                                <Button color="red" fullWidth onClick={handleSubmit} placeholder={undefined}>
                                     Submit{showBtn}
                                 </Button>
                             </>

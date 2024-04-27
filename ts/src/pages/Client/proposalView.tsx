@@ -14,6 +14,7 @@ import { Popconfirm } from 'antd';
 import type { ProposalInterface } from '../../interface/interfaces'
 import { INDIAN_RUPEE } from "../../constant/columns";
 import { formatMongoDate } from "../../util/timeFormating";
+import { URL } from "url";
 
 
 const ProposalClientView = () => {
@@ -172,7 +173,7 @@ const ProposalClientView = () => {
                                 className="pt-3 text-sm font-normal text-blue-600 underline mb-5 hover:cursor-pointer"
                                 onClick={() => {
                                     if (proposalData && proposalData.attachments) {
-                                        const fileURL = URL.createObjectURL(proposalData.attachments);
+                                        const fileURL: string = proposalData.attachments as string
                                         window.open(fileURL, '_blank');
                                     }
                                 }}

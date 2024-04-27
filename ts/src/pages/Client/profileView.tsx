@@ -366,7 +366,7 @@ const Profile = () => {
                             <p className="m-4 font-sans font-medium">Experiance</p>
                         </div>
                         <hr />
-                        <div className="flex flex-col space-y-5 items-start m-5 ">
+                        <div className="flex flex-col space-y-5 items-start m-5 w-[50vh]">
                             {datas?.Profile?.Work_Experiance[0] ? (
                                 <>
                                     <p className="text-gray-700 text-md font-sans font-medium">
@@ -374,7 +374,7 @@ const Profile = () => {
                                     </p>
                                 </>
                             ) : (
-                                <p className="text-center text-3xl font-sans font-medium">Fresher</p>
+                                <p className="text-center text-xl font-sans font-medium">Fresher</p>
                             )}
                         </div>
                     </div> : null

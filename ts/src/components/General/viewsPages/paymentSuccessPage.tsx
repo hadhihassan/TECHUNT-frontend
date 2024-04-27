@@ -6,6 +6,7 @@ const PaymentSuccessPage = () => {
     useEffect(() => {
         const proposalId: string = localStorage.getItem("paymentProposalId") || ""
         if (proposalId !== "" && proposalId) {
+            console.log(proposalId, "here")
             updatePaymentStatus("Completed", proposalId)
                 .then(() => {
                     localStorage.removeItem("paymentProposalId")

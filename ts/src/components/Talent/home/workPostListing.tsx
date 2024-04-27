@@ -5,6 +5,7 @@ import { Project } from '../../../pages/Talent/home/talentHomePage';
 // import Rating from '@mui/material/Rating';
 // import Stack from '@mui/material/Stack';
 import { formatMongoDate } from '../../../util/timeFormating';
+import { INDIAN_RUPEE } from '../../../constant/columns';
 
 interface CompenetPropos {
     handleShowJobPostDetails: (number: number) => void;
@@ -77,7 +78,7 @@ const ListWorkPost: React.FC<CompenetPropos> = ({ handleShowJobPostDetails }) =>
                         <div className="w-full mt-5 " key={index} onClick={() => handleShowJobPostDetails(index)}>
                             <div className="m-3 mt-5 w-full">
                                 <p className="font-sans font-semibold mt-1">{post.Title}</p>
-                                <p className='font-sans text-gray-800 mt-1  font-semibold text-sm '>{post.TimeLine} - {post.Expertiselevel} - Est. Budget: ${post.Amount} - Posted  {formatMongoDate(post.createdAt as Date || "")} -  {post?.WorkType} type</p>
+                                <p className='font-sans text-gray-800 mt-1  font-semibold text-sm '>{post.TimeLine} - {post.Expertiselevel} - Est. Budget: {INDIAN_RUPEE}{post.Amount} - Posted  {formatMongoDate(post.createdAt as Date || "")} -  {post?.WorkType} type</p>
                                 <p className='font-sans text-gray-600 mt-2 text-sm font-normal' dangerouslySetInnerHTML={{ __html: post.Description }}></p>
                             </div>
                             <div className='flex justify-between w-[60%] sm:ml-3'>

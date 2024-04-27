@@ -86,6 +86,7 @@ const Milestone = () => {
         const completedMilestones: MilestoneType[] = contract?.milestones?.filter(milestone => milestone.completed === "Completed") || [];
         if (completedMilestones.length as number === contract?.milestones?.length) {
             contractStatusUpdate(contract?._id || "", "completed", basicData.role)
+            console.log(completedMilestones.length,contract?.milestones?.length)
         }
         setT(toId);
 
@@ -544,8 +545,8 @@ const Milestone = () => {
                                 showReason && (
                                     <>
                                         <p className='text-red-500 font-sans font-semibold mt-2'>Request</p>
-                                        <div className="mt-3 bg-gray-300 p-3 rounded text-xs font-semibold border-2 flex flex-col gap-2 items-start">
-                                            <p>Reason: {contract?.milestones[selectMilestone]?.resheduleReason?.reason}</p>
+                                        <div className="mt-3 bg-gray-300 p-3 w-auto rounded text-xs font-semibold border-2 flex flex-col gap-2 items-start">
+                                            <p className="text-balance break-all ">Reason:    {contract?.milestones[selectMilestone]?.resheduleReason?.reason}</p>
                                             <p>Requested date number of days: { contract?.milestones[selectMilestone]?.resheduleReason?.newDeadline}</p>
                                             {
                                                 basicData.role === "TALENT" ? (

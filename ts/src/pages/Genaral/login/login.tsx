@@ -60,11 +60,6 @@ const LoginPage: React.FC = () => {
                                 socket.emit("subscribedUser", userId)
                             }
                             socket.emit("OnlineUser", { role: res?.data?.data.role, id: res?.data?.data?.data?._id })
-                            if (res?.data?.data.role === "CLIENT") {
-                                navigate("/client/home/");
-                            } else {
-                                navigate("/talent/home/");
-                            }
                         }
                     }
                 })

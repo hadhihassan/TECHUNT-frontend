@@ -84,10 +84,10 @@ export function addressValidator(address: string) {
 }
 export function descriptionValidator(address: string) {
     if (address.trim() === "") {
-        return 'address is required';
+        return 'Description is required';
     }
     if (address.length < 100) {
-        return "Address more than 100 letters";
+        return "Description more than 100 letters";
     }
     return null;
 }

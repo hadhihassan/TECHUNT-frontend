@@ -21,6 +21,7 @@ import { ROOTSTORE } from "../../../redux/store";
 import { INITIALSTATE } from "../../../redux/Slice/signupSlice";
 import { Socket } from "socket.io-client";
 import { topSkills } from "../../../schema/profileBasedSchema";
+import { INDIAN_RUPEE } from "../../../constant/columns";
 
 
 const JobPostForm = () => {
@@ -132,6 +133,8 @@ const JobPostForm = () => {
                         error("Internal server error.")
                     }
                 })
+        } else {
+            return
         }
     };
     const [editorHtml, setEditorHtml] = useState<string>('');
@@ -444,9 +447,8 @@ const JobPostForm = () => {
                                         type="number"
                                         onChange={onChangeInput}
                                         id="outlined-adornment-amount"
-                                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                        startAdornment={<InputAdornment position="start">{INDIAN_RUPEE}</InputAdornment>}
                                         style={{ width: 300, height: 45 }}
-
                                     />
                                 </FormControl>
                             </div>

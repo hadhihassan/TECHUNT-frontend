@@ -40,7 +40,6 @@ const ProfileDescription = () => {
         if (_description.trim() === "") {
             setLenghtError("Description is required")
         } else {
-
             if (!lengthError) {
                 dispatch(setDescription(_description))
                 addDescription("")

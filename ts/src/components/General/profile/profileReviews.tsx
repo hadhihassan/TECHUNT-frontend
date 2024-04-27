@@ -44,28 +44,32 @@ const ProfileReviews: React.FC<{ id: string }> = ({ id }) => {
                         <p className="m-4 font-sans font-medium">Reviews</p>
                     </div>
                     <hr />
-                    <div className="flex justify-evenly items-center m-5">
-
-                        <div className="bg-gray-200 border items-center rounded-md flex w-[18rem] h-[12rem]">
+                    <div className="flex gap-3 items-start m-5">
+                        <div className="bg-gray-200 border items-center rounded flex w-[18rem] h-[12rem]">
                             <div>
                                 <img src={`${userData[0]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
                             </div>
                             <div >
                                 <p className="text-lg m-1">{userData[0]?.First_name}</p>
-                                <p className="text-xs m-1 font-sans font-normal">{reviews[0]?.comment}</p>
+                                <p className="text-xs m-1 font-sans break-all  font-normal">{reviews[0]?.comment}</p>
                                 <p className="text-xs m-1 font-sans font-normal">{typeof reviews[0]?.from === "object" ? reviews[0]?.from?.First_name : ""}</p>
                             </div>
                         </div>
-                        <div className="bg-gray-200 border rounded-md items-center flex w-[18rem] h-[12rem]">
-                            <div>
-                                <img src={`${userData[1]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
-                            </div>
-                            <div>
-                                <p className="text-lg m-1">{userData[1]?.First_name}</p>
-                                <p className="text-xs m-1 font-sans font-normal">{reviews[1]?.comment}</p>
-                                <p className="text-xs m-1 font-sans font-normal">{typeof reviews[1]?.from === "object" ? reviews[1]?.from?.First_name : ""}</p>
-                            </div>
-                        </div>
+                        {
+                            userData[1] && <>
+                                <div className="bg-gray-200 border rounded items-center flex w-[18rem] h-[12rem]">
+                                    <div>
+                                        <img src={`${userData[1]?.Profile?.profile_Dp}`} className="w-10 h-10 border rounded-full m-5" alt="Loading.." />
+                                    </div>
+                                    <div>
+                                        <p className="text-lg m-1">{userData[1]?.First_name}</p>
+                                        <p className="text-xs m-1 break-all  font-sans font-normal">{reviews[1]?.comment}</p>
+                                        <p className="text-xs m-1 font-sans font-normal">{typeof reviews[1]?.from === "object" ? reviews[1]?.from?.First_name : ""}</p>
+                                    </div>
+                                </div>
+                            </>
+                        }
+
                     </div><hr />
                     <p className="mt-4 text-blue-500 text-center" onClick={() => setIsOpen(true)}>View All</p>
                 </div>
@@ -105,7 +109,7 @@ const ProfileReviews: React.FC<{ id: string }> = ({ id }) => {
                                                         </div>
                                                         <div>
                                                             <p className="text-lg m-1">{userData[index]?.First_name}</p>
-                                                            <p className="text-xs m-1 font-sans font-normal">{review.comment}</p>
+                                                            <p className="text-xs m-1 break-all  font-sans font-normal">{review.comment}</p>
                                                             <p className="text-xs m-1 font-sans font-normal">{typeof review?.from === "object" ? review?.from?.First_name : ""}</p>
                                                             <Rating name="half-rating-read" size="small" defaultValue={review.rating} precision={review.rating} readOnly />
                                                         </div>

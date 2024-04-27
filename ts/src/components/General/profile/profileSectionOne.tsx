@@ -251,13 +251,17 @@ const ProfileTalentDetailsFirst: React.FC<{ datas: UserProfile | undefined, onUp
                             <input onChange={changeHandle} type="text" value={formData?.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" />
                         </div>
                     </div>
-                    <div>
-                        <div className='flex justify-between'>
-                            <label htmlFor="profileTitle" className="block mb-2 text-sm font-medium text-gray-900">Profile Title</label>
-                            <label className='text-red-500 font-sans text-sm font-normal'>{titleError}</label>
-                        </div>
-                        <input onChange={changeHandle} type="text" name="title" value={formData?.title} id="profileTitle" placeholder="Title" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
+                    {
+                        basicData.role === "TALENT" && <>
+                            <div>
+                                <div className='flex justify-between'>
+                                    <label htmlFor="profileTitle" className="block mb-2 text-sm font-medium text-gray-900">Profile Title</label>
+                                    <label className='text-red-500 font-sans text-sm font-normal'>{titleError}</label>
+                                </div>
+                                <input onChange={changeHandle} type="text" name="title" value={formData?.title} id="profileTitle" placeholder="Title" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            </div>
+                        </>
+                    }
                     <div>
                         <div className='flex justify-between'>
                             <label className='text-red-500 font-sans text-sm font-normal'>{descriptionError}</label>
