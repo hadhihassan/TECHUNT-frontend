@@ -111,7 +111,7 @@ const Profile = () => {
                         }
                     </div>
                     <div className={`flex items-center  flex-row justify-center `}>
-                        <ProfileContact data={datas ? { Address: datas.Address, City: datas.City, Country: datas.Country, Number: datas.Number, PinCode: datas.PinCode } : { Address: '', City: '', Country: '', Number: '', PinCode: '' }} onUpdate={getUserProfile} />
+                        <ProfileContact data={datas ? { Address: datas?.Address, City: datas?.City, Country: datas?.Country, Number: datas?.Number, PinCode: datas?.PinCode } : { Address: '', City: '', Country: '', Number: '', PinCode: '' }} onUpdate={getUserProfile} />
                     </div>
                     <div>
                         {

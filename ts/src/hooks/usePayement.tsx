@@ -13,7 +13,7 @@ const useStripePayment = () => {
     const handlePayment = async (id: string,) => {
         try {
             setLoading(true);
-            const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
             let result
             makePayment(id)
                 .then(async (res) => {
@@ -31,10 +31,7 @@ const useStripePayment = () => {
         const paymentToTalent = async (talentId: string, amount: number) => {
             try {
                 setLoading(true);
-                if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
-                    alert('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-                } else {
-                    const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+                    const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
                     let result
                     makePaymentToBank(talentId, amount)
                     .then(async (res) => {
@@ -44,7 +41,6 @@ const useStripePayment = () => {
                         return "ok"
                     })
                     console.log(result)
-            }
         } catch (error: any) {
             setError(error.message);
         } finally {
@@ -54,10 +50,7 @@ const useStripePayment = () => {
     const subscriptionPayment = async (role: string, planId: string, amount: number) => {
         try {
             setLoading(true);
-            if (!import.meta.env.VITE_STRIP_PUBLISHABLE_KEY) {
-                throw new Error('STRIP_PUBLISHABLE_KEY is not defined in the environment variables.');
-            }
-            const stripe = await loadStripe(import.meta.env.VITE_STRIP_PUBLISHABLE_KEY);
+            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
             const session = await makePaymentToPlan(role, planId, amount);
             await stripe?.redirectToCheckout({
                 sessionId: session.data?.data

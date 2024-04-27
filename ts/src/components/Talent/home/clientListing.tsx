@@ -41,7 +41,7 @@ const ClientList = () => {
                 <div className="flex justify-between p-4">
                     <div className="flex">
                         <div>
-                            <Avatar src={`${client.Profile.profile_Dp}`} className="w-8 h-8" />
+                            <Avatar src={`${client?.Profile?.profile_Dp}`} className="w-8 h-8" />
                         </div>
                         <div className="ml-4">
                             <p className="text-md font-bold">{client?.First_name} {client?.Last_name}</p>
