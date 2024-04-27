@@ -14,7 +14,6 @@ import { Popconfirm } from 'antd';
 import type { ProposalInterface } from '../../interface/interfaces'
 import { INDIAN_RUPEE } from "../../constant/columns";
 import { formatMongoDate } from "../../util/timeFormating";
-import { URL } from "url";
 
 
 const ProposalClientView = () => {
