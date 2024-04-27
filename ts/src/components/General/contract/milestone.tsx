@@ -89,7 +89,6 @@ const Milestone = () => {
     useEffect(() => {
         fetch()
         setT(toId);
-
         return () => {
             localStorage.removeItem("payedMilestone")
         }

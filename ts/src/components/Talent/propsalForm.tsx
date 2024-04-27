@@ -119,13 +119,15 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ isOpen, forClose }) => {
         }
     };
     const hadleSubmit = async () => {
-        submitProposal(proposalData)
-            .then((res: AxiosResponse) => {
-                success(res.data.message)
-                sendNotification(res.data.data._id)
-            }).catch(() => {
-                error("Error uploading file")
-            })
+        if (proposalData.attachments && proposalData.availability !== "" && proposalData.coverLetter !== "" && proposalData.title !== "") {
+            submitProposal(proposalData)
+                .then((res: AxiosResponse) => {
+                    success(res.data.message)
+                    sendNotification(res.data.data._id)
+                }).catch(() => {
+                    error("Error uploading file")
+                })
+        }
     }
     const sendNotification = (id: string) => {
         socket.emit("sendNotification", { sender_id, recipient_id, content: `New proposal from arrive`, type: "proposal", metaData: id });

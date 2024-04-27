@@ -21,8 +21,8 @@ export function WorkSubmitForm({ open, closeModal, id }: { open: boolean, closeM
     const [showBtn, setShowSubmitBtn] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [urlError, setUrlError] = useState<string>('');
-    const [descriptionError, setDescriptionError] = useState<string>('');
+    const [urlError, setUrlError] = useState<string>(url === "" ? 'Select an file or images' : "");
+    const [descriptionError, setDescriptionError] = useState<string>(description === "" ? 'Description is required' : "");
     useEffect(() => {
         const workItem = localStorage.getItem("work")
         const workData = JSON.parse(workItem ? workItem : "{}")
@@ -66,26 +66,21 @@ export function WorkSubmitForm({ open, closeModal, id }: { open: boolean, closeM
         }
     };
     const handleSubmit = () => {
-        if (url === "") {
-            setUrlError("Upload an file ?")
-            if (description === "") {
-                setDescription("Description is required ?")
-            }
-            return
-        }
-        submitWork(id, { url, description })
-            .then((res) => {
-                console.log(res)
-                if (res.data) {
-                    message.success("successfully work submitted")
-                } else {
+        if (urlError === "" && descriptionError === "") {
+            submitWork(id, { url, description })
+                .then((res) => {
+                    console.log(res)
+                    if (res.data) {
+                        message.success("successfully work submitted")
+                    } else {
+                        message.error("Something went wrong ! ")
+                    }
+                    closeModal(!open)
+                }).catch((err) => {
                     message.error("Something went wrong ! ")
-                }
-                closeModal(!open)
-            }).catch((err) => {
-                message.error("Something went wrong ! ")
-                console.log(err)
-            })
+                    console.log(err)
+                })
+        }
     };
     return (
         <>

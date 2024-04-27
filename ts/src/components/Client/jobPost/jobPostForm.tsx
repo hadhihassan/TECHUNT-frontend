@@ -61,7 +61,7 @@ const JobPostForm = () => {
         Amount: 0,
     });
     const [formDataError, setFormDataError] = useState({
-        TitleError: '',
+        TitleError: ' ',
         SkillsError: "",
         TimeLineError: '',
         ExpertiselevelError: '',
@@ -109,9 +109,17 @@ const JobPostForm = () => {
                 ["AmountError"]: "Amount is required .",
             }));
         }
-
-        if (formDataError.AmountError === "" && formDataError.SkillsError === "" && formDataError.TimeLineError === "" &&
-            formDataError.ExpertiselevelError === "" && formDataError.TitleError === "" && formDataError.WorkTypeError === "" && validationError === ""
+        setTimeout(() => {
+            
+        }, 2000);
+        if (
+            formDataError.AmountError === "" &&
+            formDataError.SkillsError === "" &&
+            formDataError.TimeLineError === "" &&
+            formDataError.ExpertiselevelError === "" &&
+            formDataError.TitleError === "" &&
+            formDataError.WorkTypeError === "" &&
+            validationError === ""
         ) {
             postJob(formData)
                 .then((res: any) => {
