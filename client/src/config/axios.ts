@@ -2,8 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 import Swal from 'sweetalert2'
-export const BASE_URL: string = 'http://localhost:3000/';
-// export const BASE_URL: string = 'https://timezones.website/';
+// export const BASE_URL: string = 'http://localhost:3000/';
+export const BASE_URL: string = 'https://techunt-api.onrender.com/';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = BASE_URL;
 
