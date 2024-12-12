@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
 
 import { useSocketContext } from "../context/socketContext";
@@ -13,7 +14,7 @@ const useListenMessages = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		const handleNewMessage = (newMessage) => {
+		const handleNewMessage = (newMessage: any) => {
 			const updatedMessage = { ...newMessage, shouldShake: true };
 			dispatch(setMessages([...messages, updatedMessage]));
 		};

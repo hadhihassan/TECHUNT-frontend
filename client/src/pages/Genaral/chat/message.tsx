@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 // import ChatSearchBar from '../../../components/General/chat/sideBar/charSearchInput';
 // import { SearchProps } from 'antd/es/input';

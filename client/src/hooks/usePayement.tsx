@@ -14,31 +14,29 @@ const useStripePayment = () => {
         try {
             setLoading(true);
             const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
-            let result
             makePayment(id)
                 .then(async (res) => {
-                    result = await stripe?.redirectToCheckout({
+                    await stripe?.redirectToCheckout({
                         sessionId: res.data.id
                     });
                 })
-            } catch (error: any) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        const paymentToTalent = async (talentId: string, amount: number) => {
-            try {
-                setLoading(true);
-                    const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
-                    let result
-                    makePaymentToBank(talentId, amount)
-                    .then(async (res) => {
-                        result = await stripe?.redirectToCheckout({
-                            sessionId: res.data?.data
-                        });
-                        return "ok"
-                    })
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const paymentToTalent = async (talentId: string, amount: number) => {
+        try {
+            setLoading(true);
+            const stripe = await loadStripe("pk_test_51OoPKwSErGknJRsEdI0czOQw3S3KCHWzp9wW1k7DvssxEw14hbO68x19sz1elAeKcpEevg3PEbjlLLsnqPXuEHbA00exB43qKm");
+            makePaymentToBank(talentId, amount)
+                .then(async (res) => {
+                    await stripe?.redirectToCheckout({
+                        sessionId: res.data?.data
+                    });
+                    return "ok"
+                })
         } catch (error: any) {
             setError(error.message);
         } finally {
