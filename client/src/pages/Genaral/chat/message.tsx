@@ -7,16 +7,13 @@ import MessageHeader from '../../../components/General/chat/sideBar/messageConta
 import SendMessageInput from '../../../components/General/chat/sideBar/messageContainer.tsx/messageInput';
 import MessageListing from '../../../components/General/chat/sideBar/messageContainer.tsx/messagesListing';
 import { cleanChatItems } from '../../../redux/Slice/conversationsSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserOfflineInConversation } from '../../../services/commonApiService';
-import { ROOTSTORE } from '../../../redux/store';
-import { ConversationType } from '../../../redux/Slice/conversationsSlice'
 
 
 const Message = () => {
-    const dispatch = useDispatch()
-    const conversation = useSelector((state: ROOTSTORE) => state.conversation) as ConversationType
 
+    const dispatch = useDispatch()
     useEffect(() => {
         return () => {
             setUserOfflineInConversation()
