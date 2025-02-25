@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react"
-import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../constant/validation'
+import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../constant/validationConstant'
 interface JobCategoryFormProps {
     editable: boolean;
     formData: JobInterface;

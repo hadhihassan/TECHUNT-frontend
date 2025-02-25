@@ -16,6 +16,9 @@ type Layout = {
 }
 
 const Header = ({ layout }: Layout) => {
+
+  // const [openDrawer, setOpenDrawer] = useState(false)
+
   const naviagte = useNavigate()
   const basicdata: any = useContext(MyContext);
   const handleClick = () => {
@@ -70,10 +73,10 @@ const Header = ({ layout }: Layout) => {
   //     </div>}
   //   </>
   // );
-  return (
-    <nav className=" bg-white fixed w-full z-20 top-0 start-0  ">
+  return (<>
+    <nav className=" bg-white fixed w-full z-20 top-0 start-0 flex justify-between items-center md:block ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <div>
             <span className="text-red-500 text-3xl sm:xl font-extrabold font-montserrat break-words">TECH</span>
             <span className="text-red-500 text-3xl sm:xl font-normal font-montserrat break-words">UNT</span>
@@ -106,16 +109,16 @@ const Header = ({ layout }: Layout) => {
           }
         </div>
       </div>
-      <div className="items-center justify-between  w-full  md:hidden md:w-auto md:order-1" id="navbar-sticky">
-        <button data-collapse-toggle="navbar-multi-level" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-multi-level" aria-expanded="false">
-          <span className="sr-only">Open main menu</span>
+      <div className="flex items-center justify-end  w-full  md:hidden md:w-auto md:order-1" id="navbar-sticky">
+        <button data-collapse-toggle="navbar-multi-level" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-end text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-multi-level" aria-expanded="false">
+          <span className="sr-only"></span>
           <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
           </svg>
         </button>
       </div>
     </nav >
-  )
+    </>)
 
 };
 

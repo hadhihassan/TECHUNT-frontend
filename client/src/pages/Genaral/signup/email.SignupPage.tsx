@@ -30,7 +30,7 @@ const Login = () => {
     const verifyEmail = async (): Promise<void> => {
         setErrorsEmail(emailValidator(inputValue))
         setErrorsPassword(passwordValidator(password))
-        
+
         if (!EmailErrors && !PasswordErrors) {
             if (inputValue !== "") {
                 dispatch(setEmail(inputValue));
@@ -43,7 +43,7 @@ const Login = () => {
                     setTimeout(() => {
                         setError("")
                     }, 3000);
-                    const { token }: { token:string } = result?.data?.data as { token: string }
+                    const { token }: { token: string } = result?.data?.data as { token: string }
                     localStorage.setItem("token", token)
                     Swal.fire({
                         position: "top-end",
@@ -78,10 +78,10 @@ const Login = () => {
     return (
         <div>
             <Header layout={true} />
-            <div className="w-full flex flex-col justify-center items-center]">
-                <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-                    <div className="relative px-4 py-10 bg-white border shadow-xl mx-8 md:mx-0 rounded-3xl sm:p-10">
-                        <div className="max-w-md mx-auto text-black">
+            <div className="w-full">
+                <div className="h-screen py-3 sm:max-w-xl sm:mx-auto flex justify-center items-center">
+                    <div className="px-4 py-10 bg-white border shadow-xl mx-8 md:mx-0 rounded-3xl sm:p-10 w-[550px]">
+                        <div className="max-w-md mx-auto text-black w-full">
                             <div className="flex items-center space-x-5 justify-center text-black">
                                 <p className="text-black">Get your Techunt free account</p>
                             </div>
@@ -90,7 +90,7 @@ const Login = () => {
                                 {EmailErrors && <p className="text-red-500 text-xs text-end">{EmailErrors}</p>}
                                 <input
                                     onChange={handleChange}
-                                    className="border rounded-xl px-3  py-2 mt-1 mb-5 text-sm w-[50vh] text-black"
+                                    className="border rounded-xl px-3  py-2 mt-1 mb-5 text-sm w-full text-black"
                                     type="text"
                                     id="login"
                                     placeholder="Enter your email"
@@ -114,7 +114,6 @@ const Login = () => {
                                     className="py-2 px-4 bg-red-500 hover:bg-red-600 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
                                     type="submit"
                                 >
-
                                     Verify
                                 </button>
                             </div>

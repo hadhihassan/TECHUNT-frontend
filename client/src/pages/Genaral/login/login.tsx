@@ -80,7 +80,7 @@ const LoginPage: React.FC = () => {
         <div>
             <Header layout={true} />
             <div className="w-full flex justify-center items-center mt-20">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-[550px] m-10    shadow-2xl rounded-xl border-2">
+                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-[550px] m-10 shadow-2xl rounded-xl border-2">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         Sign in to your account
                     </h1>

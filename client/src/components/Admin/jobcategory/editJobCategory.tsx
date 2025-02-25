@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useState } from "react"
 import { editJobCategory } from "../../../services/adminApiService";
-import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../constant/validation'
+import { descriptionRegex, nameRegex, maxLength, minLength } from '../../../constant/validationConstant'
 
 interface JobCategoryFormProps {
     formData: {
@@ -18,6 +18,7 @@ interface ValidationInterface {
     descriptionError: string,
 }
 const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, error, reCall }) => {
+
     const [inputData, setData] = useState<{ name: string, description: string }>({
         name: formData?.name,
         description: formData?.description,
@@ -26,6 +27,7 @@ const JobCategoryForm: React.FC<JobCategoryFormProps> = ({ formData, success, er
         nameError: "",
         descriptionError: "",
     });
+    
     const changeData = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value }: { name: string, value: string } = e.target;
         if (e.target instanceof HTMLInputElement) {

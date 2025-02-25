@@ -60,7 +60,6 @@
     "react-table": "^7.8.0",
     "react-toastify": "^10.0.4",
     "redux-persist": "^6.0.0",
-    "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.10.7",
     "tailwind-merge": "^2.2.1",

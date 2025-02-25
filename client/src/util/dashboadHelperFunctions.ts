@@ -1,10 +1,13 @@
+import { MONTHS } from "../constant/columns";
+
+
 interface ArguInterface {
     month: string;
     totalAmount: number;
 }
 const populateChartData = (overalRevenuse: ArguInterface[]): number[] => {
     const monthlyData: { [key: string]: number } = {};
-    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].forEach(month => {
+    MONTHS?.forEach(month => {
         monthlyData[month] = 0;
     });
     overalRevenuse.forEach(item => {

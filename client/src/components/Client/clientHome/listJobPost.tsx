@@ -36,6 +36,9 @@ const ListJobPost = () => {
             }
             return 0;
         });
+
+        db.jobs.find()
+    
     //pagination logic
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage: number = 10;

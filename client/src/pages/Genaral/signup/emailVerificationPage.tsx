@@ -21,9 +21,10 @@ const EmailVerificationPage = () => {
     const signupData: INITIALSTATE = useSelector((state: ROOTSTORE) => state.signup)
     const navigate = useNavigate()
     const handleClick: () => void = () => {
-        
+        console.log("working the verifications")
         try {
             const url = `${BASE_URL}/${signupData.role}/verify/${param.id}`;
+            console.log(url)
             get(url, signupData.role)
                 .then((_res) => {
                     if (_res) {
